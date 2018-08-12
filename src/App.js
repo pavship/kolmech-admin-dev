@@ -1,11 +1,15 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 
-import Enquiries from './components/Enquiries'
+import EnquiriesPage from './components/EnquiriesPage'
+import NavBar from './components/NavBar'
 
 class App extends Component {
   render() {
     return (
-      <Enquiries />  
+      <Fragment>
+        <NavBar />
+        <EnquiriesPage />
+      </Fragment>  
     )
   }
 }

@@ -1,0 +1,25 @@
+mutation {
+  login (
+    email: "developer@example.com",
+    password: "nooneknows"
+    ) {
+      token
+    }
+}
+
+mutation createOrg {
+  createOrg (data: {
+    name: "Организация1"
+    enquiries: {
+      create: {
+        message: "Интересует возможность обработки"
+      }
+    }
+  }) {
+    id
+    name
+    enquiries {
+      id message
+    }
+  }
+}
