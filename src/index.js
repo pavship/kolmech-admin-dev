@@ -8,7 +8,17 @@ import registerServiceWorker from './registerServiceWorker';
 import { ApolloProvider } from 'react-apollo'
 import ApolloClient from 'apollo-boost'
 
-const client = new ApolloClient({ uri: 'https://now-advanced-wbfyuejyvr.now.sh' })
+import defaults from './apollo/defaults'
+import resolvers from './apollo/resolvers'
+
+const client = new ApolloClient({ 
+    uri: 'https://now-advanced-wbfyuejyvr.now.sh',
+    clientState: {
+        defaults,
+        resolvers,
+        // typeDefs
+    }
+})
 
 ReactDOM.render(
     <ApolloProvider client={client}>

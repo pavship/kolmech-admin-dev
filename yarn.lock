@@ -5746,6 +5746,12 @@ react-apollo@^2.1.11:
     lodash "^4.17.10"
     prop-types "^15.6.0"
 
+react-day-picker@^7.1.10:
+  version "7.1.10"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.1.10.tgz#c763b1acb141ce960e25654b7033c2207f0fc1c3"
+  dependencies:
+    prop-types "^15.6.1"
+
 react-dev-utils@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-5.0.1.tgz#1f396e161fe44b595db1b186a40067289bf06613"

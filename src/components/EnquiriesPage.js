@@ -15,7 +15,7 @@ const Pushable = styled(Sidebar.Pushable) `
 `
 
 const DetailsSidebar = styled(Sidebar) `
-    width: 50% !important;
+    width: 65% !important;
     background-color: white !important;
 `
 
