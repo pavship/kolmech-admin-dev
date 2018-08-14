@@ -12,7 +12,7 @@ import defaults from './apollo/defaults'
 import resolvers from './apollo/resolvers'
 
 const client = new ApolloClient({ 
-    uri: 'https://now-advanced-wbfyuejyvr.now.sh',
+    uri: 'https://now-advanced.now.sh/',
     clientState: {
         defaults,
         resolvers,

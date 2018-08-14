@@ -5,21 +5,17 @@ import 'react-day-picker/lib/style.css'
 
 import { toLocalISOString } from '../utils'
 
-const DatePicker = ({ selectedDay, handleDayPick }) => {
-  const placeholder = toLocalISOString(selectedDay).slice(0, 10)
-  return (
-    // <div className='komz-chart-datepicker'>
-      <DayPickerInput
-		// placeholder={placeholder}
-		value={toLocalISOString(selectedDay).slice(0, 10)}
-        onDayChange={handleDayPick}
-        dayPickerProps={{
-          firstDayOfWeek: 1,
-          month: selectedDay
+const DatePicker = ({ selectedDate, handleDatePick }) => {
+	return (
+		<DayPickerInput
+		value={toLocalISOString(selectedDate).slice(0, 10)}
+		onDayChange={handleDatePick}
+		dayPickerProps={{
+			firstDayOfWeek: 1,
+			month: selectedDate
 		}}
-      />
-    // </div>
-  )
+		/>
+	)
 }
 
 export default DatePicker

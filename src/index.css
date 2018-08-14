@@ -4,10 +4,6 @@ body {
   font-family: sans-serif;
 }
 
-input {
-  border-radius: 0 !important;
-}
-
 /* DAY-PICKER-INPUT */
 .DayPickerInput {
   margin-left: auto;

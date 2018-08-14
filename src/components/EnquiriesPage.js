@@ -11,11 +11,12 @@ import EnquiriesTable from './EnquiriesTable'
 import EnquiryDetails from './EnquiryDetails'
 
 const Pushable = styled(Sidebar.Pushable) `
-    min-height: 100vh !important;
+    min-height: calc(100vh - 36px) !important;
 `
 
 const DetailsSidebar = styled(Sidebar) `
     width: 65% !important;
+    max-width: 680px !important;
     background-color: white !important;
 `
 

@@ -7,11 +7,6 @@ import DatePicker from './DatePicker'
 
 import updateEnquiry from '../graphql/updateEnquiry'
 
-const Container = styled.div`
-    height: 100%;
-    padding: 7px;
-`
-
 const ECard = styled(Card)`
     border-radius: 0 !important;
     box-shadow: none !important;
@@ -49,11 +44,11 @@ const EnquiryDetails = ({ closeDetails }) => {
                         <Header.Content>Заявка №10</Header.Content>
                     </EHeader>
                         <DatePicker
-                            selectedDay={new Date()} 
-                            handleDayPick={newDate => updateEnquiry({
+                            selectedDate={new Date()} 
+                            handleDatePick={pickedDate => updateEnquiry({
                                 variables: {
                                     key: 'date',
-                                    value: newDate
+                                    value: new Date(pickedDate.setHours(0,0,0,0))
                                 }
                             })} />
                 </ECardTop>
