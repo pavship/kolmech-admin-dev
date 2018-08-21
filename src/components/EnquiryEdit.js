@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
-import { Card, Header, Icon, Form, Input, Comment, Button, Dropdown, Message } from 'semantic-ui-react'
+import { Card, Form, Input, Button, Dropdown, Message } from 'semantic-ui-react'
 import DatePicker from './common/DatePicker'
 
 import { graphql, compose } from 'react-apollo'
-import { alteredEnquiry, updateEnquiry, createEnquiry } from '../graphql/enquiry'
+import { allEnquiries, createEnquiry, updateEnquiry } from '../graphql/enquiry'
 
+import cloneDeep from 'lodash/cloneDeep'
 import validateInn from '../utils/validateInn'
 import { toLocalISOString, fromLocalISOString }from '../utils/dates'
 
@@ -38,11 +39,34 @@ const CancelLink = styled.a`
 class EnquiryEdit extends Component {
     constructor(props){
         super(props)
-        const { dateLocal } = props.enquiry
-        const dateLocal = toLocalISOString(new Date()).slice(0, 10)
-        this.state = { dateLocal, orgId: null }
+        this.isNewEnquiry = props.id === 'new'
+        const isNewEnquiry = this.isNewEnquiry
+        this.state = {}
+        const oriEnquiry = cloneDeep(props.enquiry)
+        if (isNewEnquiry) oriEnquiry.dateLocal = toLocalISOString(new Date()).slice(0, 10)
+        this.fields = Object.keys(oriEnquiry)
+                            .filter(key => !['__typename', 'id', 'num'].includes(key))
+        this.fields.forEach(key => {
+            // console.log(key, oriEnquiry[key])
+            this.state[key] = {
+                curVal: oriEnquiry[key],
+                error: false,
+                ...!isNewEnquiry && {
+                    oriVal: oriEnquiry[key],
+                    diff: false,
+                }
+            }
+        })
+        if (!isNewEnquiry) this.state.diff = false
+        console.log(this.state)
     }
-    handleDatePick = (pickedDate) => this.setState({ dateLocal: toLocalISOString(pickedDate).slice(0, 10) })
+    handleDatePick = (pickedDate) => {
+        const dateLocal = cloneDeep(this.state.dateLocal)
+        dateLocal.curVal = toLocalISOString(pickedDate).slice(0, 10)
+        dateLocal.diff = dateLocal.curVal !== dateLocal.oriVal
+        const diff = this.fields.filter(f => f !== 'dateLocal').map(f => this.state[f].diff).includes(true) || dateLocal.diff
+        this.setState({ dateLocal, diff })
+    }
     handleOrgDropdownChange = (e, { value }) => {
         console.log('op, change', value)
         this.setState({ orgId: value })
@@ -55,20 +79,21 @@ class EnquiryEdit extends Component {
         console.log(result, error)
     }
     submit = () => {
-        const { dateLocal } = this.state
-        // validate
-        this.props.createEnquiry({
-            variables: {
-                dateLocal
-            }
+        const enquiry = {}
+        this.fields.forEach(f => {
+            if (this.isNewEnquiry || this.state[f].diff) enquiry[f] = this.state[f].curVal
         })
+        const variables = { ...enquiry }
+        // validate
+        if (this.isNewEnquiry) return this.props.createEnquiry({ variables })
+        variables.id = this.props.id
+        this.props.updateEnquiry({ variables })
     }
 	render() {
         // console.log(this.props)		
-        const { dateLocal, orgId } = this.state
-		const { id, enquiry, updateEnquiry, closeDetails } = this.props
-        const isNewEnquiry = id === 'new'
-        const selectedDate = fromLocalISOString(dateLocal)
+        const { dateLocal, diff } = this.state
+		const { updateEnquiry, cancelEdit } = this.props
+        const selectedDate = fromLocalISOString(dateLocal.curVal)
 		return (
 			<Fragment>
 				<ECardBody>
@@ -98,7 +123,7 @@ class EnquiryEdit extends Component {
                                 allowAdditions
                                 additionLabel='Добавить по ИНН: '
                                 // additionLabel={<i style={{ color: 'red' }}>Custom Language: </i>}
-                                value={orgId}
+                                value={null}
                                 onAddItem={this.addOrg}
                                 onChange={this.handleOrgDropdownChange}
                             />
@@ -124,8 +149,12 @@ class EnquiryEdit extends Component {
 				</ECardBody>
                 <ECardBody>
                     <LabelImitator />
-                    <Button content='Создать' primary onClick={this.submit} />
-                    <CancelLink onClick={closeDetails}>Отмена</CancelLink>
+                    <Button 
+                        primary 
+                        content={this.isNewEnquiry ? 'Создать' : 'Сохранить'}
+                        disabled={!this.isNewEnquiry && !diff}
+                        onClick={this.submit} />
+                    <CancelLink onClick={cancelEdit}>Отмена</CancelLink>
                 </ECardBody>
 			</Fragment>
 		)
@@ -133,7 +162,16 @@ class EnquiryEdit extends Component {
 }
 
 export default compose(
-    graphql(createEnquiry, { name: 'createEnquiry' }),
     graphql(updateEnquiry, { name: 'updateEnquiry' }),
-    graphql(alteredEnquiry, { name: 'alteredEnquiry' }),
+    graphql(createEnquiry, { 
+        name: 'createEnquiry',
+        options: {
+            update: (cache, {data: { createEnquiry }}) => {
+                const query = allEnquiries
+                const data = cache.readQuery({ query })
+                data.enquiries.unshift(createEnquiry)
+                cache.writeQuery({ query, data })
+            }
+        }
+    }),
 )(EnquiryEdit)

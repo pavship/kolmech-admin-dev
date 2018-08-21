@@ -3,11 +3,11 @@ const defaults = {
     //     __typename: ‘ApolloClientDemo’,
     //     currentPageName: ‘Apollo Demo’,
     // }
-    alteredEnquiry: {
-        __typename: 'AlteredEnquiry',
-        // dateLocal: 
-        // active: false,
-    },
+    // alteredEnquiry: {
+    //     __typename: 'AlteredEnquiry',
+    //     // dateLocal: 
+    //     // active: false,
+    // },
     newEnquiry: {
         __typename: 'Enquiry',
         id: 'new'

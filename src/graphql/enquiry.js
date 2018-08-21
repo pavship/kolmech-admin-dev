@@ -28,24 +28,6 @@ export const newEnquiry = gql`
     }
 `
 
-export const alteredEnquiry = gql`
-    query AlteredEnquiry($id: ID!) {
-        alteredEnquiry(id: $id) @client
-    }
-`
-
-export const assignCurrentEnquiry = gql`
-    mutation AssignCurrentEnquiry($id: ID!) {
-        assignCurrentEnquiry(id: $id) @client
-    }
-`
-
-export const updateEnquiry = gql`
-    mutation UpdateEnquiry($key: String!, $value: String!) {
-        updateEnquiry(key: $key, value: $value) @client
-    }
-`
-
 export const createEnquiry = gql`
     mutation createEnquiry($dateLocal: String!) {
         createEnquiry(dateLocal: $dateLocal) {
@@ -56,3 +38,26 @@ export const createEnquiry = gql`
         }
     }
 `
+
+export const updateEnquiry = gql`
+    mutation UpdateEnquiry($id: ID!, $dateLocal: String) {
+        updateEnquiry(id: $id, dateLocal: $dateLocal) {
+            id
+			num
+			dateLocal
+			message
+        }
+    }
+`
+
+// export const alteredEnquiry = gql`
+//     query AlteredEnquiry($id: ID!) {
+//         alteredEnquiry(id: $id) @client
+//     }
+// `
+
+// export const updateAlteredEnquiry = gql`
+//     mutation UpdateAlteredEnquiry($key: String!, $value: String!) {
+//         updateAlteredEnquiry(key: $key, value: $value) @client
+//     }
+// `

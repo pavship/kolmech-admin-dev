@@ -5,7 +5,7 @@ import { Card, Header, Icon, Form, Input, Comment, Button } from 'semantic-ui-re
 import DatePicker from './common/DatePicker'
 
 import { Query, Mutation, graphql, compose } from 'react-apollo'
-import { enquiry, newEnquiry, alteredEnquiry, updateEnquiry } from '../graphql/enquiry'
+import { enquiry, newEnquiry } from '../graphql/enquiry'
 
 import EnquiryEdit from './EnquiryEdit'
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
@@ -83,17 +83,21 @@ class EnquiryDetails extends Component {
 	state = {
 		editMode: this.isNewEnquiry ? true : false
 	}
-
-	enableEditMode = () => this.setState({ editMode: true })
+    enableEditMode = () => this.setState({ editMode: true })
+    cancelEdit = () => {
+        if (this.isNewEnquiry) return this.props.closeDetails()
+        this.setState({ editMode: false })
+    }
 	render() {
-		console.log(this.props)
+		// console.log(this.props)
 		const { editMode } = this.state
-		const { id, closeDetails, enquiry, updateEnquiry } = this.props
+		const { id, closeDetails, enquiryQuery, updateEnquiry } = this.props
 		const isNewEnquiry = id === 'new'
 		// if (isNewEnquiry) this.enableEditMode()
-		if (enquiry.loading) return "Загрузка..."
-		if (enquiry.error) return `Ошибка ${enquiry.error.message}`
-		const { num, dateLocal, orgId } =  isNewEnquiry ? enquiry.newEnquiry : enquiry.enquiry
+		if (enquiryQuery.loading) return "Загрузка..."
+        if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
+        const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
+		const { num, dateLocal, orgId } = enquiry
 		return (
 			<ECard fluid>
 				<ECardTop>
@@ -112,7 +116,7 @@ class EnquiryDetails extends Component {
 					<EditButton icon='edit' coloronhover='blue' active={editMode} onClick={this.enableEditMode} />
 				</ECardTop>
 				{ (editMode || isNewEnquiry) &&
-					<EnquiryEdit id={id} enquiry={enquiry.enquiry} closeDetails={closeDetails} />
+					<EnquiryEdit id={id} enquiry={enquiry} cancelEdit={this.cancelEdit} />
 				}
 				{ !(editMode || isNewEnquiry) && <Fragment>
 					<ECardBody>
@@ -203,8 +207,6 @@ class EnquiryDetails extends Component {
 }
 
 export default compose(
-    graphql(updateEnquiry, { name: 'updateEnquiry' }),
-    graphql(alteredEnquiry, { name: 'alteredEnquiry' }),
-    graphql(newEnquiry, { name: 'enquiry', skip: (props) => props.id !== 'new' }),
-    graphql(enquiry, { name: 'enquiry', skip: (props) => props.id === 'new' })
+    graphql(newEnquiry, { name: 'enquiryQuery', skip: (props) => props.id !== 'new' }),
+    graphql(enquiry, { name: 'enquiryQuery', skip: (props) => props.id === 'new' })
 )(EnquiryDetails)
