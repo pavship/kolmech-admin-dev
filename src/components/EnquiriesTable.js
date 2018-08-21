@@ -21,6 +21,7 @@ const Table = styled.table`
 const Tr = styled.tr`
 
 `
+
 const Enquiry = styled.tr`
     font-size: 1rem;
     // font-weight: bold;
@@ -29,21 +30,21 @@ const Enquiry = styled.tr`
 
 const Td = styled.td`
 	padding-left: 4px;
-  :nth-child(1) {
-    width: 40px;
-  }
-  :nth-child(2) {
-    width: 100px;
-  }
-  :nth-child(3) {
-    width: 250px;
-  }
-  :nth-child(4) {
-    width: 80px;
-  }
-  :nth-child(5) {
-    color: #570f0f;
-  }
+    :nth-child(1) {
+        width: 40px;
+    }
+    :nth-child(2) {
+        width: 100px;
+    }
+    :nth-child(3) {
+        width: 250px;
+    }
+    :nth-child(4) {
+        width: 80px;
+    }
+    :nth-child(5) {
+        color: #570f0f;
+    }
 `
 
 const EnquiriesTable = ({ enquiries, handleEnquiryLineClick }) => {
@@ -64,10 +65,10 @@ const EnquiriesTable = ({ enquiries, handleEnquiryLineClick }) => {
             </TableHeader>
             <Table>
             <tbody>
-                {enquiries.map(({ id, message }) => <Fragment key={id}>
+                {enquiries.map(({ id, num, dateLocal, message }) => <Fragment key={id}>
                 <Enquiry onClick={() => handleEnquiryLineClick(id)}>
-                    <Td>10</Td>
-                    <Td>2018-08-12</Td>
+                    <Td>{num}</Td>
+                    <Td>{dateLocal}</Td>
                     <Td>
                     {/* <Caret name='dropdown' active={activeIndex.includes(name) ? 1 : 0} /> */}
                     {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}

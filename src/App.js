@@ -4,11 +4,12 @@ import EnquiriesPage from './components/EnquiriesPage'
 
 class App extends Component {
   render() {
-    return (
-      <Fragment>
-        <EnquiriesPage />
-      </Fragment>  
-    )
+	this.props.client.cache.reset()
+	return (
+		<Fragment>
+			<EnquiriesPage />
+		</Fragment>  
+	)
   }
 }
 

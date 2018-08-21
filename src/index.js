@@ -7,6 +7,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 import { ApolloProvider } from 'react-apollo'
 import ApolloClient from 'apollo-boost'
+import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory'
 
 import defaults from './apollo/defaults'
 import resolvers from './apollo/resolvers'
@@ -17,12 +18,20 @@ const client = new ApolloClient({
         defaults,
         resolvers,
         // typeDefs
-    }
+    },
+    cache: new InMemoryCache({
+        dataIdFromObject: object => {
+            switch (object.__typename) {
+                case 'NewEnquiry': return 'NewEnquiry'
+                default: return defaultDataIdFromObject(object)
+            }
+        }
+    })
 })
 
 ReactDOM.render(
     <ApolloProvider client={client}>
-        <App />
+        <App client={client} />
     </ApolloProvider>
 , document.getElementById('root'));
 registerServiceWorker();

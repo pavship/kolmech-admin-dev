@@ -3,7 +3,7 @@ import React from 'react'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import 'react-day-picker/lib/style.css'
 
-import { toLocalISOString } from '../utils'
+import { toLocalISOString } from '../../utils/dates'
 
 const DatePicker = ({ selectedDate, handleDatePick }) => {
 	return (
