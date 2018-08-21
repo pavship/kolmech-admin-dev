@@ -25,6 +25,7 @@ class EnquiriesPage extends Component {
         detailsVisible: false,
         activeEnquiryId: null 
     }
+    setActiveEnquiry = (id) => this.setState({ activeEnquiryId: id })
     // Presentational methods
     openDetails = () => this.setState({ detailsVisible: true })
     closeDetails = () => {
@@ -76,7 +77,8 @@ class EnquiriesPage extends Component {
                                 <EnquiryDetails 
                                     key={activeEnquiryId}
                                     id={activeEnquiryId} 
-                                    closeDetails={this.closeDetails} /> } 
+                                    closeDetails={this.closeDetails} 
+                                    setActiveEnquiry={this.setActiveEnquiry} /> } 
                         </DetailsSidebar>
                         <Sidebar.Pusher>
                             <EnquiriesTable enquiries={enquiries} handleEnquiryLineClick={this.handleEnquiryLineClick} />

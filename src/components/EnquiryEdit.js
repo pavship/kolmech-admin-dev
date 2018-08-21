@@ -41,7 +41,9 @@ class EnquiryEdit extends Component {
         super(props)
         this.isNewEnquiry = props.id === 'new'
         const isNewEnquiry = this.isNewEnquiry
-        this.state = {}
+        this.state = {
+            requestIsInProcess: false
+        }
         const oriEnquiry = cloneDeep(props.enquiry)
         if (isNewEnquiry) oriEnquiry.dateLocal = toLocalISOString(new Date()).slice(0, 10)
         this.fields = Object.keys(oriEnquiry)
@@ -84,14 +86,27 @@ class EnquiryEdit extends Component {
             if (this.isNewEnquiry || this.state[f].diff) enquiry[f] = this.state[f].curVal
         })
         const variables = { ...enquiry }
-        // validate
-        if (this.isNewEnquiry) return this.props.createEnquiry({ variables })
+        // TODO validate
+        if (this.isNewEnquiry) return this.createEnquiry(variables)
         variables.id = this.props.id
-        this.props.updateEnquiry({ variables })
+        this.updateEnquiry(variables)
+    }
+    createEnquiry = async (variables) => {
+        this.setState({ requestIsInProcess: true })
+        const res = await this.props.createEnquiry({ variables })
+        this.setState({ requestIsInProcess: false })
+        // console.log(data)
+        this.props.setActiveEnquiry(res.data.createEnquiry.id)
+    }
+    updateEnquiry = async (variables) => {
+        this.setState({ requestIsInProcess: true })
+        await this.props.updateEnquiry({ variables })
+        this.setState({ requestIsInProcess: false })
+        this.props.exitEditMode()
     }
 	render() {
         // console.log(this.props)		
-        const { dateLocal, diff } = this.state
+        const { dateLocal, diff, requestIsInProcess } = this.state
 		const { updateEnquiry, cancelEdit } = this.props
         const selectedDate = fromLocalISOString(dateLocal.curVal)
 		return (
@@ -153,6 +168,7 @@ class EnquiryEdit extends Component {
                         primary 
                         content={this.isNewEnquiry ? 'Создать' : 'Сохранить'}
                         disabled={!this.isNewEnquiry && !diff}
+                        loading={requestIsInProcess}
                         onClick={this.submit} />
                     <CancelLink onClick={cancelEdit}>Отмена</CancelLink>
                 </ECardBody>

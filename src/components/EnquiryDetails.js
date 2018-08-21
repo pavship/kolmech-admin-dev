@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
-import { Card, Header, Icon, Form, Input, Comment, Button } from 'semantic-ui-react'
+import { Card, Header, Icon, Label, Form, Comment, Button } from 'semantic-ui-react'
 import DatePicker from './common/DatePicker'
 
 import { Query, Mutation, graphql, compose } from 'react-apollo'
-import { enquiry, newEnquiry } from '../graphql/enquiry'
+import { enquiry, newEnquiry, createEnquiryComment, enquiryFragment } from '../graphql/enquiry'
 
 import EnquiryEdit from './EnquiryEdit'
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
@@ -59,7 +59,7 @@ const Tr = styled.tr`
 const Td = styled.td`
 	padding-left: 4px;
 	:nth-child(1) {
-		width: 100px;
+        width: 100px;
 		margin: 0 0 1em;
 		font-weight: bold;
 		// color: rgba(0,0,0,.87);
@@ -67,37 +67,76 @@ const Td = styled.td`
 		line-height: 32px;
 	}
 	:nth-child(2) {
-		// width: 100px;
+        // width: 100px;
 		font-size: 1em;
 		line-height: 1.21428571em;
 		padding: .67857143em 1em;
 	}
 `
-
+    
 const Comments = styled(Comment.Group)`
     margin: 1.5em 1.5em 1.5em 45px !important;
 `
 
+const CIcon = styled(Icon)`
+	width: 1.4em !important;
+	margin-top: .15em !important;
+	float: left;
+`
+
+const CLabel = styled(Label)`
+	width: 2em;
+	height: 2em;
+	margin-left: 0 !important;
+	padding: .4em 0em !important;
+	float: left;
+	text-align: center;
+`
+
+const CContent = styled(Comment.Content)`
+	margin-left: 6.5em !important;
+`
+
+const CMetadata = styled(Comment.Metadata)`
+	color: rgba(0,0,0,.6) !important;
+`
+    
 class EnquiryDetails extends Component {
 	isNewEnquiry = this.props.id === 'new'
 	state = {
-		editMode: this.isNewEnquiry ? true : false
+		editMode: this.isNewEnquiry ? true : false,
+		commentText: '',
+		creatingComment: false
 	}
     enableEditMode = () => this.setState({ editMode: true })
+    exitEditMode = () => this.setState({ editMode: false })
     cancelEdit = () => {
         if (this.isNewEnquiry) return this.props.closeDetails()
-        this.setState({ editMode: false })
-    }
+        this.exitEditMode()
+	}
+	handleTextareaChange = (e, target) => {
+		this.setState({commentText: target.value})
+	}
+	createComment = async () => {
+		// console.log(this.state.commentText)
+		this.setState({creatingComment: true})
+		await this.props.createEnquiryComment({
+			variables: {
+				enquiryId: this.props.id,
+				text: this.state.commentText
+			}
+		})
+		this.setState({creatingComment: false, commentText: ''})
+	}
 	render() {
 		// console.log(this.props)
-		const { editMode } = this.state
-		const { id, closeDetails, enquiryQuery, updateEnquiry } = this.props
-		const isNewEnquiry = id === 'new'
-		// if (isNewEnquiry) this.enableEditMode()
+		const { editMode, commentText, creatingComment } = this.state
+		const { id, closeDetails, enquiryQuery, setActiveEnquiry } = this.props
+		const isNewEnquiry = this.isNewEnquiry
 		if (enquiryQuery.loading) return "Загрузка..."
         if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
         const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
-		const { num, dateLocal, orgId } = enquiry
+		const { num, dateLocal, comments } = enquiry
 		return (
 			<ECard fluid>
 				<ECardTop>
@@ -105,19 +144,22 @@ class EnquiryDetails extends Component {
 						<EIcon name='cancel' onClick={closeDetails} />
 						<Header.Content>
 							{ isNewEnquiry 
-								? 'Новая заявка' 
-								: 	<Fragment>
-										{`Заявка №${num}`}
-										<SHeader>{`от ${dateLocal}`}</SHeader>
-									</Fragment> 
-							}
+                              ? 'Новая заявка' 
+                              : <Fragment>
+                                    {`Заявка №${num}`}
+                                    <SHeader>{`от ${dateLocal}`}</SHeader>
+                                </Fragment> }
 						</Header.Content>
 					</EHeader>
-					<EditButton icon='edit' coloronhover='blue' active={editMode} onClick={this.enableEditMode} />
+                    { !isNewEnquiry &&
+					    <EditButton icon='edit' coloronhover='blue' active={editMode} onClick={this.enableEditMode} /> }
 				</ECardTop>
 				{ (editMode || isNewEnquiry) &&
-					<EnquiryEdit id={id} enquiry={enquiry} cancelEdit={this.cancelEdit} />
-				}
+                    <EnquiryEdit id={id} 
+                        enquiry={enquiry} 
+                        cancelEdit={this.cancelEdit} 
+                        exitEditMode={this.exitEditMode} 
+                        setActiveEnquiry={setActiveEnquiry} /> }
 				{ !(editMode || isNewEnquiry) && <Fragment>
 					<ECardBody>
 						<Table><tbody>
@@ -129,77 +171,40 @@ class EnquiryDetails extends Component {
 							<Tr>
 								<Td>Организация</Td>
 								{/* <Td>{orgId}</Td> */}
-								<Td>Жопа на круче</Td>
+								<Td>Жопа покруче</Td>
 							</Tr>
 						</tbody></Table>
 					</ECardBody>
-					{/* <Comments minimal>
-						<Header as='h3' dividing content='Комментарии' />
-						<Comment>
-							<Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
-							<Comment.Content>
-								<Comment.Author as='a'>Matt</Comment.Author>
-								<Comment.Metadata>
-									<span>Today at 5:42PM</span>
-								</Comment.Metadata>
-								<Comment.Text>How artistic!</Comment.Text>
-								<Comment.Actions>
-									<a>Reply</a>
-								</Comment.Actions>
-							</Comment.Content>
-						</Comment>
-
-						<Comment>
-							<Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/elliot.jpg' />
-							<Comment.Content>
-								<Comment.Author as='a'>Elliot Fu</Comment.Author>
-								<Comment.Metadata>
-									<span>Yesterday at 12:30AM</span>
-								</Comment.Metadata>
-								<Comment.Text>
-									<p>This has been very useful for my research. Thanks as well!</p>
-								</Comment.Text>
-								<Comment.Actions>
-									<a>Reply</a>
-								</Comment.Actions>
-							</Comment.Content>
-
-							<Comment.Group>
-								<Comment>
-									<Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/jenny.jpg' />
-									<Comment.Content>
-										<Comment.Author as='a'>Jenny Hess</Comment.Author>
-										<Comment.Metadata>
-											<span>Just now</span>
-										</Comment.Metadata>
-										<Comment.Text>Elliot you are always so right :)</Comment.Text>
-										<Comment.Actions>
-											<a>Reply</a>
-										</Comment.Actions>
-									</Comment.Content>
-								</Comment>
-							</Comment.Group>
-						</Comment>
-
-						<Comment>
-							<Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/joe.jpg' />
-							<Comment.Content>
-								<Comment.Author as='a'>Joe Henderson</Comment.Author>
-								<Comment.Metadata>
-									<span>5 days ago</span>
-								</Comment.Metadata>
-								<Comment.Text>Dude, this is awesome. Thanks so much</Comment.Text>
-								<Comment.Actions>
-									<a>Reply</a>
-								</Comment.Actions>
-							</Comment.Content>
-						</Comment>
-
+                    
+					<Comments minimal>
+						<Header as='h3' dividing content='Комментарии и события' />
+                        { comments.map(c => (
+                            <Comment key={c.id}>
+								{ c.type &&
+									<CIcon size='big'
+										name={c.type === 'CREATE' ? 'arrow alternate circle up outline' : 'question'}  
+									/> }
+								<CLabel size='big' content='КП' />
+                                {/* <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' /> */}
+                                <CContent>
+                                    <Comment.Author as='span'>Константин Поляков</Comment.Author>
+                                    <CMetadata>
+                                        <span>{c.datetimeLocal.slice(0,16)}</span>
+                                    </CMetadata>
+                                    <Comment.Text>{c.text}</Comment.Text>
+                                    {/* <Comment.Actions>
+                                        <a>Reply</a>
+                                    </Comment.Actions> */}
+                                </CContent>
+                            </Comment>
+                        ))}
 						<Form reply>
-							<Form.TextArea />
-							<Button content='Добавить коммент' labelPosition='left' icon='edit' primary floated='right' />
+							<Form.TextArea value={commentText} onChange={this.handleTextareaChange} />
+							<Button content='Добавить коммент' labelPosition='left' icon='edit' primary floated='right' 
+								onClick={this.createComment}
+								loading={creatingComment} />
 						</Form>
-					</Comments> */}
+					</Comments>
 				</Fragment> }
 			</ECard>
 		)
@@ -207,6 +212,24 @@ class EnquiryDetails extends Component {
 }
 
 export default compose(
+    graphql(createEnquiryComment, { 
+		name: 'createEnquiryComment',
+		options: (props) => ({
+			update: (cache, {data: createEnquiryComment}) => {
+				const id = `Enquiry:${props.id}`
+				const fragment = enquiryFragment
+				const data = cache.readFragment({
+					id,
+					fragment
+				})
+				data.comments.push(createEnquiryComment.createEnquiryComment)
+				cache.writeData({
+					id,
+					data
+				})
+			}
+		})
+	}),
     graphql(newEnquiry, { name: 'enquiryQuery', skip: (props) => props.id !== 'new' }),
     graphql(enquiry, { name: 'enquiryQuery', skip: (props) => props.id === 'new' })
 )(EnquiryDetails)

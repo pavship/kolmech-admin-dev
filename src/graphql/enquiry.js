@@ -6,7 +6,6 @@ export const allEnquiries = gql`
             id
             num
             dateLocal
-            message
         }
     }
 `
@@ -17,7 +16,12 @@ export const enquiry = gql`
             id
 			num
 			dateLocal
-			message
+            comments {
+                id
+                datetimeLocal
+                text
+                type
+            }
 		}
 	}
 `
@@ -34,7 +38,6 @@ export const createEnquiry = gql`
             id
 			num
 			dateLocal
-			message
         }
     }
 `
@@ -45,10 +48,35 @@ export const updateEnquiry = gql`
             id
 			num
 			dateLocal
-			message
         }
     }
 `
+
+export const createEnquiryComment = gql`
+    mutation CreateEnquiryComment($enquiryId: ID!, $text: String) {
+        createEnquiryComment(enquiryId: $enquiryId, text: $text) {
+            id
+            datetimeLocal
+            text
+            type
+        }
+    }
+`
+
+export const enquiryFragment = gql`
+    fragment myEnquiry on Enquiry {
+        id
+        num
+        dateLocal
+        comments {
+            id
+            datetimeLocal
+            text
+            type
+        }
+    }
+`
+
 
 // export const alteredEnquiry = gql`
 //     query AlteredEnquiry($id: ID!) {
