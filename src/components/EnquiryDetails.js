@@ -92,7 +92,9 @@ const CLabel = styled(Label)`
 	margin-left: 0 !important;
 	padding: .4em 0em !important;
 	float: left;
-	text-align: center;
+    text-align: center;
+    ${props => props.indent && 'margin-left: 42.69px !important;'}
+    // ${props => props.indent && 'margin-left: calc(1.4em + 0.25rem) !important;'}
 `
 
 const CContent = styled(Comment.Content)`
@@ -104,14 +106,13 @@ const CMetadata = styled(Comment.Metadata)`
 `
 
 const CText = styled(Comment.Text)`
-	&>p {
-        margin: 0 !important;
-    }
+    &>p { margin: 0 !important; }
+    &>table { border-collapse: collapse; }
 `
 
 const StyledEditorWrapper = styled.div`
     padding: .78571429em 1em;
-    margin-bottom: 1em;
+    margin: 0 0 1em 6.35em;
     border: 1px solid rgba(34,36,38,.15);
     border-radius: .28571429rem;
     transition: color .1s ease,border-color .1s ease;
@@ -216,7 +217,7 @@ class EnquiryDetails extends Component {
 									<CIcon size='big'
 										name={c.type === 'CREATE' ? 'arrow alternate circle up outline' : 'question'}  
 									/> }
-								<CLabel size='big' content='КП' />
+								<CLabel size='big' content='КП' indent={!c.type ? 1 : 0} />
                                 {/* <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' /> */}
                                 <CContent>
                                     <Comment.Author as='span'>Константин Поляков</Comment.Author>
@@ -226,6 +227,13 @@ class EnquiryDetails extends Component {
                                     {/* <Comment.Text>{c.text}</Comment.Text> */}
                                     {/* <Comment.Text><DraftEditor readOnly={true} rawText={rawText}/></Comment.Text> */}
                                     <CText dangerouslySetInnerHTML={{__html: sanitize(c.htmlText)}} />
+                                    {/* <CText>
+                                        <p><strong>Создал</strong> заявку с параметрами:</p>
+                                        <table><tbody>
+                                            <tr><td></td><td>Номер</td><td><strong>2</strong></td></tr>    
+                                            <tr><td></td><td>Дата</td><td><strong>2018-08-22</strong></td></tr>    
+                                        </tbody></table>
+                                    </CText> */}
                                     {/* <Comment.Text dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(thisIsMyCopy)}}> */}
                                     {/* <Comment.Actions>
                                         <a>Reply</a>
@@ -235,10 +243,12 @@ class EnquiryDetails extends Component {
                         ))}
 						<Form reply>
 							<StyledEditorWrapper>
-                                <DraftEditor ref={this.editorRef} setEditorHasText={this.setEditorHasText}/>
+                                <DraftEditor ref={this.editorRef} 
+                                    setEditorHasText={this.setEditorHasText}
+                                    createComment={this.createComment} />
                                 {/* <DraftEditor printOutRaw={this.printOutRaw} ref={this.editorRef}/> */}
                             </StyledEditorWrapper>
-							<Form.TextArea onChange={this.handleTextareaChange} />
+							{/* <Form.TextArea onChange={this.handleTextareaChange} /> */}
 							<Button content='Добавить коммент' labelPosition='left' icon='edit' primary floated='right' 
                                 onClick={this.createComment}
                                 disabled={!editorHasText}

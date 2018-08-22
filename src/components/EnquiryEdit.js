@@ -114,7 +114,7 @@ class EnquiryEdit extends Component {
 			<Fragment>
 				<ECardBody>
                     {/* {dateLocal + ' ' + orgId} */}
-					<Form size='large'>
+					<Form>
 						<Form.Field inline>
 							<ELabel>Дата</ELabel>
                             <DatePicker
