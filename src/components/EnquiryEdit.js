@@ -9,7 +9,7 @@ import { allEnquiries, createEnquiry, updateEnquiry } from '../graphql/enquiry'
 
 import cloneDeep from 'lodash/cloneDeep'
 import validateInn from '../utils/validateInn'
-import { toLocalISOString, fromLocalISOString }from '../utils/dates'
+import { isValidDate, toLocalISOString, fromLocalISOString }from '../utils/dates'
 
 const ECardBody = styled(Card.Content)`
     padding-left: 55px !important;
@@ -63,6 +63,7 @@ class EnquiryEdit extends Component {
         console.log(this.state)
     }
     handleDatePick = (pickedDate) => {
+        if (!isValidDate(pickedDate)) return
         const dateLocal = cloneDeep(this.state.dateLocal)
         dateLocal.curVal = toLocalISOString(pickedDate).slice(0, 10)
         dateLocal.diff = dateLocal.curVal !== dateLocal.oriVal
@@ -113,7 +114,7 @@ class EnquiryEdit extends Component {
 			<Fragment>
 				<ECardBody>
                     {/* {dateLocal + ' ' + orgId} */}
-					<Form>
+					<Form size='large'>
 						<Form.Field inline>
 							<ELabel>Дата</ELabel>
                             <DatePicker

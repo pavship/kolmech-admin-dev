@@ -19,7 +19,7 @@ export const enquiry = gql`
             comments {
                 id
                 datetimeLocal
-                text
+                htmlText
                 type
             }
 		}
@@ -53,11 +53,11 @@ export const updateEnquiry = gql`
 `
 
 export const createEnquiryComment = gql`
-    mutation CreateEnquiryComment($enquiryId: ID!, $text: String) {
-        createEnquiryComment(enquiryId: $enquiryId, text: $text) {
+    mutation CreateEnquiryComment($enquiryId: ID!, $htmlText: String) {
+        createEnquiryComment(enquiryId: $enquiryId, htmlText: $htmlText) {
             id
             datetimeLocal
-            text
+            htmlText
             type
         }
     }
@@ -71,7 +71,7 @@ export const enquiryFragment = gql`
         comments {
             id
             datetimeLocal
-            text
+            htmlText
             type
         }
     }

@@ -9,6 +9,8 @@ import { enquiry, newEnquiry, createEnquiryComment, enquiryFragment } from '../g
 
 import EnquiryEdit from './EnquiryEdit'
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
+import DraftEditor from './common/DraftEditor'
+import { sanitize } from 'dompurify'
 
 const ECard = styled(Card)`
     border-radius: 0 !important;
@@ -100,16 +102,37 @@ const CContent = styled(Comment.Content)`
 const CMetadata = styled(Comment.Metadata)`
 	color: rgba(0,0,0,.6) !important;
 `
+
+const CText = styled(Comment.Text)`
+	&>p {
+        margin: 0 !important;
+    }
+`
+
+const StyledEditorWrapper = styled.div`
+    padding: .78571429em 1em;
+    margin-bottom: 1em;
+    border: 1px solid rgba(34,36,38,.15);
+    border-radius: .28571429rem;
+    transition: color .1s ease,border-color .1s ease;
+    line-height: 1.2857;
+`
     
 class EnquiryDetails extends Component {
-	isNewEnquiry = this.props.id === 'new'
+    isNewEnquiry = this.props.id === 'new'
+    editorRef = React.createRef()
 	state = {
 		editMode: this.isNewEnquiry ? true : false,
+        creatingComment: false,
+        htmlText: '', //formatted text from draft js Editor
+        editorHasText: false,
 		commentText: '',
-		creatingComment: false
+        rawComment: {},
+        rawText: '{ "blocks": [ { "key": "3ojq8", "text": "qewrwe", "type": "unstyled", "depth": 0, "inlineStyleRanges": [], "entityRanges": [], "data": {} }, { "key": "ctpk9", "text": " dsfgsdgfd", "type": "unstyled", "depth": 0, "inlineStyleRanges": [], "entityRanges": [], "data": {} } ], "entityMap": {} }'
 	}
     enableEditMode = () => this.setState({ editMode: true })
     exitEditMode = () => this.setState({ editMode: false })
+    setEditorHasText = (bool) => this.setState({ editorHasText: bool })
     cancelEdit = () => {
         if (this.isNewEnquiry) return this.props.closeDetails()
         this.exitEditMode()
@@ -118,19 +141,28 @@ class EnquiryDetails extends Component {
 		this.setState({commentText: target.value})
 	}
 	createComment = async () => {
-		// console.log(this.state.commentText)
+        // console.log(this.state.commentText)
+        const htmlText = this.editorRef.current.exportHtml()
+        if (htmlText === '<p><br></p>') return
+        // this.setState({ htmlText })
+
+
 		this.setState({creatingComment: true})
 		await this.props.createEnquiryComment({
 			variables: {
 				enquiryId: this.props.id,
-				text: this.state.commentText
+				htmlText
 			}
 		})
-		this.setState({creatingComment: false, commentText: ''})
-	}
+        this.setState({ creatingComment: false, editorHasText: false })
+        this.editorRef.current.clear()
+    }
+    printOutRaw = (rawComment) => {
+        this.setState({rawComment})
+    }
 	render() {
 		// console.log(this.props)
-		const { editMode, commentText, creatingComment } = this.state
+		const { editMode, commentText, creatingComment, rawComment, rawText, htmlText, editorHasText } = this.state
 		const { id, closeDetails, enquiryQuery, setActiveEnquiry } = this.props
 		const isNewEnquiry = this.isNewEnquiry
 		if (enquiryQuery.loading) return "Загрузка..."
@@ -191,7 +223,10 @@ class EnquiryDetails extends Component {
                                     <CMetadata>
                                         <span>{c.datetimeLocal.slice(0,16)}</span>
                                     </CMetadata>
-                                    <Comment.Text>{c.text}</Comment.Text>
+                                    {/* <Comment.Text>{c.text}</Comment.Text> */}
+                                    {/* <Comment.Text><DraftEditor readOnly={true} rawText={rawText}/></Comment.Text> */}
+                                    <CText dangerouslySetInnerHTML={{__html: sanitize(c.htmlText)}} />
+                                    {/* <Comment.Text dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(thisIsMyCopy)}}> */}
                                     {/* <Comment.Actions>
                                         <a>Reply</a>
                                     </Comment.Actions> */}
@@ -199,9 +234,14 @@ class EnquiryDetails extends Component {
                             </Comment>
                         ))}
 						<Form reply>
-							<Form.TextArea value={commentText} onChange={this.handleTextareaChange} />
+							<StyledEditorWrapper>
+                                <DraftEditor ref={this.editorRef} setEditorHasText={this.setEditorHasText}/>
+                                {/* <DraftEditor printOutRaw={this.printOutRaw} ref={this.editorRef}/> */}
+                            </StyledEditorWrapper>
+							<Form.TextArea onChange={this.handleTextareaChange} />
 							<Button content='Добавить коммент' labelPosition='left' icon='edit' primary floated='right' 
-								onClick={this.createComment}
+                                onClick={this.createComment}
+                                disabled={!editorHasText}
 								loading={creatingComment} />
 						</Form>
 					</Comments>
