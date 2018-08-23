@@ -1,16 +1,15 @@
 import React, { Component, Fragment } from 'react'
 
-import EnquiriesPage from './components/EnquiriesPage'
+import Root from './components/Root'
 
 class App extends Component {
   render() {
-	this.props.client.cache.reset()
 	return (
 		<Fragment>
-			<EnquiriesPage />
-		</Fragment>  
+			<Root />
+		</Fragment>
 	)
   }
 }
 
-export default App;
+export default App

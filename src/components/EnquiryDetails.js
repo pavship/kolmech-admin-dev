@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
-import { Card, Header, Icon, Label, Form, Comment, Button } from 'semantic-ui-react'
-import DatePicker from './common/DatePicker'
+import { Card, Header, Icon, Label, Form, Comment, Button, Message } from 'semantic-ui-react'
 
-import { Query, Mutation, graphql, compose } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import { enquiry, newEnquiry, createEnquiryComment, enquiryFragment } from '../graphql/enquiry'
 
 import EnquiryEdit from './EnquiryEdit'
@@ -108,6 +107,9 @@ const CMetadata = styled(Comment.Metadata)`
 const CText = styled(Comment.Text)`
     &>p { margin: 0 !important; }
     &>table { border-collapse: collapse; }
+    &>table>tbody>tr>td:nth-child(1) {
+        width: 5px;
+    }
 `
 
 const StyledEditorWrapper = styled.div`
@@ -118,6 +120,9 @@ const StyledEditorWrapper = styled.div`
     transition: color .1s ease,border-color .1s ease;
     line-height: 1.2857;
 `
+const CMessage = styled(Message)`
+    margin-left: 6.35em !important;
+`
     
 class EnquiryDetails extends Component {
     isNewEnquiry = this.props.id === 'new'
@@ -127,9 +132,7 @@ class EnquiryDetails extends Component {
         creatingComment: false,
         htmlText: '', //formatted text from draft js Editor
         editorHasText: false,
-		commentText: '',
-        rawComment: {},
-        rawText: '{ "blocks": [ { "key": "3ojq8", "text": "qewrwe", "type": "unstyled", "depth": 0, "inlineStyleRanges": [], "entityRanges": [], "data": {} }, { "key": "ctpk9", "text": " dsfgsdgfd", "type": "unstyled", "depth": 0, "inlineStyleRanges": [], "entityRanges": [], "data": {} } ], "entityMap": {} }'
+        error: ''
 	}
     enableEditMode = () => this.setState({ editMode: true })
     exitEditMode = () => this.setState({ editMode: false })
@@ -138,32 +141,26 @@ class EnquiryDetails extends Component {
         if (this.isNewEnquiry) return this.props.closeDetails()
         this.exitEditMode()
 	}
-	handleTextareaChange = (e, target) => {
-		this.setState({commentText: target.value})
-	}
 	createComment = async () => {
-        // console.log(this.state.commentText)
-        const htmlText = this.editorRef.current.exportHtml()
-        if (htmlText === '<p><br></p>') return
-        // this.setState({ htmlText })
-
-
-		this.setState({creatingComment: true})
-		await this.props.createEnquiryComment({
-			variables: {
-				enquiryId: this.props.id,
-				htmlText
-			}
-		})
-        this.setState({ creatingComment: false, editorHasText: false })
-        this.editorRef.current.clear()
-    }
-    printOutRaw = (rawComment) => {
-        this.setState({rawComment})
+        try {
+            const htmlText = this.editorRef.current.exportHtml()
+            if (htmlText === '<p><br></p>') return
+            this.setState({creatingComment: true})
+            await this.props.createEnquiryComment({
+                variables: {
+                    enquiryId: this.props.id,
+                    htmlText
+                }
+            })
+            this.setState({ creatingComment: false, editorHasText: false, error: '' })
+            this.editorRef.current.clear()
+        } catch(err) {
+            this.setState({ creatingComment: false, error: err.message })
+        }
     }
 	render() {
 		// console.log(this.props)
-		const { editMode, commentText, creatingComment, rawComment, rawText, htmlText, editorHasText } = this.state
+		const { editMode, creatingComment, rawText, htmlText, editorHasText } = this.state
 		const { id, closeDetails, enquiryQuery, setActiveEnquiry } = this.props
 		const isNewEnquiry = this.isNewEnquiry
 		if (enquiryQuery.loading) return "Загрузка..."
@@ -224,31 +221,23 @@ class EnquiryDetails extends Component {
                                     <CMetadata>
                                         <span>{c.datetimeLocal.slice(0,16)}</span>
                                     </CMetadata>
-                                    {/* <Comment.Text>{c.text}</Comment.Text> */}
-                                    {/* <Comment.Text><DraftEditor readOnly={true} rawText={rawText}/></Comment.Text> */}
                                     <CText dangerouslySetInnerHTML={{__html: sanitize(c.htmlText)}} />
-                                    {/* <CText>
-                                        <p><strong>Создал</strong> заявку с параметрами:</p>
-                                        <table><tbody>
-                                            <tr><td></td><td>Номер</td><td><strong>2</strong></td></tr>    
-                                            <tr><td></td><td>Дата</td><td><strong>2018-08-22</strong></td></tr>    
-                                        </tbody></table>
-                                    </CText> */}
-                                    {/* <Comment.Text dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(thisIsMyCopy)}}> */}
                                     {/* <Comment.Actions>
                                         <a>Reply</a>
                                     </Comment.Actions> */}
                                 </CContent>
                             </Comment>
                         ))}
-						<Form reply>
+						<Form reply error={!!this.state.error}>
 							<StyledEditorWrapper>
                                 <DraftEditor ref={this.editorRef} 
                                     setEditorHasText={this.setEditorHasText}
                                     createComment={this.createComment} />
-                                {/* <DraftEditor printOutRaw={this.printOutRaw} ref={this.editorRef}/> */}
                             </StyledEditorWrapper>
-							{/* <Form.TextArea onChange={this.handleTextareaChange} /> */}
+                            <CMessage
+                                error
+                                header='Коммент добавить не удалось..'
+                                content={this.state.error} />
 							<Button content='Добавить коммент' labelPosition='left' icon='edit' primary floated='right' 
                                 onClick={this.createComment}
                                 disabled={!editorHasText}

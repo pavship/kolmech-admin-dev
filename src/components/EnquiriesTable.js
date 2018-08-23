@@ -57,8 +57,8 @@ const EnquiriesTable = ({ enquiries, handleEnquiryLineClick }) => {
                         <Td>№</Td>
                         <Td>Дата</Td>
                         <Td>Организация</Td>
-                        <Td>Сумма КП</Td>
-                        <Td>Статус</Td>
+                        {/* <Td>Сумма КП</Td>
+                        <Td>Статус</Td> */}
                     </Tr>
                 </tbody>
                 </Table>
@@ -72,11 +72,9 @@ const EnquiriesTable = ({ enquiries, handleEnquiryLineClick }) => {
                     <Td>
                     {/* <Caret name='dropdown' active={activeIndex.includes(name) ? 1 : 0} /> */}
                     {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
-                    {message}
                     </Td>
-                    <Td>15 000 ₽</Td>
-                    <Td><Label color='green' basic content={`ниче так`} /></Td>
-                    {/* padding: 3px 5px !important; */}
+                    {/* <Td>15 000 ₽</Td>
+                    <Td><Label color='green' basic content={`ниче так`} /></Td> */}
                 </Enquiry>
                 {/* {activeIndex.includes(name) && prods.map(({ id, fullnumber, time, nTime, cost }) => <Fragment key={id}>
                     <ECProd>
