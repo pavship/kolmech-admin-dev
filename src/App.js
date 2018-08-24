@@ -6,7 +6,7 @@ class App extends Component {
   render() {
 	return (
 		<Fragment>
-			<Root />
+			<Root token={this.props.token} />
 		</Fragment>
 	)
   }
