@@ -6,6 +6,7 @@ import { isTokenExpired } from '../utils/jwtHelper'
 import LoginPage from './LoginPage'
 import EnquiriesPage from './EnquiriesPage'
 
+import { Query } from 'react-apollo'
 import { me } from '../graphql/user'
 
 class Root extends Component {
@@ -48,7 +49,17 @@ class Root extends Component {
 			<Fragment>
 				{ !token 
 				  ?	<LoginPage refreshToken={this.refreshToken} />
-				  :	<EnquiriesPage refreshToken={this.refreshToken} /> }
+				  : <Query
+                        query={me}
+                         >
+                        { ({ loading, error, data }) => (
+                            <Fragment>
+                                { loading && 'Загрузка...'}
+                                { error   && `Ошибка ${error.message}`}
+                                <EnquiriesPage refreshToken={this.refreshToken} me={data.me} />
+                            </Fragment>
+                        )}
+                    </Query> }
 			</Fragment>
 		)
 	}
