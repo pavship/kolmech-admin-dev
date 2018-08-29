@@ -5,13 +5,19 @@ import { Header, Icon } from 'semantic-ui-react'
 
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
 
+import { Query, graphql, compose } from 'react-apollo'
+import { meLocal } from '../graphql/user'
+
 const MenuDiv = styled.div`
+    display: flex;
+    align-items: center;
     border-bottom: 1px solid #7e7e81;
 `
 
 const MenuHeader = styled(Header)`
-    display: inline;
+    margin: 0 !important;
     padding: 0 1rem !important;
+    cursor: default;
 `
 
 const MenuButton = styled(ButtonColoredOnHover)`
@@ -27,7 +33,13 @@ const LoadButton = MenuButton.extend`
     `}
 `
 
-const EnquiriesMenu = ({ refetchEnquiries, enquiriesAreLoading, addNewEnquiry, newEnquiryButtonActive }) => {
+const UserName = styled(Header)`
+    margin: 0 0 0 auto !important;
+    padding: 0 1rem !important;
+    cursor: default;
+`
+
+const EnquiriesMenu = ({ refetchEnquiries, enquiriesAreLoading, addNewEnquiry, newEnquiryButtonActive, refreshToken }) => {
     return (
         <MenuDiv>
             <MenuHeader content='Заявки и заказы' size='medium' />
@@ -37,8 +49,24 @@ const EnquiriesMenu = ({ refetchEnquiries, enquiriesAreLoading, addNewEnquiry, n
             </LoadButton>
             <MenuButton coloronhover='green' circular icon='plus' content=' Заявка'
                 onClick={addNewEnquiry} active={newEnquiryButtonActive} />
+            <Query query={meLocal}>
+                { ({ data }) => {
+                    if (data && data.me) {
+                        const { fName, lName } = data.me.person
+                        const menuNameTitle = fName + ' ' + (lName ? `${lName.slice(0,1)}.` : '')
+                        return (
+                            // <MenuHeader content={fName + ' ' + (lName ? (lName.slice(0,1) + '.') : '')} size='small' />
+                            <UserName content={menuNameTitle} size='small' />
+                    )} else return null
+                }}
+            </Query>
+            {/* <MenuButton circular icon='log out' /> */}
+            <Icon name='log out' size='large' link onClick={() => refreshToken(null)} />
         </MenuDiv>
     )
 }
 
 export default EnquiriesMenu
+// export default compose(
+// 	graphql(meLocal, {name: 'me'})
+// )(EnquiriesMenu)

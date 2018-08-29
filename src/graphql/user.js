@@ -13,18 +13,21 @@ export const me = gql`
 	}
 `
 
+export const meLocal = gql`
+	query MeLocal {
+		me @client {
+			person {
+				fName
+				lName
+			}
+		}
+	}
+`
+
 export const login = gql`
 	mutation Login($email: String!, $password: String!) {
 		login(email: $email, password: $password) {
 			token
-			user {
-				id
-				email
-				person {
-					fName
-					lName
-				}
-			}
 		}
 	}
 `

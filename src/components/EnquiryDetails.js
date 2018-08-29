@@ -60,7 +60,7 @@ const Tr = styled.tr`
 const Td = styled.td`
 	padding-left: 4px;
 	:nth-child(1) {
-        width: 100px;
+        width: 150px;
 		margin: 0 0 1em;
 		font-weight: bold;
 		// color: rgba(0,0,0,.87);
@@ -76,16 +76,19 @@ const Td = styled.td`
 `
     
 const Comments = styled(Comment.Group)`
-    margin: 1.5em 1.5em 1.5em 45px !important;
+    margin: 1.5em 1.5em 1.5em 55px !important;
 `
 
 const CIcon = styled(Icon)`
-	width: 1.4em !important;
+    // apply horizontal offset correction for different icons to be vertically alined
+	width: ${props => (props.type === 'CREATE') ? '1.73em' : '1.4em' } !important;
+    ${props => (props.type === 'CREATE') && 'margin-left: -0.33em !important;'}
 	margin-top: .15em !important;
-	float: left;
+    float: left;
+    opacity: 0.6 !important;
 `
 
-const CLabel = styled(Label)`
+const UserLabel = styled(Label)`
 	width: 2em;
 	height: 2em;
 	margin-left: 0 !important;
@@ -107,8 +110,14 @@ const CMetadata = styled(Comment.Metadata)`
 const CText = styled(Comment.Text)`
     &>p { margin: 0 !important; }
     &>table { border-collapse: collapse; }
+    &>table>tbody>tr>td {
+        padding-left: 4px;
+    }
     &>table>tbody>tr>td:nth-child(1) {
         width: 5px;
+    }
+    &>table>tbody>tr>td:nth-child(3) {
+        padding-left: 10px;
     }
 `
 
@@ -130,7 +139,6 @@ class EnquiryDetails extends Component {
 	state = {
 		editMode: this.isNewEnquiry ? true : false,
         creatingComment: false,
-        htmlText: '', //formatted text from draft js Editor
         editorHasText: false,
         error: ''
 	}
@@ -156,13 +164,14 @@ class EnquiryDetails extends Component {
             this.editorRef.current.clear()
         } catch(err) {
             this.setState({ creatingComment: false, error: err.message })
+            console.log(err)
         }
     }
 	render() {
 		// console.log(this.props)
-		const { editMode, creatingComment, rawText, htmlText, editorHasText } = this.state
-		const { id, closeDetails, enquiryQuery, setActiveEnquiry } = this.props
-		const isNewEnquiry = this.isNewEnquiry
+		const { editMode, creatingComment, editorHasText } = this.state
+		const { id, enquiryQuery, closeDetails, selectEnquiry } = this.props
+        const isNewEnquiry = this.isNewEnquiry
 		if (enquiryQuery.loading) return "Загрузка..."
         if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
         const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
@@ -189,45 +198,55 @@ class EnquiryDetails extends Component {
                         enquiry={enquiry} 
                         cancelEdit={this.cancelEdit} 
                         exitEditMode={this.exitEditMode} 
-                        setActiveEnquiry={setActiveEnquiry} /> }
+                        selectEnquiry={selectEnquiry} /> }
 				{ !(editMode || isNewEnquiry) && <Fragment>
 					<ECardBody>
 						<Table><tbody>
 							<Tr>
 								<Td>Организация</Td>
 								{/* <Td>{orgId}</Td> */}
-								<Td>Жопа на круче</Td>
+								<Td>ООО Экскаватор</Td>
 							</Tr>
 							<Tr>
-								<Td>Организация</Td>
+								<Td>Контакт организации</Td>
 								{/* <Td>{orgId}</Td> */}
-								<Td>Жопа покруче</Td>
+								<Td>Брутал Клайнт</Td>
 							</Tr>
 						</tbody></Table>
 					</ECardBody>
                     
 					<Comments minimal>
 						<Header as='h3' dividing content='Комментарии и события' />
-                        { comments.map(c => (
-                            <Comment key={c.id}>
-								{ c.type &&
-									<CIcon size='big'
-										name={c.type === 'CREATE' ? 'arrow alternate circle up outline' : 'question'}  
-									/> }
-								<CLabel size='big' content='КП' indent={!c.type ? 1 : 0} />
-                                {/* <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' /> */}
-                                <CContent>
-                                    <Comment.Author as='span'>Константин Поляков</Comment.Author>
-                                    <CMetadata>
-                                        <span>{c.datetimeLocal.slice(0,16)}</span>
-                                    </CMetadata>
-                                    <CText dangerouslySetInnerHTML={{__html: sanitize(c.htmlText)}} />
-                                    {/* <Comment.Actions>
-                                        <a>Reply</a>
-                                    </Comment.Actions> */}
-                                </CContent>
-                            </Comment>
-                        ))}
+                        { comments.map(c => {
+							const { fName, lName } = c.user.person
+							const userInitials = (lName ? fName.slice(0,1) : fName.slice(0,2)) + (lName ? lName.slice(0,1) : '')
+                            return (
+								<Comment key={c.id}>
+									{ c.type &&
+									<CIcon 
+                                        size='big' type={c.type}
+                                        color={c.type === 'CREATE' ? 'green' : 
+                                                          'UPDATE' ? 'blue' : 'brown'}
+                                        name ={c.type === 'CREATE' ? 'plus' : 
+                                                          'UPDATE' ? 'edit' : 'question'} /> }
+									<UserLabel 
+										size='big' 
+										content={userInitials}
+										indent={!c.type ? 1 : 0} />
+									{/* <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' /> */}
+									<CContent>
+										<Comment.Author 
+											as='span' 
+											content={fName + ' ' + lName} />
+										<CMetadata
+											content={c.datetimeLocal.slice(0,16)} />
+										<CText dangerouslySetInnerHTML={{__html: sanitize(c.htmlText)}} />
+										{/* <Comment.Actions
+											content={( <a>Reply</a> )} /> */}
+									</CContent>
+								</Comment>
+                            )
+                        })}
 						<Form reply error={!!this.state.error}>
 							<StyledEditorWrapper>
                                 <DraftEditor ref={this.editorRef} 
@@ -262,11 +281,12 @@ export default compose(
 					fragment
 				})
 				data.comments.push(createEnquiryComment.createEnquiryComment)
-				cache.writeData({
-					id,
+				cache.writeFragment({
+                    id,
+                    fragment,
 					data
 				})
-			}
+            }
 		})
 	}),
     graphql(newEnquiry, { name: 'enquiryQuery', skip: (props) => props.id !== 'new' }),

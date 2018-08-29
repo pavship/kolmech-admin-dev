@@ -25,8 +25,7 @@ class Root extends Component {
 				if (!expired) {
 					this.setState({ token: token })
 				} else {
-					localStorage.removeItem(AUTH_TOKEN)
-					this.setState({ token: null })
+					this.refreshToken(null)
 				}
 			}
 		} catch (e) {
@@ -38,27 +37,25 @@ class Root extends Component {
 		if (token) {
 		  	localStorage.setItem(AUTH_TOKEN, token)
 		} else {
-		  	localStorage.removeItem(AUTH_TOKEN)
+            localStorage.removeItem(AUTH_TOKEN)
+            this.props.client.resetStore()
 		}
 		this.setState({ token })
-	}
+    }
 	render() {
 		const { token } = this.state
-		console.log('token on startup > ', token)
 		return (
 			<Fragment>
 				{ !token 
 				  ?	<LoginPage refreshToken={this.refreshToken} />
-				  : <Query
-                        query={me}
-                         >
-                        { ({ loading, error, data }) => (
-                            <Fragment>
-                                { loading && 'Загрузка...'}
-                                { error   && `Ошибка ${error.message}`}
+				  : <Query query={me} >
+                        { ({ loading, error, data }) => {
+                            if (loading) return null
+                            if (error) return `Error!: ${error.message}`
+                            return (
                                 <EnquiriesPage refreshToken={this.refreshToken} me={data.me} />
-                            </Fragment>
-                        )}
+                            )
+                        }}
                     </Query> }
 			</Fragment>
 		)

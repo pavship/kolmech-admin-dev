@@ -1,13 +1,14 @@
 import React, { Component, Fragment } from 'react'
 
-import { graphql, compose } from 'react-apollo'
-import { login } from '../graphql/user'
-
 import styled from 'styled-components'
 import { Header, Form, Message, Button, Segment } from 'semantic-ui-react'
 
+import { graphql, compose } from 'react-apollo'
+import { login } from '../graphql/user'
+
 const MenuDiv = styled.div`
     border-bottom: 1px solid #7e7e81;
+    // height: 35px;
 `
 
 const MenuHeader = styled(Header)`
@@ -34,7 +35,6 @@ class LoginPage extends Component {
 		try {
 			const { email, password } = this.state
 			this.setState({ sendingRequest: true })
-			console.log(email, password)
 			const result = await this.props.login({
 				variables: {
 					email,
@@ -53,7 +53,7 @@ class LoginPage extends Component {
         return (
             <Fragment>
                 <MenuDiv>
-                    <MenuHeader>
+                    <MenuHeader size='large'>
                         <i>Колмех</i>
                     </MenuHeader>
                 </MenuDiv>
@@ -96,5 +96,10 @@ class LoginPage extends Component {
 }
 
 export default compose(
-	graphql(login, {name: 'login'})
+	graphql(login, {
+        name: 'login',
+        options: {
+            fetchPolicy: 'no-cache'
+        }
+    })
 )(LoginPage)

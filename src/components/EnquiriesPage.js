@@ -25,7 +25,7 @@ class EnquiriesPage extends Component {
         detailsVisible: false,
         activeEnquiryId: null 
     }
-    setActiveEnquiry = (id) => this.setState({ activeEnquiryId: id })
+    selectEnquiry = (id) => this.setState({ activeEnquiryId: id })
     // Presentational methods
     openDetails = () => this.setState({ detailsVisible: true })
     closeDetails = () => {
@@ -48,13 +48,9 @@ class EnquiriesPage extends Component {
         this.setState({ activeEnquiryId: id })
         this.openDetails()
     }
-    // toggleDetails = () => this.setState({ detailsVisible: !this.state.detailsVisible })
-    // assignCurrentEnquiry = (id) => {
-        
-    // }
     render() {
         const { detailsVisible, activeEnquiryId } = this.state
-        const { allEnquiries: { loading, error, enquiries } } = this.props
+        const { allEnquiries: { loading, error, enquiries }, refreshToken } = this.props
         // if (loading) return "Загрузка..."
 		// if (error) return `Ошибка ${error.message}`
         return (
@@ -63,7 +59,8 @@ class EnquiriesPage extends Component {
                     refetchEnquiries={this.refetchEnquiries}
                     enquiriesAreLoading={loading}
                     addNewEnquiry={this.addNewEnquiry} 
-                    newEnquiryButtonActive={activeEnquiryId === 'new' && detailsVisible} />
+                    newEnquiryButtonActive={activeEnquiryId === 'new' && detailsVisible}
+                    refreshToken={refreshToken} />
                 { loading && "Загрузка..."}
                 { error   && `Ошибка ${error.message}`}
                 { !(loading || error) && 
@@ -78,10 +75,13 @@ class EnquiriesPage extends Component {
                                     key={activeEnquiryId}
                                     id={activeEnquiryId} 
                                     closeDetails={this.closeDetails} 
-                                    setActiveEnquiry={this.setActiveEnquiry} /> } 
+                                    selectEnquiry={this.selectEnquiry} /> } 
                         </DetailsSidebar>
                         <Sidebar.Pusher>
-                            <EnquiriesTable enquiries={enquiries} handleEnquiryLineClick={this.handleEnquiryLineClick} />
+                            <EnquiriesTable 
+                                enquiries={enquiries}
+                                activeEnquiryId={activeEnquiryId}
+                                handleEnquiryLineClick={this.handleEnquiryLineClick} />
                         </Sidebar.Pusher>
                     </Pushable>
                 }

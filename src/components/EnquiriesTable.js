@@ -18,76 +18,91 @@ const Table = styled.table`
     border-collapse: collapse;
 `
 
-const Tr = styled.tr`
+// const Col = styled.col`
+//     :nth-child(1) {
+//         width: 10px;
+//     }
+//     :nth-child(2) {
+//         width: 40px;
+//     }
+//     :nth-child(3) {
+//         width: 100px;
+//     }
+//     :nth-child(4) {
+//         width: 250px;
+//     }
+// `
 
+const Tr = styled.tr`
+    
 `
 
-const Enquiry = styled.tr`
+const EnquiryRow = styled.tr`
     font-size: 1rem;
-    // font-weight: bold;
     cursor: pointer;
+    &:hover {
+        background-color: rgba(0,0,0,.03);
+    }
+    ${props => props.active && `{
+        background-color: rgba(0,0,0,.03);
+        font-weight: bold;
+    }`}
 `
 
 const Td = styled.td`
 	padding-left: 4px;
     :nth-child(1) {
-        width: 40px;
+        width: 10px;
     }
     :nth-child(2) {
-        width: 100px;
+        width: 40px;
     }
     :nth-child(3) {
-        width: 250px;
+        width: 100px;
     }
     :nth-child(4) {
-        width: 80px;
+        width: 250px;
+    }
+    :nth-child(5) {
+
     }
     :nth-child(5) {
         color: #570f0f;
     }
 `
 
-const EnquiriesTable = ({ enquiries, handleEnquiryLineClick }) => {
+const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) => {
     return (
         <Fragment>
             <TableHeader>
                 <Table>
-                <tbody>
-                    <Tr>
+                    {/* <colgroup> <Col /> <Col /> <Col /> <Col /> <Col /> </colgroup> */}
+                    <tbody><tr>
+                        <Td></Td>
                         <Td>№</Td>
                         <Td>Дата</Td>
                         <Td>Организация</Td>
+                        <Td></Td>
                         {/* <Td>Сумма КП</Td>
                         <Td>Статус</Td> */}
-                    </Tr>
-                </tbody>
-                </Table>
+                </tr></tbody></Table>
             </TableHeader>
             <Table>
-            <tbody>
-                {enquiries.map(({ id, num, dateLocal, message }) => <Fragment key={id}>
-                <Enquiry onClick={() => handleEnquiryLineClick(id)}>
-                    <Td>{num}</Td>
-                    <Td>{dateLocal}</Td>
-                    <Td>
-                    {/* <Caret name='dropdown' active={activeIndex.includes(name) ? 1 : 0} /> */}
-                    {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
-                    </Td>
-                    {/* <Td>15 000 ₽</Td>
-                    <Td><Label color='green' basic content={`ниче так`} /></Td> */}
-                </Enquiry>
-                {/* {activeIndex.includes(name) && prods.map(({ id, fullnumber, time, nTime, cost }) => <Fragment key={id}>
-                    <ECProd>
-                    <Td>
-                        {fullnumber}
-                    </Td>
-                    <Td>{time}ч</Td>
-                    <Td>{nTime || '- '}ч</Td>
-                    <Td>{cost || '- '}₽</Td>
-                    </ECProd>
-                </Fragment>)} */}
-                </Fragment>)}
-            </tbody>
+                {/* <colgroup> <Col /> <Col /> <Col /> <Col /> <Col /> </colgroup> */}
+                <tbody>
+                    {enquiries.map(({ id, num, dateLocal, message }) => <Fragment key={id}>
+                        <EnquiryRow onClick={() => handleEnquiryLineClick(id)} active={id === activeEnquiryId}>
+                            <Td></Td>
+                            <Td>{num}</Td>
+                            <Td>{dateLocal}</Td>
+                            <Td>
+                            {/* <Caret name='dropdown' active={activeIndex.includes(name) ? 1 : 0} /> */}
+                            {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
+                            </Td>
+                            <Td></Td>
+                            {/* <Td>15 000 ₽</Td>*/}
+                        </EnquiryRow></Fragment>)}
+                </tbody>
             </Table>
         </Fragment>
     )

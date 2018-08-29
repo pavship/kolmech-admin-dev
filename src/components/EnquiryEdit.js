@@ -26,6 +26,13 @@ const LabelImitator = styled.div`
 
 const EDropdown = styled(Dropdown)`
     width: 350px !important;
+    &:hover: {
+        border-color: rgba(34, 36, 38, 0.1) !important;
+    }
+`
+
+const CMessage = styled(Message)`
+    // margin-left: 6.35em !important;
 `
 
 const CancelLink = styled.a`
@@ -42,7 +49,8 @@ class EnquiryEdit extends Component {
         this.isNewEnquiry = props.id === 'new'
         const isNewEnquiry = this.isNewEnquiry
         this.state = {
-            requestIsInProcess: false
+            requestIsInProcess: false,
+            error: ''
         }
         const oriEnquiry = cloneDeep(props.enquiry)
         if (isNewEnquiry) oriEnquiry.dateLocal = toLocalISOString(new Date()).slice(0, 10)
@@ -60,7 +68,6 @@ class EnquiryEdit extends Component {
             }
         })
         if (!isNewEnquiry) this.state.diff = false
-        console.log(this.state)
     }
     handleDatePick = (pickedDate) => {
         if (!isValidDate(pickedDate)) return
@@ -93,21 +100,30 @@ class EnquiryEdit extends Component {
         this.updateEnquiry(variables)
     }
     createEnquiry = async (variables) => {
-        this.setState({ requestIsInProcess: true })
-        const res = await this.props.createEnquiry({ variables })
-        this.setState({ requestIsInProcess: false })
-        // console.log(data)
-        this.props.setActiveEnquiry(res.data.createEnquiry.id)
+        try {
+            this.setState({ requestIsInProcess: true })
+            const res = await this.props.createEnquiry({ variables })
+            this.setState({ requestIsInProcess: false, error: '' })
+            this.props.selectEnquiry(res.data.createEnquiry.id)
+        } catch (err) {
+            this.setState({ requestIsInProcess: false, error: err.message })
+            console.log(err)
+        }
     }
     updateEnquiry = async (variables) => {
-        this.setState({ requestIsInProcess: true })
-        await this.props.updateEnquiry({ variables })
-        this.setState({ requestIsInProcess: false })
-        this.props.exitEditMode()
+        try {
+            this.setState({ requestIsInProcess: true })
+            await this.props.updateEnquiry({ variables: { input: variables } })
+            this.setState({ requestIsInProcess: false, error: '' })
+            this.props.exitEditMode()
+        } catch (err) {
+            this.setState({ requestIsInProcess: false, error: err.message })
+            console.log(err)
+        }
     }
 	render() {
         // console.log(this.props)		
-        const { dateLocal, diff, requestIsInProcess } = this.state
+        const { dateLocal, diff, requestIsInProcess, error } = this.state
 		const { updateEnquiry, cancelEdit } = this.props
         const selectedDate = fromLocalISOString(dateLocal.curVal)
 		return (
@@ -164,6 +180,11 @@ class EnquiryEdit extends Component {
 					</Form>
 				</ECardBody>
                 <ECardBody>
+                    <CMessage
+                        error
+                        hidden={!error}
+                        header={`${this.isNewEnquiry ? 'Создать' : 'Сохранить'}  не удалось..`}
+                        content={error} />
                     <LabelImitator />
                     <Button 
                         primary 
@@ -179,7 +200,17 @@ class EnquiryEdit extends Component {
 }
 
 export default compose(
-    graphql(updateEnquiry, { name: 'updateEnquiry' }),
+    graphql(updateEnquiry, { 
+        name: 'updateEnquiry',
+        // options: {
+        //     update: (cache, {data: { createEnquiry }}) => {
+        //         const query = allEnquiries
+        //         const data = cache.readQuery({ query })
+        //         data.enquiries.unshift(createEnquiry)
+        //         cache.writeQuery({ query, data })
+        //     }
+        // }
+     }),
     graphql(createEnquiry, { 
         name: 'createEnquiry',
         options: {

@@ -21,6 +21,12 @@ export const enquiry = gql`
                 datetimeLocal
                 htmlText
                 type
+                user {
+                    person {
+                        fName
+                        lName
+                    }
+                }
             }
 		}
 	}
@@ -43,11 +49,23 @@ export const createEnquiry = gql`
 `
 
 export const updateEnquiry = gql`
-    mutation UpdateEnquiry($id: ID!, $dateLocal: String) {
-        updateEnquiry(id: $id, dateLocal: $dateLocal) {
+    mutation UpdateEnquiry($input: EnquiryInput!) {
+        updateEnquiry(input: $input) {
             id
 			num
 			dateLocal
+            comments {
+                id
+                datetimeLocal
+                htmlText
+                type
+                user {
+                    person {
+                        fName
+                        lName
+                    }
+                }
+            }
         }
     }
 `
@@ -59,6 +77,12 @@ export const createEnquiryComment = gql`
             datetimeLocal
             htmlText
             type
+            user {
+                person {
+                    fName
+                    lName
+                }
+            }
         }
     }
 `
