@@ -50,12 +50,21 @@ class EnquiryEdit extends Component {
         const isNewEnquiry = this.isNewEnquiry
         this.state = {
             requestIsInProcess: false,
-            error: ''
+            err: {
+                title: '',
+                message: ''
+            },
+            org: {
+                text: false,
+                value: 'new',
+                search: '',
+                error: false
+            }
         }
         const oriEnquiry = cloneDeep(props.enquiry)
         if (isNewEnquiry) oriEnquiry.dateLocal = toLocalISOString(new Date()).slice(0, 10)
         this.fields = Object.keys(oriEnquiry)
-                            .filter(key => !['__typename', 'id', 'num'].includes(key))
+            .filter(key => !['__typename', 'id', 'num'].includes(key))
         this.fields.forEach(key => {
             // console.log(key, oriEnquiry[key])
             this.state[key] = {
@@ -77,16 +86,52 @@ class EnquiryEdit extends Component {
         const diff = this.fields.filter(f => f !== 'dateLocal').map(f => this.state[f].diff).includes(true) || dateLocal.diff
         this.setState({ dateLocal, diff })
     }
-    handleOrgDropdownChange = (e, { value }) => {
-        console.log('op, change', value)
-        this.setState({ orgId: value })
+    handleOrgDropdownSearchChange = (e, data) => {
+        this.setState({ 
+            org: {
+            ...this.state.org,
+            search: data.searchQuery,
+            error: false,
+            },
+            err: {
+                message: ''
+            }
+        })
     }
-    addOrg = (e, { value }) => {
-        console.log('op, add', value)
-        console.log(this.state.orgId)
-        let error = {}
-        const result = validateInn(value, error)
-        console.log(result, error)
+    handleOrgDropdownChange = (e, data) => {
+        console.log('op, change', data)
+        this.setState({ org: {
+            text: false,
+            value: data.value,
+            search: ''
+        } })
+    }
+    handleOrgDropdownAdd = (e, { value }) => {
+        try {
+            console.log('op, add', value)
+            console.log(this.state.orgId)
+            let error = {}
+            const result = validateInn(value, error)
+            console.log(result, error)
+            if (error.message) throw new Error(error.message)
+        } catch (err) {
+            this.setState({
+                err: {
+                    title: 'Добавить организацию по ИНН не удалось..',
+                    message: err.message
+                },
+                org: {
+                    text: value,
+                    value: 'new',
+                    search: value,
+                    error: true
+                }
+             })
+            console.log(err)
+        }
+    }
+    handleOrgDropdownClose = () => {
+        console.log('close ')
     }
     submit = () => {
         const enquiry = {}
@@ -106,7 +151,13 @@ class EnquiryEdit extends Component {
             this.setState({ requestIsInProcess: false, error: '' })
             this.props.selectEnquiry(res.data.createEnquiry.id)
         } catch (err) {
-            this.setState({ requestIsInProcess: false, error: err.message })
+            this.setState({
+                requestIsInProcess: false,
+                err: {
+                    title: 'Создать не удалось..',
+                    message: err.message
+                }
+            })
             console.log(err)
         }
     }
@@ -117,47 +168,59 @@ class EnquiryEdit extends Component {
             this.setState({ requestIsInProcess: false, error: '' })
             this.props.exitEditMode()
         } catch (err) {
-            this.setState({ requestIsInProcess: false, error: err.message })
+            this.setState({ 
+                requestIsInProcess: false,
+                err: {
+                    title: 'Сохранить не удалось..',
+                    message: err.message
+                }
+            })
             console.log(err)
         }
     }
 	render() {
         // console.log(this.props)		
-        const { dateLocal, diff, requestIsInProcess, error } = this.state
+        const { dateLocal, org, diff, requestIsInProcess, err } = this.state
 		const { updateEnquiry, cancelEdit } = this.props
         const selectedDate = fromLocalISOString(dateLocal.curVal)
+        const dropdownOptions = [
+            ...(org.text && [{ text: org.text, value: 'new' }]),
+            { text: 'Arabictext', value: 'Arabicvalue' }, 
+            { text: 'Бabictext', value: 'Бabicvalue' }
+        ]
 		return (
 			<Fragment>
+                {JSON.stringify(org, null, 2) }
 				<ECardBody>
-                    {/* {dateLocal + ' ' + orgId} */}
 					<Form>
 						<Form.Field inline>
 							<ELabel>Дата</ELabel>
                             <DatePicker
                                 selectedDate={selectedDate}
                                 handleDatePick={this.handleDatePick} />
-                                {/* // handleDatePick={pickedDate => updateEnquiry({
-                                //     variables: {
-                                //         key: 'date',
-                                //         value: new Date(pickedDate.setHours(0, 0, 0, 0))
-                                //     }
-                                // })} /> */}
 						</Form.Field>
-						<Form.Field inline>
+						<Form.Field inline error={org.error}>
 							<ELabel>Организация</ELabel>
                             <EDropdown
-                                options={[]}
+                                selection //render as a formControl
                                 placeholder='Поиск по наименованию или ИНН'
+                                // options={ dropdownOptions }
+                                options={[ { key: 'Arabickey', text: 'Arabictext', value: 'Arabicvalue' }, { key: 'Бabickey', text: 'Бabictext', value: 'Бabicvalue' }  ]}
+                                value={org.value}
+                                // searchQuery={org.text}
+                                onChange={this.handleOrgDropdownChange}
+                                selectOnBlur={false}
+                                selectOnNavigation={false}
                                 search
-                                selection
+                                searchQuery={org.search}
+                                onSearchChange={this.handleOrgDropdownSearchChange}
                                 // fluid
                                 noResultsMessage='Не найдено. Введите ИНН, чтобы добавить.'
                                 allowAdditions
                                 additionLabel='Добавить по ИНН: '
                                 // additionLabel={<i style={{ color: 'red' }}>Custom Language: </i>}
-                                value={null}
-                                onAddItem={this.addOrg}
-                                onChange={this.handleOrgDropdownChange}
+                                onAddItem={this.handleOrgDropdownAdd}
+                                onClose={this.handleOrgDropdownClose}
                             />
 						</Form.Field>
                         <Message
@@ -182,9 +245,9 @@ class EnquiryEdit extends Component {
                 <ECardBody>
                     <CMessage
                         error
-                        hidden={!error}
-                        header={`${this.isNewEnquiry ? 'Создать' : 'Сохранить'}  не удалось..`}
-                        content={error} />
+                        hidden={!err.message}
+                        header={err.title}
+                        content={err.message} />
                     <LabelImitator />
                     <Button 
                         primary 
