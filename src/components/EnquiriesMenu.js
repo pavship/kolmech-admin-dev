@@ -5,7 +5,7 @@ import { Header, Icon } from 'semantic-ui-react'
 
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
 
-import { Query, graphql, compose } from 'react-apollo'
+import { Query } from 'react-apollo'
 import { meLocal } from '../graphql/user'
 
 const MenuDiv = styled.div`
@@ -67,6 +67,3 @@ const EnquiriesMenu = ({ refetchEnquiries, enquiriesAreLoading, addNewEnquiry, n
 }
 
 export default EnquiriesMenu
-// export default compose(
-// 	graphql(meLocal, {name: 'me'})
-// )(EnquiriesMenu)

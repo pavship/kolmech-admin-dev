@@ -83,7 +83,7 @@ class LoginPage extends Component {
 							primary
                             type='submit'
                             floated='right'
-							disabled={!email || !password}
+							disabled={!email || !password || sendingRequest}
 							loading={sendingRequest}
 							onClick={this.submit} >
                             Войти

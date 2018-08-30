@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react'
 
-import { Query, graphql, compose } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import { allEnquiries } from '../graphql/enquiry'
 
 import styled from 'styled-components'
-import { Sidebar, Button, Container } from 'semantic-ui-react'
+import { Sidebar } from 'semantic-ui-react'
 
 import EnquiriesMenu from './EnquiriesMenu'
 import EnquiriesTable from './EnquiriesTable'
