@@ -90,12 +90,12 @@ class EnquiryEdit extends Component {
         console.log('change ', field, ' to value > ', newVal)
         const fieldObj = cloneDeep(this.state[field])
         fieldObj.curVal = newVal
-        fieldObj.diff = fieldObj.curVal !== fieldObj.oriVal
         fieldObj.err = false
+        if (this.isNewEnquiry) fieldObj.diff = fieldObj.curVal !== fieldObj.oriVal
         const diff = this.fields.filter(f => f !== field).map(f => this.state[f].diff).includes(true) || fieldObj.diff
         this.setState({ [field]: fieldObj, diff, err: { message: '' } })
     }
-    handleDatePick = (pickedDate) => {
+    selectDay = (pickedDate) => {
         if (!isValidDate(pickedDate)) return this.setState({ 
             dateLocal: { ...this.state.dateLocal, err: true },
             err: { title: 'Ошибка ввода даты', message: 'Дата заявки не соответствует формату дат' } 
@@ -103,48 +103,22 @@ class EnquiryEdit extends Component {
         this.changeFieldValue('dateLocal', toLocalISOString(pickedDate).slice(0, 10))
     }
     handleOrgDropdownSearchChange = (e, { searchQuery }) => {
-        // console.log('searchChange ')
         this.setState({ 
             orgDdn: { search: searchQuery, err: false },
         })
     }
-    handleOrgDropdownChange = (e, data) => {
-        // console.log('change')
-        const orgId = cloneDeep(this.state.orgId)
-        orgId.curVal = data.value
-        orgId.diff = orgId.curVal !== orgId.oriVal
-        orgId.err = false
-        const diff = this.fields.filter(f => f !== 'orgId').map(f => this.state[f].diff).includes(true) || orgId.diff
-        this.setState({ orgDdn: { search: '', loading: false }, orgId, diff })
-    }
-    selectOrg = (id) => {
-        console.log('select ')
-        const org = cloneDeep(this.state.org)
-        const orgId = cloneDeep(this.state.orgId)
-        orgId.curVal = id
-        orgId.diff = orgId.curVal !== orgId.oriVal
-        const diff = this.fields.filter(f => f !== 'orgId').map(f => this.state[f].diff).includes(true) || orgId.diff
-        org.search = ''
-        this.setState({ orgId, org, diff })
+    selectOrg = (e, { value }) => {
+        this.setState({ orgDdn: { search: '', loading: false } })
+        this.changeFieldValue('orgId', value)
     }
     createOrg = async (e, { value: inn }) => {
         try {
-            // console.log('add ')
-            // console.log(this.state.orgId)
             let err = {}
             const isValidInn = validateInn(inn, err)
             if (!isValidInn) throw new Error(err.message)
-            // let org = cloneDeep(this.state.org)
-            // org.loading = true
             this.setState({ orgDdn: { search: inn, loading: true} })
             const data = await this.props.createOrg({ variables: { inn } })
-            // console.log(data)
-            const orgId = cloneDeep(this.state.orgId)
-            orgId.curVal = data.data.createOrg.id
-            orgId.diff = orgId.curVal !== orgId.oriVal
-            orgId.err = false
-            const diff = this.fields.filter(f => f !== 'orgId').map(f => this.state[f].diff).includes(true) || orgId.diff
-            this.setState({ orgDdn: { search: '', loading: false }, orgId, diff, err: { message: '' } })
+            this.selectOrg(null, { value: data.data.createOrg.id } )
         } catch (err) {
             this.setState({
                 err: {
@@ -163,10 +137,6 @@ class EnquiryEdit extends Component {
             console.log(err)
         }
     }
-    // handleOrgDropdownClose = (e, data) => {
-    //     console.log('close ')
-    //     console.log(data)
-    // }
     submit = () => {
         const enquiry = {}
         this.fields.forEach(f => {
@@ -218,11 +188,8 @@ class EnquiryEdit extends Component {
 		const { cancelEdit, allOrgs } = this.props
         const selectedDate = fromLocalISOString(dateLocal.curVal)
         const orgs = allOrgs.orgs
-        // const dropdownOptions = orgs ? orgs.map(o => ({key:o.id, value: o.id, text: o.name})) : []
-        // console.log(dropdownOptions)
-        // console.log('orgId > ', orgId)
-        // const formErr = this.fields.filter(f => f !== 'orgId').map(f => this.state[f].diff).includes(true) || orgId.diff
         const requiredIsEmpty = this.requiredFields.some(f => !this.state[f].curVal)
+        const someFieldHasError = this.fields.some(f => !!this.state[f].err)
 		return (
 			<Fragment>
 				<ECardBody>
@@ -232,7 +199,7 @@ class EnquiryEdit extends Component {
                             <DatePicker
                                 error={dateLocal.err}
                                 selectedDate={selectedDate}
-                                handleDatePick={this.handleDatePick} />
+                                selectDay={this.selectDay} />
 						</Form.Field>
 						<Form.Field inline error={orgId.err} required>
 							<ELabel>Организация</ELabel>
@@ -243,7 +210,7 @@ class EnquiryEdit extends Component {
                                 placeholder='Поиск по наименованию или ИНН'
                                 options={ orgs ? orgs.map(o => ({key:o.id, value: o.id, text: o.name})) : [] }
                                 value={orgId.curVal}
-                                onChange={this.handleOrgDropdownChange}
+                                onChange={this.selectOrg}
                                 selectOnBlur={false}
                                 selectOnNavigation={false}
                                 search
@@ -285,7 +252,7 @@ class EnquiryEdit extends Component {
                     <Button 
                         primary 
                         content={this.isNewEnquiry ? 'Создать' : 'Сохранить'}
-                        disabled={(!this.isNewEnquiry && !diff) || !!err.message || !!orgId.loading || requiredIsEmpty}
+                        disabled={(!this.isNewEnquiry && !diff) || !!err.message || someFieldHasError || !!orgId.loading || requiredIsEmpty}
                         loading={loading}
                         onClick={this.submit} />
                     <CancelLink onClick={cancelEdit}>Отмена</CancelLink>

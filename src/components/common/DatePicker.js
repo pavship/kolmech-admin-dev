@@ -18,12 +18,12 @@ const PickerDiv = styled.div`
 	}
 `
 
-const DatePicker = ({ selectedDate, handleDatePick, error }) => {
+const DatePicker = ({ selectedDate, selectDay, error }) => {
 	return (
 		<PickerDiv error={error}>
 			<DayPickerInput
 				value={toLocalISOString(selectedDate).slice(0, 10)}
-				onDayChange={handleDatePick}
+				onDayChange={selectDay}
 				dayPickerProps={{
 					firstDayOfWeek: 1,
 					month: selectedDate
