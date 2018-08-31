@@ -51,6 +51,7 @@ class EnquiryEdit extends Component {
         const isNewEnquiry = this.isNewEnquiry
         this.state = {
             loading: false,
+            // if any of the form fields has error, the following err prop should always contain non empty string error message with explanaition 
             err: {
                 message: ''
             },
@@ -67,12 +68,15 @@ class EnquiryEdit extends Component {
         oriEnquiry.orgId = oriEnquiry.org ? oriEnquiry.org.id : null //'cjlgzauej003z0919v114wb2u'
         this.fields = Object.keys(oriEnquiry)
             .filter(key => !['__typename', 'id', 'num', 'generated', 'type', 'org'].includes(key))
+        this.requiredFields = ['dateLocal', 'orgId']
         // map through form fields and write helper props
         this.fields.forEach(key => {
             // console.log(key, oriEnquiry[key])
             this.state[key] = {
                 curVal: oriEnquiry[key],
+                // err bool controls weather the field is heighlighted with error (red) style
                 err: false,
+                ...this.requiredFields.includes(key) && { required: true },
                 ...!isNewEnquiry && {
                     oriVal: oriEnquiry[key],
                     diff: false,
@@ -97,17 +101,11 @@ class EnquiryEdit extends Component {
             err: { title: 'Ошибка ввода даты', message: 'Дата заявки не соответствует формату дат' } 
         })
         this.changeFieldValue('dateLocal', toLocalISOString(pickedDate).slice(0, 10))
-        // const dateLocal = cloneDeep(this.state.dateLocal)
-        // dateLocal.curVal = toLocalISOString(pickedDate).slice(0, 10)
-        // dateLocal.diff = dateLocal.curVal !== dateLocal.oriVal
-        // const diff = this.fields.filter(f => f !== 'dateLocal').map(f => this.state[f].diff).includes(true) || dateLocal.diff
-        // this.setState({ dateLocal, diff })
     }
     handleOrgDropdownSearchChange = (e, { searchQuery }) => {
         // console.log('searchChange ')
         this.setState({ 
             orgDdn: { search: searchQuery, err: false },
-            err: { message: '' }
         })
     }
     handleOrgDropdownChange = (e, data) => {
@@ -147,7 +145,6 @@ class EnquiryEdit extends Component {
             orgId.err = false
             const diff = this.fields.filter(f => f !== 'orgId').map(f => this.state[f].diff).includes(true) || orgId.diff
             this.setState({ orgDdn: { search: '', loading: false }, orgId, diff, err: { message: '' } })
-            // this.selectOrg(orgId.curVal)
         } catch (err) {
             this.setState({
                 err: {
@@ -224,6 +221,8 @@ class EnquiryEdit extends Component {
         // const dropdownOptions = orgs ? orgs.map(o => ({key:o.id, value: o.id, text: o.name})) : []
         // console.log(dropdownOptions)
         // console.log('orgId > ', orgId)
+        // const formErr = this.fields.filter(f => f !== 'orgId').map(f => this.state[f].diff).includes(true) || orgId.diff
+        const requiredIsEmpty = this.requiredFields.some(f => !this.state[f].curVal)
 		return (
 			<Fragment>
 				<ECardBody>
@@ -235,7 +234,7 @@ class EnquiryEdit extends Component {
                                 selectedDate={selectedDate}
                                 handleDatePick={this.handleDatePick} />
 						</Form.Field>
-						<Form.Field inline error={orgId.err}>
+						<Form.Field inline error={orgId.err} required>
 							<ELabel>Организация</ELabel>
                             <EDropdown
                                 loading={!orgs || orgDdn.loading}
@@ -286,7 +285,7 @@ class EnquiryEdit extends Component {
                     <Button 
                         primary 
                         content={this.isNewEnquiry ? 'Создать' : 'Сохранить'}
-                        disabled={!this.isNewEnquiry && !diff}
+                        disabled={(!this.isNewEnquiry && !diff) || !!err.message || !!orgId.loading || requiredIsEmpty}
                         loading={loading}
                         onClick={this.submit} />
                     <CancelLink onClick={cancelEdit}>Отмена</CancelLink>
