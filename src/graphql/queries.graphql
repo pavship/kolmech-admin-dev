@@ -1,25 +1,143 @@
-mutation {
-  login (
-    email: "developer@example.com",
-    password: "nooneknows"
-    ) {
-      token
+query me {
+  me {
+    id
+    email
+    person {
+      fName
+      lName
     }
+  }
+}
+query enquiry {
+  enquiry (id: "cjliki4lg00220977insbp9d1") {
+    id
+    num
+    dateLocal
+    org {
+      id
+      name
+      inn
+    }
+    comments {
+      id
+      user {
+        person {
+          lName
+        }
+      }
+    }
+  }
+}
+query enquiries {
+  enquiries {
+    id
+    num
+    dateLocal
+    org {
+      id
+      name
+      inn
+    }
+    comments {
+      id
+      user {
+        person {
+          lName
+        }
+      }
+    }
+  }
+}
+mutation createEnquiryComment {
+  createEnquiryComment(
+    enquiryId: "cjl8qccp100100943fjqgb5q3"
+    htmlText: "<p><strong>Создал</strong> заявку с параметрами:</p>"
+  ) {
+    id
+    datetimeLocal
+    text
+    type
+  }
+}
+mutation createEnquiry {
+  createEnquiry (
+    dateLocal: "2017-07-01"
+    orgId: "cjlievxkh00200935y9s4wp5s"
+  ){
+    id
+  }
+}
+mutation updateEnquiry {
+  updateEnquiry ( 
+    input: {
+      dateLocal: "2018-08-12"
+      id: "cjlivcszu002s0930g6cqzt55"
+      orgId: "cjliefthe001r09351n74zmfi"
+    }
+  ){
+    id
+    num
+    dateLocal
+    org {
+      id
+      name
+      inn
+    }
+    comments {
+      id
+      user {
+        person {
+          lName
+        }
+      }
+    }
+  }
+}
+
+mutation deleteAllEnquiries {
+	deleteAllEnquiries {
+    count
+  }  
+}
+
+mutation signup {
+  signup(
+    email: "p@p",
+    password: "burito",
+  	fName: "Павел",
+    lName: "Шипицын"
+  ) {
+		token
+  }
+}
+
+mutation login {
+  login(email: "developer@example.com", password: "nooneknows") {
+		token  
+  }
 }
 
 mutation createOrg {
-  createOrg (data: {
-    name: "Организация1"
-    enquiries: {
-      create: {
-        message: "Интересует возможность обработки"
-      }
-    }
-  }) {
+  createOrg(inn: "7706107510") {
     id
+    inn
     name
-    enquiries {
-      id message
-    }
+    legalAddress
+  }
+}
+
+query orgs {
+  orgs {
+    id
+    inn
+    moedeloId
+    name
+    legalAddress
+  }
+}
+
+mutation deleteAllOrgs {
+  deleteAllOrgs {
+    count
   }
 }
