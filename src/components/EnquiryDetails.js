@@ -46,6 +46,10 @@ const ReloadButton = styled(ButtonColoredOnHover)`
     }
 `
 
+const EditButton = styled(ButtonColoredOnHover)`
+    ${props => props.withmargin && 'margin-left: auto !important;'}
+`
+
 const ECardBody = styled(Card.Content)`
     padding-left: 55px !important;
 `
@@ -132,17 +136,12 @@ const CText = styled(Comment.Text)`
         min-width: 90px;
     }
     &>table>tbody>tr>td:nth-child(3) {
-        width: 500px;
-        min-width: 30%;
         padding-left: 10px;
-    }
-    &>table>tbody>tr>td:nth-child(4) {
-        width: 21px;
-        min-width: 21px;
-    }
-    &>table>tbody>tr>td:nth-child(5) {
-        /* width: 60%; */
         width: 1000px;
+        min-width: 240px;
+    }
+    &>table>tbody>tr>td>span {
+        margin-right: 5px;
     }
 `
 
@@ -199,7 +198,6 @@ class EnquiryDetails extends Component {
         }
     }
 	render() {
-		// console.log(this.props)
 		const { editMode, creatingComment, editorHasText, error, loading } = this.state
 		const { id, enquiryQuery, closeDetails, selectEnquiry } = this.props
         const isNewEnquiry = this.isNewEnquiry
@@ -222,12 +220,18 @@ class EnquiryDetails extends Component {
                                 </Fragment> }
 						</Header.Content>
 					</EHeader>
+                    { !editMode &&
+                        <ReloadButton coloronhover='blue' 
+                            active={loading} 
+                            onClick={this.refetchEnquiry} >
+                            <Icon name='refresh' 
+                                loading={loading} /></ReloadButton> }
                     { !isNewEnquiry &&
-                        // <EditButton icon='refresh' coloronhover='blue' active={loading} loading={loading} onClick={this.refetchEnquiry} />
-                        <ReloadButton coloronhover='blue' active={loading} onClick={this.refetchEnquiry} >
-                            <Icon name='refresh' loading={loading} /></ReloadButton> }
-                    { !isNewEnquiry &&
-					    <ButtonColoredOnHover icon='edit' coloronhover='blue' active={editMode} onClick={this.enableEditMode} /> }
+                        <EditButton icon='edit' 
+                            coloronhover='blue' 
+                            active={editMode} 
+                            withmargin={editMode ? 1 : 0} 
+                            onClick={this.enableEditMode} /> }
 				</ECardTop>
 				{ (editMode || isNewEnquiry) &&
                     <EnquiryEdit id={id} 

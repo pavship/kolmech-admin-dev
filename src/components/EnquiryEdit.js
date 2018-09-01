@@ -120,8 +120,10 @@ class EnquiryEdit extends Component {
             if (!isValidInn) throw new Error(err.message)
             this.setState({ orgDdn: { search: inn, loading: true} })
             const data = await this.props.createOrg({ variables: { inn } })
+            if (!this.refs.componentRef) return
             this.selectOrg(null, { value: data.data.createOrg.id } )
         } catch (err) {
+            if (!this.refs.componentRef) return
             this.setState({
                 err: {
                     title: 'Добавить организацию по ИНН не удалось..',
@@ -147,16 +149,18 @@ class EnquiryEdit extends Component {
         })
         const variables = { ...enquiry }
         if (this.isNewEnquiry) return this.createEnquiry(variables)
-        // variables.id = this.props.id
-        // this.updateEnquiry(variables)
+        variables.id = this.props.id
+        this.updateEnquiry(variables)
     }
     createEnquiry = async (variables) => {
         try {
             this.setState({ loading: true })
             const res = await this.props.createEnquiry({ variables })
+            if (!this.refs.componentRef) return
             this.setState({ loading: false, err: '' })
             this.props.selectEnquiry(res.data.createEnquiry.id)
         } catch (err) {
+            if (!this.refs.componentRef) return
             this.setState({
                 loading: false,
                 err: {
@@ -171,9 +175,11 @@ class EnquiryEdit extends Component {
         try {
             this.setState({ loading: true })
             await this.props.updateEnquiry({ variables: { input: variables } })
+            if (!this.refs.componentRef) return
             this.setState({ loading: false, err: '' })
             this.props.exitEditMode()
         } catch (err) {
+            if (!this.refs.componentRef) return
             this.setState({ 
                 loading: false,
                 err: {
@@ -184,8 +190,8 @@ class EnquiryEdit extends Component {
             console.log(err)
         }
     }
+    componentRef = React.createRef()
 	render() {
-        // console.log(this.props)		
         const { dateLocal, orgId, orgDdn, diff, loading, err } = this.state
 		const { cancelEdit, allOrgs } = this.props
         const selectedDate = fromLocalISOString(dateLocal.curVal)
@@ -194,7 +200,7 @@ class EnquiryEdit extends Component {
         const someFieldHasError = this.fields.some(f => !!this.state[f].err)
 		return (
 			<Fragment>
-				<ECardBody>
+				<ECardBody ref={this.componentRef}>
 					<Form>
 						<Form.Field inline>
 							<ELabel>Дата</ELabel>
