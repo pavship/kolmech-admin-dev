@@ -61,7 +61,7 @@ const Td = styled.td`
         width: 100px;
     }
     :nth-child(4) {
-        width: 250px;
+        width: 450px;
     }
     :nth-child(5) {
 
@@ -90,14 +90,15 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
             <Table>
                 {/* <colgroup> <Col /> <Col /> <Col /> <Col /> <Col /> </colgroup> */}
                 <tbody>
-                    {enquiries.map(({ id, num, dateLocal, message }) => <Fragment key={id}>
+                    {enquiries.map(({ id, num, dateLocal, org }) => <Fragment key={id}>
                         <EnquiryRow onClick={() => handleEnquiryLineClick(id)} active={id === activeEnquiryId}>
                             <Td></Td>
                             <Td>{num}</Td>
                             <Td>{dateLocal}</Td>
                             <Td>
-                            {/* <Caret name='dropdown' active={activeIndex.includes(name) ? 1 : 0} /> */}
-                            {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
+                                {org && org.name}
+                                {/* <Caret name='dropdown' active={activeIndex.includes(name) ? 1 : 0} /> */}
+                                {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
                             </Td>
                             <Td></Td>
                             {/* <Td>15 000 ₽</Td>*/}

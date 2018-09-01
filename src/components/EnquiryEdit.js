@@ -62,12 +62,14 @@ class EnquiryEdit extends Component {
         }
         // gather form fields on oriEnquiry object
         const oriEnquiry = cloneDeep(props.enquiry)
-        console.log(oriEnquiry)
+        // console.log('props.enquiry > ', props.enquiry)
         if (isNewEnquiry) oriEnquiry.dateLocal = toLocalISOString(new Date()).slice(0, 10)
         delete oriEnquiry.comments
-        oriEnquiry.orgId = oriEnquiry.org ? oriEnquiry.org.id : null //'cjlgzauej003z0919v114wb2u'
+        oriEnquiry.orgId = oriEnquiry.org ? oriEnquiry.org.id : null
+        // console.log('oriEnquiry > ', oriEnquiry)
         this.fields = Object.keys(oriEnquiry)
-            .filter(key => !['__typename', 'id', 'num', 'generated', 'type', 'org'].includes(key))
+            .filter(key => !['__typename', 'id', 'num', 'org'].includes(key))
+        // console.log('this.fields > ', this.fields)
         this.requiredFields = ['dateLocal', 'orgId']
         // map through form fields and write helper props
         this.fields.forEach(key => {
@@ -84,14 +86,14 @@ class EnquiryEdit extends Component {
             }
         })
         if (!isNewEnquiry) this.state.diff = false
-        console.log(this.state)
+        // console.log(this.state)
     }
     changeFieldValue = (field, newVal) => {
         console.log('change ', field, ' to value > ', newVal)
         const fieldObj = cloneDeep(this.state[field])
         fieldObj.curVal = newVal
         fieldObj.err = false
-        if (this.isNewEnquiry) fieldObj.diff = fieldObj.curVal !== fieldObj.oriVal
+        if (!this.isNewEnquiry) fieldObj.diff = fieldObj.curVal !== fieldObj.oriVal
         const diff = this.fields.filter(f => f !== field).map(f => this.state[f].diff).includes(true) || fieldObj.diff
         this.setState({ [field]: fieldObj, diff, err: { message: '' } })
     }
@@ -139,14 +141,14 @@ class EnquiryEdit extends Component {
     }
     submit = () => {
         const enquiry = {}
+        // take out only changed fields for update
         this.fields.forEach(f => {
             if (this.isNewEnquiry || this.state[f].diff) enquiry[f] = this.state[f].curVal
         })
         const variables = { ...enquiry }
-        // TODO validate
         if (this.isNewEnquiry) return this.createEnquiry(variables)
-        variables.id = this.props.id
-        this.updateEnquiry(variables)
+        // variables.id = this.props.id
+        // this.updateEnquiry(variables)
     }
     createEnquiry = async (variables) => {
         try {
@@ -228,18 +230,10 @@ class EnquiryEdit extends Component {
                             header='Action Forbidden'
                             content='You can only sign up for an account once with a given e-mail address.'
                         />
-						<Form.Field inline>
+						{/* <Form.Field inline>
 							<ELabel>First name</ELabel>
 							<Input placeholder='First name' />
-						</Form.Field>
-						<Form.Field inline>
-							<ELabel>First name</ELabel>
-							<Input placeholder='First name' />
-						</Form.Field>
-						<Form.Field inline>
-							<ELabel>First name</ELabel>
-							<Input placeholder='First name' />
-						</Form.Field>
+						</Form.Field> */}
 					</Form>
 				</ECardBody>
                 <ECardBody>

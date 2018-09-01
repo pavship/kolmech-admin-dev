@@ -6,6 +6,10 @@ export const allEnquiries = gql`
             id
             num
             dateLocal
+            org {
+                id
+                name
+            }
         }
     }
 `
@@ -16,6 +20,10 @@ export const enquiry = gql`
             id
 			num
 			dateLocal
+            org {
+                id
+                name
+            }
             comments {
                 id
                 datetimeLocal
@@ -33,17 +41,23 @@ export const enquiry = gql`
 `
 
 export const newEnquiry = gql`
-    query NewEnquiry {
-        newEnquiry @client
-    }
+    query {
+        newEnquiry @client {
+            id
+        }
+    } 
 `
 
 export const createEnquiry = gql`
-    mutation createEnquiry($dateLocal: String!) {
-        createEnquiry(dateLocal: $dateLocal) {
+    mutation createEnquiry($dateLocal: String!, $orgId: ID!) {
+        createEnquiry(dateLocal: $dateLocal, orgId: $orgId) {
             id
 			num
 			dateLocal
+            org {
+                id
+                name
+            }
         }
     }
 `
@@ -54,6 +68,10 @@ export const updateEnquiry = gql`
             id
 			num
 			dateLocal
+            org {
+                id
+                name
+            }
             comments {
                 id
                 datetimeLocal

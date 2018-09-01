@@ -37,8 +37,13 @@ const EIcon = styled(Icon)`
     cursor: pointer;
 `
 
-const EditButton = styled(ButtonColoredOnHover)`
+const ReloadButton = styled(ButtonColoredOnHover)`
     margin-left: auto !important;
+    padding: .78571429em !important;
+    &>i {
+        opacity: .9 !important;
+        margin: 0 !important;
+    }
 `
 
 const ECardBody = styled(Card.Content)`
@@ -46,7 +51,7 @@ const ECardBody = styled(Card.Content)`
 `
 
 const Table = styled.table`
-    table-layout: fixed;
+    /* table-layout: fixed; */
     width: 100%;
     border-collapse: collapse;
 `
@@ -60,17 +65,19 @@ const Tr = styled.tr`
 const Td = styled.td`
 	padding-left: 4px;
 	:nth-child(1) {
-        width: 150px;
-		margin: 0 0 1em;
-		font-weight: bold;
+        /* width: 150px; */
 		// color: rgba(0,0,0,.87);
-		font-size: .92857143em;
-		line-height: 32px;
+		/* font-size: .92857143em; */
+		/* line-height: 32px; */
+        line-height: 1.21428571em;
+        padding: .67857143em 0;
+        vertical-align: top;
 	}
 	:nth-child(2) {
         // width: 100px;
 		font-size: 1em;
-		line-height: 1.21428571em;
+		font-weight: bold;
+        line-height: 1.21428571em;
 		padding: .67857143em 1em;
 	}
 `
@@ -109,15 +116,33 @@ const CMetadata = styled(Comment.Metadata)`
 
 const CText = styled(Comment.Text)`
     &>p { margin: 0 !important; }
-    &>table { border-collapse: collapse; }
+    &>table { 
+        width: 100%;
+        border-collapse: collapse; 
+    }
     &>table>tbody>tr>td {
         padding-left: 4px;
+        vertical-align: top;
     }
     &>table>tbody>tr>td:nth-child(1) {
         width: 5px;
     }
+    &>table>tbody>tr>td:nth-child(2) {
+        width: 25px;
+        min-width: 90px;
+    }
     &>table>tbody>tr>td:nth-child(3) {
+        width: 500px;
+        min-width: 30%;
         padding-left: 10px;
+    }
+    &>table>tbody>tr>td:nth-child(4) {
+        width: 21px;
+        min-width: 21px;
+    }
+    &>table>tbody>tr>td:nth-child(5) {
+        /* width: 60%; */
+        width: 1000px;
     }
 `
 
@@ -140,8 +165,14 @@ class EnquiryDetails extends Component {
 		editMode: this.isNewEnquiry ? true : false,
         creatingComment: false,
         editorHasText: false,
-        error: ''
-	}
+        error: '',
+        loading: false
+    }
+    refetchEnquiry = async () => {
+        this.setState({ loading: true })
+        const res = await this.props.enquiryQuery.refetch()
+        this.setState({ loading: false })
+    }
     enableEditMode = () => this.setState({ editMode: true })
     exitEditMode = () => this.setState({ editMode: false })
     setEditorHasText = (bool) => this.setState({ editorHasText: bool })
@@ -169,13 +200,14 @@ class EnquiryDetails extends Component {
     }
 	render() {
 		// console.log(this.props)
-		const { editMode, creatingComment, editorHasText } = this.state
+		const { editMode, creatingComment, editorHasText, error, loading } = this.state
 		const { id, enquiryQuery, closeDetails, selectEnquiry } = this.props
         const isNewEnquiry = this.isNewEnquiry
 		if (enquiryQuery.loading) return "Загрузка..."
         if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
         const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
-		const { num, dateLocal, comments } = enquiry
+        const { num, dateLocal, org, comments } = enquiry
+        // console.log('enquiry > ', enquiry)
 		return (
 			<ECard fluid>
 				<ECardTop>
@@ -191,7 +223,11 @@ class EnquiryDetails extends Component {
 						</Header.Content>
 					</EHeader>
                     { !isNewEnquiry &&
-					    <EditButton icon='edit' coloronhover='blue' active={editMode} onClick={this.enableEditMode} /> }
+                        // <EditButton icon='refresh' coloronhover='blue' active={loading} loading={loading} onClick={this.refetchEnquiry} />
+                        <ReloadButton coloronhover='blue' active={loading} onClick={this.refetchEnquiry} >
+                            <Icon name='refresh' loading={loading} /></ReloadButton> }
+                    { !isNewEnquiry &&
+					    <ButtonColoredOnHover icon='edit' coloronhover='blue' active={editMode} onClick={this.enableEditMode} /> }
 				</ECardTop>
 				{ (editMode || isNewEnquiry) &&
                     <EnquiryEdit id={id} 
@@ -204,14 +240,14 @@ class EnquiryDetails extends Component {
 						<Table><tbody>
 							<Tr>
 								<Td>Организация</Td>
-								{/* <Td>{orgId}</Td> */}
-								<Td>ООО Экскаватор</Td>
+								<Td>{org && org.name}</Td>
+                                <Td></Td>
 							</Tr>
-							<Tr>
+							{/* <Tr>
 								<Td>Контакт организации</Td>
-								{/* <Td>{orgId}</Td> */}
 								<Td>Брутал Клайнт</Td>
-							</Tr>
+                                <Td></Td>
+							</Tr> */}
 						</tbody></Table>
 					</ECardBody>
                     
@@ -247,7 +283,7 @@ class EnquiryDetails extends Component {
 								</Comment>
                             )
                         })}
-						<Form reply error={!!this.state.error}>
+						<Form reply error={!!error}>
 							<StyledEditorWrapper>
                                 <DraftEditor ref={this.editorRef} 
                                     setEditorHasText={this.setEditorHasText}
@@ -256,7 +292,7 @@ class EnquiryDetails extends Component {
                             <CMessage
                                 error
                                 header='Коммент добавить не удалось..'
-                                content={this.state.error} />
+                                content={error} />
 							<Button content='Добавить коммент' labelPosition='left' icon='edit' primary floated='right' 
                                 onClick={this.createComment}
                                 disabled={!editorHasText}
