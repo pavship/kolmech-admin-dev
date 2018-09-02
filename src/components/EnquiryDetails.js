@@ -166,10 +166,11 @@ class EnquiryDetails extends Component {
     editorRef = React.createRef()
 	state = {
 		editMode: this.isNewEnquiry ? true : false,
-        creatingComment: false,
         editorHasText: false,
-        error: '',
-        loading: false
+        loading: false,
+        creatingComment: false,
+        changingStatus: false,
+        error: ''
     }
     refetchEnquiry = async () => {
         this.setState({ loading: true })
@@ -201,9 +202,25 @@ class EnquiryDetails extends Component {
             console.log(err)
         }
     }
+    changeStatus = async (e, {value}) => {
+        console.log('value > ', value)
+        try {
+            this.setState({ changingStatus: true })
+            await this.props.createEnquiryEvent({
+                variables: {
+                    enquiryId: this.props.id,
+                    statusId: value
+                }
+            })
+            this.setState({ changingStatus: false })
+        } catch (err) {
+            this.setState({ changingStatus: false, error: err.message })
+            console.log(err)
+        }
+    }
 	render() { 
         // console.log(this.state, this.props);
-		const { editMode, creatingComment, editorHasText, error, loading } = this.state
+		const { editMode, editorHasText, loading, creatingComment, changingStatus, error } = this.state
 		const { id, enquiryQuery, closeDetails, selectEnquiry } = this.props
         const isNewEnquiry = this.isNewEnquiry
 		if (enquiryQuery.loading) return "Загрузка..."
@@ -211,6 +228,7 @@ class EnquiryDetails extends Component {
         const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
         const { num, dateLocal, org, events } = enquiry
         const statuses = enquiryQuery.statuses
+        const curStatus = events && events.filter(e => e.status).pop().status
 		return (
 			<ECard fluid>
 				<ECardTop>
@@ -257,17 +275,38 @@ class EnquiryDetails extends Component {
 							<Tr>
 								<Td>Статус</Td>
                                 <StatusTd>
-                                    <Dropdown text={events[0].status.name} labeled button className='icon'>
-                                        <Dropdown.Menu>
+                                    <Dropdown labeled button className='icon'
+                                        loading={changingStatus}
+                                        disabled={changingStatus}
+                                        // text={curStatus.name}
+                                        value={curStatus.id}
+                                        options={statuses.map(s => ({
+                                            key: s.id,
+                                            text: s.name,
+                                            value: s.id,
+                                            label: { 
+                                                basic: true, 
+                                                content: 'этап', 
+                                                detail: s.stage, 
+                                                icon: 'long arrow alternate up' 
+                                            }
+                                        }))}
+                                        onChange={this.changeStatus} 
+                                        selectOnBlur={false}
+                                        selectOnNavigation={false} >
+                                        {/* <Dropdown.Menu>
                                             {statuses.map(s => 
-                                                <Dropdown.Item
+                                            <Dropdown.Item
                                                 key={s.id}
-                                                    text={s.name}
-                                                    label={{ basic: true, content: 'этап', detail: s.stage, icon: 'long arrow alternate up' }}
-                                                    />)}
-                                        </Dropdown.Menu>
+                                                text={s.name}
+                                                value={s.id}
+                                                label={{ basic: true, 
+                                                    content: 'этап', 
+                                                    detail: s.stage, 
+                                                    icon: 'long arrow alternate up' }} />)}
+                                        </Dropdown.Menu> */}
                                     </Dropdown>
-                                    <Label basic size='large' content='этап' detail={ events[0].status.stage} />
+                                    <Label basic size='large' content='этап' detail={ curStatus.stage} />
                                 </StatusTd>
                                 <Td></Td>
 							</Tr>

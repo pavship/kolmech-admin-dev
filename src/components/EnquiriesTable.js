@@ -102,7 +102,7 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
                                 {/* <Caret name='dropdown' active={activeIndex.includes(name) ? 1 : 0} /> */}
                                 {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
                             </Td>
-                            <Td>{events && events[0].status.name}</Td>
+                            <Td>{events && events[0].status.name} {events.length}</Td>
                             <Td></Td>
                             {/* <Td>15 000 ₽</Td>*/}
                         </EnquiryRow></Fragment>)}

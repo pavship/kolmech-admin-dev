@@ -132,8 +132,8 @@ export const updateEnquiry = gql`
 `
 
 export const createEnquiryEvent = gql`
-	mutation CreateEnquiryEvent($enquiryId: ID!, $htmlText: String) {
-		createEnquiryEvent(enquiryId: $enquiryId, htmlText: $htmlText) {
+	mutation CreateEnquiryEvent($enquiryId: ID!, $htmlText: String, $statusId: ID) {
+		createEnquiryEvent(enquiryId: $enquiryId, htmlText: $htmlText, statusId: $statusId) {
 			id
 			datetimeLocal
 			htmlText
