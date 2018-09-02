@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
-import { Card, Header, Icon, Label, Form, Comment, Button, Message } from 'semantic-ui-react'
+import { Card, Header, Icon, Label, Form, Comment, Button, Message, Dropdown } from 'semantic-ui-react'
 
 import { graphql, compose } from 'react-apollo'
 import { enquiry, newEnquiry, createEnquiryEvent, enquiryFragment } from '../graphql/enquiry'
@@ -84,6 +84,10 @@ const Td = styled.td`
         line-height: 1.21428571em;
 		padding: .67857143em 1em;
 	}
+`
+const StatusTd = Td.extend`
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 `
     
 const Comments = styled(Comment.Group)`
@@ -233,12 +237,14 @@ class EnquiryDetails extends Component {
                             withmargin={editMode ? 1 : 0} 
                             onClick={this.enableEditMode} /> }
 				</ECardTop>
+
 				{ (editMode || isNewEnquiry) &&
                     <EnquiryEdit id={id} 
                         enquiry={enquiry} 
                         cancelEdit={this.cancelEdit} 
                         exitEditMode={this.exitEditMode} 
                         selectEnquiry={selectEnquiry} /> }
+
 				{ !(editMode || isNewEnquiry) && <Fragment>
 					<ECardBody>
 						<Table><tbody>
@@ -249,7 +255,17 @@ class EnquiryDetails extends Component {
 							</Tr>
 							<Tr>
 								<Td>Статус</Td>
-								<Td>{events[0].status.name}</Td>
+                                <StatusTd>
+                                    <Dropdown text={events[0].status.name} labeled button className='icon'>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Header content='People You Might Know' />
+                                            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Important' />
+                                            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Announcement' />
+                                            <Dropdown.Item label={{ color: 'black', empty: true, circular: true }} text='Discussion' />
+                                            {/* {friendOptions.map(option => <Dropdown.Item key={option.value} {...option} />)} */}
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </StatusTd>
                                 <Td></Td>
 							</Tr>
 						</tbody></Table>
