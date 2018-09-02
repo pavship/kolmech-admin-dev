@@ -6,7 +6,7 @@ import DatePicker from './common/DatePicker'
 
 import { graphql, compose } from 'react-apollo'
 import { allEnquiries, createEnquiry, updateEnquiry } from '../graphql/enquiry'
-import { org, allOrgs, createOrg } from '../graphql/org'
+import { allOrgs, createOrg } from '../graphql/org'
 
 import cloneDeep from 'lodash/cloneDeep'
 import validateInn from '../utils/validateInn'
@@ -47,6 +47,7 @@ const CancelLink = styled.a`
 class EnquiryEdit extends Component {
     constructor(props){
         super(props)
+        this.componentIsMounted = true
         this.isNewEnquiry = props.id === 'new'
         const isNewEnquiry = this.isNewEnquiry
         this.state = {
@@ -113,17 +114,20 @@ class EnquiryEdit extends Component {
         this.setState({ orgDdn: { search: '', loading: false } })
         this.changeFieldValue('orgId', value)
     }
+    cancellable
     createOrg = async (e, { value: inn }) => {
+        console.log('this.componentIsMounted0 > ', this.componentIsMounted)
         try {
             let err = {}
             const isValidInn = validateInn(inn, err)
             if (!isValidInn) throw new Error(err.message)
             this.setState({ orgDdn: { search: inn, loading: true} })
             const data = await this.props.createOrg({ variables: { inn } })
-            if (!this.refs.componentRef) return
+            if (!this.componentIsMounted) return
             this.selectOrg(null, { value: data.data.createOrg.id } )
         } catch (err) {
-            if (!this.refs.componentRef) return
+            // if (!this.refs.componentRef) return
+            if (!this.componentIsMounted) return
             this.setState({
                 err: {
                     title: 'Добавить организацию по ИНН не удалось..',
@@ -156,11 +160,11 @@ class EnquiryEdit extends Component {
         try {
             this.setState({ loading: true })
             const res = await this.props.createEnquiry({ variables })
-            if (!this.refs.componentRef) return
+            if (!this.componentIsMounted) return
             this.setState({ loading: false, err: '' })
             this.props.selectEnquiry(res.data.createEnquiry.id)
         } catch (err) {
-            if (!this.refs.componentRef) return
+            if (!this.componentIsMounted) return
             this.setState({
                 loading: false,
                 err: {
@@ -175,11 +179,11 @@ class EnquiryEdit extends Component {
         try {
             this.setState({ loading: true })
             await this.props.updateEnquiry({ variables: { input: variables } })
-            if (!this.refs.componentRef) return
+            if (!this.componentIsMounted) return
             this.setState({ loading: false, err: '' })
             this.props.exitEditMode()
         } catch (err) {
-            if (!this.refs.componentRef) return
+            if (!this.componentIsMounted) return
             this.setState({ 
                 loading: false,
                 err: {
@@ -190,18 +194,20 @@ class EnquiryEdit extends Component {
             console.log(err)
         }
     }
-    componentRef = React.createRef()
+    componentWillUnmount() {
+        this.componentIsMounted = false
+    }
 	render() {
         const { dateLocal, orgId, orgDdn, diff, loading, err } = this.state
 		const { cancelEdit, allOrgs } = this.props
         const selectedDate = fromLocalISOString(dateLocal.curVal)
         const orgs = allOrgs.orgs
+        console.log('orgs > ', orgs)
         const requiredIsEmpty = this.requiredFields.some(f => !this.state[f].curVal)
         const someFieldHasError = this.fields.some(f => !!this.state[f].err)
 		return (
-            
 			<Fragment>
-				<ECardBody ref={this.componentRef}>
+				<ECardBody>
 					<Form>
 						<Form.Field inline>
 							<ELabel>Дата</ELabel>
@@ -276,7 +282,6 @@ export default compose(
             }
         }
     }),
-    // graphql(org, { name: 'orgQuery' }),
     graphql(allOrgs, { name: 'allOrgs' }),
     graphql(updateEnquiry, { name: 'updateEnquiry' }),
     graphql(createEnquiry, { 

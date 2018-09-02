@@ -6,7 +6,6 @@ export const org = gql`
             id
             inn
             name
-            legalAddress
         }
     }
 `
@@ -27,7 +26,6 @@ export const createOrg = gql`
             id
 			inn
             name
-            legalAddress
         }
     }
 `

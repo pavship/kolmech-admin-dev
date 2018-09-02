@@ -15,7 +15,6 @@ export const allEnquiries = gql`
 					id
 					name
 					stage } } } } `
-
 export const enquiry = gql`
 	query Enquiry ($id: ID!) {
 		enquiry (id: $id) {
@@ -40,8 +39,8 @@ export const enquiry = gql`
 						lName } } 
 				status {
 					id
-					name } } } } `
-
+					name
+					stage } } } } `
 export const newEnquiry = gql`
 	query {
 		newEnquiry @client {
@@ -49,7 +48,6 @@ export const newEnquiry = gql`
 		}
 	} 
 `
-
 export const createEnquiry = gql`
 	mutation createEnquiry($dateLocal: String!, $orgId: ID!) {
 		createEnquiry(dateLocal: $dateLocal, orgId: $orgId) {
@@ -60,10 +58,28 @@ export const createEnquiry = gql`
 				id
 				name
 			}
+			events {
+				id
+				datetimeLocal
+				htmlText
+				type
+				user {
+					id
+					person {
+						id
+						fName
+						lName 
+					} 
+				}
+				status {
+					id
+					name
+					stage
+				}
+			}
 		}
 	}
 `
-
 export const updateEnquiry = gql`
 	mutation UpdateEnquiry($input: EnquiryInput!) {
 		updateEnquiry(input: $input) {
@@ -86,6 +102,11 @@ export const updateEnquiry = gql`
 						fName
 						lName
 					}
+				}
+				status {
+					id
+					name
+					stage
 				}
 			}
 		}
@@ -126,6 +147,19 @@ export const enquiryFragment = gql`
 			datetimeLocal
 			htmlText
 			type
+			user {
+				id
+				person {
+					id
+					fName
+					lName
+				}
+			}
+			status {
+				id
+				name
+				stage
+			}
 		}
 	}
 `
