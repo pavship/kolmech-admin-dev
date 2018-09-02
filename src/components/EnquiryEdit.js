@@ -202,7 +202,6 @@ class EnquiryEdit extends Component {
 		const { cancelEdit, allOrgs } = this.props
         const selectedDate = fromLocalISOString(dateLocal.curVal)
         const orgs = allOrgs.orgs
-        console.log('orgs > ', orgs)
         const requiredIsEmpty = this.requiredFields.some(f => !this.state[f].curVal)
         const someFieldHasError = this.fields.some(f => !!this.state[f].err)
 		return (
@@ -235,7 +234,6 @@ class EnquiryEdit extends Component {
                                 allowAdditions
                                 additionLabel='Добавить по ИНН: '
                                 onAddItem={this.createOrg}
-                                // onClose={this.handleOrgDropdownClose}
                             />
 						</Form.Field>
                         <Message

@@ -43,6 +43,7 @@ const EnquiryRow = styled.tr`
     &:hover {
         background-color: rgba(0,0,0,.03);
     }
+    // @ts-ignore
     ${props => props.active && `{
         background-color: rgba(0,0,0,.03);
         font-weight: bold;
@@ -61,13 +62,13 @@ const Td = styled.td`
         width: 100px;
     }
     :nth-child(4) {
-        width: 450px;
+        width: 350px;
     }
     :nth-child(5) {
+        width: 100px;
+    }
+    :nth-child(6) {
 
-    }
-    :nth-child(5) {
-        color: #570f0f;
     }
 `
 
@@ -82,6 +83,7 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
                         <Td>№</Td>
                         <Td>Дата</Td>
                         <Td>Организация</Td>
+                        <Td>Статус</Td>
                         <Td></Td>
                         {/* <Td>Сумма КП</Td>
                         <Td>Статус</Td> */}
@@ -90,7 +92,7 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
             <Table>
                 {/* <colgroup> <Col /> <Col /> <Col /> <Col /> <Col /> </colgroup> */}
                 <tbody>
-                    {enquiries.map(({ id, num, dateLocal, org }) => <Fragment key={id}>
+                    {enquiries.map(({ id, num, dateLocal, org, events }) => <Fragment key={id}>
                         <EnquiryRow onClick={() => handleEnquiryLineClick(id)} active={id === activeEnquiryId}>
                             <Td></Td>
                             <Td>{num}</Td>
@@ -100,6 +102,7 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
                                 {/* <Caret name='dropdown' active={activeIndex.includes(name) ? 1 : 0} /> */}
                                 {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
                             </Td>
+                            <Td>{events && events[0].status.name}</Td>
                             <Td></Td>
                             {/* <Td>15 000 ₽</Td>*/}
                         </EnquiryRow></Fragment>)}
