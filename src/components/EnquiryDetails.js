@@ -11,8 +11,6 @@ import ButtonColoredOnHover from './common/ButtonColoredOnHover'
 import DraftEditor from './common/DraftEditor'
 import { sanitize } from 'dompurify'
 
-import ErrorBoundary from './common/ErrorBoundary'
-
 const ECard = styled(Card)`
     border-radius: 0 !important;
     box-shadow: none !important;
@@ -192,13 +190,9 @@ class EnquiryDetails extends Component {
                     htmlText
                 }
             })
-            // console.log('componentRef > ', this.refs.componentRef)
-            // setTimeout(()=>console.log('componentRef after tmeout > ', this.refs.componentRef), 3000)
-            // if (!this.refs.componentRef) return
             this.setState({ creatingComment: false, editorHasText: false, error: '' })
             this.editorRef.current.clear()
         } catch(err) {
-            // if (!this.refs.componentRef) return
             this.setState({ creatingComment: false, error: err.message })
             console.log(err)
         }
@@ -213,7 +207,6 @@ class EnquiryDetails extends Component {
         const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
         const { num, dateLocal, org, events } = enquiry
 		return (
-            <ErrorBoundary>
 			<ECard fluid>
 				<ECardTop>
 					<EHeader>
@@ -312,7 +305,6 @@ class EnquiryDetails extends Component {
 					</Comments>
 				</Fragment> }
 			</ECard>
-            </ErrorBoundary>
 		)
 	}
 }
