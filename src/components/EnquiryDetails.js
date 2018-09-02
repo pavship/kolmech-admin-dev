@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Card, Header, Icon, Label, Form, Comment, Button, Message, Dropdown } from 'semantic-ui-react'
 
 import { graphql, compose } from 'react-apollo'
-import { enquiry, newEnquiry, createEnquiryEvent, enquiryFragment } from '../graphql/enquiry'
+import { enquiryDetails, newEnquiry, createEnquiryEvent, enquiryFragment } from '../graphql/enquiry'
 
 import EnquiryEdit from './EnquiryEdit'
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
@@ -89,7 +89,7 @@ const StatusTd = Td.extend`
     padding-top: 0 !important;
     padding-bottom: 0 !important;
 `
-    
+
 const Comments = styled(Comment.Group)`
     margin: 1.5em 1.5em 1.5em 55px !important;
 `
@@ -210,6 +210,7 @@ class EnquiryDetails extends Component {
         if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
         const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
         const { num, dateLocal, org, events } = enquiry
+        const statuses = enquiryQuery.statuses
 		return (
 			<ECard fluid>
 				<ECardTop>
@@ -258,13 +259,15 @@ class EnquiryDetails extends Component {
                                 <StatusTd>
                                     <Dropdown text={events[0].status.name} labeled button className='icon'>
                                         <Dropdown.Menu>
-                                            <Dropdown.Header content='People You Might Know' />
-                                            <Dropdown.Item label={{ color: 'red', empty: true, circular: true }} text='Important' />
-                                            <Dropdown.Item label={{ color: 'blue', empty: true, circular: true }} text='Announcement' />
-                                            <Dropdown.Item label={{ color: 'black', empty: true, circular: true }} text='Discussion' />
-                                            {/* {friendOptions.map(option => <Dropdown.Item key={option.value} {...option} />)} */}
+                                            {statuses.map(s => 
+                                                <Dropdown.Item
+                                                key={s.id}
+                                                    text={s.name}
+                                                    label={{ basic: true, content: 'этап', detail: s.stage, icon: 'long arrow alternate up' }}
+                                                    />)}
                                         </Dropdown.Menu>
                                     </Dropdown>
+                                    <Label basic size='large' content='этап' detail={ events[0].status.stage} />
                                 </StatusTd>
                                 <Td></Td>
 							</Tr>
@@ -346,5 +349,5 @@ export default compose(
 		})
 	}),
     graphql(newEnquiry, { name: 'enquiryQuery', skip: (props) => props.id !== 'new' }),
-    graphql(enquiry, { name: 'enquiryQuery', skip: (props) => props.id === 'new' })
+    graphql(enquiryDetails, { name: 'enquiryQuery', skip: (props) => props.id === 'new' })
 )(EnquiryDetails)

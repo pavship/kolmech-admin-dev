@@ -15,8 +15,8 @@ export const allEnquiries = gql`
 					id
 					name
 					stage } } } } `
-export const enquiry = gql`
-	query Enquiry ($id: ID!) {
+export const enquiryDetails = gql`
+	query EnquiryDetails ($id: ID!) {
 		enquiry (id: $id) {
 			id
 			num
@@ -36,17 +36,35 @@ export const enquiry = gql`
 					person {
 						id
 						fName
-						lName } } 
+						lName 
+					}
+				}
 				status {
 					id
 					name
-					stage } } } } `
+					stage 
+				}
+			}
+		}
+		statuses {
+			id
+			stage
+			name
+			prev {
+				id
+			}
+			next {
+				id
+			}
+		}
+	}
+`
 export const newEnquiry = gql`
 	query {
 		newEnquiry @client {
 			id
 		}
-	} 
+	}
 `
 export const createEnquiry = gql`
 	mutation createEnquiry($dateLocal: String!, $orgId: ID!) {
@@ -69,7 +87,7 @@ export const createEnquiry = gql`
 						id
 						fName
 						lName 
-					} 
+					}
 				}
 				status {
 					id
