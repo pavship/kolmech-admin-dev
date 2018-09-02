@@ -64,7 +64,7 @@ class EnquiryEdit extends Component {
         const oriEnquiry = cloneDeep(props.enquiry)
         // console.log('props.enquiry > ', props.enquiry)
         if (isNewEnquiry) oriEnquiry.dateLocal = toLocalISOString(new Date()).slice(0, 10)
-        delete oriEnquiry.comments
+        delete oriEnquiry.events
         oriEnquiry.orgId = oriEnquiry.org ? oriEnquiry.org.id : null
         // console.log('oriEnquiry > ', oriEnquiry)
         this.fields = Object.keys(oriEnquiry)
@@ -199,6 +199,7 @@ class EnquiryEdit extends Component {
         const requiredIsEmpty = this.requiredFields.some(f => !this.state[f].curVal)
         const someFieldHasError = this.fields.some(f => !!this.state[f].err)
 		return (
+            
 			<Fragment>
 				<ECardBody ref={this.componentRef}>
 					<Form>

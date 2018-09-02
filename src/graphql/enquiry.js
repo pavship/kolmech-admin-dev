@@ -1,122 +1,133 @@
 import gql from 'graphql-tag'
 
 export const allEnquiries = gql`
-    query AllEnquiries {
-        enquiries {
-            id
-            num
-            dateLocal
-            org {
-                id
-                name
-            }
-        }
-    }
-`
-
-export const enquiry = gql`
-    query Enquiry ($id: ID!) {
-		enquiry (id: $id) {
-            id
+	query AllEnquiries {
+		enquiries {
+			id
 			num
 			dateLocal
-            org {
-                id
-                name
-            }
-            comments {
-                id
-                datetimeLocal
-                htmlText
-                type
-                user {
-                    person {
-                        fName
-                        lName
-                    }
-                }
-            }
+			org {
+				id
+				name }	
+			events ( where: { status: { id_not: null } }, last: 1 ) {
+				id
+				status {
+					id
+					name
+					stage } } } } `
+
+export const enquiry = gql`
+	query Enquiry ($id: ID!) {
+		enquiry (id: $id) {
+			id
+			num
+			dateLocal
+			org {
+				id
+				name
+				inn
+			}
+			events {
+				id
+				datetimeLocal
+				htmlText
+				type
+				user {
+					id
+					person {
+						id
+						fName
+						lName } } 
+				status {
+					id
+					name } } } } `
+
+export const newEnquiry = gql`
+	query {
+		newEnquiry @client {
+			id
+		}
+	} 
+`
+
+export const createEnquiry = gql`
+	mutation createEnquiry($dateLocal: String!, $orgId: ID!) {
+		createEnquiry(dateLocal: $dateLocal, orgId: $orgId) {
+			id
+			num
+			dateLocal
+			org {
+				id
+				name
+			}
 		}
 	}
 `
 
-export const newEnquiry = gql`
-    query {
-        newEnquiry @client {
-            id
-        }
-    } 
-`
-
-export const createEnquiry = gql`
-    mutation createEnquiry($dateLocal: String!, $orgId: ID!) {
-        createEnquiry(dateLocal: $dateLocal, orgId: $orgId) {
-            id
-			num
-			dateLocal
-            org {
-                id
-                name
-            }
-        }
-    }
-`
-
 export const updateEnquiry = gql`
-    mutation UpdateEnquiry($input: EnquiryInput!) {
-        updateEnquiry(input: $input) {
-            id
+	mutation UpdateEnquiry($input: EnquiryInput!) {
+		updateEnquiry(input: $input) {
+			id
 			num
 			dateLocal
-            org {
-                id
-                name
-            }
-            comments {
-                id
-                datetimeLocal
-                htmlText
-                type
-                user {
-                    person {
-                        fName
-                        lName
-                    }
-                }
-            }
-        }
-    }
+			org {
+				id
+				name
+			}
+			events {
+				id
+				datetimeLocal
+				htmlText
+				type
+				user {
+					id
+					person {
+						id
+						fName
+						lName
+					}
+				}
+			}
+		}
+	}
 `
 
-export const createEnquiryComment = gql`
-    mutation CreateEnquiryComment($enquiryId: ID!, $htmlText: String) {
-        createEnquiryComment(enquiryId: $enquiryId, htmlText: $htmlText) {
-            id
-            datetimeLocal
-            htmlText
-            type
-            user {
-                person {
-                    fName
-                    lName
-                }
-            }
-        }
-    }
+export const createEnquiryEvent = gql`
+	mutation CreateEnquiryEvent($enquiryId: ID!, $htmlText: String) {
+		createEnquiryEvent(enquiryId: $enquiryId, htmlText: $htmlText) {
+			id
+			datetimeLocal
+			htmlText
+			type
+			user {
+				id
+				person {
+					id
+					fName
+					lName
+				}
+			}
+			status {
+				id
+				name
+				stage
+			}
+		}
+	}
 `
 
 export const enquiryFragment = gql`
-    fragment myEnquiry on Enquiry {
-        id
-        num
-        dateLocal
-        comments {
-            id
-            datetimeLocal
-            htmlText
-            type
-        }
-    }
+	fragment myEnquiry on Enquiry {
+		id
+		num
+		dateLocal
+		events {
+			id
+			datetimeLocal
+			htmlText
+			type
+		}
+	}
 `
 
 

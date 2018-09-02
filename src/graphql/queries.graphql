@@ -18,7 +18,7 @@ query enquiry {
       name
       inn
     }
-    comments {
+    events {
       id
       user {
         person {
@@ -38,7 +38,7 @@ query enquiries {
       name
       inn
     }
-    comments {
+    events {
       id
       user {
         person {
@@ -48,8 +48,8 @@ query enquiries {
     }
   }
 }
-mutation createEnquiryComment {
-  createEnquiryComment(
+mutation createEnquiryEvent {
+  createEnquiryEvent(
     enquiryId: "cjl8qccp100100943fjqgb5q3"
     htmlText: "<p><strong>Создал</strong> заявку с параметрами:</p>"
   ) {
@@ -83,7 +83,7 @@ mutation updateEnquiry {
       name
       inn
     }
-    comments {
+    events {
       id
       user {
         person {

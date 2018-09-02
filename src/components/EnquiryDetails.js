@@ -4,12 +4,14 @@ import styled from 'styled-components'
 import { Card, Header, Icon, Label, Form, Comment, Button, Message } from 'semantic-ui-react'
 
 import { graphql, compose } from 'react-apollo'
-import { enquiry, newEnquiry, createEnquiryComment, enquiryFragment } from '../graphql/enquiry'
+import { enquiry, newEnquiry, createEnquiryEvent, enquiryFragment } from '../graphql/enquiry'
 
 import EnquiryEdit from './EnquiryEdit'
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
 import DraftEditor from './common/DraftEditor'
 import { sanitize } from 'dompurify'
+
+import ErrorBoundary from './common/ErrorBoundary'
 
 const ECard = styled(Card)`
     border-radius: 0 !important;
@@ -184,29 +186,34 @@ class EnquiryDetails extends Component {
             const htmlText = this.editorRef.current.exportHtml()
             if (htmlText === '<p><br></p>') return
             this.setState({creatingComment: true})
-            await this.props.createEnquiryComment({
+            await this.props.createEnquiryEvent({
                 variables: {
                     enquiryId: this.props.id,
                     htmlText
                 }
             })
+            // console.log('componentRef > ', this.refs.componentRef)
+            // setTimeout(()=>console.log('componentRef after tmeout > ', this.refs.componentRef), 3000)
+            // if (!this.refs.componentRef) return
             this.setState({ creatingComment: false, editorHasText: false, error: '' })
             this.editorRef.current.clear()
         } catch(err) {
+            // if (!this.refs.componentRef) return
             this.setState({ creatingComment: false, error: err.message })
             console.log(err)
         }
     }
-	render() {
+	render() { 
+        // console.log(this.state, this.props);
 		const { editMode, creatingComment, editorHasText, error, loading } = this.state
 		const { id, enquiryQuery, closeDetails, selectEnquiry } = this.props
         const isNewEnquiry = this.isNewEnquiry
 		if (enquiryQuery.loading) return "Загрузка..."
         if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
         const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
-        const { num, dateLocal, org, comments } = enquiry
-        // console.log('enquiry > ', enquiry)
+        const { num, dateLocal, org, events } = enquiry
 		return (
+            <ErrorBoundary>
 			<ECard fluid>
 				<ECardTop>
 					<EHeader>
@@ -247,40 +254,40 @@ class EnquiryDetails extends Component {
 								<Td>{org && org.name}</Td>
                                 <Td></Td>
 							</Tr>
-							{/* <Tr>
-								<Td>Контакт организации</Td>
-								<Td>Брутал Клайнт</Td>
+							<Tr>
+								<Td>Статус</Td>
+								<Td>{events[0].status.name}</Td>
                                 <Td></Td>
-							</Tr> */}
+							</Tr>
 						</tbody></Table>
 					</ECardBody>
                     
 					<Comments minimal>
 						<Header as='h3' dividing content='Комментарии и события' />
-                        { comments.map(c => {
-							const { fName, lName } = c.user.person
+                        { events.map(e => {
+							const { fName, lName } = e.user.person
 							const userInitials = (lName ? fName.slice(0,1) : fName.slice(0,2)) + (lName ? lName.slice(0,1) : '')
                             return (
-								<Comment key={c.id}>
-									{ c.type &&
+								<Comment key={e.id}>
+									{ e.type &&
 									<CIcon 
-                                        size='big' type={c.type}
-                                        color={c.type === 'CREATE' ? 'green' : 
+                                        size='big' type={e.type}
+                                        color={e.type === 'CREATE' ? 'green' : 
                                                           'UPDATE' ? 'blue' : 'brown'}
-                                        name ={c.type === 'CREATE' ? 'plus' : 
+                                        name ={e.type === 'CREATE' ? 'plus' : 
                                                           'UPDATE' ? 'edit' : 'question'} /> }
 									<UserLabel 
 										size='big' 
 										content={userInitials}
-										indent={!c.type ? 1 : 0} />
+										indent={!e.type ? 1 : 0} />
 									{/* <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' /> */}
 									<CContent>
 										<Comment.Author 
 											as='span' 
 											content={fName + ' ' + lName} />
 										<CMetadata
-											content={c.datetimeLocal.slice(0,16)} />
-										<CText dangerouslySetInnerHTML={{__html: sanitize(c.htmlText)}} />
+											content={e.datetimeLocal.slice(0,16)} />
+										<CText dangerouslySetInnerHTML={{__html: sanitize(e.htmlText)}} />
 										{/* <Comment.Actions
 											content={( <a>Reply</a> )} /> */}
 									</CContent>
@@ -305,22 +312,23 @@ class EnquiryDetails extends Component {
 					</Comments>
 				</Fragment> }
 			</ECard>
+            </ErrorBoundary>
 		)
 	}
 }
 
 export default compose(
-    graphql(createEnquiryComment, { 
-		name: 'createEnquiryComment',
+    graphql(createEnquiryEvent, { 
+		name: 'createEnquiryEvent',
 		options: (props) => ({
-			update: (cache, {data: createEnquiryComment}) => {
+			update: (cache, {data: createEnquiryEvent}) => {
 				const id = `Enquiry:${props.id}`
 				const fragment = enquiryFragment
 				const data = cache.readFragment({
 					id,
 					fragment
 				})
-				data.comments.push(createEnquiryComment.createEnquiryComment)
+				data.events.push(createEnquiryEvent.createEnquiryEvent)
 				cache.writeFragment({
                     id,
                     fragment,
