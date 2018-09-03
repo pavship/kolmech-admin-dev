@@ -24,7 +24,6 @@ export const enquiryDetails = gql`
 			org {
 				id
 				name
-				inn
 			}
 			events {
 				id
@@ -160,6 +159,10 @@ export const enquiryFragment = gql`
 		id
 		num
 		dateLocal
+		org {
+			id
+			name
+		}
 		events {
 			id
 			datetimeLocal

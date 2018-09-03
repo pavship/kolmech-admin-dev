@@ -42,6 +42,12 @@ class EnquiriesPage extends Component {
         this.setState({ activeEnquiryId: 'new' })
         this.openDetails()
     }
+    // Query actions
+    updateAllEnquiries = (newAllEnquiries) => {
+        console.log('newAllEnquiries > ', newAllEnquiries)
+        this.forceUpdate()
+        // this.props.allEnquiries.updateQuery( _ => (newAllEnquiries))
+    }
     // Table actions
     handleEnquiryLineClick = (id) => {
         // console.log('hey, thats a click!', id)
@@ -74,7 +80,8 @@ class EnquiriesPage extends Component {
                                 <EnquiryDetails 
                                     key={activeEnquiryId}
                                     id={activeEnquiryId} 
-                                    closeDetails={this.closeDetails} 
+                                    closeDetails={this.closeDetails}
+                                    updateAllEnquiries={this.updateAllEnquiries} 
                                     selectEnquiry={this.selectEnquiry} /> } 
                         </DetailsSidebar>
                         <Sidebar.Pusher>

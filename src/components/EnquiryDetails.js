@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Card, Header, Icon, Label, Form, Comment, Button, Message, Dropdown } from 'semantic-ui-react'
 
 import { graphql, compose } from 'react-apollo'
-import { enquiryDetails, newEnquiry, createEnquiryEvent, enquiryFragment } from '../graphql/enquiry'
+import { enquiryDetails, newEnquiry, createEnquiryEvent, enquiryFragment, allEnquiries } from '../graphql/enquiry'
 
 import EnquiryEdit from './EnquiryEdit'
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
@@ -371,20 +371,29 @@ export default compose(
     graphql(createEnquiryEvent, { 
 		name: 'createEnquiryEvent',
 		options: (props) => ({
-			update: (cache, {data: createEnquiryEvent}) => {
+			update: (cache, {data: reponseData}) => {
+                const newEvent = reponseData.createEnquiryEvent
 				const id = `Enquiry:${props.id}`
 				const fragment = enquiryFragment
-				const data = cache.readFragment({
+				let data = cache.readFragment({
 					id,
 					fragment
 				})
-				data.events.push(createEnquiryEvent.createEnquiryEvent)
+				data.events.push(newEvent)
 				cache.writeFragment({
                     id,
                     fragment,
 					data
-				})
-            }
+                })
+                // also update allEnquiries if status changed (for EnquiryTable view update)
+                if (! newEvent.status) return
+                const query = allEnquiries
+                data = cache.readQuery({ query })
+                const enquiry = data.enquiries.find(e => e.id === props.id)
+                enquiry.events = [newEvent]
+                cache.writeQuery({ query, data })
+            },
+            refetchQueries:[ 'allEnquiries' ]
 		})
 	}),
     graphql(newEnquiry, { name: 'enquiryQuery', skip: (props) => props.id !== 'new' }),

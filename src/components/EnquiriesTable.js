@@ -18,24 +18,7 @@ const Table = styled.table`
     border-collapse: collapse;
 `
 
-// const Col = styled.col`
-//     :nth-child(1) {
-//         width: 10px;
-//     }
-//     :nth-child(2) {
-//         width: 40px;
-//     }
-//     :nth-child(3) {
-//         width: 100px;
-//     }
-//     :nth-child(4) {
-//         width: 250px;
-//     }
-// `
-
-const Tr = styled.tr`
-    
-`
+const Tr = styled.tr` `
 
 const EnquiryRow = styled.tr`
     font-size: 1rem;
@@ -62,10 +45,10 @@ const Td = styled.td`
         width: 100px;
     }
     :nth-child(4) {
-        width: 350px;
+        width: 310px;
     }
     :nth-child(5) {
-        width: 100px;
+        width: 130px;
     }
     :nth-child(6) {
 
@@ -102,7 +85,7 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
                                 {/* <Caret name='dropdown' active={activeIndex.includes(name) ? 1 : 0} /> */}
                                 {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
                             </Td>
-                            <Td>{events && events[0].status.name} {events.length}</Td>
+                            <Td>{events && events[0].status.name}</Td>
                             <Td></Td>
                             {/* <Td>15 000 ₽</Td>*/}
                         </EnquiryRow></Fragment>)}
