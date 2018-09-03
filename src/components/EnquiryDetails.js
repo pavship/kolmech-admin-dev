@@ -90,6 +90,12 @@ const StatusTd = Td.extend`
     padding-bottom: 0 !important;
 `
 
+const SDropdown = styled(Dropdown)`
+    & .active.item {
+        display: none !important;
+    }
+`
+
 const Comments = styled(Comment.Group)`
     margin: 1.5em 1.5em 1.5em 55px !important;
 `
@@ -119,6 +125,7 @@ const CContent = styled(Comment.Content)`
 `
 
 const CMetadata = styled(Comment.Metadata)`
+    margin-left: 0 !important;
 	color: rgba(0,0,0,.6) !important;
 `
 
@@ -229,6 +236,16 @@ class EnquiryDetails extends Component {
         const { num, dateLocal, org, events } = enquiry
         const statuses = enquiryQuery.statuses
         const curStatus = events && events.filter(e => e.status).pop().status
+        const eventStatusStages = events && events.map(e => e.status && e.status.stage)
+        let stage = 0
+        const eventStatusDirections = events && events.reduce((res, e, i) => {
+            if (!e.status || i === 0) return res = [...res, null]
+            res.push(e.status.stage - stage > 0 ? 'up' : 'down')
+            stage = e.status.stage
+            return res
+        }, [])
+        console.log('eventStatusStages > ', eventStatusStages)
+        console.log('eventStatusDirections > ', eventStatusDirections)
 		return (
 			<ECard fluid>
 				<ECardTop>
@@ -275,38 +292,31 @@ class EnquiryDetails extends Component {
 							<Tr>
 								<Td>Статус</Td>
                                 <StatusTd>
-                                    <Dropdown labeled button className='icon'
+                                    <SDropdown labeled button className='icon'
                                         loading={changingStatus}
                                         disabled={changingStatus}
-                                        // text={curStatus.name}
                                         value={curStatus.id}
-                                        options={statuses.map(s => ({
-                                            key: s.id,
-                                            text: s.name,
-                                            value: s.id,
-                                            label: { 
-                                                basic: true, 
-                                                content: 'этап', 
-                                                detail: s.stage, 
-                                                icon: 'long arrow alternate up' 
-                                            }
-                                        }))}
+                                        options={statuses
+                                            .filter(s => (s.id === curStatus.id
+                                                        || Math.abs(s.stage - curStatus.stage) === 1)
+                                                        && !(s.stage === 0 && curStatus.stage !== 0))
+                                            .map(s => ({
+                                                key: s.id,
+                                                text: s.name,
+                                                value: s.id,
+                                                label: { 
+                                                    basic: true, 
+                                                    content: 'ур', 
+                                                    detail: s.stage, 
+                                                    icon: `long arrow alternate ${(s.stage - curStatus.stage) > 0 ? 'up' : 'down'}`
+                                                }
+                                            }))
+                                        }
                                         onChange={this.changeStatus} 
                                         selectOnBlur={false}
                                         selectOnNavigation={false} >
-                                        {/* <Dropdown.Menu>
-                                            {statuses.map(s => 
-                                            <Dropdown.Item
-                                                key={s.id}
-                                                text={s.name}
-                                                value={s.id}
-                                                label={{ basic: true, 
-                                                    content: 'этап', 
-                                                    detail: s.stage, 
-                                                    icon: 'long arrow alternate up' }} />)}
-                                        </Dropdown.Menu> */}
-                                    </Dropdown>
-                                    <Label basic size='large' content='этап' detail={ curStatus.stage} />
+                                    </SDropdown>
+                                    <Label basic size='large' content='уровень' detail={ curStatus.stage} />
                                 </StatusTd>
                                 <Td></Td>
 							</Tr>
@@ -315,27 +325,33 @@ class EnquiryDetails extends Component {
                     
 					<Comments minimal>
 						<Header as='h3' dividing content='Комментарии и события' />
-                        { events.map(e => {
+                        { events.map((e, i) => {
 							const { fName, lName } = e.user.person
-							const userInitials = (lName ? fName.slice(0,1) : fName.slice(0,2)) + (lName ? lName.slice(0,1) : '')
+                            const userInitials = (lName ? fName.slice(0,1) : fName.slice(0,2)) + (lName ? lName.slice(0,1) : '')
+                            // eventStatusStages.reverse().findIndex(s => s !== null, events.length - 1 - i)
+                            // const eIndex = e.status && events.findIn
+                            // const statusDirection = e.status && 
                             return (
 								<Comment key={e.id}>
 									{ e.type &&
 									<CIcon 
                                         size='big' type={e.type}
-                                        color={e.type === 'CREATE' ? 'green' : 
-                                                          'UPDATE' ? 'blue' : 'brown'}
-                                        name ={e.type === 'CREATE' ? 'plus' : 
-                                                          'UPDATE' ? 'edit' : 'question'} /> }
+                                        color={ e.type === 'CREATE' ? 'green' : 
+                                                e.type === 'UPDATE' ? 'blue' : 
+                                                e.type === 'STATUS' && eventStatusDirections[i] === 'up' ? 'yellow' :
+                                                e.type === 'STATUS' && eventStatusDirections[i] === 'down' ? 'brown' : 'brown'}
+                                        name ={ e.type === 'CREATE' ? 'plus' : 
+                                                e.type === 'UPDATE' ? 'write square' : 
+                                                e.type === 'STATUS' ? `long arrow alternate ${eventStatusDirections[i]}` : 'question'} /> }
 									<UserLabel 
 										size='big' 
 										content={userInitials}
 										indent={!e.type ? 1 : 0} />
 									{/* <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' /> */}
 									<CContent>
-										<Comment.Author 
+										{/* <Comment.Author 
 											as='span' 
-											content={fName + ' ' + lName} />
+											content={fName + ' ' + lName} /> */}
 										<CMetadata
 											content={e.datetimeLocal.slice(0,16)} />
 										<CText dangerouslySetInnerHTML={{__html: sanitize(e.htmlText)}} />
