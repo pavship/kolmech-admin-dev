@@ -236,7 +236,6 @@ class EnquiryDetails extends Component {
         const { num, dateLocal, org, events } = enquiry
         const statuses = enquiryQuery.statuses
         const curStatus = events && events.filter(e => e.status).pop().status
-        const eventStatusStages = events && events.map(e => e.status && e.status.stage)
         let stage = 0
         const eventStatusDirections = events && events.reduce((res, e, i) => {
             if (!e.status || i === 0) return res = [...res, null]
@@ -244,8 +243,6 @@ class EnquiryDetails extends Component {
             stage = e.status.stage
             return res
         }, [])
-        console.log('eventStatusStages > ', eventStatusStages)
-        console.log('eventStatusDirections > ', eventStatusDirections)
 		return (
 			<ECard fluid>
 				<ECardTop>
@@ -328,9 +325,6 @@ class EnquiryDetails extends Component {
                         { events.map((e, i) => {
 							const { fName, lName } = e.user.person
                             const userInitials = (lName ? fName.slice(0,1) : fName.slice(0,2)) + (lName ? lName.slice(0,1) : '')
-                            // eventStatusStages.reverse().findIndex(s => s !== null, events.length - 1 - i)
-                            // const eIndex = e.status && events.findIn
-                            // const statusDirection = e.status && 
                             return (
 								<Comment key={e.id}>
 									{ e.type &&
