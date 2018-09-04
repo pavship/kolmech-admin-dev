@@ -210,7 +210,6 @@ class EnquiryDetails extends Component {
         }
     }
     changeStatus = async (e, {value}) => {
-        console.log('value > ', value)
         try {
             this.setState({ changingStatus: true })
             await this.props.createEnquiryEvent({
@@ -234,11 +233,16 @@ class EnquiryDetails extends Component {
         if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
         const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
         const { num, dateLocal, org, events } = enquiry
-        const statuses = enquiryQuery.statuses
         const curStatus = events && events.filter(e => e.status).pop().status
+        const refusalStatusIds = ['cjlj25g4q00170959picodhln', 'cjlj2c004001c0959k6qq42xz']
+        const orderStatusId = 'cjlj2ckgy001i09599l147fot'
+        // sort so that refusal statuses are at the end of their stage block
+        const statuses = enquiryQuery.statuses.slice().sort((a, b) => a.stage === b.stage && refusalStatusIds.includes(a.id))
         let stage = 0
-        const eventStatusDirections = events && events.reduce((res, e, i) => {
+        const eventStatusPresentationHelpers = events && events.reduce((res, e, i) => {
             if (!e.status || i === 0) return res = [...res, null]
+            if (refusalStatusIds.includes(e.status.id)) return [...res, 'refuse']
+            if (e.status.id === orderStatusId) return [...res, 'order']
             res.push(e.status.stage - stage > 0 ? 'up' : 'down')
             stage = e.status.stage
             return res
@@ -293,6 +297,7 @@ class EnquiryDetails extends Component {
                                         loading={changingStatus}
                                         disabled={changingStatus}
                                         value={curStatus.id}
+                                        text={curStatus.name}
                                         options={statuses
                                             .filter(s => (s.id === curStatus.id
                                                         || Math.abs(s.stage - curStatus.stage) === 1)
@@ -303,9 +308,11 @@ class EnquiryDetails extends Component {
                                                 value: s.id,
                                                 label: { 
                                                     basic: true, 
-                                                    content: 'ур', 
+                                                    content: 'ст', 
                                                     detail: s.stage, 
-                                                    icon: `long arrow alternate ${(s.stage - curStatus.stage) > 0 ? 'up' : 'down'}`
+                                                    icon:   refusalStatusIds.includes(s.id) ? 'minus circle' :
+                                                            s.id === orderStatusId ? 'checkmark' :
+                                                            `long arrow alternate ${(s.stage - curStatus.stage) > 0 ? 'up' : 'down' }`
                                                 }
                                             }))
                                         }
@@ -313,7 +320,7 @@ class EnquiryDetails extends Component {
                                         selectOnBlur={false}
                                         selectOnNavigation={false} >
                                     </SDropdown>
-                                    <Label basic size='large' content='уровень' detail={ curStatus.stage} />
+                                    <Label basic size='large' content='стадия' detail={ curStatus.stage} />
                                 </StatusTd>
                                 <Td></Td>
 							</Tr>
@@ -332,11 +339,15 @@ class EnquiryDetails extends Component {
                                         size='big' type={e.type}
                                         color={ e.type === 'CREATE' ? 'green' : 
                                                 e.type === 'UPDATE' ? 'blue' : 
-                                                e.type === 'STATUS' && eventStatusDirections[i] === 'up' ? 'yellow' :
-                                                e.type === 'STATUS' && eventStatusDirections[i] === 'down' ? 'brown' : 'brown'}
+                                                e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'up' ? 'yellow' :
+                                                e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'down' ? 'brown' :
+                                                e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'refuse' ? 'red' :
+                                                e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'order' ? 'green' : 'brown'}
                                         name ={ e.type === 'CREATE' ? 'plus' : 
                                                 e.type === 'UPDATE' ? 'write square' : 
-                                                e.type === 'STATUS' ? `long arrow alternate ${eventStatusDirections[i]}` : 'question'} /> }
+                                                e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'refuse' ? 'minus circle' :
+                                                e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'order' ? 'checkmark' :
+                                                e.type === 'STATUS' ? `long arrow alternate ${eventStatusPresentationHelpers[i]}` : 'question'} /> }
 									<UserLabel 
 										size='big' 
 										content={userInitials}
