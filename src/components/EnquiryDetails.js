@@ -94,6 +94,9 @@ const SDropdown = styled(Dropdown)`
     & .active.item {
         display: none !important;
     }
+    & .selected.item {
+        background: none !important;
+    }
 `
 
 const Comments = styled(Comment.Group)`
@@ -334,7 +337,7 @@ class EnquiryDetails extends Component {
                             const userInitials = (lName ? fName.slice(0,1) : fName.slice(0,2)) + (lName ? lName.slice(0,1) : '')
                             return (
 								<Comment key={e.id}>
-									{ e.type &&
+									{ e.type && (e.type !== 'COMMENT') &&
 									<CIcon 
                                         size='big' type={e.type}
                                         color={ e.type === 'CREATE' ? 'green' : 
@@ -342,16 +345,17 @@ class EnquiryDetails extends Component {
                                                 e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'up' ? 'yellow' :
                                                 e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'down' ? 'brown' :
                                                 e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'refuse' ? 'red' :
-                                                e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'order' ? 'green' : 'brown'}
+                                                e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'order' ? 'green' : 'grey'}
                                         name ={ e.type === 'CREATE' ? 'plus' : 
                                                 e.type === 'UPDATE' ? 'write square' : 
+                                                // e.type === 'COMMENT' ? 'comment outline' : 
                                                 e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'refuse' ? 'minus circle' :
                                                 e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'order' ? 'checkmark' :
                                                 e.type === 'STATUS' ? `long arrow alternate ${eventStatusPresentationHelpers[i]}` : 'question'} /> }
 									<UserLabel 
 										size='big' 
 										content={userInitials}
-										indent={!e.type ? 1 : 0} />
+										indent={!e.type || e.type === 'COMMENT' ? 1 : 0} />
 									{/* <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' /> */}
 									<CContent>
 										{/* <Comment.Author 
