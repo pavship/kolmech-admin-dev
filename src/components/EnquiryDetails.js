@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
-import { Card, Header, Icon, Label, Form, Comment, Button, Message, Dropdown } from 'semantic-ui-react'
-
+import { Card, Header, Icon, Label, Form, Comment, Button, 
+        Message, Dropdown } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
-import { enquiryDetails, newEnquiry, createEnquiryEvent, enquiryFragment, allEnquiries } from '../graphql/enquiry'
-
+import { enquiryDetails, newEnquiry, createEnquiryEvent, 
+        enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
 import EnquiryEdit from './EnquiryEdit'
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
 import DraftEditor from './common/DraftEditor'
@@ -69,7 +69,7 @@ const Tr = styled.tr`
 const Td = styled.td`
 	padding-left: 4px;
 	:nth-child(1) {
-        /* width: 150px; */
+        width: 130px;
 		// color: rgba(0,0,0,.87);
 		/* font-size: .92857143em; */
 		/* line-height: 32px; */
@@ -85,8 +85,12 @@ const Td = styled.td`
 		padding: .67857143em 1em;
 	}
 `
-const StatusTd = Td.extend`
+const InputTd = Td.extend`
     padding-top: 0 !important;
+`
+
+const EditorTd = InputTd.extend`
+    font-weight: unset !important;
     padding-bottom: 0 !important;
 `
 
@@ -133,7 +137,7 @@ const CMetadata = styled(Comment.Metadata)`
 `
 
 const CText = styled(Comment.Text)`
-    &>p { margin: 0 !important; }
+    & p { margin: 0 !important; }
     &>table { 
         width: 100%;
         border-collapse: collapse; 
@@ -159,14 +163,21 @@ const CText = styled(Comment.Text)`
     }
 `
 
-const StyledEditorWrapper = styled.div`
+const EditorWrapper = styled.div`
     padding: .78571429em 1em;
-    margin: 0 0 1em 6.35em;
+    margin: 0;
     border: 1px solid rgba(34,36,38,.15);
     border-radius: .28571429rem;
     transition: color .1s ease,border-color .1s ease;
-    line-height: 1.2857;
+    /* line-height: 1em; */
+    line-height: 1.4285em;
+    ${props => props.withButton && 'margin-bottom: 1em'}
 `
+
+const CommentEditorWrapper = EditorWrapper.extend`
+    margin: 0 0 1em 6.35em;
+`
+
 const CMessage = styled(Message)`
     margin-left: 6.35em !important;
 `
@@ -174,12 +185,17 @@ const CMessage = styled(Message)`
 class EnquiryDetails extends Component {
     isNewEnquiry = this.props.id === 'new'
     editorRef = React.createRef()
+    noteEditorRef = React.createRef()
 	state = {
+        componentIsMounted: true,
 		editMode: this.isNewEnquiry ? true : false,
         editorHasText: false,
+        noteEditorDiff: false,
+        noteKey: 1,
         loading: false,
         creatingComment: false,
         changingStatus: false,
+        savingNote: false,
         error: ''
     }
     refetchEnquiry = async () => {
@@ -190,6 +206,7 @@ class EnquiryDetails extends Component {
     enableEditMode = () => this.setState({ editMode: true })
     exitEditMode = () => this.setState({ editMode: false })
     setEditorHasText = (bool) => this.setState({ editorHasText: bool })
+    setNoteEditorDiff = (bool) => this.setState({ noteEditorDiff: bool })
     cancelEdit = () => {
         if (this.isNewEnquiry) return this.props.closeDetails()
         this.exitEditMode()
@@ -197,7 +214,8 @@ class EnquiryDetails extends Component {
 	createComment = async () => {
         try {
             const htmlText = this.editorRef.current.exportHtml()
-            if (htmlText === '<p><br></p>') return
+            // if (htmlText === '<p><br></p>') return
+            if (htmlText === null) return
             this.setState({creatingComment: true})
             await this.props.createEnquiryEvent({
                 variables: {
@@ -227,15 +245,33 @@ class EnquiryDetails extends Component {
             console.log(err)
         }
     }
+    saveNote = async () => {
+        try {
+            let htmlNote = this.noteEditorRef.current.exportHtml()
+            if (htmlNote === this.props.enquiryQuery.enquiry.htmlNote) {
+                return this.setState({ noteKey: this.state.noteKey + 1, noteEditorDiff: false })
+            }
+            this.setState({ savingNote: true })
+            await this.props.updateEnquiry({ 
+                variables: { input: { id: this.props.id, htmlNote } } })
+            if (!this.componentIsMounted) return
+            this.setState({ savingNote: false, error: '', noteKey: this.state.noteKey + 1, noteEditorDiff: false })
+        } catch (err) {
+            if (!this.componentIsMounted) return
+            this.setState({ savingNote: false, error: err.message })
+            console.log(err)
+        }
+    }
 	render() { 
         // console.log(this.state, this.props);
-		const { editMode, editorHasText, loading, creatingComment, changingStatus, error } = this.state
+        const { editMode, editorHasText, loading, creatingComment, changingStatus, error,
+                noteEditorDiff, noteKey, savingNote } = this.state
 		const { id, enquiryQuery, closeDetails, selectEnquiry } = this.props
         const isNewEnquiry = this.isNewEnquiry
 		if (enquiryQuery.loading) return "Загрузка..."
         if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
         const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
-        const { num, dateLocal, org, events } = enquiry
+        const { num, dateLocal, org, htmlNote, events } = enquiry
         const curStatus = events && events.filter(e => e.status).pop().status
         const refusalStatusIds = ['cjlj25g4q00170959picodhln', 'cjlj2c004001c0959k6qq42xz']
         const orderStatusId = 'cjlj2ckgy001i09599l147fot'
@@ -295,7 +331,7 @@ class EnquiryDetails extends Component {
 							</Tr>
 							<Tr>
 								<Td>Статус</Td>
-                                <StatusTd>
+                                <InputTd>
                                     <SDropdown labeled button className='icon'
                                         loading={changingStatus}
                                         disabled={changingStatus}
@@ -324,9 +360,26 @@ class EnquiryDetails extends Component {
                                         selectOnNavigation={false} >
                                     </SDropdown>
                                     <Label basic size='large' content='стадия' detail={ curStatus.stage} />
-                                </StatusTd>
+                                </InputTd>
                                 <Td></Td>
 							</Tr>
+                            <Tr>
+                                <Td>Примечания</Td>
+                                <EditorTd>
+                                    <EditorWrapper withButton={noteEditorDiff}>
+                                        <DraftEditor ref={this.noteEditorRef} key={noteKey}
+                                            initFromHtml={htmlNote}
+                                            setEditorDiff={this.setNoteEditorDiff}
+                                            onSave={this.saveNote} /> 
+                                    </EditorWrapper> 
+                                    { noteEditorDiff &&
+                                        <Button content='Сохранить примечания' labelPosition='left' icon='save' primary floated='left' 
+                                            onClick={this.saveNote}
+                                            disabled={savingNote}
+                                            loading={savingNote} /> }
+                                </EditorTd>
+                                <Td></Td>
+                            </Tr>
 						</tbody></Table>
 					</ECardBody>
                     
@@ -348,7 +401,6 @@ class EnquiryDetails extends Component {
                                                 e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'order' ? 'green' : 'grey'}
                                         name ={ e.type === 'CREATE' ? 'plus' : 
                                                 e.type === 'UPDATE' ? 'write square' : 
-                                                // e.type === 'COMMENT' ? 'comment outline' : 
                                                 e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'refuse' ? 'minus circle' :
                                                 e.type === 'STATUS' && eventStatusPresentationHelpers[i] === 'order' ? 'checkmark' :
                                                 e.type === 'STATUS' ? `long arrow alternate ${eventStatusPresentationHelpers[i]}` : 'question'} /> }
@@ -371,11 +423,11 @@ class EnquiryDetails extends Component {
                             )
                         })}
 						<Form reply error={!!error}>
-							<StyledEditorWrapper>
+							<CommentEditorWrapper>
                                 <DraftEditor ref={this.editorRef} 
                                     setEditorHasText={this.setEditorHasText}
-                                    createComment={this.createComment} />
-                            </StyledEditorWrapper>
+                                    onSave={this.createComment} />
+                            </CommentEditorWrapper>
                             <CMessage
                                 error
                                 header='Коммент добавить не удалось..'
@@ -393,6 +445,7 @@ class EnquiryDetails extends Component {
 }
 
 export default compose(
+    graphql(updateEnquiry, { name: 'updateEnquiry' }),
     graphql(createEnquiryEvent, { 
 		name: 'createEnquiryEvent',
 		options: (props) => ({

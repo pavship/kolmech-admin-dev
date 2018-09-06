@@ -6,6 +6,7 @@ export const allEnquiries = gql`
 			id
 			num
 			dateLocal
+            htmlNote
 			org {
 				id
 				name }	
@@ -21,6 +22,7 @@ export const enquiryDetails = gql`
 			id
 			num
 			dateLocal
+            htmlNote
 			org {
 				id
 				name
@@ -63,6 +65,17 @@ export const newEnquiry = gql`
 		newEnquiry @client {
 			id
 		}
+        statuses {
+			id
+			stage
+			name
+			prev {
+				id
+			}
+			next {
+				id
+			}
+		}
 	}
 `
 export const createEnquiry = gql`
@@ -71,6 +84,7 @@ export const createEnquiry = gql`
 			id
 			num
 			dateLocal
+            htmlNote
 			org {
 				id
 				name
@@ -103,6 +117,7 @@ export const updateEnquiry = gql`
 			id
 			num
 			dateLocal
+            htmlNote
 			org {
 				id
 				name
@@ -159,6 +174,7 @@ export const enquiryFragment = gql`
 		id
 		num
 		dateLocal
+        htmlNote
 		org {
 			id
 			name
