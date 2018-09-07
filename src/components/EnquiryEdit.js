@@ -73,11 +73,12 @@ class EnquiryEdit extends Component {
         delete oriEnquiry.events
         oriEnquiry.orgId = oriEnquiry.org ? oriEnquiry.org.id : null
         oriEnquiry.modelId = oriEnquiry.model ? oriEnquiry.model.id : null
+        oriEnquiry.qty = oriEnquiry.qty ? oriEnquiry.qty : ''
         // console.log('oriEnquiry > ', oriEnquiry)
         this.fields = Object.keys(oriEnquiry)
-            .filter(key => !['__typename', 'id', 'num', 'org'].includes(key))
+            .filter(key => !['__typename', 'id', 'num', 'org', 'model'].includes(key))
         // console.log('this.fields > ', this.fields)
-        this.requiredFields = ['dateLocal', 'orgId', 'modelId']
+        this.requiredFields = ['dateLocal', 'orgId', 'modelId', 'qty']
         // map through form fields and write helper props
         this.fields.forEach(key => {
             // console.log(key, oriEnquiry[key])
@@ -121,6 +122,9 @@ class EnquiryEdit extends Component {
             modelDdn: { search: searchQuery, err: false },
         })
     }
+    handleQtyInputChange = ( e, { value } ) => {
+        this.changeFieldValue('qty', value)
+    }
     selectOrg = (e, { value }) => {
         this.setState({ orgDdn: { search: '', loading: false } })
         this.changeFieldValue('orgId', value)
@@ -129,7 +133,6 @@ class EnquiryEdit extends Component {
         this.setState({ modelDdn: { search: '', loading: false } })
         this.changeFieldValue('modelId', value)
     }
-    cancellable
     createOrg = async (e, { value: inn }) => {
         try {
             let err = {}
@@ -211,7 +214,7 @@ class EnquiryEdit extends Component {
         this.componentIsMounted = false
     }
 	render() {
-        const { dateLocal, orgId, orgDdn, modelId, modelDdn, diff, loading, err } = this.state
+        const { dateLocal, orgId, orgDdn, modelId, modelDdn, qty, diff, loading, err } = this.state
 		const { cancelEdit, allOrgsAndModels } = this.props
         const selectedDate = fromLocalISOString(dateLocal.curVal)
         const orgs = allOrgsAndModels.orgs
@@ -271,15 +274,18 @@ class EnquiryEdit extends Component {
                                 // onAddItem={this.createOrg}
                             />
 						</Form.Field>
+                        <Form.Field inline error={modelId.err} required>
+							<ELabel>Кол-во</ELabel>
+                            <Input type='number'
+                                placeholder='Введите кол-во шт.' 
+                                value={qty.curVal}
+                                onChange={this.handleQtyInputChange} />
+						</Form.Field>
                         <Message
                             error
                             header='Action Forbidden'
                             content='You can only sign up for an account once with a given e-mail address.'
                         />
-						{/* <Form.Field inline>
-							<ELabel>First name</ELabel>
-							<Input placeholder='First name' />
-						</Form.Field> */}
 					</Form>
 				</ECardBody>
                 <ECardBody>

@@ -32,6 +32,7 @@ export const enquiryDetails = gql`
                 article
                 name
             }
+            qty
 			events {
 				id
 				datetimeLocal
@@ -99,6 +100,7 @@ export const createEnquiry = gql`
                 article
                 name
             }
+            qty
 			events {
 				id
 				datetimeLocal
@@ -137,6 +139,7 @@ export const updateEnquiry = gql`
                 article
                 name
             }
+            qty
 			events {
 				id
 				datetimeLocal

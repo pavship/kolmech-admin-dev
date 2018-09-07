@@ -331,12 +331,12 @@ class EnquiryDetails extends Component {
                                 <Td></Td>
 							</Tr>
 							<Tr>
-								<Td>Модель</Td>
+								<Td>Изделие</Td>
 								<Td>{model && model.name}</Td>
                                 <Td></Td>
 							</Tr>
 							<Tr>
-								<Td>Кол-во</Td>
+								<Td>Кол-во, шт.</Td>
 								<Td>{qty}</Td>
                                 <Td></Td>
 							</Tr>
