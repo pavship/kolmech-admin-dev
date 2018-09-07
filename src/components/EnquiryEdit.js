@@ -6,7 +6,8 @@ import DatePicker from './common/DatePicker'
 
 import { graphql, compose } from 'react-apollo'
 import { allEnquiries, createEnquiry, updateEnquiry } from '../graphql/enquiry'
-import { allOrgs, createOrg } from '../graphql/org'
+import { createOrg } from '../graphql/org'
+import { allOrgsAndModels } from '../graphql/combinedQueries'
 
 import cloneDeep from 'lodash/cloneDeep'
 import validateInn from '../utils/validateInn'
@@ -59,6 +60,10 @@ class EnquiryEdit extends Component {
             orgDdn: {
                 search: '',
                 loading: false
+            },
+            modelDdn: {
+                search: '',
+                loading: false
             }
         }
         // gather form fields on oriEnquiry object
@@ -67,11 +72,12 @@ class EnquiryEdit extends Component {
         if (isNewEnquiry) oriEnquiry.dateLocal = toLocalISOString(new Date()).slice(0, 10)
         delete oriEnquiry.events
         oriEnquiry.orgId = oriEnquiry.org ? oriEnquiry.org.id : null
+        oriEnquiry.modelId = oriEnquiry.model ? oriEnquiry.model.id : null
         // console.log('oriEnquiry > ', oriEnquiry)
         this.fields = Object.keys(oriEnquiry)
             .filter(key => !['__typename', 'id', 'num', 'org'].includes(key))
         // console.log('this.fields > ', this.fields)
-        this.requiredFields = ['dateLocal', 'orgId']
+        this.requiredFields = ['dateLocal', 'orgId', 'modelId']
         // map through form fields and write helper props
         this.fields.forEach(key => {
             // console.log(key, oriEnquiry[key])
@@ -110,13 +116,21 @@ class EnquiryEdit extends Component {
             orgDdn: { search: searchQuery, err: false },
         })
     }
+    handleModelDropdownSearchChange = (e, { searchQuery }) => {
+        this.setState({ 
+            modelDdn: { search: searchQuery, err: false },
+        })
+    }
     selectOrg = (e, { value }) => {
         this.setState({ orgDdn: { search: '', loading: false } })
         this.changeFieldValue('orgId', value)
     }
+    selectModel = (e, { value }) => {
+        this.setState({ modelDdn: { search: '', loading: false } })
+        this.changeFieldValue('modelId', value)
+    }
     cancellable
     createOrg = async (e, { value: inn }) => {
-        console.log('this.componentIsMounted0 > ', this.componentIsMounted)
         try {
             let err = {}
             const isValidInn = validateInn(inn, err)
@@ -126,7 +140,6 @@ class EnquiryEdit extends Component {
             if (!this.componentIsMounted) return
             this.selectOrg(null, { value: data.data.createOrg.id } )
         } catch (err) {
-            // if (!this.refs.componentRef) return
             if (!this.componentIsMounted) return
             this.setState({
                 err: {
@@ -198,10 +211,11 @@ class EnquiryEdit extends Component {
         this.componentIsMounted = false
     }
 	render() {
-        const { dateLocal, orgId, orgDdn, diff, loading, err } = this.state
-		const { cancelEdit, allOrgs } = this.props
+        const { dateLocal, orgId, orgDdn, modelId, modelDdn, diff, loading, err } = this.state
+		const { cancelEdit, allOrgsAndModels } = this.props
         const selectedDate = fromLocalISOString(dateLocal.curVal)
-        const orgs = allOrgs.orgs
+        const orgs = allOrgsAndModels.orgs
+        const models = allOrgsAndModels.models
         const requiredIsEmpty = this.requiredFields.some(f => !this.state[f].curVal)
         const someFieldHasError = this.fields.some(f => !!this.state[f].err)
 		return (
@@ -234,6 +248,27 @@ class EnquiryEdit extends Component {
                                 allowAdditions
                                 additionLabel='Добавить по ИНН: '
                                 onAddItem={this.createOrg}
+                            />
+						</Form.Field>
+						<Form.Field inline error={modelId.err} required>
+							<ELabel>Изделие</ELabel>
+                            <EDropdown
+                                loading={!models || modelDdn.loading}
+                                disabled={!models || modelDdn.loading}
+                                selection //render as a formControl
+                                placeholder='Поиск по наименованию или артикулу'
+                                options={ models ? models.map(m => ({key:m.id, value: m.id, text: m.name})) : [] }
+                                value={modelId.curVal}
+                                onChange={this.selectModel}
+                                selectOnBlur={false}
+                                selectOnNavigation={false}
+                                search
+                                searchQuery={modelDdn.search}
+                                onSearchChange={this.handleModelDropdownSearchChange}
+                                noResultsMessage='Не найдено. Введите название, чтобы добавить.'
+                                // allowAdditions
+                                // additionLabel='Добавить по ИНН: '
+                                // onAddItem={this.createOrg}
                             />
 						</Form.Field>
                         <Message
@@ -272,7 +307,7 @@ export default compose(
         name: 'createOrg',
         options: {
             update: (cache, {data: { createOrg }}) => {
-                const query = allOrgs
+                const query = allOrgsAndModels
                 const data = cache.readQuery({ query })
                 data.orgs.push(createOrg)
                 data.orgs.sort((a, b) => a.name > b.name)
@@ -280,7 +315,7 @@ export default compose(
             }
         }
     }),
-    graphql(allOrgs, { name: 'allOrgs' }),
+    graphql(allOrgsAndModels, { name: 'allOrgsAndModels' }),
     graphql(updateEnquiry, { name: 'updateEnquiry' }),
     graphql(createEnquiry, { 
         name: 'createEnquiry',

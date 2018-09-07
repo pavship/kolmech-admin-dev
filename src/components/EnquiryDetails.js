@@ -186,8 +186,8 @@ class EnquiryDetails extends Component {
     isNewEnquiry = this.props.id === 'new'
     editorRef = React.createRef()
     noteEditorRef = React.createRef()
+    componentIsMounted = true
 	state = {
-        componentIsMounted: true,
 		editMode: this.isNewEnquiry ? true : false,
         editorHasText: false,
         noteEditorDiff: false,
@@ -248,6 +248,7 @@ class EnquiryDetails extends Component {
     saveNote = async () => {
         try {
             let htmlNote = this.noteEditorRef.current.exportHtml()
+            console.log('htmlNote > ', htmlNote)
             if (htmlNote === this.props.enquiryQuery.enquiry.htmlNote) {
                 return this.setState({ noteKey: this.state.noteKey + 1, noteEditorDiff: false })
             }
@@ -271,7 +272,7 @@ class EnquiryDetails extends Component {
 		if (enquiryQuery.loading) return "Загрузка..."
         if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
         const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
-        const { num, dateLocal, org, htmlNote, events } = enquiry
+        const { num, dateLocal, org, model, qty, htmlNote, events } = enquiry
         const curStatus = events && events.filter(e => e.status).pop().status
         const refusalStatusIds = ['cjlj25g4q00170959picodhln', 'cjlj2c004001c0959k6qq42xz']
         const orderStatusId = 'cjlj2ckgy001i09599l147fot'
@@ -327,6 +328,16 @@ class EnquiryDetails extends Component {
 							<Tr>
 								<Td>Организация</Td>
 								<Td>{org && org.name}</Td>
+                                <Td></Td>
+							</Tr>
+							<Tr>
+								<Td>Модель</Td>
+								<Td>{model && model.name}</Td>
+                                <Td></Td>
+							</Tr>
+							<Tr>
+								<Td>Кол-во</Td>
+								<Td>{qty}</Td>
                                 <Td></Td>
 							</Tr>
 							<Tr>
