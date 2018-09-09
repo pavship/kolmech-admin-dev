@@ -42,15 +42,24 @@ const Td = styled.td`
         width: 40px;
     }
     :nth-child(3) {
-        width: 100px;
+        width: 110px;
     }
     :nth-child(4) {
-        width: 310px;
+        width: 250px;
     }
     :nth-child(5) {
-        width: 130px;
+        width: 250px;
     }
     :nth-child(6) {
+        width: 60px;
+    }
+    :nth-child(7) {
+        width: 90px;
+    }
+    :nth-child(8) {
+        width: 130px;
+    }
+    :nth-child(9) {
 
     }
 `
@@ -66,6 +75,9 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
                         <Td>№</Td>
                         <Td>Дата</Td>
                         <Td>Организация</Td>
+                        <Td>Изделие</Td>
+                        <Td>Кол.</Td>
+                        <Td>Сумма</Td>
                         <Td>Статус</Td>
                         <Td></Td>
                         {/* <Td>Сумма КП</Td>
@@ -75,7 +87,7 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
             <Table>
                 {/* <colgroup> <Col /> <Col /> <Col /> <Col /> <Col /> </colgroup> */}
                 <tbody>
-                    {enquiries.map(({ id, num, dateLocal, org, events }) => <Fragment key={id}>
+                    {enquiries.map(({ id, num, dateLocal, org, model, qty, events }) => <Fragment key={id}>
                         <EnquiryRow onClick={() => handleEnquiryLineClick(id)} active={id === activeEnquiryId}>
                             <Td></Td>
                             <Td>{num}</Td>
@@ -85,6 +97,9 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
                                 {/* <Caret name='dropdown' active={activeIndex.includes(name) ? 1 : 0} /> */}
                                 {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
                             </Td>
+                            <Td>{model.name}</Td>
+                            <Td>{qty}</Td>
+                            <Td>{}</Td>
                             <Td>{events && events[0].status.name}</Td>
                             <Td></Td>
                             {/* <Td>15 000 ₽</Td>*/}

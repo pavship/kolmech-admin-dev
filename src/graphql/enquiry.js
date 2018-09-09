@@ -9,7 +9,12 @@ export const allEnquiries = gql`
             htmlNote
 			org {
 				id
-				name }	
+				name }
+            model {
+                id
+                name
+            }
+            qty
 			events ( where: { status: { id_not: null } }, last: 1 ) {
 				id
 				status {
@@ -85,8 +90,8 @@ export const newEnquiry = gql`
 	}
 `
 export const createEnquiry = gql`
-	mutation createEnquiry($dateLocal: String!, $orgId: ID!, $modelId: ID!) {
-		createEnquiry(dateLocal: $dateLocal, orgId: $orgId, modelId: $modelId) {
+	mutation createEnquiry($dateLocal: String!, $orgId: ID!, $modelId: ID!, $qty: Int!) {
+		createEnquiry(dateLocal: $dateLocal, orgId: $orgId, modelId: $modelId, qty: $qty) {
 			id
 			num
 			dateLocal

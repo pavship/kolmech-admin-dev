@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
 import { Card, Header, Icon, Label, Form, Comment, Button, 
-        Message, Dropdown } from 'semantic-ui-react'
+        Message, Dropdown, Popup } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { enquiryDetails, newEnquiry, createEnquiryEvent, 
         enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
@@ -100,6 +100,19 @@ const SDropdown = styled(Dropdown)`
     }
     & .selected.item {
         background: none !important;
+    }
+`
+
+const InlineBlockDiv = styled.div`
+    display: inline-block;
+`
+
+const DarkGreenButton = styled(Button)`
+    &&&& {
+        color: #178230 !important;
+        &:hover {
+            color: #0c5a1e !important;
+        }
     }
 `
 
@@ -263,6 +276,9 @@ class EnquiryDetails extends Component {
             console.log(err)
         }
     }
+    // check = (e, target) => {
+    //     e.preventDefault()
+    // }
 	render() { 
         // console.log(this.state, this.props);
         const { editMode, editorHasText, loading, creatingComment, changingStatus, error,
@@ -351,7 +367,8 @@ class EnquiryDetails extends Component {
                                         options={statuses
                                             .filter(s => (s.id === curStatus.id
                                                         || Math.abs(s.stage - curStatus.stage) === 1)
-                                                        && !(s.stage === 0 && curStatus.stage !== 0))
+                                                        && !(s.stage === 0 && curStatus.stage !== 0)
+                                                        && !(s.name === 'Выставлено КП'))
                                             .map(s => ({
                                                 key: s.id,
                                                 text: s.name,
@@ -393,6 +410,37 @@ class EnquiryDetails extends Component {
                             </Tr>
 						</tbody></Table>
 					</ECardBody>
+                    <ECardBody>
+                        <CMessage
+                            error
+                            hidden={true}
+                            // header={err.title}
+                            // content={err.message} 
+                            />
+                        <Popup 
+                            position='bottom left'
+                            size='small'
+                            flowing
+                            hoverable
+                            // onOpen={this.check}
+                            style={curStatus.stage === 1 ? {opacity: 0} : {}}
+                            trigger={<InlineBlockDiv><DarkGreenButton
+                                basic labelPosition='left' icon='rub' color='green'
+                                content={'Коммерческое предложение'}
+                                disabled={curStatus.stage !== 1}
+                                // loading={loading}
+                                // onClick={this.submit} 
+                                /></InlineBlockDiv>} 
+                        >
+                            <Popup.Header content='Не все условия выполнены' />
+                            <Popup.Content>
+                                <Icon name='cancel' color='red' />
+                                Статус заявки <b>В работе</b>
+                            </Popup.Content>
+                        </Popup>
+                        
+                        {/* <CancelLink onClick={cancelEdit}>Отмена</CancelLink> */}
+                    </ECardBody>
                     
 					<Comments minimal>
 						<Header as='h3' dividing content='Комментарии и события' />
