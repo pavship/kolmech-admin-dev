@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
 import { Card, Header, Icon, Label, Form, Comment, Button, 
-        Message, Dropdown, Popup } from 'semantic-ui-react'
+        Message, Dropdown, Popup, Segment } from 'semantic-ui-react'
 import { graphql, compose } from 'react-apollo'
 import { enquiryDetails, newEnquiry, createEnquiryEvent, 
         enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
@@ -91,7 +91,7 @@ const InputTd = Td.extend`
 
 const EditorTd = InputTd.extend`
     font-weight: unset !important;
-    padding-bottom: 0 !important;
+    /* padding-bottom: 0 !important; */
 `
 
 const SDropdown = styled(Dropdown)`
@@ -117,7 +117,8 @@ const DarkGreenButton = styled(Button)`
 `
 
 const Comments = styled(Comment.Group)`
-    margin: 1.5em 1.5em 1.5em 55px !important;
+    /* margin: 1.5em 1.5em 1.5em 55px !important; */
+    margin: 1.5em 1.5em 1.5em 0 !important;
 `
 
 const CIcon = styled(Icon)`
@@ -177,7 +178,12 @@ const CText = styled(Comment.Text)`
 `
 
 const EditorWrapper = styled.div`
-    padding: .78571429em 1em;
+    /* padding: .78571429em 1em; */
+    /* TODO cool concept: borders appear only when editing
+        margin-left: -15px;
+        border: none; 
+    */
+    padding: calc(0.678571em - 1px) 1em;
     margin: 0;
     border: 1px solid rgba(34,36,38,.15);
     border-radius: .28571429rem;
@@ -356,6 +362,23 @@ class EnquiryDetails extends Component {
 								<Td>{qty}</Td>
                                 <Td></Td>
 							</Tr>
+                            <Tr>
+                                <Td>Примечания</Td>
+                                <EditorTd>
+                                    <EditorWrapper withButton={noteEditorDiff}>
+                                        <DraftEditor ref={this.noteEditorRef} key={noteKey}
+                                            initFromHtml={htmlNote}
+                                            setEditorDiff={this.setNoteEditorDiff}
+                                            onSave={this.saveNote} /> 
+                                    </EditorWrapper> 
+                                    { noteEditorDiff &&
+                                        <Button content='Сохранить примечания' labelPosition='left' icon='save' primary floated='left' 
+                                            onClick={this.saveNote}
+                                            disabled={savingNote}
+                                            loading={savingNote} /> }
+                                </EditorTd>
+                                <Td></Td>
+                            </Tr>
 							<Tr>
 								<Td>Статус</Td>
                                 <InputTd>
@@ -391,26 +414,11 @@ class EnquiryDetails extends Component {
                                 </InputTd>
                                 <Td></Td>
 							</Tr>
-                            <Tr>
-                                <Td>Примечания</Td>
-                                <EditorTd>
-                                    <EditorWrapper withButton={noteEditorDiff}>
-                                        <DraftEditor ref={this.noteEditorRef} key={noteKey}
-                                            initFromHtml={htmlNote}
-                                            setEditorDiff={this.setNoteEditorDiff}
-                                            onSave={this.saveNote} /> 
-                                    </EditorWrapper> 
-                                    { noteEditorDiff &&
-                                        <Button content='Сохранить примечания' labelPosition='left' icon='save' primary floated='left' 
-                                            onClick={this.saveNote}
-                                            disabled={savingNote}
-                                            loading={savingNote} /> }
-                                </EditorTd>
-                                <Td></Td>
-                            </Tr>
+                            
 						</tbody></Table>
 					</ECardBody>
                     <ECardBody>
+                    <Segment secondary basic>
                         <CMessage
                             error
                             hidden={true}
@@ -440,8 +448,9 @@ class EnquiryDetails extends Component {
                         </Popup>
                         
                         {/* <CancelLink onClick={cancelEdit}>Отмена</CancelLink> */}
+                    </Segment>
                     </ECardBody>
-                    
+                    <ECardBody>
 					<Comments minimal>
 						<Header as='h3' dividing content='Комментарии и события' />
                         { events.map((e, i) => {
@@ -497,6 +506,7 @@ class EnquiryDetails extends Component {
 								loading={creatingComment} />
 						</Form>
 					</Comments>
+                    </ECardBody>
 				</Fragment> }
 			</ECard>
 		)
