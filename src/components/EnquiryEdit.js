@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
 import { Card, Form, Input, Button, Dropdown, Message } from 'semantic-ui-react'
+import { Span } from './styled-semantic/styled-semantic.js'
 import DatePicker from './common/DatePicker'
 
 import { graphql, compose } from 'react-apollo'
@@ -123,7 +124,8 @@ class EnquiryEdit extends Component {
         })
     }
     handleQtyInputChange = ( e, { value } ) => {
-        this.changeFieldValue('qty', parseInt(value, 10))
+        const newVal = parseInt(value, 10) || ''
+        this.changeFieldValue('qty', newVal)
     }
     selectOrg = (e, { value }) => {
         this.setState({ orgDdn: { search: '', loading: false } })
@@ -281,12 +283,8 @@ class EnquiryEdit extends Component {
                                 placeholder='Введите кол-во шт.' 
                                 value={qty.curVal}
                                 onChange={this.handleQtyInputChange} />
+                            <Span pl='6px'>шт.</Span>
 						</Form.Field>
-                        <Message
-                            error
-                            header='Action Forbidden'
-                            content='You can only sign up for an account once with a given e-mail address.'
-                        />
 					</Form>
 				</ECardBody>
                 <ECardBody>

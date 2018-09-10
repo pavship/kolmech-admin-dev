@@ -7,6 +7,7 @@ import { graphql, compose } from 'react-apollo'
 import { enquiryDetails, newEnquiry, createEnquiryEvent, 
         enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
 import EnquiryEdit from './EnquiryEdit'
+import EnquiryCommercialOffer from './EnquiryCommercialOffer'
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
 import DraftEditor from './common/DraftEditor'
 import { sanitize } from 'dompurify'
@@ -282,9 +283,6 @@ class EnquiryDetails extends Component {
             console.log(err)
         }
     }
-    // check = (e, target) => {
-    //     e.preventDefault()
-    // }
 	render() { 
         // console.log(this.state, this.props);
         const { editMode, editorHasText, loading, creatingComment, changingStatus, error,
@@ -417,7 +415,8 @@ class EnquiryDetails extends Component {
                             
 						</tbody></Table>
 					</ECardBody>
-                    <ECardBody>
+                    <EnquiryCommercialOffer id='new' />
+                    {/* <ECardBody>
                     <Segment secondary basic>
                         <CMessage
                             error
@@ -430,7 +429,6 @@ class EnquiryDetails extends Component {
                             size='small'
                             flowing
                             hoverable
-                            // onOpen={this.check}
                             style={curStatus.stage === 1 ? {opacity: 0} : {}}
                             trigger={<InlineBlockDiv><DarkGreenButton
                                 basic labelPosition='left' icon='rub' color='green'
@@ -447,9 +445,9 @@ class EnquiryDetails extends Component {
                             </Popup.Content>
                         </Popup>
                         
-                        {/* <CancelLink onClick={cancelEdit}>Отмена</CancelLink> */}
+                        <CancelLink onClick={cancelEdit}>Отмена</CancelLink>
                     </Segment>
-                    </ECardBody>
+                    </ECardBody> */}
                     <ECardBody>
 					<Comments minimal>
 						<Header as='h3' dividing content='Комментарии и события' />
