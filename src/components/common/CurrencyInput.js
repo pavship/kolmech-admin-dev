@@ -19,8 +19,8 @@ class CurrencyInput extends Component {
                     decimalScale={2}
                     allowNegative={false}
                     onValueChange={values => setFormFieldValue('amount', values.floatValue)} />
-                <Span pl='6px' fs='1.1rem'>₽</Span>
-                <Span pl='9px' fs='1.1rem'>с НДС</Span>
+                <Span pl='6px' fs='1.1rem' c='rgba(0,0,0,.87)'>₽</Span>
+                <Span pl='9px' fs='1.1rem' ws='0.1em'>с НДС</Span>
             </Fragment>
         )
     }

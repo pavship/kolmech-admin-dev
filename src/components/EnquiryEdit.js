@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
 import { Card, Form, Input, Button, Dropdown, Message } from 'semantic-ui-react'
-import { Span } from './styled-semantic/styled-semantic.js'
+import { Div, Span, A, Label } from './styled-semantic/styled-semantic.js'
 import DatePicker from './common/DatePicker'
 
 import { graphql, compose } from 'react-apollo'
@@ -18,15 +18,6 @@ const ECardBody = styled(Card.Content)`
     padding-left: 55px !important;
 `
 
-const ELabel = styled.label`
-    width: 100px !important;
-`
-
-const LabelImitator = styled.div`
-    display: inline-block;
-    width: calc(100px + 0.857143em);
-`
-
 const EDropdown = styled(Dropdown)`
     width: 350px !important;
     &:hover: {
@@ -36,14 +27,6 @@ const EDropdown = styled(Dropdown)`
 
 const CMessage = styled(Message)`
     // margin-left: 6.35em !important;
-`
-
-const CancelLink = styled.a`
-    padding-left: 15px;
-    color: rgba(0,0,0,.87);
-    &:hover {
-        color: #B03060;
-    }
 `
 
 class EnquiryEdit extends Component {
@@ -229,14 +212,14 @@ class EnquiryEdit extends Component {
 				<ECardBody>
 					<Form>
 						<Form.Field inline>
-							<ELabel>Дата</ELabel>
+							<Label>Дата</Label>
                             <DatePicker
                                 error={dateLocal.err}
                                 selectedDate={selectedDate}
                                 selectDay={this.selectDay} />
 						</Form.Field>
 						<Form.Field inline error={orgId.err} required>
-							<ELabel>Организация</ELabel>
+							<Label>Организация</Label>
                             <EDropdown
                                 loading={!orgs || orgDdn.loading}
                                 disabled={!orgs || orgDdn.loading}
@@ -257,7 +240,7 @@ class EnquiryEdit extends Component {
                             />
 						</Form.Field>
 						<Form.Field inline error={modelId.err} required>
-							<ELabel>Изделие</ELabel>
+							<Label>Изделие</Label>
                             <EDropdown
                                 loading={!models || modelDdn.loading}
                                 disabled={!models || modelDdn.loading}
@@ -278,7 +261,7 @@ class EnquiryEdit extends Component {
                             />
 						</Form.Field>
                         <Form.Field inline error={modelId.err} required>
-							<ELabel>Кол-во</ELabel>
+							<Label>Кол-во</Label>
                             <Input type='number'
                                 placeholder='Введите кол-во шт.' 
                                 value={qty.curVal}
@@ -293,14 +276,14 @@ class EnquiryEdit extends Component {
                         hidden={!err.message}
                         header={err.title}
                         content={err.message} />
-                    <LabelImitator />
+                    <Div inline w='formLabelWidth' />
                     <Button 
                         primary 
                         content={this.isNewEnquiry ? 'Создать' : 'Сохранить'}
                         disabled={(!this.isNewEnquiry && !diff) || !!err.message || someFieldHasError || !!orgId.loading || requiredIsEmpty}
                         loading={loading}
                         onClick={this.submit} />
-                    <CancelLink onClick={cancelEdit}>Отмена</CancelLink>
+                    <A cancel onClick={cancelEdit}>Отмена</A>
                 </ECardBody>
 			</Fragment>
 		)

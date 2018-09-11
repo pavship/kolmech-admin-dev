@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
-import { Header, Form, Message, Button } from 'semantic-ui-react'
-import { Div, SLabel, SCardSection } from './styled-semantic/styled-semantic'
+import { Header, Form, Message, Button, Divider } from 'semantic-ui-react'
+import { Div, A, Label, CardSection } from './styled-semantic/styled-semantic'
 import LocalDatePicker from './common/LocalDatePicker'
 import CurrencyInput from './common/CurrencyInput'
 
 import { toLocalISOString }from '../utils/dates'
+import { coStatusId } from '../constants'
 
 class EnquiryCommercialOffer extends Component {
     constructor(props){
@@ -28,7 +29,6 @@ class EnquiryCommercialOffer extends Component {
                 amount: props.co.amount
               }
         this.fields = Object.keys(oriCO)
-    console.log('this.fields > ', this.fields)
         this.requiredFields = ['dateLocal', 'amount']
         // map through form fields and write helper props
         this.fields.forEach(key => {
@@ -36,7 +36,6 @@ class EnquiryCommercialOffer extends Component {
                 curVal: oriCO[key],
                 // err bool controls weather the field is heighlighted with error (red) style
                 err: { message: '' },
-                // key: 1,
                 ...this.requiredFields.includes(key) && { required: true },
                 ...!isNewCO && {
                     oriVal: oriCO[key],
@@ -44,7 +43,6 @@ class EnquiryCommercialOffer extends Component {
                 }
             }
         })
-        // this.state.dateLocal.key = 1
         // console.log(this.state)
     }
     setFieldValue = (field, newVal) => {
@@ -55,67 +53,68 @@ class EnquiryCommercialOffer extends Component {
                 curVal: newVal,
                 ...this.isNewCO && { diff: newVal !== this.state[field].oriVal },
                 err: { message: '' },
-                // key: this.state[field].key + 1
             }
         })
     }
     setFieldError = (field, err) => {
         this.setState({ [field]: { ...this.state[field], err } })
     }
-    handleAmountInputChange = (e, { value }) => {
-        console.log(value)
-        
-    }
-    handleAmountValueChange = ({formattedValue, value, floatValue}) => {
-        console.log('formattedVal, value > ', formattedValue, value, floatValue)
+    submit = () => {
+        const co = this.fields.reduce((co, f) => {
+            co[f] = this.state[f].curVal
+            return co
+        }, {})
+        // this.props.onSubmit(null, {value: coStatusId, co})
+        this.props.onSubmit(co)
     }
     render() {
         const { dateLocal, amount, loading } = this.state
+        const { cancel, id } = this.props
         const requiredIsEmpty = this.requiredFields.some(f => !this.state[f].curVal)
         const diff = this.isNewCO ? null : this.fields.map(f => this.state[f].diff).includes(true)
         const err = this.fields.map(f => this.state[f].err).find(err => err.message) || {}
         return (
             <Fragment>
-            <SCardSection head secondary >
+            <CardSection head secondary >
                 <Header>
                     Коммерческое предложение
                 </Header>
-            </SCardSection>
-            <SCardSection secondary >
+            </CardSection>
+            <CardSection secondary >
                 <Form>
                     <Form.Field inline>
-                        <SLabel>Дата</SLabel>
+                        <Label>Дата</Label>
                         <LocalDatePicker
-                            // key={dateLocal.key}
                             value={dateLocal.curVal}
                             setFormFieldValue={this.setFieldValue}
                             setFormFieldError={this.setFieldError}
                             err={dateLocal.err} />
                     </Form.Field>
                     <Form.Field inline required>
-                        <SLabel>Сумма</SLabel>
+                        <Label>Сумма</Label>
                         <CurrencyInput
                             value={amount.curVal}
                             placeholder='Введите сумму КП' 
                             setFormFieldValue={this.setFieldValue} />
                     </Form.Field>
                 </Form>
-            </SCardSection>
-            <SCardSection secondary minor>
+            </CardSection>
+            <CardSection secondary minor>
                 <Message
                     error
                     hidden={!err.message}
                     header={err.title}
                     content={err.message} />
-                <Div inline w='form-label' />
+                <Div inline w='formLabelWidth' />
                 <Button 
                     primary 
-                    content={'Сохранить КП'}
+                    content={'Создать'}
                     disabled={(!this.isNewCO && !diff) || !!err.message || loading || requiredIsEmpty}
                     loading={loading}
                     onClick={this.submit} />
-                {/* <CancelLink onClick={cancelEdit}>Отмена</CancelLink> */}
-            </SCardSection>
+                <A cancel onClick={cancel}>Отмена</A>
+            </CardSection>
+            <Divider />
             </Fragment>
         )
     }

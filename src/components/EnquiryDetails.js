@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
 import { Card, Header, Icon, Label, Form, Comment, Button, 
-        Message, Dropdown, Popup, Segment } from 'semantic-ui-react'
-import { SCardSection } from './styled-semantic/styled-semantic'
+        Message, Dropdown, Popup } from 'semantic-ui-react'
+import { CardSection } from './styled-semantic/styled-semantic'
 import { graphql, compose } from 'react-apollo'
 import { enquiryDetails, newEnquiry, createEnquiryEvent, 
         enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
@@ -12,6 +12,7 @@ import EnquiryCommercialOffer from './EnquiryCommercialOffer'
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
 import DraftEditor from './common/DraftEditor'
 import { sanitize } from 'dompurify'
+import { coStatusId } from '../constants'
 
 const ECard = styled(Card)`
     border-radius: 0 !important;
@@ -113,8 +114,8 @@ const DarkGreenButton = styled(Button)`
 `
 
 const Comments = styled(Comment.Group)`
-    /* margin: 1.5em 1.5em 1.5em 55px !important; */
-    margin: 1.5em 1.5em 1.5em 0 !important;
+    margin: 1.5em 1.5em 1.5em 55px !important;
+    /* margin: 1.5em 1.5em 1.5em 0 !important; */
 `
 
 const CIcon = styled(Icon)`
@@ -207,9 +208,11 @@ class EnquiryDetails extends Component {
         editorHasText: false,
         noteEditorDiff: false,
         noteKey: 1,
+        activeCO: '',
         loading: false,
         creatingComment: false,
         changingStatus: false,
+        statusPending: false,
         savingNote: false,
         error: ''
     }
@@ -245,16 +248,22 @@ class EnquiryDetails extends Component {
             console.log(err)
         }
     }
-    changeStatus = async (e, {value}) => {
+    changeStatus = async (e, { value, co }) => {
+        console.log('value, co > ', value, co)
+        if (value === coStatusId) {
+            if (!this.state.statusPending) return this.setState({ statusPending: true, activeCO: 'new' })
+            else this.setState({ statusPending: false })
+        }
         try {
             this.setState({ changingStatus: true })
             await this.props.createEnquiryEvent({
                 variables: {
                     enquiryId: this.props.id,
-                    statusId: value
+                    statusId: value,
+                    ...co && { co }
                 }
             })
-            this.setState({ changingStatus: false })
+            this.setState({ changingStatus: false, activeCO: '' })
         } catch (err) {
             this.setState({ changingStatus: false, error: err.message })
             console.log(err)
@@ -280,8 +289,8 @@ class EnquiryDetails extends Component {
     }
 	render() { 
         // console.log(this.state, this.props);
-        const { editMode, editorHasText, loading, creatingComment, changingStatus, error,
-                noteEditorDiff, noteKey, savingNote } = this.state
+        const { editMode, editorHasText, loading, creatingComment, changingStatus, statusPending, 
+                error, noteEditorDiff, noteKey, savingNote, activeCO } = this.state
 		const { id, enquiryQuery, closeDetails, selectEnquiry } = this.props
         const isNewEnquiry = this.isNewEnquiry
 		if (enquiryQuery.loading) return "Загрузка..."
@@ -304,7 +313,7 @@ class EnquiryDetails extends Component {
         }, [])
 		return (
 			<ECard fluid>
-				<SCardSection head noIndent>
+				<CardSection head noIndent>
 					<EHeader>
 						<EIcon name='cancel' onClick={closeDetails} />
 						<Header.Content>
@@ -328,7 +337,7 @@ class EnquiryDetails extends Component {
                             active={editMode} 
                             withmargin={editMode ? 1 : 0} 
                             onClick={this.enableEditMode} /> }
-				</SCardSection>
+				</CardSection>
 				{ (editMode || isNewEnquiry) &&
                     <EnquiryEdit id={id} 
                         enquiry={enquiry} 
@@ -376,14 +385,14 @@ class EnquiryDetails extends Component {
                                 <InputTd>
                                     <SDropdown labeled button className='icon'
                                         loading={changingStatus}
-                                        disabled={changingStatus}
+                                        disabled={changingStatus || statusPending}
                                         value={curStatus.id}
                                         text={curStatus.name}
                                         options={statuses
                                             .filter(s => (s.id === curStatus.id
                                                         || Math.abs(s.stage - curStatus.stage) === 1)
-                                                        && !(s.stage === 0 && curStatus.stage !== 0)
-                                                        && !(s.name === 'Выставлено КП'))
+                                                        && !(s.stage === 0 && curStatus.stage !== 0))
+                                                        // && !(s.name === 'Выставлено КП'))
                                             .map(s => ({
                                                 key: s.id,
                                                 text: s.name,
@@ -409,15 +418,7 @@ class EnquiryDetails extends Component {
                             
 						</tbody></Table>
 					</ECardBody>
-                    <EnquiryCommercialOffer id='new' />
-                    {/* <ECardBody>
-                    <Segment secondary basic>
-                        <CMessage
-                            error
-                            hidden={true}
-                            // header={err.title}
-                            // content={err.message} 
-                            />
+                    {/* <CardSection minor>
                         <Popup 
                             position='bottom left'
                             size='small'
@@ -425,7 +426,7 @@ class EnquiryDetails extends Component {
                             hoverable
                             style={curStatus.stage === 1 ? {opacity: 0} : {}}
                             trigger={<InlineBlockDiv><DarkGreenButton
-                                basic labelPosition='left' icon='rub' color='green'
+                                basic labelPosition='left' icon='plus' color='green'
                                 content={'Коммерческое предложение'}
                                 disabled={curStatus.stage !== 1}
                                 // loading={loading}
@@ -438,11 +439,12 @@ class EnquiryDetails extends Component {
                                 Статус заявки <b>В работе</b>
                             </Popup.Content>
                         </Popup>
-                        
-                        <CancelLink onClick={cancelEdit}>Отмена</CancelLink>
-                    </Segment>
-                    </ECardBody> */}
-                    <ECardBody>
+                    </CardSection> */}
+                    { activeCO && 
+                        <EnquiryCommercialOffer 
+                            id={activeCO} 
+                            onSubmit={(co) => this.changeStatus(null, { value: coStatusId, co })} />}
+                    {/* <ECardBody> */}
 					<Comments minimal>
 						<Header as='h3' dividing content='Комментарии и события' />
                         { events.map((e, i) => {
@@ -498,7 +500,7 @@ class EnquiryDetails extends Component {
 								loading={creatingComment} />
 						</Form>
 					</Comments>
-                    </ECardBody>
+                    {/* </ECardBody> */}
 				</Fragment> }
 			</ECard>
 		)
