@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import { Card, Header, Icon, Label, Form, Comment, Button, 
         Message, Dropdown, Popup, Segment } from 'semantic-ui-react'
+import { SCardSection } from './styled-semantic/styled-semantic'
 import { graphql, compose } from 'react-apollo'
 import { enquiryDetails, newEnquiry, createEnquiryEvent, 
         enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
@@ -15,12 +16,6 @@ import { sanitize } from 'dompurify'
 const ECard = styled(Card)`
     border-radius: 0 !important;
     box-shadow: none !important;
-`
-
-const ECardTop = styled(Card.Content)`
-    display: flex;
-	align-items: center;
-    height: 3.5em;
 `
 
 const EHeader = styled(Header)`
@@ -70,7 +65,7 @@ const Tr = styled.tr`
 const Td = styled.td`
 	padding-left: 4px;
 	:nth-child(1) {
-        width: 130px;
+        width: ${props => props.theme.formLabelWidth};
 		// color: rgba(0,0,0,.87);
 		/* font-size: .92857143em; */
 		/* line-height: 32px; */
@@ -309,7 +304,7 @@ class EnquiryDetails extends Component {
         }, [])
 		return (
 			<ECard fluid>
-				<ECardTop>
+				<SCardSection head noIndent>
 					<EHeader>
 						<EIcon name='cancel' onClick={closeDetails} />
 						<Header.Content>
@@ -333,8 +328,7 @@ class EnquiryDetails extends Component {
                             active={editMode} 
                             withmargin={editMode ? 1 : 0} 
                             onClick={this.enableEditMode} /> }
-				</ECardTop>
-
+				</SCardSection>
 				{ (editMode || isNewEnquiry) &&
                     <EnquiryEdit id={id} 
                         enquiry={enquiry} 

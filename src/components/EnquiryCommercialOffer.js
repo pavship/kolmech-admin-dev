@@ -1,14 +1,12 @@
 import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
-import { Card, Segment, Header, Form, Input, Message, Button } from 'semantic-ui-react'
-import { SLabel, Span, SCardSection } from './styled-semantic/styled-semantic'
-// import DatePicker from './common/DatePicker'
+import { Header, Form, Message, Button } from 'semantic-ui-react'
+import { Div, SLabel, SCardSection } from './styled-semantic/styled-semantic'
 import LocalDatePicker from './common/LocalDatePicker'
+import CurrencyInput from './common/CurrencyInput'
 
-import { isValidDate, toLocalISOString, fromLocalISOString }from '../utils/dates'
-
-// export const COFormContext = React.createContext()
+import { toLocalISOString }from '../utils/dates'
 
 class EnquiryCommercialOffer extends Component {
     constructor(props){
@@ -18,11 +16,6 @@ class EnquiryCommercialOffer extends Component {
         const isNewCO = this.isNewCO
         this.state = {
             loading: false,
-            // if any of the form fields has error, the following err prop should always contain non empty error message string
-            // err: {
-            //     title: '',
-            //     message: ''
-            // }
         }
         // gather original form fields' values on oriCO object
         const oriCO = isNewCO 
@@ -43,6 +36,7 @@ class EnquiryCommercialOffer extends Component {
                 curVal: oriCO[key],
                 // err bool controls weather the field is heighlighted with error (red) style
                 err: { message: '' },
+                // key: 1,
                 ...this.requiredFields.includes(key) && { required: true },
                 ...!isNewCO && {
                     oriVal: oriCO[key],
@@ -50,7 +44,7 @@ class EnquiryCommercialOffer extends Component {
                 }
             }
         })
-        if (!isNewCO) this.state.diff = false
+        // this.state.dateLocal.key = 1
         // console.log(this.state)
     }
     setFieldValue = (field, newVal) => {
@@ -60,71 +54,60 @@ class EnquiryCommercialOffer extends Component {
                 ...this.state[field],
                 curVal: newVal,
                 ...this.isNewCO && { diff: newVal !== this.state[field].oriVal },
-                err: { message: '' }
+                err: { message: '' },
+                // key: this.state[field].key + 1
             }
         })
-
-        // const fieldObj = { ...this.state[field] }
-        // fieldObj.curVal = newVal
-        // fieldObj.err = false
-        // if (!this.isNewCO) fieldObj.diff = fieldObj.curVal !== fieldObj.oriVal
-        // this.setState({ [field]: fieldObj, err: { message: '' } })
     }
     setFieldError = (field, err) => {
         this.setState({ [field]: { ...this.state[field], err } })
     }
     handleAmountInputChange = (e, { value }) => {
         console.log(value)
+        
+    }
+    handleAmountValueChange = ({formattedValue, value, floatValue}) => {
+        console.log('formattedVal, value > ', formattedValue, value, floatValue)
     }
     render() {
         const { dateLocal, amount, loading } = this.state
         const requiredIsEmpty = this.requiredFields.some(f => !this.state[f].curVal)
-        const diff = this.fields.map(f => this.state[f].diff).includes(true)
+        const diff = this.isNewCO ? null : this.fields.map(f => this.state[f].diff).includes(true)
         const err = this.fields.map(f => this.state[f].err).find(err => err.message) || {}
         return (
             <Fragment>
-            <SCardSection secondary={1}>
-                {/* <Segment secondary basic> */}
-                    <Header>
-                        Коммерческое предложение
-                    </Header>
-                    {/* <COFormContext.Provider value={{
-                        state: this.state,
-                        changeFormFieldValue: this.setFieldValue,
-                        setFormFieldError: this.setFieldError
-                        #f3f4f5
-                    }}> */}
-                    <Form>
-						<Form.Field inline>
-							<SLabel>Дата</SLabel>
-                            <LocalDatePicker
-                                value={dateLocal.curVal}
-                                setFormFieldValue={this.setFieldValue}
-                                setFormFieldError={this.setFieldError}
-                                err={dateLocal.err}
-                                // selectDay={(newVal) => this.setFieldValue('dateLocal', newVal)} 
-                                />
-                            <Span pl='6px'>{dateLocal.curVal}</Span>
-						</Form.Field>
-                        <Form.Field inline error={!!amount.err.message} required>
-							<SLabel>Сумма</SLabel>
-                            <Input type='number'
-                                placeholder='Сумма КП в рублях' 
-                                value={amount.curVal}
-                                onChange={this.handleAmountInputChange} />
-                            <Span pl='6px' fs='1.1rem'>₽</Span>
-						</Form.Field>
-					</Form>
-                    {/* </COFormContext.Provider> */}
-                {/* </Segment> */}
+            <SCardSection head secondary >
+                <Header>
+                    Коммерческое предложение
+                </Header>
             </SCardSection>
-            <SCardSection secondary={1}>
+            <SCardSection secondary >
+                <Form>
+                    <Form.Field inline>
+                        <SLabel>Дата</SLabel>
+                        <LocalDatePicker
+                            // key={dateLocal.key}
+                            value={dateLocal.curVal}
+                            setFormFieldValue={this.setFieldValue}
+                            setFormFieldError={this.setFieldError}
+                            err={dateLocal.err} />
+                    </Form.Field>
+                    <Form.Field inline required>
+                        <SLabel>Сумма</SLabel>
+                        <CurrencyInput
+                            value={amount.curVal}
+                            placeholder='Введите сумму КП' 
+                            setFormFieldValue={this.setFieldValue} />
+                    </Form.Field>
+                </Form>
+            </SCardSection>
+            <SCardSection secondary minor>
                 <Message
                     error
                     hidden={!err.message}
                     header={err.title}
                     content={err.message} />
-                {/* <LabelImitator /> */}
+                <Div inline w='form-label' />
                 <Button 
                     primary 
                     content={'Сохранить КП'}

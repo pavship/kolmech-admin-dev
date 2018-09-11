@@ -27,7 +27,7 @@ class LocalDatePicker extends Component {
         if (!isValidDate(pickedDate)) {
             this.props.setFormFieldError('dateLocal', {
                 title: 'Ошибка ввода даты', 
-                message: 'Дата заявки не соответствует формату ГГГГ-ММ-ДД'
+                message: 'Дата не соответствует формату ГГГГ-ММ-ДД'
             })
             return
         }
