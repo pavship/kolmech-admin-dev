@@ -1,5 +1,5 @@
-export const USER_ID = 'user-id'
-export const AUTH_TOKEN = 'AUTH_TOKEN'
+export const USER_ID = 'kolmech-user-id'
+export const AUTH_TOKEN = 'kolmech-token'
 
 // DB ids
 export const coStatusId = 'cjlj2561q00130959gtcqhoew' // commercial offer status
