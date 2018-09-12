@@ -98,6 +98,5 @@ class EnquiriesPage extends Component {
 }
 
 export default compose(
-    // graphql(assignCurrentEnquiry, { name: 'assignCurrentEnquiry' })
     graphql(allEnquiries, { name: 'allEnquiries' })
 )(EnquiriesPage)

@@ -6,38 +6,50 @@ export const allEnquiries = gql`
 			id
 			num
 			dateLocal
-            htmlNote
+			htmlNote
 			org {
 				id
 				name }
-            model {
-                id
-                name
-            }
-            qty
-			events ( where: { status: { id_not: null } }, last: 1 ) {
+			model {
+				id
+				name
+			}
+			qty
+			curStatusEvents: events ( where: { status: { id_not: null } }, last: 1 ) {
 				id
 				status {
 					id
 					name
-					stage } } } } `
+					stage
+				}
+			}
+			lastCoEvents: events ( where: { doc: { type: CO } }, last: 1 ) {
+				id
+				doc {
+					id
+					amount
+				}
+			}
+		}
+	}
+`
 export const enquiryDetails = gql`
 	query EnquiryDetails ($id: ID!) {
 		enquiry (id: $id) {
 			id
 			num
 			dateLocal
-            htmlNote
+			htmlNote
 			org {
 				id
 				name
 			}
-            model {
-                id
-                article
-                name
-            }
-            qty
+			model {
+				id
+				article
+				name
+			}
+			qty
 			events {
 				id
 				datetimeLocal
@@ -56,7 +68,20 @@ export const enquiryDetails = gql`
 					name
 					stage 
 				}
+				doc {
+					id
+					dateLocal
+					amount
+				}
 			}
+			# coEvents: events ( where: { doc: { type: CO } } ) {
+			# 	id
+			# 	doc {
+			# 		id
+			# 		dateLocal
+			# 		amount
+			# 	}
+			# }
 		}
 		statuses {
 			id
@@ -76,7 +101,7 @@ export const newEnquiry = gql`
 		newEnquiry @client {
 			id
 		}
-        statuses {
+		statuses {
 			id
 			stage
 			name
@@ -95,17 +120,17 @@ export const createEnquiry = gql`
 			id
 			num
 			dateLocal
-            htmlNote
+			htmlNote
 			org {
 				id
 				name
 			}
-            model {
-                id
-                article
-                name
-            }
-            qty
+			model {
+				id
+				article
+				name
+			}
+			qty
 			events {
 				id
 				datetimeLocal
@@ -124,6 +149,11 @@ export const createEnquiry = gql`
 					name
 					stage
 				}
+				doc {
+					id
+					dateLocal
+					amount
+				}
 			}
 		}
 	}
@@ -134,17 +164,17 @@ export const updateEnquiry = gql`
 			id
 			num
 			dateLocal
-            htmlNote
+			htmlNote
 			org {
 				id
 				name
 			}
-            model {
-                id
-                article
-                name
-            }
-            qty
+			model {
+				id
+				article
+				name
+			}
+			qty
 			events {
 				id
 				datetimeLocal
@@ -163,14 +193,19 @@ export const updateEnquiry = gql`
 					name
 					stage
 				}
+				doc {
+					id
+					dateLocal
+					amount
+				}
 			}
 		}
 	}
 `
 
 export const createEnquiryEvent = gql`
-	mutation CreateEnquiryEvent($enquiryId: ID!, $htmlText: String, $statusId: ID) {
-		createEnquiryEvent(enquiryId: $enquiryId, htmlText: $htmlText, statusId: $statusId) {
+	mutation CreateEnquiryEvent($enquiryId: ID!, $htmlText: String, $statusId: ID, $doc: DocCreateInput) {
+		createEnquiryEvent(enquiryId: $enquiryId, htmlText: $htmlText, statusId: $statusId, doc: $doc) {
 			id
 			datetimeLocal
 			htmlText
@@ -188,6 +223,11 @@ export const createEnquiryEvent = gql`
 				name
 				stage
 			}
+			doc {
+				id
+				dateLocal
+				amount
+			}
 		}
 	}
 `
@@ -197,7 +237,7 @@ export const enquiryFragment = gql`
 		id
 		num
 		dateLocal
-        htmlNote
+		htmlNote
 		org {
 			id
 			name
@@ -219,6 +259,11 @@ export const enquiryFragment = gql`
 				id
 				name
 				stage
+			}
+			doc {
+				id
+				dateLocal
+				amount
 			}
 		}
 	}

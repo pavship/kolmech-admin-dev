@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import { Card, Header, Icon, Label, Form, Comment, Button, 
         Message, Dropdown, Popup } from 'semantic-ui-react'
-import { CardSection } from './styled-semantic/styled-semantic'
+import { CardSection, P } from './styled-semantic/styled-semantic'
 import { graphql, compose } from 'react-apollo'
 import { enquiryDetails, newEnquiry, createEnquiryEvent, 
         enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
@@ -12,7 +12,7 @@ import EnquiryCommercialOffer from './EnquiryCommercialOffer'
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
 import DraftEditor from './common/DraftEditor'
 import { sanitize } from 'dompurify'
-import { coStatusId } from '../constants'
+import { coStatusId, orderStatusId, refusalStatusIds } from '../constants'
 
 const ECard = styled(Card)`
     border-radius: 0 !important;
@@ -260,7 +260,7 @@ class EnquiryDetails extends Component {
                 variables: {
                     enquiryId: this.props.id,
                     statusId: value,
-                    ...co && { co }
+                    ...(co && { doc: { ...co } })
                 }
             })
             this.setState({ changingStatus: false, activeCO: '' })
@@ -268,6 +268,9 @@ class EnquiryDetails extends Component {
             this.setState({ changingStatus: false, error: err.message })
             console.log(err)
         }
+    }
+    cancelPendingStatusChange = () => {
+        this.setState({ statusPending: false, activeCO: '' })
     }
     saveNote = async () => {
         try {
@@ -297,9 +300,8 @@ class EnquiryDetails extends Component {
         if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
         const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
         const { num, dateLocal, org, model, qty, htmlNote, events } = enquiry
+        const coEvents = events && events.filter(e => e.doc)
         const curStatus = events && events.filter(e => e.status).pop().status
-        const refusalStatusIds = ['cjlj25g4q00170959picodhln', 'cjlj2c004001c0959k6qq42xz']
-        const orderStatusId = 'cjlj2ckgy001i09599l147fot'
         // sort so that refusal statuses are at the end of their stage block
         const statuses = enquiryQuery.statuses.slice().sort((a, b) => a.stage === b.stage && refusalStatusIds.includes(a.id))
         let stage = 0
@@ -363,6 +365,20 @@ class EnquiryDetails extends Component {
 								<Td>{qty}</Td>
                                 <Td></Td>
 							</Tr>
+							{ !!coEvents.length &&
+                                <Tr>
+                                    <Td>КП</Td>
+                                    <Td>
+                                        {coEvents.map(({ doc: { id, dateLocal, amount } }) => (
+                                            <P key={id} 
+                                                fw='normal'
+                                                lh='1.21428571em' >
+                                                <b>{amount} ₽ </b> ( от {dateLocal} )
+                                            </P>
+                                        ))}
+                                    </Td>
+                                    <Td></Td>
+                                </Tr> }
                             <Tr>
                                 <Td>Примечания</Td>
                                 <EditorTd>
@@ -443,7 +459,8 @@ class EnquiryDetails extends Component {
                     { activeCO && 
                         <EnquiryCommercialOffer 
                             id={activeCO} 
-                            onSubmit={(co) => this.changeStatus(null, { value: coStatusId, co })} />}
+                            submit={(co) => this.changeStatus(null, { value: coStatusId, co })}
+                            cancel={this.cancelPendingStatusChange} />}
                     {/* <ECardBody> */}
 					<Comments minimal>
 						<Header as='h3' dividing content='Комментарии и события' />
@@ -531,10 +548,11 @@ export default compose(
                 const query = allEnquiries
                 data = cache.readQuery({ query })
                 const enquiry = data.enquiries.find(e => e.id === props.id)
-                enquiry.events = [newEvent]
+                enquiry.curStatusEvents = [newEvent]
+                if (newEvent.doc) enquiry.lastCoEvents = [newEvent]
                 cache.writeQuery({ query, data })
             },
-            refetchQueries:[ 'allEnquiries' ]
+            // refetchQueries:[ 'allEnquiries' ]
 		})
 	}),
     graphql(newEnquiry, { name: 'enquiryQuery', skip: (props) => props.id !== 'new' }),

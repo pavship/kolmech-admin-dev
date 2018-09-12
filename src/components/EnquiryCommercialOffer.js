@@ -7,7 +7,6 @@ import LocalDatePicker from './common/LocalDatePicker'
 import CurrencyInput from './common/CurrencyInput'
 
 import { toLocalISOString }from '../utils/dates'
-import { coStatusId } from '../constants'
 
 class EnquiryCommercialOffer extends Component {
     constructor(props){
@@ -64,12 +63,11 @@ class EnquiryCommercialOffer extends Component {
             co[f] = this.state[f].curVal
             return co
         }, {})
-        // this.props.onSubmit(null, {value: coStatusId, co})
-        this.props.onSubmit(co)
+        this.props.submit(co)
     }
     render() {
         const { dateLocal, amount, loading } = this.state
-        const { cancel, id } = this.props
+        const { cancel } = this.props
         const requiredIsEmpty = this.requiredFields.some(f => !this.state[f].curVal)
         const diff = this.isNewCO ? null : this.fields.map(f => this.state[f].diff).includes(true)
         const err = this.fields.map(f => this.state[f].err).find(err => err.message) || {}
@@ -114,7 +112,7 @@ class EnquiryCommercialOffer extends Component {
                     onClick={this.submit} />
                 <A cancel onClick={cancel}>Отмена</A>
             </CardSection>
-            <Divider />
+            <Divider fitted/>
             </Fragment>
         )
     }

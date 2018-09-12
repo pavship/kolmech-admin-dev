@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react'
 
 import styled from 'styled-components'
-import { Label } from 'semantic-ui-react'
+
+import NumberFormat from 'react-number-format'
 
 const TableHeader = styled.div`
     // padding: 0 14px;
@@ -51,10 +52,10 @@ const Td = styled.td`
         width: 250px;
     }
     :nth-child(6) {
-        width: 60px;
+        width: 50px;
     }
     :nth-child(7) {
-        width: 90px;
+        width: 105px;
     }
     :nth-child(8) {
         width: 130px;
@@ -87,7 +88,7 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
             <Table>
                 {/* <colgroup> <Col /> <Col /> <Col /> <Col /> <Col /> </colgroup> */}
                 <tbody>
-                    {enquiries.map(({ id, num, dateLocal, org, model, qty, events }) => <Fragment key={id}>
+                    {enquiries.map(({ id, num, dateLocal, org, model, qty, curStatusEvents, lastCoEvents }) => <Fragment key={id}>
                         <EnquiryRow onClick={() => handleEnquiryLineClick(id)} active={id === activeEnquiryId}>
                             <Td></Td>
                             <Td>{num}</Td>
@@ -99,8 +100,20 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
                             </Td>
                             <Td>{model.name}</Td>
                             <Td>{qty}</Td>
-                            <Td>{}</Td>
-                            <Td>{events && events[0].status.name}</Td>
+                            <Td>{!!lastCoEvents.length && (
+                                    <NumberFormat 
+                                        displayType='text'
+                                        value={Math.round(lastCoEvents[0].doc.amount)}
+                                        decimalSeparator=','
+                                        thousandSeparator=' '
+                                        decimalScale={2}
+                                        allowNegative={false}
+                                        suffix=' ₽'
+                                        />
+                                        // lastCoEvents[0].doc.amount + ' ₽'
+                                )}
+                            </Td>
+                            <Td>{curStatusEvents[0].status.name}</Td>
                             <Td></Td>
                             {/* <Td>15 000 ₽</Td>*/}
                         </EnquiryRow></Fragment>)}

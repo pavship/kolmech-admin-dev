@@ -311,6 +311,8 @@ export default compose(
             update: (cache, {data: { createEnquiry }}) => {
                 const query = allEnquiries
                 const data = cache.readQuery({ query })
+                createEnquiry.curStatusEvents = [createEnquiry.events[0]]
+                createEnquiry.lastCoEvents = []
                 data.enquiries.unshift(createEnquiry)
                 cache.writeQuery({ query, data })
             }
