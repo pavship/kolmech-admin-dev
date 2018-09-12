@@ -3,6 +3,7 @@ import React, { Fragment } from 'react'
 import styled from 'styled-components'
 
 import NumberFormat from 'react-number-format'
+import { currency } from '../utils/format';
 
 const TableHeader = styled.div`
     // padding: 0 14px;
@@ -100,22 +101,9 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
                             </Td>
                             <Td>{model.name}</Td>
                             <Td>{qty}</Td>
-                            <Td>{!!lastCoEvents.length && (
-                                    <NumberFormat 
-                                        displayType='text'
-                                        value={Math.round(lastCoEvents[0].doc.amount)}
-                                        decimalSeparator=','
-                                        thousandSeparator=' '
-                                        decimalScale={2}
-                                        allowNegative={false}
-                                        suffix=' ₽'
-                                        />
-                                        // lastCoEvents[0].doc.amount + ' ₽'
-                                )}
-                            </Td>
-                            <Td>{curStatusEvents[0].status.name}</Td>
+                            <Td>{lastCoEvents[0] && currency(lastCoEvents[0].doc.amount)}</Td>
+                            <Td>{curStatusEvents[0] && curStatusEvents[0].status.name}</Td>
                             <Td></Td>
-                            {/* <Td>15 000 ₽</Td>*/}
                         </EnquiryRow></Fragment>)}
                 </tbody>
             </Table>

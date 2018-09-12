@@ -13,6 +13,8 @@ import ButtonColoredOnHover from './common/ButtonColoredOnHover'
 import DraftEditor from './common/DraftEditor'
 import { sanitize } from 'dompurify'
 import { coStatusId, orderStatusId, refusalStatusIds } from '../constants'
+import { currency } from '../utils/format'
+
 
 const ECard = styled(Card)`
     border-radius: 0 !important;
@@ -373,7 +375,7 @@ class EnquiryDetails extends Component {
                                             <P key={id} 
                                                 fw='normal'
                                                 lh='1.21428571em' >
-                                                <b>{amount} ₽ </b> ( от {dateLocal} )
+                                                <b>{currency(amount)} </b> ( от {dateLocal} )
                                             </P>
                                         ))}
                                     </Td>

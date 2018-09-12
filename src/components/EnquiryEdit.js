@@ -153,7 +153,6 @@ class EnquiryEdit extends Component {
             if (this.isNewEnquiry || this.state[f].diff) enquiry[f] = this.state[f].curVal
         })
         const variables = { ...enquiry }
-        console.log('variables > ', variables)
         if (this.isNewEnquiry) return this.createEnquiry(variables)
         variables.id = this.props.id
         this.updateEnquiry(variables)
