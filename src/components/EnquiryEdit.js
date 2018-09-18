@@ -253,7 +253,7 @@ class EnquiryEdit extends Component {
                                 search
                                 searchQuery={modelDdn.search}
                                 onSearchChange={this.handleModelDropdownSearchChange}
-                                noResultsMessage='Не найдено. Введите название, чтобы добавить.'
+                                noResultsMessage='Не найдено. Выберите "Нет в списке".'
                                 // allowAdditions
                                 // additionLabel='Добавить по ИНН: '
                                 // onAddItem={this.createOrg}

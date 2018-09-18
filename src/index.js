@@ -20,10 +20,12 @@ import resolvers from './apollo/resolvers'
 
 import App from './App'
 
-// deprecated init with Apollo Boost:
+// init with Apollo Boost:
 // @ts-ignore
 const client = new ApolloClient({
-    uri: 'https://now-advanced.now.sh',
+    uri: 'http://localhost:4000',
+    // uri: 'https://now-advanced.now.sh',
+    // uri: 'http://node62506-env-1542080.mircloud.ru:11268/',
     request: (operation) => {
         const token = localStorage.getItem(AUTH_TOKEN)
         operation.setContext({

@@ -1,3 +1,18 @@
+mutation signup {
+  signup(
+    email: "",
+    password: "",
+  	fName: "",
+    lName: ""
+  ) {
+		token
+  }
+}
+mutation login {
+  login(email: "developer@example.com", password: "nooneknows") {
+		token  
+  }
+}
 query me {
   me {
     id
@@ -159,24 +174,6 @@ mutation deleteAllEnquiries {
     count
   }  
 }
-
-mutation signup {
-  signup(
-    email: "p@p",
-    password: "burito",
-  	fName: "Павел",
-    lName: "Шипицын"
-  ) {
-		token
-  }
-}
-
-mutation login {
-  login(email: "developer@example.com", password: "nooneknows") {
-		token  
-  }
-}
-
 mutation createOrg {
   createOrg(inn: "7706107510") {
     id
@@ -185,7 +182,6 @@ mutation createOrg {
     legalAddress
   }
 }
-
 query orgs {
   orgs {
     id
@@ -217,4 +213,9 @@ query statuses {
       id
     }
   }
+}
+mutation importModels {
+    importModels {
+        count
+    }
 }

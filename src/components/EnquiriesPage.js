@@ -23,23 +23,24 @@ const DetailsSidebar = styled(Sidebar)`
 class EnquiriesPage extends Component {
     state = { 
         detailsVisible: false,
-        activeEnquiryId: null 
+        active: null
     }
-    selectEnquiry = (id) => this.setState({ activeEnquiryId: id })
+    selectEnquiry = (id) => this.setState({ active: {type: 'Enquiry', id} })
     // Presentational methods
     openDetails = () => this.setState({ detailsVisible: true })
     closeDetails = () => {
         this.setState({ detailsVisible: false })
         // set timeout for sidebar to finish animation
-        setTimeout(() => this.setState({ activeEnquiryId: null }), 300)
+        setTimeout(() => this.setState({ active: null }), 300)
     }
     // Menu actions
-    refetchEnquiries = () => {
-        const { allEnquiries: { refetch } } = this.props
-        refetch()
-    }
+    refetchEnquiries = () => { this.props.allEnquiries.refetch() }
     addNewEnquiry = () => {
-        this.setState({ activeEnquiryId: 'new' })
+        this.setState({ active: {type: 'Enquiry', id: 'new'} })
+        this.openDetails()
+    }
+    addNewOrder = () => {
+        this.setState({ active: {type: 'Order',  id: 'new', enquiryId: this.state.active.id } })
         this.openDetails()
     }
     // Query actions
@@ -50,12 +51,11 @@ class EnquiriesPage extends Component {
     }
     // Table actions
     handleEnquiryLineClick = (id) => {
-        // console.log('hey, thats a click!', id)
-        this.setState({ activeEnquiryId: id })
+        this.setState({ active: {type: 'Enquiry', id } })
         this.openDetails()
     }
     render() {
-        const { detailsVisible, activeEnquiryId } = this.state
+        const { detailsVisible, active } = this.state
         const { allEnquiries: { loading, error, enquiries }, refreshToken } = this.props
         // if (loading) return "Загрузка..."
 		// if (error) return `Ошибка ${error.message}`
@@ -64,8 +64,8 @@ class EnquiriesPage extends Component {
                 <EnquiriesMenu 
                     refetchEnquiries={this.refetchEnquiries}
                     enquiriesAreLoading={loading}
-                    addNewEnquiry={this.addNewEnquiry} 
-                    newEnquiryButtonActive={activeEnquiryId === 'new' && detailsVisible}
+                    addNewEnquiry={this.addNewEnquiry}
+                    newEnquiryButtonActive={ active && active.type === 'Enquiry' && active.id === 'new'}
                     refreshToken={refreshToken} />
                 { loading && "Загрузка..."}
                 { error   && `Ошибка ${error.message}`}
@@ -76,10 +76,10 @@ class EnquiriesPage extends Component {
                             animation='overlay'
                             direction='right'
                         >
-                            { activeEnquiryId &&
-                                <EnquiryDetails 
-                                    key={activeEnquiryId}
-                                    id={activeEnquiryId} 
+                            { (active && active.type === 'Enquiry') &&
+                                <EnquiryDetails
+                                    key={active.id}
+                                    id={active.id} 
                                     closeDetails={this.closeDetails}
                                     updateAllEnquiries={this.updateAllEnquiries} 
                                     selectEnquiry={this.selectEnquiry} /> } 
@@ -87,7 +87,7 @@ class EnquiriesPage extends Component {
                         <Sidebar.Pusher>
                             <EnquiriesTable 
                                 enquiries={enquiries}
-                                activeEnquiryId={activeEnquiryId}
+                                activeEnquiryId={active && active.id}
                                 handleEnquiryLineClick={this.handleEnquiryLineClick} />
                         </Sidebar.Pusher>
                     </Pushable>
