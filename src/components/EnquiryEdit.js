@@ -232,7 +232,7 @@ class EnquiryEdit extends Component {
                                 search
                                 searchQuery={orgDdn.search}
                                 onSearchChange={this.handleOrgDropdownSearchChange}
-                                noResultsMessage='Не найдено. Введите ИНН, чтобы добавить.'
+                                noResultsMessage='Если не найдено, введите ИНН, чтобы добавить.'
                                 allowAdditions
                                 additionLabel='Добавить по ИНН: '
                                 onAddItem={this.createOrg}
@@ -253,7 +253,7 @@ class EnquiryEdit extends Component {
                                 search
                                 searchQuery={modelDdn.search}
                                 onSearchChange={this.handleModelDropdownSearchChange}
-                                noResultsMessage='Не найдено. Выберите "Нет в списке".'
+                                noResultsMessage='Если не найдено, выберите "Нет в списке"'
                                 // allowAdditions
                                 // additionLabel='Добавить по ИНН: '
                                 // onAddItem={this.createOrg}

@@ -12,7 +12,7 @@ import EnquiryCommercialOffer from './EnquiryCommercialOffer'
 import ButtonColoredOnHover from './common/ButtonColoredOnHover'
 import DraftEditor from './common/DraftEditor'
 import { sanitize } from 'dompurify'
-import { coStatusId, orderStatusId, refusalStatusIds } from '../constants'
+// import { coStatusId, orderStatusId, refusalStatusIds } from '../constants'
 import { currency } from '../utils/format'
 
 
@@ -252,6 +252,7 @@ class EnquiryDetails extends Component {
     }
     changeStatus = async (e, { value, co }) => {
         console.log('value, co > ', value, co)
+        const coStatusId = this.props.enquiryQuery.statuses.find(s => s.name === 'Выставлено КП').id
         if (value === coStatusId) {
             if (!this.state.statusPending) return this.setState({ statusPending: true, activeCO: 'new' })
             else this.setState({ statusPending: false })
@@ -304,8 +305,13 @@ class EnquiryDetails extends Component {
         const { num, dateLocal, org, model, qty, htmlNote, events } = enquiry
         const coEvents = events && events.filter(e => e.doc)
         const curStatus = events && events.filter(e => e.status).pop().status
-        // sort so that refusal statuses are at the end of their stage block
-        const statuses = enquiryQuery.statuses.slice().sort((a, b) => a.stage === b.stage && refusalStatusIds.includes(a.id))
+        // rawStatuses - received from server
+        const rawStatuses = enquiryQuery.statuses.slice()
+        const coStatusId = rawStatuses.find(s => s.name === 'Выставлено КП').id
+        const orderStatusId = rawStatuses.find(s => s.name === 'Заказ').id
+        const refusalStatusIds = rawStatuses.filter(s => ['Нет возможности', 'Отказ'].includes(s.name)).map(s => s.id)
+        // sort statuses so that refusal statuses are at the end of their stage block
+        const statuses = rawStatuses.sort((a, b) => a.stage === b.stage && refusalStatusIds.includes(a.id))
         let stage = 0
         const eventStatusPresentationHelpers = events && events.reduce((res, e, i) => {
             if (!e.status || i === 0) return res = [...res, null]
