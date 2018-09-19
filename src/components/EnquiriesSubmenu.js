@@ -1,7 +1,8 @@
 import React from 'react'
 
+import { Icon, Popup as SPopup } from 'semantic-ui-react'
+import { Div, Header, Button, Popup } from './styled-semantic/styled-semantic'
 import styled from 'styled-components'
-import { Header, Button } from './styled-semantic/styled-semantic'
 
 import { Query } from 'react-apollo'
 import { enquiryLocal } from '../graphql/enquiry'
@@ -46,7 +47,8 @@ const EnquiriesSubmenu = ({ item, addNewOrder }) => {
             { ({ data }) => {
                 console.log('data > ', data)
                 if (data && data.enquiryLocal) {
-                    const { num } = data.enquiryLocal
+                    const { num, lastCoEvents } = data.enquiryLocal
+                    const addNewOrderForbidden = !lastCoEvents.length
                     return (
                         <SubmenuDiv>
                             <Header inline
@@ -54,7 +56,7 @@ const EnquiriesSubmenu = ({ item, addNewOrder }) => {
                                 size='medium'
                                 content={`Заявка №${num}`}
                             />
-                            <Button compact circular menu
+                            {/* <Button compact circular menu
                                 ml='0'
                                 activeColor='green'
                                 icon='plus'
@@ -65,7 +67,38 @@ const EnquiriesSubmenu = ({ item, addNewOrder }) => {
                                     && item.id === 'new'
                                 }
                                 onClick={addNewOrder}
-                            />
+                            /> */}
+                            <Popup 
+                                position='bottom left'
+                                size='small'
+                                flowing
+                                // hoverable
+                                showIf={addNewOrderForbidden}
+                                trigger={
+                                    <Div inline>
+                                        <Button compact circular menu
+                                            ml='0'
+                                            activeColor='green'
+                                            icon='plus'
+                                            content='Заказ'
+                                            active={
+                                                item
+                                                && item.type === 'Order'
+                                                && item.id === 'new'
+                                            }
+                                            disabled={addNewOrderForbidden}
+                                            onClick={addNewOrder}
+                                        />
+                                    </Div>
+                                } 
+                            >
+                                {/* Johnny noxwell is here! */}
+                                <SPopup.Header content='Не все условия выполнены' />
+                                <SPopup.Content>
+                                    <Icon name='cancel' color='red' />
+                                    Не выставлено КП
+                                </SPopup.Content>
+                            </Popup>
                         </SubmenuDiv>
                     )
                 } else return null

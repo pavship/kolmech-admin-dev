@@ -1,6 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Header as SHeader, Label as SLabel, Button as SButton, Card } from 'semantic-ui-react'
+import { 
+	Header as SHeader, 
+	Label as SLabel, 
+	Button as SButton, 
+	Card,
+	Popup as SPopup,
+} from 'semantic-ui-react'
 
 export const theme = {
 	formLabelWidth: '110px', //required
@@ -55,8 +61,8 @@ export const Header = styled(HeaderWithFilteredProps)`
 	&&& {
 		${props => baseSet(props)}
 		${props => props.inline && `{
-			margin: 0 !important;
-			padding: 0 1rem !important;
+			margin: 0;
+			padding: 0 1rem;
 		}`}
 	}
 `
@@ -115,6 +121,17 @@ export const CardSection = styled(CardContentPropFiltered).attrs({
 		}`}
 		${props => props.noIndent && `{
 			padding-left: 1em;
+		}`}
+	}
+`
+
+const PopupWithFilteredProps = ({ showIf, ...rest }) => (
+	<SPopup {...rest} />
+)
+export const Popup = styled(PopupWithFilteredProps)`
+	&&& {
+		${props => !props.showIf && `{
+			opacity: 0;
 		}`}
 	}
 `

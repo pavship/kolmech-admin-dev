@@ -88,17 +88,13 @@ export const enquiryDetails = gql`
 		}
 	}
 `
-// export const enquiryLocal = gql`
-// 	query EnquiryLocal ($id: ID!) {
-// 		enquiry (id: $id) @client {
-// 			num
-// 		}
-// 	}
-// `
 export const enquiryLocal = gql`
 	query EnquiryLocal ($id: ID!) {
 		enquiryLocal (id: $id) {
 			num
+            lastCoEvents: events ( where: { doc: { type: CO } }, last: 1 ) {
+				id
+			}
 		}
 	}
 `
