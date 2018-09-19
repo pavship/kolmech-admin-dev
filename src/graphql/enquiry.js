@@ -74,14 +74,6 @@ export const enquiryDetails = gql`
 					amount
 				}
 			}
-			# coEvents: events ( where: { doc: { type: CO } } ) {
-			# 	id
-			# 	doc {
-			# 		id
-			# 		dateLocal
-			# 		amount
-			# 	}
-			# }
 		}
 		statuses {
 			id
@@ -93,6 +85,20 @@ export const enquiryDetails = gql`
 			next {
 				id
 			}
+		}
+	}
+`
+// export const enquiryLocal = gql`
+// 	query EnquiryLocal ($id: ID!) {
+// 		enquiry (id: $id) @client {
+// 			num
+// 		}
+// 	}
+// `
+export const enquiryLocal = gql`
+	query EnquiryLocal ($id: ID!) {
+		enquiryLocal (id: $id) {
+			num
 		}
 	}
 `

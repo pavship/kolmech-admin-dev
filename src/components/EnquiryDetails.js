@@ -1,15 +1,14 @@
 import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
-import { Card, Header, Icon, Label, Form, Comment, Button, 
+import { Card, Header, Icon, Label, Form, Comment, 
         Message, Dropdown, Popup } from 'semantic-ui-react'
-import { CardSection, P } from './styled-semantic/styled-semantic'
+import { P, Button, CardSection } from './styled-semantic/styled-semantic'
 import { graphql, compose } from 'react-apollo'
 import { enquiryDetails, newEnquiry, createEnquiryEvent, 
         enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
 import EnquiryEdit from './EnquiryEdit'
 import EnquiryCommercialOffer from './EnquiryCommercialOffer'
-import ButtonColoredOnHover from './common/ButtonColoredOnHover'
 import DraftEditor from './common/DraftEditor'
 import { sanitize } from 'dompurify'
 // import { coStatusId, orderStatusId, refusalStatusIds } from '../constants'
@@ -36,7 +35,7 @@ const EIcon = styled(Icon)`
     cursor: pointer;
 `
 
-const ReloadButton = styled(ButtonColoredOnHover)`
+const ReloadButton = styled(Button)`
     margin-left: auto !important;
     padding: .78571429em !important;
     &>i {
@@ -45,7 +44,7 @@ const ReloadButton = styled(ButtonColoredOnHover)`
     }
 `
 
-const EditButton = styled(ButtonColoredOnHover)`
+const EditButton = styled(Button)`
     ${props => props.withmargin && 'margin-left: auto !important;'}
 `
 
@@ -336,16 +335,18 @@ class EnquiryDetails extends Component {
 						</Header.Content>
 					</EHeader>
                     { !editMode &&
-                        <ReloadButton coloronhover='blue' 
-                            active={loading} 
+                        <ReloadButton
+                            activeColor='blue'
+                            active={loading}
                             onClick={this.refetchEnquiry} >
-                            <Icon name='refresh' 
+                            <Icon name='refresh'
                                 loading={loading} /></ReloadButton> }
                     { !isNewEnquiry &&
-                        <EditButton icon='edit' 
-                            coloronhover='blue' 
-                            active={editMode} 
-                            withmargin={editMode ? 1 : 0} 
+                        <EditButton
+                            icon='edit'
+                            activeColor='blue'
+                            active={editMode}
+                            withmargin={editMode ? 1 : 0}
                             onClick={this.enableEditMode} /> }
 				</CardSection>
 				{ (editMode || isNewEnquiry) &&

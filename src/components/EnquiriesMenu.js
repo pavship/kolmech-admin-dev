@@ -1,9 +1,10 @@
 import React from 'react'
 
 import styled from 'styled-components'
-import { Header, Icon } from 'semantic-ui-react'
+import { Icon } from 'semantic-ui-react'
+import { Header, Button } from './styled-semantic/styled-semantic'
 
-import ButtonColoredOnHover from './common/ButtonColoredOnHover'
+import EnquiriesSubmenu from './EnquiriesSubmenu'
 
 import { Query } from 'react-apollo'
 import { meLocal } from '../graphql/user'
@@ -14,41 +15,58 @@ const MenuDiv = styled.div`
     border-bottom: 1px solid #7e7e81;
 `
 
-const MenuHeader = styled(Header)`
-    margin: 0 !important;
-    padding: 0 1rem !important;
-    cursor: default;
-`
-
-const MenuButton = styled(ButtonColoredOnHover)`
-    && {
-        margin: .25rem 0 .25rem 0.5rem;
-        padding: .5rem 1rem;
-    }
-`
-
-const LoadButton = MenuButton.extend`
-    ${props => props.increaserightpadding && `
-        padding-right: calc(14px + 9.125px) !important;
-    `}
-`
-
 const UserName = styled(Header)`
     margin: 0 0 0 auto !important;
     padding: 0 1rem !important;
     cursor: default;
 `
 
-const EnquiriesMenu = ({ refetchEnquiries, enquiriesAreLoading, addNewEnquiry, newEnquiryButtonActive, refreshToken }) => {
+const EnquiriesMenu = ({
+    refetchEnquiries,
+    enquiriesAreLoading,
+    addNewEnquiry,
+    addNewOrder,
+    activeItem,
+    refreshToken 
+}) => {
     return (
         <MenuDiv>
-            <MenuHeader content='Заявки и заказы' size='medium' />
-            <LoadButton coloronhover='blue' circular onClick={refetchEnquiries} increaserightpadding={enquiriesAreLoading ? 1: 0}>
-                <Icon name='refresh' loading={enquiriesAreLoading} color={enquiriesAreLoading ? 'blue' : undefined} />
+            <Header inline
+                size='medium'
+                content='Заявки и заказы'
+            />
+            <Button compact circular menu
+                w='118.5px'
+                ml='0'
+                ta='left'
+                activeColor='blue' 
+                onClick={refetchEnquiries}
+            >
+                <Icon 
+                    name='refresh'
+                    color={enquiriesAreLoading ? 'blue' : undefined} 
+                    loading={enquiriesAreLoading}
+                />
                 {enquiriesAreLoading ? 'Загрузка' : 'Обновить'}
-            </LoadButton>
-            <MenuButton coloronhover='green' circular icon='plus' content=' Заявка'
-                onClick={addNewEnquiry} active={newEnquiryButtonActive} />
+            </Button>
+            <Button compact circular menu
+                activeColor='green'
+                icon='plus'
+                content='Заявка'
+                active={
+                    activeItem
+                    && activeItem.type === 'Enquiry'
+                    && activeItem.id === 'new'
+                }
+                onClick={addNewEnquiry}
+            />
+            {/* {activeItem && activeItem.id !== 'new' && */}
+            {activeItem &&
+                <EnquiriesSubmenu
+                    item={activeItem}
+                    addNewOrder={addNewOrder}
+                />
+            }
             <Query query={meLocal}>
                 { ({ data }) => {
                     if (data && data.me) {

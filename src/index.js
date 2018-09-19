@@ -23,30 +23,36 @@ import App from './App'
 // init with Apollo Boost:
 // @ts-ignore
 const client = new ApolloClient({
-    uri: 'http://localhost:4000',
-    // uri: 'https://now-advanced.now.sh',
-    // uri: 'http://node62506-env-1542080.mircloud.ru:11268/',
-    request: (operation) => {
-        const token = localStorage.getItem(AUTH_TOKEN)
-        operation.setContext({
-            headers: {
-                Authorization: token ? `Bearer ${token}` : '',
-            }
-        })
-    },
-    clientState: {
-        defaults,
-        resolvers,
-        // typeDefs
-    },
-    cache: new InMemoryCache({
-        dataIdFromObject: object => {
-            switch (object.__typename) {
-                case 'NewEnquiry': return 'NewEnquiry'
-                default: return defaultDataIdFromObject(object)
-            }
-        }
-    })
+	uri: 'http://localhost:4000',
+	// uri: 'https://now-advanced.now.sh',
+	// uri: 'https://env-1542080.mircloud.ru',
+	request: (operation) => {
+		const token = localStorage.getItem(AUTH_TOKEN)
+		operation.setContext({
+			headers: {
+				Authorization: token ? `Bearer ${token}` : '',
+			}
+		})
+	},
+	clientState: {
+		defaults,
+		resolvers,
+		// typeDefs
+	},
+	cache: new InMemoryCache({
+		dataIdFromObject: object => {
+			switch (object.__typename) {
+				case 'NewEnquiry': return 'NewEnquiry'
+				default: return defaultDataIdFromObject(object)
+			}
+		},
+		cacheRedirects: {
+			Query: {
+				enquiryLocal: (_, args, { getCacheKey }) =>
+					getCacheKey({ __typename: 'Enquiry', id: args.id })
+			}
+		}
+	})
 })
 
 // const cache = new InMemoryCache({
@@ -117,9 +123,9 @@ const token = localStorage.getItem(AUTH_TOKEN)
 // client.cache.reset()
 
 ReactDOM.render(
-    <ApolloProvider client={client}>
-        <App token={token} client={client}/>
-    </ApolloProvider>
+	<ApolloProvider client={client}>
+		<App token={token} client={client}/>
+	</ApolloProvider>
 , document.getElementById('root'))
 
 registerServiceWorker()

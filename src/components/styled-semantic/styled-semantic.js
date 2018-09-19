@@ -1,15 +1,27 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Label as SLabel, Card } from 'semantic-ui-react'
+import { Header as SHeader, Label as SLabel, Button as SButton, Card } from 'semantic-ui-react'
 
 export const theme = {
-	formLabelWidth: '110px' //required
+	formLabelWidth: '110px', //required
+	colors: {
+		green: '#016936',
+		blue: '#0E6EB8'
+	}
 }
-
-const baseSet = (props) => {
+const getThemeColor = (color) => theme.colors[color] || color
+const baseSet = ({ w, m, ml, pl, fs, fw, c, lh, ta, ws }) => {
 	return `
-		${props.fw && `font-weight: ${props.fw};`}
-		${props.lh && `line-height: ${props.lh};`}
+		${w ? `width: ${w};`: ''}
+		${m ? `margin: ${m};`: ''}
+		${ml ? `margin-left: ${ml};`: ''}
+		${pl ? `padding-left: ${pl};`: ''}
+		${fs ? `font-size: ${fs};`: ''}
+		${fw ? `font-weight: ${fw};`: ''}
+		${c ? `color: ${c};`: ''}
+		${lh ? `line-height: ${lh};`: ''}
+		${ta ? `text-align: ${ta};`: ''}
+		${ws ? `word-spacing: ${ws};`: ''}
 	`
 }
 
@@ -19,14 +31,11 @@ export const Div = styled.div`
 `
 
 export const P = styled.p`
-	${props => baseSet(props) }
+	${props => baseSet(props)}
 `
 
 export const Span = styled.span`
-	${props => props.pl && `padding-left: ${props.pl};`}
-	${props => props.c && `color: ${props.c};`}
-	${props => props.fs && `font-size: ${props.fs};`}
-	${props => props.ws && `word-spacing: ${props.ws};`}
+	${props => baseSet(props)}
 `
 
 export const A = styled.a`
@@ -39,14 +48,54 @@ export const A = styled.a`
 	}`}
 `
 
+const HeaderWithFilteredProps = ({ inline, c, ...rest }) => (
+	<SHeader {...rest} />
+)
+export const Header = styled(HeaderWithFilteredProps)`
+	&&& {
+		${props => baseSet(props)}
+		${props => props.inline && `{
+			margin: 0 !important;
+			padding: 0 1rem !important;
+		}`}
+	}
+`
+
 export const Label = styled.label`
 	width: ${props => props.theme.formLabelWidth} !important;
+`
+
+const ButtonWithFilteredProps = ({ activeColor, menu, ...rest }) => (
+	<SButton {...rest} />
+)
+export const Button = styled(ButtonWithFilteredProps)`
+	&&&& {
+		${props => baseSet(props)}
+	}
+	&&& {
+		&.compact {
+			padding: .5rem 1rem;
+		}
+		${props => props.activeColor && `{
+			&:hover {
+				color: ${getThemeColor(props.activeColor)} !important;
+			}
+			&.active {
+				color: ${getThemeColor(props.activeColor)} !important;
+        	}
+		}`}
+		${props => props.menu && `{
+			margin: .25rem 0 .25rem 0.5rem;
+			z-index: 3;
+		}`}
+	}
 `
 
 const CardContentPropFiltered = ({ secondary, minor, head, noIndent, ...rest }) => (
 	<Card.Content {...rest} />
 )
 export const CardSection = styled(CardContentPropFiltered).attrs({
+	// head extends minor style
 	minor: props => props.minor || props.head
 })`
 	&&& {

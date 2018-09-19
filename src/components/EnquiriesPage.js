@@ -51,7 +51,7 @@ class EnquiriesPage extends Component {
     }
     // Table actions
     handleEnquiryLineClick = (id) => {
-        this.setState({ active: {type: 'Enquiry', id } })
+        this.selectEnquiry(id)
         this.openDetails()
     }
     render() {
@@ -65,7 +65,8 @@ class EnquiriesPage extends Component {
                     refetchEnquiries={this.refetchEnquiries}
                     enquiriesAreLoading={loading}
                     addNewEnquiry={this.addNewEnquiry}
-                    newEnquiryButtonActive={ active && active.type === 'Enquiry' && active.id === 'new'}
+                    addNewOrder={this.addNewOrder}
+                    activeItem={active}
                     refreshToken={refreshToken} />
                 { loading && "Загрузка..."}
                 { error   && `Ошибка ${error.message}`}
