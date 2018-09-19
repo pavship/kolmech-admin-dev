@@ -14,6 +14,8 @@ const SubmenuDiv = styled.div`
     display: flex;
     align-items: center;
     background-color: #f3f4f5;
+    border-top-right-radius: .65rem;
+    border-bottom-right-radius: .65rem;
     ::before {
         position: absolute;
         z-index: 2;
