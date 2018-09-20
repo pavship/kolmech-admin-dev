@@ -13,7 +13,6 @@ import CurrencyInput from './common/CurrencyInput'
 import SmartForm from './common/SmartForm'
 import SmartInput from './common/SmartInput'
 
-import cloneDeep from 'lodash/cloneDeep'
 import { toLocalISOString }from '../utils/dates'
 
 class OrderEdit extends Component {
@@ -28,7 +27,8 @@ class OrderEdit extends Component {
             const res = await this.props.createEnquiry({ variables })
             if (!this.componentIsMounted) return
             this.setState({ loading: false, err: '' })
-            this.props.selectEnquiry(res.data.createEnquiry.id)
+            // this.props.selectEnquiry(res.data.createEnquiry.id)
+            // this.props.selectEntity(res.data.createOrder.id)
         } catch (err) {
             if (!this.componentIsMounted) return
             this.setState({
@@ -47,7 +47,7 @@ class OrderEdit extends Component {
             await this.props.updateEnquiry({ variables: { input: variables } })
             if (!this.componentIsMounted) return
             this.setState({ loading: false, err: '' })
-            this.props.exitEditMode()
+            this.props.closeDetails()
         } catch (err) {
             if (!this.componentIsMounted) return
             this.setState({ 
@@ -66,7 +66,7 @@ class OrderEdit extends Component {
 	render() {
         // const orgs = allOrgsAndModels.orgs
         // const models = allOrgsAndModels.models
-        const { cancelEdit, cancel, submit, loading } = this.props
+        const { closeDetails, cancel, submit, loading } = this.props
         const isNewOrder = this.props.id === 'new'
         const order = isNewOrder
         ?   {
@@ -137,7 +137,7 @@ class OrderEdit extends Component {
                             disabled={(!this.isNewEntity && !diff) || !!err || requiredIsEmpty}
                             loading={loading}
                             onClick={this.submit} />
-                        <A cancel onClick={cancelEdit}>Отмена</A>
+                        <A cancel onClick={closeDetails}>Отмена</A>
                     </CardSection>
                 </Fragment>}
             </SmartForm>

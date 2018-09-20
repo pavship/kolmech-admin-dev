@@ -6,10 +6,10 @@ import DetailsHeader from './DetailsHeader'
 import EnquiryDetails from './EnquiryDetails'
 import OrderEdit from './OrderEdit'
 
+// TODO store active entity in local cache and access from everywhere
 const Details = ({ entity, closeDetails, selectEnquiry }) => {
 	return (
 		<Card details fluid>
-
 			{entity.type === 'Order' && entity.id === 'new' && 
 			// TODO make universal header (with render prop buttons)
 				<DetailsHeader
@@ -30,9 +30,9 @@ const Details = ({ entity, closeDetails, selectEnquiry }) => {
 				? 	<OrderEdit
 						id={entity.id}
 						entity={entity}
-						cancelEdit={this.cancelEdit}
-						exitEditMode={this.exitEditMode}
-						selectEnquiry={selectEnquiry} 
+						closeDetails={closeDetails}
+						// selectEnquiry={selectEnquiry}
+						// selectEntity={selectEntity}
 					/>
 				:	null
 			}

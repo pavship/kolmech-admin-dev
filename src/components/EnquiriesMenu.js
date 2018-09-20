@@ -54,7 +54,10 @@ const EnquiriesMenu = ({
                 }
                 onClick={addNewEnquiry}
             />
-            {activeItem && activeItem.id !== 'new' &&
+            {activeItem && (
+                activeItem.type === 'Enquiry' && activeItem.id !== 'new'
+                || activeItem.type === 'Order' && activeItem.id === 'new'
+            ) &&
                 <EnquiriesSubmenu
                     item={activeItem}
                     addNewOrder={addNewOrder}
