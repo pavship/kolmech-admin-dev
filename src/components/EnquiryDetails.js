@@ -227,7 +227,6 @@ class EnquiryDetails extends Component {
         }
     }
     changeStatus = async (e, { value, co }) => {
-        console.log('value, co > ', value, co)
         const coStatusId = this.props.enquiryQuery.statuses.find(s => s.name === 'Выставлено КП').id
         if (value === coStatusId) {
             if (!this.state.statusPending) return this.setState({ statusPending: true, activeCO: 'new' })
