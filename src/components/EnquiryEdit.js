@@ -243,7 +243,7 @@ class EnquiryEdit extends Component {
                                 // onAddItem={this.createOrg}
                             />
 						</Form.Field>
-                        <Form.Field inline error={modelId.err} required>
+                        <Form.Field inline required>
 							<Label>Кол-во</Label>
                             <Input type='number'
                                 placeholder='Введите кол-во шт.' 

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 
 import { Header, Form, Message, Button, Divider } from 'semantic-ui-react'
 import { Div, A, Label, CardSection } from './styled-semantic/styled-semantic'
+
 import LocalDatePicker from './common/LocalDatePicker'
 import CurrencyInput from './common/CurrencyInput'
 import SmartForm from './common/SmartForm'
