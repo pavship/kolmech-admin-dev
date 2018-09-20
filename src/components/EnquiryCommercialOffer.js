@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react'
 
-import styled from 'styled-components'
 import { Header, Form, Message, Button, Divider } from 'semantic-ui-react'
 import { Div, A, Label, CardSection } from './styled-semantic/styled-semantic'
 import LocalDatePicker from './common/LocalDatePicker'

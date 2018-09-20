@@ -14,9 +14,9 @@ const SubmenuDiv = styled.div`
     padding: 0 1em;
     display: flex;
     align-items: center;
-    background-color: #f3f4f5;
-    border-top-right-radius: .65rem;
-    border-bottom-right-radius: .65rem;
+    background-color: #f5f6f7;
+    border-top-right-radius: .35rem;
+    border-bottom-right-radius: .35rem;
     ::before {
         position: absolute;
         z-index: 2;
@@ -56,23 +56,10 @@ const EnquiriesSubmenu = ({ item, addNewOrder }) => {
                                 size='medium'
                                 content={`Заявка №${num}`}
                             />
-                            {/* <Button compact circular menu
-                                ml='0'
-                                activeColor='green'
-                                icon='plus'
-                                content='Заказ'
-                                active={
-                                    item
-                                    && item.type === 'Order'
-                                    && item.id === 'new'
-                                }
-                                onClick={addNewOrder}
-                            /> */}
                             <Popup 
                                 position='bottom left'
                                 size='small'
                                 flowing
-                                // hoverable
                                 showIf={addNewOrderForbidden}
                                 trigger={
                                     <Div inline>
@@ -92,11 +79,10 @@ const EnquiriesSubmenu = ({ item, addNewOrder }) => {
                                     </Div>
                                 } 
                             >
-                                {/* Johnny noxwell is here! */}
                                 <SPopup.Header content='Не все условия выполнены' />
                                 <SPopup.Content>
                                     <Icon name='cancel' color='red' />
-                                    Не выставлено КП
+                                    Выставлено КП
                                 </SPopup.Content>
                             </Popup>
                         </SubmenuDiv>

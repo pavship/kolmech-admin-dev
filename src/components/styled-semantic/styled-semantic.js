@@ -4,8 +4,9 @@ import {
 	Header as SHeader, 
 	Label as SLabel, 
 	Button as SButton, 
-	Card,
+	Card as SCard,
 	Popup as SPopup,
+	Dropdown as SDropdown
 } from 'semantic-ui-react'
 
 export const theme = {
@@ -58,8 +59,10 @@ const HeaderWithFilteredProps = ({ inline, c, ...rest }) => (
 	<SHeader {...rest} />
 )
 export const Header = styled(HeaderWithFilteredProps)`
-	&&& {
+	&&&& {
 		${props => baseSet(props)}
+	}
+	&&& {
 		${props => props.inline && `{
 			margin: 0;
 			padding: 0 1rem;
@@ -97,8 +100,23 @@ export const Button = styled(ButtonWithFilteredProps)`
 	}
 `
 
+const CardWithFilteredProps = ({ details, ...rest }) => (
+	<SCard {...rest} />
+)
+export const Card = styled(CardWithFilteredProps)`
+	&&&& {
+		${props => baseSet(props)}
+	}
+	&&& {
+		${props => props.details && `{
+			border-radius: 0;
+			box-shadow: none;
+		}`}
+	}
+`
+
 const CardContentPropFiltered = ({ secondary, minor, head, noIndent, ...rest }) => (
-	<Card.Content {...rest} />
+	<SCard.Content {...rest} />
 )
 export const CardSection = styled(CardContentPropFiltered).attrs({
 	// head extends minor style
@@ -133,5 +151,14 @@ export const Popup = styled(PopupWithFilteredProps)`
 		${props => !props.showIf && `{
 			opacity: 0;
 		}`}
+	}
+`
+
+export const Dropdown = styled(SDropdown)`
+	&&&&&& {
+		width: 350px;
+		&:hover {
+			border-color: rgba(34, 36, 38, 0.15);
+		}
 	}
 `

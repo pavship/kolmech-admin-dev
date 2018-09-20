@@ -15,12 +15,6 @@ const MenuDiv = styled.div`
     border-bottom: 1px solid #7e7e81;
 `
 
-const UserName = styled(Header)`
-    margin: 0 0 0 auto !important;
-    padding: 0 1rem !important;
-    cursor: default;
-`
-
 const EnquiriesMenu = ({
     refetchEnquiries,
     enquiriesAreLoading,
@@ -60,8 +54,7 @@ const EnquiriesMenu = ({
                 }
                 onClick={addNewEnquiry}
             />
-            {/* {activeItem && activeItem.id !== 'new' && */}
-            {activeItem &&
+            {activeItem && activeItem.id !== 'new' &&
                 <EnquiriesSubmenu
                     item={activeItem}
                     addNewOrder={addNewOrder}
@@ -73,13 +66,19 @@ const EnquiriesMenu = ({
                         const { fName, lName } = data.me.person
                         const menuNameTitle = fName + ' ' + (lName ? `${lName.slice(0,1)}.` : '')
                         return (
-                            // <MenuHeader content={fName + ' ' + (lName ? (lName.slice(0,1) + '.') : '')} size='small' />
-                            <UserName content={menuNameTitle} size='small' />
+                            <Header inline
+                                ml='auto'
+                                size='small'
+                                content={menuNameTitle} 
+                            />
                     )} else return null
                 }}
             </Query>
-            {/* <MenuButton circular icon='log out' /> */}
-            <Icon name='log out' size='large' link onClick={() => refreshToken(null)} />
+            <Icon link
+                name='log out'
+                size='large'
+                onClick={() => refreshToken(null)} 
+            />
         </MenuDiv>
     )
 }

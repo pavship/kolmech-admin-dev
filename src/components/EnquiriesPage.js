@@ -9,6 +9,7 @@ import { Sidebar } from 'semantic-ui-react'
 import EnquiriesMenu from './EnquiriesMenu'
 import EnquiriesTable from './EnquiriesTable'
 import EnquiryDetails from './EnquiryDetails'
+import Details from './Details';
 
 const Pushable = styled(Sidebar.Pushable)`
     min-height: calc(100vh - 36px) !important;
@@ -77,13 +78,18 @@ class EnquiriesPage extends Component {
                             animation='overlay'
                             direction='right'
                         >
-                            { (active && active.type === 'Enquiry') &&
+                            {/* { active && active.type === 'Enquiry' &&
                                 <EnquiryDetails
                                     key={active.id}
-                                    id={active.id} 
+                                    id={active.id}
                                     closeDetails={this.closeDetails}
-                                    updateAllEnquiries={this.updateAllEnquiries} 
-                                    selectEnquiry={this.selectEnquiry} /> } 
+                                    selectEnquiry={this.selectEnquiry} /> } */}
+                            { active &&
+                                <Details
+                                    entity={active}
+                                    key={active.type + '-' + active.id}
+                                    closeDetails={this.closeDetails}
+                                    selectEnquiry={this.selectEnquiry} /> }
                         </DetailsSidebar>
                         <Sidebar.Pusher>
                             <EnquiriesTable 

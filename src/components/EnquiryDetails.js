@@ -1,35 +1,20 @@
 import React, { Component, Fragment } from 'react'
 
+import { Header as SHeader, Icon, Label, Form, Comment, 
+    Message, Dropdown, Popup } from 'semantic-ui-react'
+import { Span, P, Header, Button, CardSection } from './styled-semantic/styled-semantic'
 import styled from 'styled-components'
-import { Card, Header, Icon, Label, Form, Comment, 
-        Message, Dropdown, Popup } from 'semantic-ui-react'
-import { P, Button, CardSection } from './styled-semantic/styled-semantic'
+
 import { graphql, compose } from 'react-apollo'
 import { enquiryDetails, newEnquiry, createEnquiryEvent, 
-        enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
-import EnquiryEdit from './EnquiryEdit'
-import EnquiryCommercialOffer from './EnquiryCommercialOffer'
+    enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
+
 import DraftEditor from './common/DraftEditor'
 import { sanitize } from 'dompurify'
-// import { coStatusId, orderStatusId, refusalStatusIds } from '../constants'
 import { currency } from '../utils/format'
 
-
-const ECard = styled(Card)`
-    border-radius: 0 !important;
-    box-shadow: none !important;
-`
-
-const EHeader = styled(Header)`
-    margin: 0 !important;
-`
-
-const SHeader = styled.span`
-	margin-left: 10px;
-	font-size: 1rem;
-	color: rgba(0,0,0,.6);
-	word-spacing: 0.5em;
-`
+import EnquiryEdit from './EnquiryEdit'
+import EnquiryCommercialOffer from './EnquiryCommercialOffer'
 
 const EIcon = styled(Icon)`
     cursor: pointer;
@@ -46,10 +31,6 @@ const ReloadButton = styled(Button)`
 
 const EditButton = styled(Button)`
     ${props => props.withmargin && 'margin-left: auto !important;'}
-`
-
-const ECardBody = styled(Card.Content)`
-    padding-left: 55px !important;
 `
 
 const Table = styled.table`
@@ -99,10 +80,6 @@ const SDropdown = styled(Dropdown)`
     & .selected.item {
         background: none !important;
     }
-`
-
-const InlineBlockDiv = styled.div`
-    display: inline-block;
 `
 
 const DarkGreenButton = styled(Button)`
@@ -321,19 +298,21 @@ class EnquiryDetails extends Component {
             return res
         }, [])
 		return (
-			<ECard fluid>
+			<Fragment>
 				<CardSection head noIndent>
-					<EHeader>
+					<Header m='0' >
 						<EIcon name='cancel' onClick={closeDetails} />
-						<Header.Content>
+						<SHeader.Content>
 							{ isNewEnquiry 
                               ? 'Новая заявка' 
                               : <Fragment>
                                     {`Заявка №${num}`}
-                                    <SHeader>{`от ${dateLocal}`}</SHeader>
+                                    <Span ml='10px' fs='1rem' c='rgba(0,0,0,.6)' ws='0.5em' >
+                                        {`от ${dateLocal}`}
+                                    </Span>
                                 </Fragment> }
-						</Header.Content>
-					</EHeader>
+						</SHeader.Content>
+					</Header>
                     { !editMode &&
                         <ReloadButton
                             activeColor='blue'
@@ -350,14 +329,14 @@ class EnquiryDetails extends Component {
                             onClick={this.enableEditMode} /> }
 				</CardSection>
 				{ (editMode || isNewEnquiry) &&
-                    <EnquiryEdit id={id} 
+                    <EnquiryEdit 
+                        id={id} 
                         enquiry={enquiry} 
                         cancelEdit={this.cancelEdit} 
                         exitEditMode={this.exitEditMode} 
                         selectEnquiry={selectEnquiry} /> }
-
 				{ !(editMode || isNewEnquiry) && <Fragment>
-					<ECardBody>
+					<CardSection>
 						<Table><tbody>
 							<Tr>
 								<Td>Организация</Td>
@@ -442,7 +421,7 @@ class EnquiryDetails extends Component {
 							</Tr>
                             
 						</tbody></Table>
-					</ECardBody>
+					</CardSection>
                     {/* <CardSection minor>
                         <Popup 
                             position='bottom left'
@@ -450,13 +429,13 @@ class EnquiryDetails extends Component {
                             flowing
                             hoverable
                             style={curStatus.stage === 1 ? {opacity: 0} : {}}
-                            trigger={<InlineBlockDiv><DarkGreenButton
+                            trigger={<Div inline><DarkGreenButton
                                 basic labelPosition='left' icon='plus' color='green'
                                 content={'Коммерческое предложение'}
                                 disabled={curStatus.stage !== 1}
                                 // loading={loading}
                                 // onClick={this.submit} 
-                                /></InlineBlockDiv>} 
+                                /></Div>} 
                         >
                             <Popup.Header content='Не все условия выполнены' />
                             <Popup.Content>
@@ -470,9 +449,9 @@ class EnquiryDetails extends Component {
                             id={activeCO} 
                             submit={(co) => this.changeStatus(null, { value: coStatusId, co })}
                             cancel={this.cancelPendingStatusChange} />}
-                    {/* <ECardBody> */}
+                    {/* <CardSection> */}
 					<Comments minimal>
-						<Header as='h3' dividing content='Комментарии и события' />
+						<SHeader as='h3' dividing content='Комментарии и события' />
                         { events.map((e, i) => {
 							const { fName, lName } = e.user.person
                             const userInitials = (lName ? fName.slice(0,1) : fName.slice(0,2)) + (lName ? lName.slice(0,1) : '')
@@ -526,9 +505,9 @@ class EnquiryDetails extends Component {
 								loading={creatingComment} />
 						</Form>
 					</Comments>
-                    {/* </ECardBody> */}
+                    {/* </CardSection> */}
 				</Fragment> }
-			</ECard>
+			</Fragment>
 		)
 	}
 }

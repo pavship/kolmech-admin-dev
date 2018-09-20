@@ -13,7 +13,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import validateInn from '../utils/validateInn'
 import { isValidDate, toLocalISOString, fromLocalISOString }from '../utils/dates'
 
-class EnquiryEdit extends Component {
+class OrderEdit extends Component {
     constructor(props){
         super(props)
         this.componentIsMounted = true
@@ -301,4 +301,4 @@ export default compose(
             }
         }
     }),
-)(EnquiryEdit)
+)(OrderEdit)
