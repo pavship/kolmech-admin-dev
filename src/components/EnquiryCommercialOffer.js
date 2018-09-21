@@ -30,11 +30,10 @@ class EnquiryCommercialOffer extends Component {
                 submit={submit}
             >
                 {({
-                    diff,
-                    requiredIsEmpty,
+                    disabled,
                     err,
-                    setFieldValue,
-                    setFieldError,
+                    setField,
+                    submit,
                     formState: { dateLocal, amount }
                 }) => <Fragment>
                     <CardSection head secondary >
@@ -47,17 +46,17 @@ class EnquiryCommercialOffer extends Component {
                             <Form.Field inline>
                                 <Label>Дата</Label>
                                 <LocalDatePicker
-                                    value={dateLocal.curVal}
-                                    setFormFieldValue={setFieldValue}
-                                    setFormFieldError={setFieldError}
-                                    err={dateLocal.err} />
+                                    field={dateLocal}
+                                    setField={setField}
+                                />
                             </Form.Field>
                             <Form.Field inline required>
                                 <Label>Сумма</Label>
                                 <CurrencyInput
-                                    value={amount.curVal}
+                                    field={amount}
+                                    setField={setField}
                                     placeholder='Введите сумму КП'
-                                    setFormFieldValue={setFieldValue} />
+                                />
                             </Form.Field>
                         </Form>
                     </CardSection>
@@ -73,7 +72,7 @@ class EnquiryCommercialOffer extends Component {
                         <Button 
                             primary 
                             content={'Создать'}
-                            disabled={(!isNewCO && !diff) || !!err || requiredIsEmpty}
+                            disabled={disabled}
                             loading={loading}
                             onClick={submit} />
                         <A cancel onClick={cancel}>Отмена</A>

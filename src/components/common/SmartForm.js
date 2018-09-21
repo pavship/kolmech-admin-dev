@@ -13,6 +13,7 @@ class SmartForm extends Component {
         this.state = {}
         this.fields.forEach(key => {
             this.state[key] = {
+                name: key,
                 curVal: oriEntity[key],
                 err: null,
                 ...this.requiredFields.includes(key) && { required: true },
@@ -23,6 +24,18 @@ class SmartForm extends Component {
             }
         })
         // console.log(this.state)
+    }
+    setField = (field, {value, err}) => {
+        this.setState({
+            [field]: {
+                ...this.state[field],
+                ...value && {
+                    curVal: value,
+                    ...this.isNewEntity && { diff: value !== this.state[field].oriVal },
+                },
+                err: err || null,
+            }
+        })
     }
     setFieldValue = (field, newVal) => {
         console.log('change ', field, ' to value > ', newVal)
@@ -52,12 +65,13 @@ class SmartForm extends Component {
         return (
             <Fragment>
                 { this.props.children({
-                    diff,
-                    requiredIsEmpty,
+                    disabled: (!this.isNewEntity && !diff) || requiredIsEmpty || !!err,
                     err,
-                    setFieldValue: this.setFieldValue,
-                    setFieldError: this.setFieldError,
+                    setField: this.setField,
+                    submit: this.submit,
                     formState: this.state
+                    // setFieldValue: this.setFieldValue,
+                    // setFieldError: this.setFieldError,
                 }) }
             </Fragment>
         )

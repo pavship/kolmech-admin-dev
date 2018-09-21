@@ -4,14 +4,15 @@ import { Input } from 'semantic-ui-react'
 
 class CurrencyInput extends Component {
     handleInputChange = ( e, { value } ) => {
-        // const { type } = this.props
+        const { type, field: { name }, setField } = this.props
         const newVal = parseInt(value, 10) || ''
-        this.props.setFormFieldValue('qty', newVal)
+        setField(name, {value: newVal})
     }
     render() {
-        const { setFormFieldValue, ...rest } = this.props
+        const { field: {curVal: value}, setField , ...rest } = this.props
         return (
             <Input {...rest}
+                value={value}
                 onChange={this.handleInputChange} 
             />
         )

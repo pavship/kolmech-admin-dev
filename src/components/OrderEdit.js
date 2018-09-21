@@ -84,14 +84,13 @@ class OrderEdit extends Component {
                 isNewEntity={isNewOrder}
                 entity={order}
                 requiredFields={['dateLocal', 'qty', 'amount']}
-                submit={submit}
+                submit={this.submit}
             >
                 {({
-                    diff,
-                    requiredIsEmpty,
+                    disabled,
                     err,
-                    setFieldValue,
-                    setFieldError,
+                    setField,
+                    submit,
                     formState: { dateLocal, qty, amount }
                 }) => <Fragment>
                     <CardSection>
@@ -99,26 +98,27 @@ class OrderEdit extends Component {
                             <Form.Field inline>
                                 <Label>Дата</Label>
                                 <LocalDatePicker
-                                    value={dateLocal.curVal}
-                                    setFormFieldValue={setFieldValue}
-                                    setFormFieldError={setFieldError}
-                                    err={dateLocal.err} />
+                                    field={dateLocal}
+                                    setField={setField} 
+                                />
                             </Form.Field>
                             <Form.Field inline required>
                                 <Label>Кол-во</Label>
-                                <SmartInput type='number'
-                                    placeholder='Введите кол-во шт.' 
-                                    value={qty.curVal}
-                                    setFormFieldValue={setFieldValue}
+                                <SmartInput 
+                                    type='number'
+                                    placeholder='Введите кол-во шт.'
+                                    field={qty}
+                                    setField={setField} 
                                 />
                                 <Span pl='6px'>шт.</Span>
                             </Form.Field>
                             <Form.Field inline required>
                                 <Label>Сумма</Label>
                                 <CurrencyInput
-                                    value={amount.curVal}
+                                    field={amount}
+                                    setField={setField}
                                     placeholder='Введите сумму заказа'
-                                    setFormFieldValue={setFieldValue} />
+                                />
                             </Form.Field>
                         </Form>
                     </CardSection>
@@ -132,11 +132,12 @@ class OrderEdit extends Component {
                         }
                         <Div inline w='formLabelWidth' />
                         <Button 
-                            primary 
+                            primary
                             content={this.isNewEntity ? 'Создать' : 'Сохранить'}
-                            disabled={(!this.isNewEntity && !diff) || !!err || requiredIsEmpty}
+                            disabled={disabled}
                             loading={loading}
-                            onClick={this.submit} />
+                            onClick={submit}
+                        />
                         <A cancel onClick={closeDetails}>Отмена</A>
                     </CardSection>
                 </Fragment>}

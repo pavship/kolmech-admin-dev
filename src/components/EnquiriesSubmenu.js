@@ -43,9 +43,10 @@ const SubmenuDiv = styled.div`
 
 const EnquiriesSubmenu = ({ item, addNewOrder }) => {
     return (
-        <Query query={enquiryLocal} variables={{ id: item.id }}>
+        <Query query={enquiryLocal} variables={{ id: item.type === 'Enquiry' ? item.id : item.enquiryId }}>
             { ({ data }) => {
                 if (data && data.enquiryLocal) {
+                    console.log('data > ', data)
                     const { num, lastCoEvents } = data.enquiryLocal
                     const addNewOrderForbidden = !lastCoEvents.length
                     return (
