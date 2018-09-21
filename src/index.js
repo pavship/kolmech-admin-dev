@@ -17,6 +17,7 @@ import { AUTH_TOKEN } from './constants'
 
 import defaults from './apollo/defaults'
 import resolvers from './apollo/resolvers'
+import typeDefs from './apollo/typeDefs'
 
 import App from './App'
 
@@ -37,7 +38,7 @@ const client = new ApolloClient({
 	clientState: {
 		defaults,
 		resolvers,
-		// typeDefs
+		typeDefs
 	},
 	cache: new InMemoryCache({
 		dataIdFromObject: object => {

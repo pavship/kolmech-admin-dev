@@ -12,10 +12,7 @@ const Details = ({ entity, closeDetails, selectEnquiry }) => {
 		<Card details fluid>
 			{entity.type === 'Order' && entity.id === 'new' && 
 			// TODO make universal header (with render prop buttons)
-				<DetailsHeader
-					entity={entity}
-					closeDetails={closeDetails}
-				/>
+				<DetailsHeader />
 			}
 			{entity.type === 'Enquiry' 
 				? 	<EnquiryDetails

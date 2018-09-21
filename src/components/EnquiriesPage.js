@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
 import { graphql, compose } from 'react-apollo'
+import { getLayout, getLayoutOptions } from '../graphql/layout'
 import { allEnquiries } from '../graphql/enquiry'
 
 import styled from 'styled-components'
@@ -55,8 +56,7 @@ class EnquiriesPage extends Component {
         this.openDetails()
     }
     render() {
-        const { detailsVisible, active } = this.state
-        const { allEnquiries: { loading, error, enquiries }, refreshToken } = this.props
+        const { allEnquiries: { loading, error, enquiries }, refreshToken, layout: { details } } = this.props
         // if (loading) return "Загрузка..."
 		// if (error) return `Ошибка ${error.message}`
         return (
@@ -66,29 +66,28 @@ class EnquiriesPage extends Component {
                     enquiriesAreLoading={loading}
                     addNewEnquiry={this.addNewEnquiry}
                     addNewOrder={this.addNewOrder}
-                    activeItem={active}
+                    activeItem={details}
                     refreshToken={refreshToken} />
                 { loading && "Загрузка..."}
                 { error   && `Ошибка ${error.message}`}
                 { !(loading || error) && 
                     <Pushable>
                         <DetailsSidebar
-                            visible={detailsVisible}
+                            visible={!!details}
                             animation='overlay'
                             direction='right'
                         >
-                            { active &&
+                            { details &&
                                 <Details
-                                    entity={active}
-                                    key={active.type + '-' + active.id}
+                                    entity={details}
+                                    key={details.type + '-' + details.id}
                                     closeDetails={this.closeDetails}
                                     selectEnquiry={this.selectEnquiry} /> }
                         </DetailsSidebar>
                         <Sidebar.Pusher>
                             <EnquiriesTable 
                                 enquiries={enquiries}
-                                activeEnquiryId={active && (active.enquiryId || active.id)}
-                                handleEnquiryLineClick={this.handleEnquiryLineClick} />
+                            />
                         </Sidebar.Pusher>
                     </Pushable>
                 }
@@ -98,5 +97,6 @@ class EnquiriesPage extends Component {
 }
 
 export default compose(
+    graphql(getLayout, getLayoutOptions),
     graphql(allEnquiries, { name: 'allEnquiries' })
 )(EnquiriesPage)

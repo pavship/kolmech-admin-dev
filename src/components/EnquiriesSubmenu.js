@@ -5,6 +5,8 @@ import { Div, Header, Button, Popup } from './styled-semantic/styled-semantic'
 import styled from 'styled-components'
 
 import { Query } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
+import { getLayout, getLayoutOptions, setLayout } from '../graphql/layout'
 import { enquiryLocal } from '../graphql/enquiry'
 
 const SubmenuDiv = styled.div`
@@ -41,7 +43,7 @@ const SubmenuDiv = styled.div`
     } */
 `
 
-const EnquiriesSubmenu = ({ item, addNewOrder }) => {
+const EnquiriesSubmenu = ({ item, addNewOrder, setLayout, layout: { details } }) => {
     return (
         <Query query={enquiryLocal} variables={{ id: item.type === 'Enquiry' ? item.id : item.enquiryId }}>
             { ({ data }) => {
@@ -74,7 +76,14 @@ const EnquiriesSubmenu = ({ item, addNewOrder }) => {
                                                 && item.id === 'new'
                                             }
                                             disabled={addNewOrderForbidden}
-                                            onClick={addNewOrder}
+                                            // onClick={addNewOrder}
+                                            onClick={() => setLayout({variables: {
+                                                details: {
+                                                    type: 'Order',
+                                                    id: 'new',
+                                                    enquiryId: details.id
+                                                }
+                                            }})}
                                         />
                                     </Div>
                                 } 
@@ -93,4 +102,7 @@ const EnquiriesSubmenu = ({ item, addNewOrder }) => {
     )
 }
 
-export default EnquiriesSubmenu
+export default compose(
+    graphql(setLayout, { name: 'setLayout' }),
+    graphql(getLayout, getLayoutOptions),
+)(EnquiriesSubmenu)

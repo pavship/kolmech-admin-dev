@@ -6,6 +6,7 @@ import { Div, Span, A, Label, CardSection } from './styled-semantic/styled-seman
 import { graphql, compose } from 'react-apollo'
 import { allEnquiries, createEnquiry, updateEnquiry } from '../graphql/enquiry'
 import { upsertOrder } from '../graphql/order'
+import { setLayout, getLayout, getLayoutOptions } from '../graphql/layout'
 import { createOrg } from '../graphql/org'
 import { allOrgsAndModels } from '../graphql/combinedQueries'
 
@@ -18,16 +19,13 @@ import { toLocalISOString }from '../utils/dates'
 
 class OrderEdit extends Component {
     componentIsMounted = true
-    isNewEntity = this.props.id === 'new'
+    // isNewEntity = this.props.id === 'new'
+    isNewEntity = this.props.layout.details === 'new'
     state = {
         loading: false,
         err: null
     }
     submit = (entity) => {
-        // if (this.isNewEntity) return this.createEnquiry(entity)
-        // this.updateEnquiry({...entity, id: this.props.id})
-        // if (this.isNewEntity) return this.upsertOrder(entity)
-        // this.upsertOrder({...entity, id: this.props.id})
         this.upsertOrder({
             ...entity, 
             ...this.isNewEntity && {
@@ -44,6 +42,13 @@ class OrderEdit extends Component {
             const res = await this.props.upsertOrder({ variables })
             if (!this.componentIsMounted) return
             this.setState({ loading: false, err: null })
+            console.log('res > ', res)
+            this.props.setLayout({ variables: {
+                details: {
+                    type: 'Order',
+                    id: res.data.upsertOrder.id
+                }
+            }})
             // this.props.selectEnquiry(res.data.createEnquiry.id)
             // this.props.selectEntity(res.data.createOrder.id)
         } catch (err) {
@@ -58,53 +63,16 @@ class OrderEdit extends Component {
             console.log(err)
         }
     }
-    // createEnquiry = async (variables) => {
-    //     try {
-    //         this.setState({ loading: true })
-    //         const res = await this.props.createEnquiry({ variables })
-    //         if (!this.componentIsMounted) return
-    //         this.setState({ loading: false, err: '' })
-    //         // this.props.selectEnquiry(res.data.createEnquiry.id)
-    //         // this.props.selectEntity(res.data.createOrder.id)
-    //     } catch (err) {
-    //         if (!this.componentIsMounted) return
-    //         this.setState({
-    //             loading: false,
-    //             err: {
-    //                 title: 'Создать не удалось..',
-    //                 message: err.message
-    //             }
-    //         })
-    //         console.log(err)
-    //     }
-    // }
-    // updateEnquiry = async (variables) => {
-    //     try {
-    //         this.setState({ loading: true })
-    //         await this.props.updateEnquiry({ variables: { input: variables } })
-    //         if (!this.componentIsMounted) return
-    //         this.setState({ loading: false, err: '' })
-    //         this.props.closeDetails()
-    //     } catch (err) {
-    //         if (!this.componentIsMounted) return
-    //         this.setState({ 
-    //             loading: false,
-    //             err: {
-    //                 title: 'Сохранить не удалось..',
-    //                 message: err.message
-    //             }
-    //         })
-    //         console.log(err)
-    //     }
-    // }
     componentWillUnmount() {
         this.componentIsMounted = false
     }
 	render() {
         // const orgs = allOrgsAndModels.orgs
         // const models = allOrgsAndModels.models
-        const { closeDetails, cancel, submit, loading } = this.props
-        const order = this.isNewEntity
+        const { closeDetails, cancel, submit, loading, layout: {details} } = this.props
+        const isNewEntity = details.id === 'new'
+        console.log('isNewEntity, details.id > ', isNewEntity, details.id)
+        const order = isNewEntity
         ?   {
                 dateLocal: toLocalISOString(new Date()).slice(0, 10),
                 qty: '',
@@ -117,7 +85,7 @@ class OrderEdit extends Component {
             }
 		return (
 			<SmartForm
-                isNewEntity={this.isNewEntity}
+                isNewEntity={isNewEntity}
                 entity={order}
                 requiredFields={['dateLocal', 'qty', 'amount']}
                 submit={this.submit}
@@ -197,6 +165,8 @@ export default compose(
         }
     }),
     graphql(allOrgsAndModels, { name: 'allOrgsAndModels' }),
+    graphql(setLayout, { name: 'setLayout' }),
+    graphql(getLayout, getLayoutOptions),
     graphql(upsertOrder, { name: 'upsertOrder' }),
     graphql(updateEnquiry, { name: 'updateEnquiry' }),
     graphql(createEnquiry, { 

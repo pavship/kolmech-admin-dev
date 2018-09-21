@@ -1,8 +1,10 @@
 import React, { Fragment } from 'react'
 
+import { graphql, compose } from 'react-apollo'
+import { getLayout, getLayoutOptions, setLayout } from '../graphql/layout'
+
 import styled from 'styled-components'
 
-import NumberFormat from 'react-number-format'
 import { currency } from '../utils/format';
 
 const TableHeader = styled.div`
@@ -66,9 +68,10 @@ const Td = styled.td`
     }
 `
 
-const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) => {
+const EnquiriesTable = ({ enquiries, setLayout, layout: { details } }) => {
     return (
         <Fragment>
+            {JSON.stringify(details)}
             <TableHeader>
                 <Table>
                     {/* <colgroup> <Col /> <Col /> <Col /> <Col /> <Col /> </colgroup> */}
@@ -90,7 +93,18 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
                 {/* <colgroup> <Col /> <Col /> <Col /> <Col /> <Col /> </colgroup> */}
                 <tbody>
                     {enquiries.map(({ id, num, dateLocal, org, model, qty, curStatusEvents, lastCoEvents }) => <Fragment key={id}>
-                        <EnquiryRow onClick={() => handleEnquiryLineClick(id)} active={id === activeEnquiryId}>
+                        <EnquiryRow 
+                            // @ts-ignore
+                            active={details && details.type === 'Enquiry' && id === details.id}
+                            onClick={() => {
+                                setLayout({variables: {
+                                    details: {
+                                        type: 'Enquiry',
+                                        id
+                                    }
+                                }})
+                            }} 
+                        >
                             <Td></Td>
                             <Td>{num}</Td>
                             <Td>{dateLocal}</Td>
@@ -111,4 +125,7 @@ const EnquiriesTable = ({ enquiries, activeEnquiryId, handleEnquiryLineClick }) 
     )
 }
 
-export default EnquiriesTable
+export default compose(
+    graphql(getLayout, getLayoutOptions),
+    graphql(setLayout, { name: 'setLayout' }),
+)(EnquiriesTable)
