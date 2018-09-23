@@ -27,13 +27,13 @@ import { getLayout, getLayoutOptions, setLayout } from '../../graphql/layout'
 
 const GlobalContext = ({ children, layout: { details }, setLayout }) => {
   return (
-      <Fragment>
-		{children({
-			details,
-			setDetails: (details) => setLayout({variables: { details }})
-		})}
-	</Fragment>
-  )
+        <Fragment>
+            {children({
+                details,
+                setDetails: (details) => setLayout({variables: { details }})
+            })}
+        </Fragment>
+    )
 }
 
 export default compose(

@@ -2,41 +2,33 @@ import React, { Component, Fragment } from 'react'
 
 import { graphql, compose, ApolloConsumer, Query  } from 'react-apollo'
 import { enquiryDetails, enquiryLocal } from '../graphql/enquiry'
+import GlobalContext from './special/GlobalContext'
 
 import { Header as SHeader, Icon } from 'semantic-ui-react'
 import { Span } from './styled-semantic/styled-semantic'
 
 import DetailsHeaderContainer from './DetailsHeaderContainer'
-import DetailsHeaderExistingEntity from './DetailsHeaderExistingEntity'
-
-import GlobalContext from './special/GlobalContext'
 
 import { entityTitles } from '../constants'
 
-class DetailsHeader extends Component {
+class DetailsHeaderExistingEntity extends Component {
 	render() {
 		const { type, entityQuery: { refetch }, entityLocal } = this.props
 		return (
-			<GlobalContext>
-				{({ details: { type, id, editMode}, setDetails }) => (
-					<DetailsHeaderContainer
-						closeDetails={() => setDetails(null)}
-					>
-						{ id === 'new' &&
-							<SHeader.Content>
-								{entityTitles[type].new}
-							</SHeader.Content>
-						}
-						{ id !== 'new' &&
-							<DetailsHeaderExistingEntity
-								type={type}
-								id={id}
-								editMode={editMode}
-							/>
-						}
-					</DetailsHeaderContainer>
-				)}
-			</GlobalContext>
+			<DetailsHeaderContainer
+				closeDetails={}
+			>
+				<SHeader.Content>
+					{ id === 'new'
+						? titles[type].new
+						: <Fragment>
+								{titles[type].existing}{num}
+								<Span ml='10px' fs='1rem' c='rgba(0,0,0,.6)' ws='0.5em' >
+									от {dateLocal}
+								</Span>
+							</Fragment> }
+				</SHeader.Content>
+			</DetailsHeaderContainer>
 		)
 	}
 }
@@ -46,7 +38,7 @@ export default compose(
 	graphql(getLayout, getLayoutOptions),
 	graphql(setLayout, { name: 'setLayout' }),
 	graphql(enquiryDetails, { name: 'entityQuery', skip: (props) => props.details.id === 'new' })
-)(DetailsHeader)
+)(DetailsHeaderExistingEntity)
 
 
 const DetailsHeader = () => {

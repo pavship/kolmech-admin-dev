@@ -92,7 +92,8 @@ export const enquiryLocal = gql`
 	query EnquiryLocal ($id: ID!) {
 		enquiryLocal (id: $id) {
 			num
-            lastCoEvents: events ( where: { doc: { type: CO } }, last: 1 ) {
+			dateLocal
+			lastCoEvents: events ( where: { doc: { type: CO } }, last: 1 ) {
 				id
 			}
 		}

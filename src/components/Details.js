@@ -6,34 +6,37 @@ import DetailsHeader from './DetailsHeader'
 import EnquiryDetails from './EnquiryDetails'
 import OrderEdit from './OrderEdit'
 
-// TODO store active entity in local cache and access from everywhere
-const Details = ({ entity, closeDetails, selectEnquiry }) => {
+import GlobalContext from './special/GlobalContext'
+
+// TODO add delayed unmounting not to break sidebar on animating out 
+const Details = () => {
 	return (
-		<Card details fluid>
-			{entity.type === 'Order' && entity.id === 'new' && 
-			// TODO make universal header (with render prop buttons)
-				<DetailsHeader />
-			}
-			{entity.type === 'Enquiry' 
-				? 	<EnquiryDetails
-						key={entity.id}
-						id={entity.id}
-						closeDetails={closeDetails}
-						selectEnquiry={selectEnquiry} 
-					/>
-				:	null
-			}
-			{entity.type === 'Order' 
-				? 	<OrderEdit
-						id={entity.id}
-						entity={entity}
-						closeDetails={closeDetails}
-						// selectEnquiry={selectEnquiry}
-						// selectEntity={selectEntity}
-					/>
-				:	null
-			}
-		</Card>
+		<GlobalContext>
+			{({ details: { type, id, enquiryId, editMode}, setDetails }) => (
+				<Card details fluid>
+					<DetailsHeader />
+					{/* {type === 'Order' && id === 'new' && 
+					// TODO make universal header (with render prop buttons)
+						<DetailsHeader />
+					} */}
+					{type === 'Enquiry' 
+						? <EnquiryDetails
+								// key={id}
+								id={id}
+							/>
+						:	null
+					}
+					{type === 'Order' 
+						? <OrderEdit
+								id={id}
+								enquiryId={enquiryId}
+								setDetails={setDetails}
+							/>
+						:	null
+					}
+				</Card>
+			)}
+		</GlobalContext>
 	)
 }
 
