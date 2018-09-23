@@ -4,7 +4,9 @@ import { Input } from 'semantic-ui-react'
 
 class CurrencyInput extends Component {
     handleInputChange = ( e, { value } ) => {
-        const { type, field: { name }, setField } = this.props
+        // TODO validate and parse according to input type
+        // const { type, field: { name }, setField } = this.props
+        const { field: { name }, setField } = this.props
         const newVal = parseInt(value, 10) || ''
         setField(name, {value: newVal})
     }

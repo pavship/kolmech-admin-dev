@@ -56,8 +56,8 @@ const EnquiriesMenu = ({
 						onClick={() => setDetails({type: 'Enquiry', id: 'new'})}
 					/>
 					{details && (
-						details.type === 'Enquiry' && details.id !== 'new'
-						|| details.type === 'Order' && details.id === 'new'
+						(details.type === 'Enquiry' && details.id !== 'new')
+						|| (details.type === 'Order' && details.id === 'new')
 					) &&
 						<EnquiriesSubmenu />
 					}

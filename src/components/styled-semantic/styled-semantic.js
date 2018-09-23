@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { 
 	Header as SHeader, 
-	Label as SLabel, 
+	// Label as SLabel, 
 	Button as SButton, 
 	Card as SCard,
 	Popup as SPopup,
@@ -35,17 +35,25 @@ const baseSet = ({ theme, w, m, ml, pl, fs, fw, c, lh, ta, ws }) => {
 	`
 }
 
-export const Div = styled.div`
+const DivWithFilteredProps = ({ ml, ...rest }) => (
+	<div {...rest} />
+)
+export const Div = styled(DivWithFilteredProps)`
 	${props => props.inline && `display: inline-block;`}
 	${props => baseSet(props)}
-	/* ${props => props.w && `width: ${props.theme.widths[props.w] ? props.theme.formLabel : props.w};`} */
 `
 
-export const P = styled.p`
+const PWithFilteredProps = ({ ...rest }) => (
+	<p {...rest} />
+)
+export const P = styled(PWithFilteredProps)`
 	${props => baseSet(props)}
 `
 
-export const Span = styled.span`
+const SpanWithFilteredProps = ({ ml, ...rest }) => (
+	<span {...rest} />
+)
+export const Span = styled(SpanWithFilteredProps)`
 	${props => baseSet(props)}
 `
 

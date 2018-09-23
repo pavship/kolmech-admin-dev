@@ -21,7 +21,7 @@ const Table = styled.table`
 	border-collapse: collapse;
 `
 
-const Tr = styled.tr` `
+// const Tr = styled.tr` `
 
 const EnquiryRow = styled.tr`
 	font-size: 1rem;

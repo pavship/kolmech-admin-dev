@@ -3,7 +3,6 @@ import React, { Fragment } from 'react'
 import { Query  } from 'react-apollo'
 import { enquiryLocal } from '../graphql/enquiry'
 
-import { Header as SHeader } from 'semantic-ui-react'
 import { Span, Header } from './styled-semantic/styled-semantic'
 
 const settings = {
@@ -53,37 +52,6 @@ const DetailsHeaderTitle = ({ type, id }) => {
 				</Query>
 			}
 		</Header>
-		// <SHeader.Content>
-		// 	{ id === 'new' &&
-		// 		titleNew
-		// 	}
-		// 	{ id !== 'new' &&
-		// 	// for existing entity get num and dateLocal from cache
-		// 		<Query
-		// 			query={localQuery}
-		// 			variables={{ id }}
-		// 		>
-		// 			{({ data }) => {
-		// 				console.log('data > ', data)
-		// 				if (!data || !data[localQueryName]) return null
-		// 				const { num, dateLocal } = data[localQueryName]
-		// 				return (
-		// 					<Fragment>
-		// 						{titleExisting}{num}
-		// 						<Span
-		// 							ml='10px'
-		// 							fs='1rem'
-		// 							c='rgba(0,0,0,.6)'
-		// 							ws='0.5em'
-		// 						>
-		// 							от {dateLocal}
-		// 						</Span>
-		// 					</Fragment>
-		// 				)
-		// 			}}
-		// 		</Query>
-		// 	}
-		// </SHeader.Content>
 	)
 }
 

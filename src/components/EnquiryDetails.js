@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
 
 import { Header as SHeader, Icon, Label, Form, Comment, 
-	Message, Dropdown, Popup } from 'semantic-ui-react'
-import { Span, P, Header, Button, CardSection } from './styled-semantic/styled-semantic'
+	Message, Dropdown } from 'semantic-ui-react'
+import { P, Button, CardSection } from './styled-semantic/styled-semantic'
 import styled from 'styled-components'
 
 import { graphql, compose } from 'react-apollo'
@@ -17,23 +17,6 @@ import { currency } from '../utils/format'
 
 import EnquiryEdit from './EnquiryEdit'
 import EnquiryCommercialOffer from './EnquiryCommercialOffer'
-
-// const EIcon = styled(Icon)`
-// 	cursor: pointer;
-// `
-
-// const ReloadButton = styled(Button)`
-// 	margin-left: auto !important;
-// 	padding: .78571429em !important;
-// 	&>i {
-// 		opacity: .9 !important;
-// 		margin: 0 !important;
-// 	}
-// `
-
-// const EditButton = styled(Button)`
-// 	${props => props.withmargin && 'margin-left: auto !important;'}
-// `
 
 const Table = styled.table`
 	/* table-layout: fixed; */
@@ -83,14 +66,14 @@ const SDropdown = styled(Dropdown)`
 	}
 `
 
-const DarkGreenButton = styled(Button)`
-	&&&& {
-		color: #178230 !important;
-		&:hover {
-			color: #0c5a1e !important;
-		}
-	}
-`
+// const DarkGreenButton = styled(Button)`
+// 	&&&& {
+// 		color: #178230 !important;
+// 		&:hover {
+// 			color: #0c5a1e !important;
+// 		}
+// 	}
+// `
 
 const Comments = styled(Comment.Group)`
 	margin: 1.5em 1.5em 1.5em 55px !important;
@@ -195,11 +178,11 @@ class EnquiryDetails extends Component {
 		savingNote: false,
 		error: ''
 	}
-	refetchEnquiry = async () => {
-		this.setState({ loading: true })
-		const res = await this.props.enquiryQuery.refetch()
-		this.setState({ loading: false })
-	}
+	// refetchEnquiry = async () => {
+	// 	this.setState({ loading: true })
+	// 	const res = await this.props.enquiryQuery.refetch()
+	// 	this.setState({ loading: false })
+	// }
 	enableEditMode = () => this.setState({ editMode: true })
 	exitEditMode = () => this.setState({ editMode: false })
 	setEditorHasText = (bool) => this.setState({ editorHasText: bool })
@@ -271,15 +254,14 @@ class EnquiryDetails extends Component {
 	}
   render() { 
 		// console.log(this.state, this.props);
-		const { editorHasText, loading, creatingComment, changingStatus, statusPending, 
+		const { editorHasText, creatingComment, changingStatus, statusPending, 
 				error, noteEditorDiff, noteKey, savingNote, activeCO } = this.state
-		const { id, enquiryQuery, closeDetails, selectEnquiry } = this.props
+		const { enquiryQuery } = this.props
 		const isNewEnquiry = this.isNewEnquiry
 		if (enquiryQuery.loading) return "Загрузка..."
 		if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
 		const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
-		// const { num, dateLocal, org, model, qty, htmlNote, events } = enquiry
-		const { dateLocal, org, model, qty, htmlNote, events } = enquiry
+		const { org, model, qty, htmlNote, events } = enquiry
 		const coEvents = events && events.filter(e => e.doc)
 		const curStatus = events && events.filter(e => e.status).pop().status
 		// rawStatuses - received from server
@@ -305,38 +287,6 @@ class EnquiryDetails extends Component {
 					const isNewEnquiry = id === 'new'
 					return (
 						<Fragment>
-							{/* <CardSection head noIndent>
-								<Header m='0' >
-									<EIcon
-										name='cancel'
-										onClick={() => setDetails(null)}
-									/>
-									<SHeader.Content>
-										{ isNewEnquiry
-											?   'Новая заявка'
-											:   <Fragment>
-													{`Заявка №${num}`}
-													<Span ml='10px' fs='1rem' c='rgba(0,0,0,.6)' ws='0.5em' >
-														{`от ${dateLocal}`}
-													</Span>
-												</Fragment> }
-									</SHeader.Content>
-								</Header>
-								{ !editMode &&
-									<ReloadButton
-										activeColor='blue'
-										active={loading}
-										onClick={this.refetchEnquiry} >
-										<Icon name='refresh'
-											loading={loading} /></ReloadButton> }
-								{ !isNewEnquiry &&
-									<EditButton
-										icon='edit'
-										activeColor='blue'
-										active={editMode}
-										withmargin={editMode ? 1 : 0}
-										onClick={() => setDetails({...details, editMode: true})} /> }
-							</CardSection> */}
 							{ (editMode || isNewEnquiry) &&
 								<EnquiryEdit
 									id={id}
@@ -379,7 +329,9 @@ class EnquiryDetails extends Component {
 										<Tr>
 											<Td>Примечания</Td>
 											<EditorTd>
-												<EditorWrapper withButton={noteEditorDiff}>
+												<EditorWrapper 
+													withButton={noteEditorDiff}
+												>
 													<DraftEditor ref={this.noteEditorRef} key={noteKey}
 														initFromHtml={htmlNote}
 														setEditorDiff={this.setNoteEditorDiff}
@@ -507,6 +459,7 @@ export default compose(
 	options: (props) => ({
 	  update: (cache, {data: reponseData}) => {
 				const newEvent = reponseData.createEnquiryEvent
+		// @ts-ignore
 		const id = `Enquiry:${props.id}`
 		const fragment = enquiryFragment
 		let data = cache.readFragment({
@@ -523,6 +476,7 @@ export default compose(
 				if (! newEvent.status) return
 				const query = allEnquiries
 				data = cache.readQuery({ query })
+				// @ts-ignore
 				const enquiry = data.enquiries.find(e => e.id === props.id)
 				enquiry.curStatusEvents = [newEvent]
 				if (newEvent.doc) enquiry.lastCoEvents = [newEvent]

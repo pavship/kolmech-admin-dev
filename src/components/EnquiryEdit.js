@@ -9,8 +9,6 @@ import { allEnquiries, createEnquiry, updateEnquiry } from '../graphql/enquiry'
 import { createOrg } from '../graphql/org'
 import { allOrgsAndModels } from '../graphql/combinedQueries'
 
-import GlobalContext from './special/GlobalContext'
-
 import cloneDeep from 'lodash/cloneDeep'
 import validateInn from '../utils/validateInn'
 import { isValidDate, toLocalISOString, fromLocalISOString }from '../utils/dates'

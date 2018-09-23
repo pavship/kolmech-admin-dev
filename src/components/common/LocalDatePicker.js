@@ -23,7 +23,7 @@ class LocalDatePicker extends Component {
         console.log('pickedDate > ', pickedDate)
         const { setField, field: { name }} = this.props
         if (!isValidDate(pickedDate)) {
-            this.props.setField(name, {
+            setField(name, {
                 err: {
                     title: 'Ошибка ввода даты', 
                     message: 'Дата не соответствует формату ГГГГ-ММ-ДД'
@@ -31,7 +31,7 @@ class LocalDatePicker extends Component {
             })
             return
         }
-        this.props.setField(name, {
+        setField(name, {
             value: toLocalISOString(pickedDate).slice(0, 10)
         })
     }

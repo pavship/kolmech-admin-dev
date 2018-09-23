@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import { graphql, compose, Query } from 'react-apollo'
 import { enquiryDetails } from '../graphql/enquiry' 
@@ -21,7 +21,7 @@ const settings = {
 }
 
 const DetailsHeaderButtons = ({ type, id, editMode, edit }) => {
-	const { entityQueryName, entityQuery } = settings[type]
+	const { entityQuery } = settings[type]
 	return (
 		<Div
 			ml='auto'
@@ -31,17 +31,12 @@ const DetailsHeaderButtons = ({ type, id, editMode, edit }) => {
 					query={entityQuery}
 					variables={{ id }}
 				>
-					{({ refetch, loading }) => {
-						// console.log('data > ', data)
-						// if (!data || !data[localQueryName]) return null
-						// const { num, dateLocal } = data[localQueryName]
-						return (
-							<RefreshButton
-								loading={loading}
-								onClick={() => refetch()}
-							/>
-						)
-					}}
+					{({ refetch, loading }) => (
+						<RefreshButton
+							loading={loading}
+							onClick={() => refetch()}
+						/>
+					)}
 				</Query>
 			}
 			<Button

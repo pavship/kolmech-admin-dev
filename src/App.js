@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import { ThemeProvider } from 'styled-components'
 import { theme } from './components/styled-semantic/styled-semantic'
