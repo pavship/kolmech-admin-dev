@@ -128,7 +128,7 @@ class OrderEdit extends Component {
 								content={err.message}
 							/>
 						}
-						<Div inline w='formLabelWidth' />
+						<Div inline w='formLabel' />
 						<Button
 							primary
 							content={this.isNewEntity ? 'Создать' : 'Сохранить'}

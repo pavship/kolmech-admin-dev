@@ -68,7 +68,7 @@ class EnquiryCommercialOffer extends Component {
                                 content={err.message} 
                             />
                         }
-                        <Div inline w='formLabelWidth' />
+                        <Div inline w='formLabel' />
                         <Button 
                             primary 
                             content={'Создать'}

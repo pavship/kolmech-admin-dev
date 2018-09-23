@@ -10,16 +10,19 @@ import {
 } from 'semantic-ui-react'
 
 export const theme = {
-	formLabelWidth: '110px', //required
+	widths: {
+		formLabel: '122px', //required calc(110px + 0.857143em)
+		detailsPL: '55px'
+	},
 	colors: {
 		green: '#016936',
 		blue: '#0E6EB8'
 	}
 }
 const getThemeColor = (color) => theme.colors[color] || color
-const baseSet = ({ w, m, ml, pl, fs, fw, c, lh, ta, ws }) => {
+const baseSet = ({ theme, w, m, ml, pl, fs, fw, c, lh, ta, ws }) => {
 	return `
-		${w ? `width: ${w};`: ''}
+		${w ? `width: ${theme.widths[w] || w};`: ''}
 		${m ? `margin: ${m};`: ''}
 		${ml ? `margin-left: ${ml};`: ''}
 		${pl ? `padding-left: ${pl};`: ''}
@@ -34,7 +37,8 @@ const baseSet = ({ w, m, ml, pl, fs, fw, c, lh, ta, ws }) => {
 
 export const Div = styled.div`
 	${props => props.inline && `display: inline-block;`}
-	${props => props.w && `width: ${props.w === 'formLabelWidth' ? `calc(${props.theme.formLabelWidth} + 0.857143em)`: props.w};`}
+	${props => baseSet(props)}
+	/* ${props => props.w && `width: ${props.theme.widths[props.w] ? props.theme.formLabel : props.w};`} */
 `
 
 export const P = styled.p`
@@ -71,7 +75,8 @@ export const Header = styled(HeaderWithFilteredProps)`
 `
 
 export const Label = styled.label`
-	width: ${props => props.theme.formLabelWidth} !important;
+	width: ${props => props.theme.widths.formLabel} !important;
+	margin-right: 0 !important;
 `
 
 const ButtonWithFilteredProps = ({ activeColor, menu, ...rest }) => (
@@ -119,7 +124,7 @@ const CardContentPropFiltered = ({ secondary, minor, head, noIndent, ...rest }) 
 	<SCard.Content {...rest} />
 )
 export const CardSection = styled(CardContentPropFiltered).attrs({
-	// head extends minor style
+	// head extends minor style and has noIndent
 	minor: props => props.minor || props.head
 })`
 	&&& {
@@ -138,7 +143,7 @@ export const CardSection = styled(CardContentPropFiltered).attrs({
 			align-items: center;
 		}`}
 		${props => props.noIndent && `{
-			padding-left: 1em;
+			padding-left: 0;
 		}`}
 	}
 `

@@ -18,22 +18,22 @@ import { currency } from '../utils/format'
 import EnquiryEdit from './EnquiryEdit'
 import EnquiryCommercialOffer from './EnquiryCommercialOffer'
 
-const EIcon = styled(Icon)`
-	cursor: pointer;
-`
+// const EIcon = styled(Icon)`
+// 	cursor: pointer;
+// `
 
-const ReloadButton = styled(Button)`
-	margin-left: auto !important;
-	padding: .78571429em !important;
-	&>i {
-		opacity: .9 !important;
-		margin: 0 !important;
-	}
-`
+// const ReloadButton = styled(Button)`
+// 	margin-left: auto !important;
+// 	padding: .78571429em !important;
+// 	&>i {
+// 		opacity: .9 !important;
+// 		margin: 0 !important;
+// 	}
+// `
 
-const EditButton = styled(Button)`
-	${props => props.withmargin && 'margin-left: auto !important;'}
-`
+// const EditButton = styled(Button)`
+// 	${props => props.withmargin && 'margin-left: auto !important;'}
+// `
 
 const Table = styled.table`
 	/* table-layout: fixed; */
@@ -48,9 +48,8 @@ const Tr = styled.tr`
 `
 
 const Td = styled.td`
-  padding-left: 4px;
   :nth-child(1) {
-		width: ${props => props.theme.formLabelWidth};
+		width: ${props => props.theme.widths.formLabel};
 	// color: rgba(0,0,0,.87);
 	/* font-size: .92857143em; */
 	/* line-height: 32px; */
@@ -60,10 +59,10 @@ const Td = styled.td`
   }
   :nth-child(2) {
 		// width: 100px;
-	font-size: 1em;
-	font-weight: bold;
+		font-size: 1em;
+		font-weight: bold;
 		line-height: 1.21428571em;
-	padding: .67857143em 1em;
+		padding: .67857143em 0;
   }
 `
 const InputTd = Td.extend`
@@ -272,14 +271,15 @@ class EnquiryDetails extends Component {
 	}
   render() { 
 		// console.log(this.state, this.props);
-		const { editMode, editorHasText, loading, creatingComment, changingStatus, statusPending, 
+		const { editorHasText, loading, creatingComment, changingStatus, statusPending, 
 				error, noteEditorDiff, noteKey, savingNote, activeCO } = this.state
 		const { id, enquiryQuery, closeDetails, selectEnquiry } = this.props
 		const isNewEnquiry = this.isNewEnquiry
 		if (enquiryQuery.loading) return "Загрузка..."
 		if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
 		const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
-		const { num, dateLocal, org, model, qty, htmlNote, events } = enquiry
+		// const { num, dateLocal, org, model, qty, htmlNote, events } = enquiry
+		const { dateLocal, org, model, qty, htmlNote, events } = enquiry
 		const coEvents = events && events.filter(e => e.doc)
 		const curStatus = events && events.filter(e => e.status).pop().status
 		// rawStatuses - received from server
@@ -305,7 +305,7 @@ class EnquiryDetails extends Component {
 					const isNewEnquiry = id === 'new'
 					return (
 						<Fragment>
-							<CardSection head noIndent>
+							{/* <CardSection head noIndent>
 								<Header m='0' >
 									<EIcon
 										name='cancel'
@@ -336,7 +336,7 @@ class EnquiryDetails extends Component {
 										active={editMode}
 										withmargin={editMode ? 1 : 0}
 										onClick={() => setDetails({...details, editMode: true})} /> }
-							</CardSection>
+							</CardSection> */}
 							{ (editMode || isNewEnquiry) &&
 								<EnquiryEdit
 									id={id}

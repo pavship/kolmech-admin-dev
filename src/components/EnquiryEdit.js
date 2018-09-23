@@ -268,7 +268,7 @@ class EnquiryEdit extends Component {
 								hidden={!err.message}
 								header={err.title}
 								content={err.message} />
-							<Div inline w='formLabelWidth' />
+							<Div inline w='formLabel' />
 							<Button 
 								primary 
 								content={this.isNewEnquiry ? 'Создать' : 'Сохранить'}
