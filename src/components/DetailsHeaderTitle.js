@@ -13,8 +13,8 @@ const settings = {
 		localQuery: enquiryLocal
 	},
 	Order: {
-		new: 'Новый заказ',
-		existing: 'Заказ №'
+		titleNew: 'Новый заказ',
+		titleExisting: 'Заказ №'
 	}
 }
 
@@ -32,8 +32,7 @@ const DetailsHeaderTitle = ({ type, id }) => {
 					variables={{ id }}
 				>
 					{({ data }) => {
-						console.log('data > ', data)
-						if (!data || !data[localQueryName]) return null
+						if (!(data && data[localQueryName])) return null
 						const { num, dateLocal } = data[localQueryName]
 						return (
 							<Fragment>

@@ -35,7 +35,7 @@ const baseSet = ({ theme, w, m, ml, pl, fs, fw, c, lh, ta, ws }) => {
 	`
 }
 
-const DivWithFilteredProps = ({ ml, ...rest }) => (
+const DivWithFilteredProps = ({ ml, inline, ...rest }) => (
 	<div {...rest} />
 )
 export const Div = styled(DivWithFilteredProps)`

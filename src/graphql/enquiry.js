@@ -7,11 +7,13 @@ export const allEnquiries = gql`
 			num
 			dateLocal
 			htmlNote
+			isExpanded @client
 			org {
 				id
 				name }
 			model {
 				id
+				article
 				name
 			}
 			qty
@@ -29,6 +31,13 @@ export const allEnquiries = gql`
 					id
 					amount
 				}
+			}
+			orders {
+				id
+				num
+				dateLocal
+				qty
+				amount
 			}
 		}
 	}
@@ -134,6 +143,21 @@ export const createEnquiry = gql`
 				name
 			}
 			qty
+			curStatusEvents: events ( where: { status: { id_not: null } }, last: 1 ) {
+				id
+				status {
+					id
+					name
+					stage
+				}
+			}
+			lastCoEvents: events ( where: { doc: { type: CO } }, last: 1 ) {
+				id
+				doc {
+					id
+					amount
+				}
+			}
 			events {
 				id
 				datetimeLocal
@@ -241,10 +265,17 @@ export const enquiryFragment = gql`
 		num
 		dateLocal
 		htmlNote
+		isExpanded
 		org {
 			id
 			name
 		}
+		model {
+			id
+			article
+			name
+		}
+		qty
 		events {
 			id
 			datetimeLocal
@@ -255,13 +286,13 @@ export const enquiryFragment = gql`
 				person {
 					id
 					fName
-					lName
+					lName 
 				}
 			}
 			status {
 				id
 				name
-				stage
+				stage 
 			}
 			doc {
 				id

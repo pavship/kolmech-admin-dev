@@ -42,10 +42,11 @@ class OrderEdit extends Component {
 			if (!this.componentIsMounted) return
 			this.setState({ loading: false, err: null })
 			console.log('res > ', res)
-			this.props.setDetails({
-				type: 'Order',
-				id: res.data.upsertOrder.id
-			})
+			this.props.setDetails(null)
+			// this.props.setDetails({
+			// 	type: 'Order',
+			// 	id: res.data.upsertOrder.id
+			// })
 		} catch (err) {
 			if (!this.componentIsMounted) return
 			this.setState({

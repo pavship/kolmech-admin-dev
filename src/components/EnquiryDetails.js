@@ -455,22 +455,22 @@ class EnquiryDetails extends Component {
 export default compose(
 	graphql(updateEnquiry, { name: 'updateEnquiry' }),
 	graphql(createEnquiryEvent, { 
-	name: 'createEnquiryEvent',
-	options: (props) => ({
-	  update: (cache, {data: reponseData}) => {
+		name: 'createEnquiryEvent',
+		options: (props) => ({
+			update: (cache, {data: reponseData}) => {
 				const newEvent = reponseData.createEnquiryEvent
-		// @ts-ignore
-		const id = `Enquiry:${props.id}`
-		const fragment = enquiryFragment
-		let data = cache.readFragment({
-		  id,
-		  fragment
-		})
-		data.events.push(newEvent)
-		cache.writeFragment({
+				// @ts-ignore
+				const id = `Enquiry:${props.id}`
+				const fragment = enquiryFragment
+				let data = cache.readFragment({
+					id,
+					fragment
+				})
+				data.events.push(newEvent)
+				cache.writeFragment({
 					id,
 					fragment,
-		  data
+					data
 				})
 				// also update allEnquiries if status changed (for EnquiryTable view update)
 				if (! newEvent.status) return
@@ -483,7 +483,7 @@ export default compose(
 				cache.writeQuery({ query, data })
 			},
 			// refetchQueries:[ 'allEnquiries' ]
-	})
+		})
   }),
 	graphql(newEnquiry, { name: 'enquiryQuery', skip: (props) => props.id !== 'new' }),
 	graphql(enquiryDetails, { name: 'enquiryQuery', skip: (props) => props.id === 'new' })

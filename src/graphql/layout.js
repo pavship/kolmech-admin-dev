@@ -17,7 +17,15 @@ export const getLayoutOptions = ({
 export const setLayout = gql`
 	mutation SetLayout($details: json) {
 		setLayout(details: $details) @client {
-			details
+			result
+		}
+	}
+`
+
+export const setExpanded = gql`
+	mutation SetExpanded($args: json) {
+		setExpanded(args: $args) @client {
+			args
 		}
 	}
 `

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 
 import { compose, graphql } from 'react-apollo'
 
-import { getLayout, getLayoutOptions, setLayout } from '../../graphql/layout'
+import { getLayout, getLayoutOptions, setLayout, setExpanded } from '../../graphql/layout'
 
 // const GlobalContext = React.createContext()
 
@@ -25,12 +25,13 @@ import { getLayout, getLayoutOptions, setLayout } from '../../graphql/layout'
 // 	}
 // }
 
-const GlobalContext = ({ children, layout: { details }, setLayout }) => {
+const GlobalContext = ({ children, layout: { details }, setLayout, setExpanded }) => {
   return (
         <Fragment>
             {children({
                 details,
-                setDetails: (details) => setLayout({variables: { details }})
+                setDetails: (details) => setLayout({variables: { details }}),
+                setExpanded: (args) => setExpanded({variables: { args }}),
             })}
         </Fragment>
     )
@@ -39,6 +40,7 @@ const GlobalContext = ({ children, layout: { details }, setLayout }) => {
 export default compose(
     graphql(getLayout, getLayoutOptions),
     graphql(setLayout, { name: 'setLayout' }),
+    graphql(setExpanded, { name: 'setExpanded' }),
 )(GlobalContext)
     
 // export default GlobalContextProvider

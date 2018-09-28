@@ -60,9 +60,7 @@ class EnquiriesPage extends Component {
 							direction='right'
 						>
 							{ details &&
-								<Details
-									// key={details.type + '-' + details.id}
-								/>
+								<Details />
 							}
 						</DetailsSidebar>
 						<Sidebar.Pusher>
