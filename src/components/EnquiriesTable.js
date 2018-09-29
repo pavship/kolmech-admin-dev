@@ -70,93 +70,42 @@ const EnquiriesTable = ({ enquiries }) => {
 												}
 											>
 											</TableRow>
-											{	isExpanded && enquiry.orders.map(order => (
-												<TableRow
-													key={order.id}
-													entity={order}
-													tableFields={tableFields}
-													rowFields={[{
-														path: 'num',
-														value: enquiry.num + '-' + order.num
-													},{
-														path: 'lastCoEvents.0.doc.amount',
-														correctPath: 'amount'
-													}]}
-													// active={details && details.type === 'Order' && id === details.id}
-													// onClick={() => {
-													// 	setDetails({
-													// 		type: 'Order',
-													// 		id
-													// 	})
-													// }}
-												>
-												</TableRow>
-											))}
+											{	isExpanded && enquiry.orders.map(order => {
+												const { id, num } = order
+												return (
+													<TableRow
+														secondary={1}
+														key={id}
+														entity={order}
+														tableFields={tableFields}
+														rowFields={[{
+															path: 'num',
+															value: enquiry.num + '-' + num
+														},{
+															path: 'lastCoEvents.0.doc.amount',
+															correctPath: 'amount'
+														}]}
+														active={
+															details
+															&& details.type === 'Order'
+															&& id === details.id
+														}
+														onClick={() => {
+															setDetails({
+																type: 'Order',
+																id
+															})
+														}}
+													>
+													</TableRow>
+												)
+											})}
 										</Fragment>
 									)
 								})}
 						</Fragment>}
 					</Table>
-							{/* <Caret name='dropdown' active={activeIndex.includes(name) ? 1 : 0} /> */}
-							{/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
-					{/* <STable>
-						<tbody>
-							{enquiries.map(({ id, num, dateLocal, org, model, qty, curStatusEvents, lastCoEvents, orders }) => {
-								return (
-									<Fragment
-										key={id}
-									>
-										<EnquiryRow
-											// @ts-ignore
-											active={details && details.type === 'Enquiry' && id === details.id}
-											onClick={() => {
-												setDetails({
-													type: 'Enquiry',
-													id
-												})
-											}}
-										>
-											<Td></Td>
-											<Td>{num}</Td>
-											<Td>{dateLocal}</Td>
-											<Td>
-												{org && org.name}
-											</Td>
-											<Td>{model.name}</Td>
-											<Td>{qty}</Td>
-											<Td>{lastCoEvents[0] && currency(lastCoEvents[0].doc.amount)}</Td>
-											<Td>{curStatusEvents[0] && curStatusEvents[0].status.name}</Td>
-											<Td></Td>
-										</EnquiryRow>
-										{	orders.map(({ id, dateLocal, qty, amount }) => (
-											<EnquiryRow
-												key={id}
-												// @ts-ignore
-												active={details && details.type === 'Order' && id === details.id}
-												onClick={() => {
-													setDetails({
-														type: 'Order',
-														id
-													})
-												}}
-											>
-												<Td></Td>
-												<Td>{num}</Td>
-												<Td>{dateLocal}</Td>
-												<Td>
-												</Td>
-												<Td>{model.name}</Td>
-												<Td>{qty}</Td>
-												<Td>{currency(amount)}</Td>
-												<Td>{curStatusEvents[0] && curStatusEvents[0].status.name}</Td>
-												<Td></Td>
-											</EnquiryRow>
-										))}
-									</Fragment>
-								)
-							})}
-						</tbody>
-					</STable> */}
+					{/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
 				</Fragment>
 			)}
 		</GlobalContext>

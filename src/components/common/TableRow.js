@@ -17,11 +17,23 @@ const Row = styled.tr`
 		background-color: rgba(0,0,0,.03);
 		font-weight: bold;
 	}`}
-	/* border-bottom: 1px solid #d4d4d5; */
+	${props => props.secondary && `{
+		background-color: rgba(0,0,50,.02);
+		// >td {
+		// 	padding-left: 3px;
+		// }
+	}`}
+	border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 `
 
 const Td = styled.td`
 	padding-right: 4px;
+	${props => props.service && `
+		padding-left: 3px;
+		&:hover {
+			background: white !important;
+		}`
+	}
 `
 
 const Caret = styled(Icon)`
@@ -52,6 +64,7 @@ const TableRow = ({ tableFields, rowFields, entity, expandFor, expanded, setExpa
 					&& entity[expandFor].length
 				) return (
 					<Td
+						service
 						key={f.path}
 						onClick={(e) => {
 							console.log('e > ', e)

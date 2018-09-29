@@ -10,7 +10,8 @@ export const allEnquiries = gql`
 			isExpanded @client
 			org {
 				id
-				name }
+				name
+			}
 			model {
 				id
 				article
@@ -38,6 +39,10 @@ export const allEnquiries = gql`
 				dateLocal
 				qty
 				amount
+				org {
+					id
+					name
+				}
 			}
 		}
 	}
