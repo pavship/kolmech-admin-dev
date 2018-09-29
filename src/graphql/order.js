@@ -11,3 +11,13 @@ export const upsertOrder = gql`
         }
     }
 `
+export const orderLocal = gql`
+	query OrderLocal ($id: ID!) {
+		orderLocal (id: $id) {
+			num
+			dateLocal
+            qty
+            amount
+		}
+	}
+`

@@ -36,7 +36,6 @@ const fields = [{
 }]
 
 const EnquiriesTable = ({ enquiries }) => {
-	console.log('enquiries > ', enquiries)
 	return (
 		<GlobalContext>
 			{({ details, setDetails, setExpanded }) => (

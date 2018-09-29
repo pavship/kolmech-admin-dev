@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 
 import { Query  } from 'react-apollo'
 import { enquiryLocal } from '../graphql/enquiry'
+import { orderLocal } from '../graphql/order'
 
 import { Span, Header } from './styled-semantic/styled-semantic'
 
@@ -14,7 +15,9 @@ const settings = {
 	},
 	Order: {
 		titleNew: 'Новый заказ',
-		titleExisting: 'Заказ №'
+		titleExisting: 'Заказ №',
+		localQueryName: 'orderLocal',
+		localQuery: orderLocal
 	}
 }
 

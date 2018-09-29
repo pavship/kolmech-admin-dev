@@ -20,13 +20,14 @@ const settings = {
 	}
 }
 
+// TODO refetch button
 const DetailsHeaderButtons = ({ type, id, editMode, edit }) => {
 	const { entityQuery } = settings[type]
 	return (
 		<Div
 			ml='auto'
 		>
-			{	!editMode &&
+			{/* {	!editMode &&
 				<Query
 					query={entityQuery}
 					variables={{ id }}
@@ -38,7 +39,7 @@ const DetailsHeaderButtons = ({ type, id, editMode, edit }) => {
 						/>
 					)}
 				</Query>
-			}
+			} */}
 			<Button
 				icon='edit'
 				activeColor='blue'

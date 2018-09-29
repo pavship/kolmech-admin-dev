@@ -9,20 +9,18 @@ import OrderEdit from './OrderEdit'
 import GlobalContext from './special/GlobalContext'
 
 // TODO add delayed unmounting not to break sidebar on animating out 
-const Details = () => {
+const Details = ({ closeDetails }) => {
 	return (
 		<GlobalContext>
 			{({ details: { type, id, enquiryId, editMode}, setDetails }) => (
 				<Card details fluid>
-					<DetailsHeader />
-					{/* {type === 'Order' && id === 'new' && 
-					// TODO make universal header (with render prop buttons)
-						<DetailsHeader />
-					} */}
-					{type === 'Enquiry' 
+					<DetailsHeader 
+						closeDetails={closeDetails}
+					/>
+					{type === 'Enquiry'
 						? <EnquiryDetails
-								// key={id}
 								id={id}
+								closeDetails={closeDetails}
 							/>
 						:	null
 					}

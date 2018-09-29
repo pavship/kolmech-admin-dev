@@ -9,11 +9,12 @@ import GlobalContext from './special/GlobalContext'
 class DetailsHeader extends Component {
 	render() {
 		// const { type, entityQuery: { refetch }, entityLocal } = this.props
+		const { closeDetails } = this.props
 		return (
 			<GlobalContext>
 				{({ details: { type, id, editMode}, setDetails }) => (
 					<DetailsHeaderContainer
-						closeDetails={() => setDetails(null)}
+						closeDetails={closeDetails}
 					>
 						<DetailsHeaderTitle
 							type={type}

@@ -4,6 +4,7 @@ import { Form, Button, Message } from 'semantic-ui-react'
 import { Div, Span, A, Label, CardSection } from './styled-semantic/styled-semantic.js'
 
 import { graphql, compose } from 'react-apollo'
+import { orderLocal } from '../graphql/order'
 import { allEnquiries, createEnquiry, updateEnquiry } from '../graphql/enquiry'
 // 
 import { upsertOrder } from '../graphql/order'
@@ -66,17 +67,14 @@ class OrderEdit extends Component {
 		const { loading } = this.state
 		const { id, setDetails } = this.props
 		const isNewEntity = id === 'new'
+		console.log(this.props.orderLocal)
 		const order = isNewEntity
 			? {
 				dateLocal: toLocalISOString(new Date()).slice(0, 10),
 				qty: '',
 				amount: ''
 			}
-			: {
-				dateLocal: this.props.order.dateLocal,
-				qty: this.props.order.qty,
-				amount: this.props.order.amount
-			}
+			: this.props.orderLocal.orderLocal
 		return (
 			<SmartForm
 				isNewEntity={isNewEntity}
@@ -171,6 +169,7 @@ export default compose(
 	}),
 	graphql(allOrgsAndModels, { name: 'allOrgsAndModels' }),
 	graphql(upsertOrder, { name: 'upsertOrder' }),
+	graphql(orderLocal, { name: 'orderLocal' }),
 	graphql(updateEnquiry, { name: 'updateEnquiry' }),
 	graphql(createEnquiry, {
 		name: 'createEnquiry',

@@ -41,7 +41,7 @@ const Caret = styled(Icon)`
 `
 
 const TableRow = ({ tableFields, rowFields, entity, expandFor, expanded, setExpanded, ...rest }) => {
-	console.log('entity > ', entity)
+	// console.log('entity > ', entity)
 	const fields = !rowFields
 		? tableFields
 		: rowFields.reduce((fields, rf) => {

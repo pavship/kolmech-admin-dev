@@ -9,17 +9,25 @@ import { Sidebar } from 'semantic-ui-react'
 
 import EnquiriesMenu from './EnquiriesMenu'
 import EnquiriesTable from './EnquiriesTable'
-import Details from './Details';
+// import Details from './Details'
+import DetailsSidebar from './DetailsSidebar'
 
 const Pushable = styled(Sidebar.Pushable)`
 	min-height: calc(100vh - 36px) !important;
 `
 
-const DetailsSidebar = styled(Sidebar)`
-	width: 65% !important;
-	max-width: 680px !important;
-	background-color: white !important;
-`
+// const DetailsSidebar = styled(Sidebar)`
+// 	width: 65% !important;
+// 	/* max-width: 680px !important;
+// 	background-color: white !important; */
+// 	${props => props.type === 'Enquiry' ? `
+// 		width: 65% !important;
+// 		max-width: 680px !important;
+// 	` : `
+// 		width: 65% !important;
+// 		max-width: 1400px !important;
+// 	`}
+// `
 
 class EnquiriesPage extends Component {
 	// state = { 
@@ -54,15 +62,17 @@ class EnquiriesPage extends Component {
 				{ error   && `Ошибка ${error.message}`}
 				{ !loading && !error && 
 					<Pushable>
-						<DetailsSidebar
+						<DetailsSidebar />
+						{/* <DetailsSidebar
 							visible={!!details}
+							type={details && details.type}
 							animation='overlay'
 							direction='right'
 						>
 							{ details &&
 								<Details />
 							}
-						</DetailsSidebar>
+						</DetailsSidebar> */}
 						<Sidebar.Pusher>
 							<EnquiriesTable 
 								enquiries={enquiries}

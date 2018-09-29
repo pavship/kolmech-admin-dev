@@ -4,5 +4,6 @@ export default `
 		id: ID
 		enquiryId: ID
 		editMode: Boolean
+		closing: Boolean
 	}
 `
