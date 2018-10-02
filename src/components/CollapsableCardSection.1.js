@@ -1,16 +1,7 @@
 import React, { Component, Fragment } from 'react'
-
-import styled from 'styled-components'
-import { CardSection } from './styled-semantic/styled-semantic'
-
 import DetailsHeader from './DetailsHeader'
-
-const SCardSection = styled(CardSection)`
-  &&&& { padding: 0; }
-`
-const BCardSection = styled(CardSection)`
-  &&&& { padding: 0.5em 1em 1em 55px; }
-`
+import { Transition } from 'semantic-ui-react'
+import { CardSection } from './styled-semantic/styled-semantic';
 
 class CollapsableCardSection extends Component {
   state = {
@@ -20,18 +11,25 @@ class CollapsableCardSection extends Component {
     const { expanded } = this.state
     const { title, children } = this.props
     return (
-        <SCardSection>
+      <Fragment>
           <DetailsHeader
             expanded={expanded}
             title={title}
             onClick={() => this.setState({ expanded: !expanded})}
-          />
-            {expanded &&
-              <BCardSection>
+          >
+          <CardSection>
+            <Transition
+              visible={expanded}
+              unmountOnHide
+              animation='slide down'
+              duration={500}
+            >
+              <div>
                 {children}
-              </BCardSection>
-            }
-        </SCardSection>
+              </div>
+            </Transition>
+          </CardSection></DetailsHeader>
+      </Fragment>
     )
   }
 }

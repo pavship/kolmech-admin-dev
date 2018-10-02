@@ -1,8 +1,8 @@
 import React from 'react'
 
+import styled from 'styled-components'
 import { Icon } from 'semantic-ui-react'
 import { CardSection, Caret } from './styled-semantic/styled-semantic'
-import styled from 'styled-components'
 
 const SIcon = styled(Icon)`
 	&&& {
@@ -19,7 +19,7 @@ const SCaret = styled(Caret)`
 	}
 `
 
-const DetailsHeaderContainer = ({ closeDetails, expanded, children }) => {
+const DetailsHeaderContainer = ({ closeDetails, expanded, onClick, children }) => {
 	const headerType = !!closeDetails ? 'main' : 'expandable'
 	return (
 		<CardSection 
@@ -27,6 +27,7 @@ const DetailsHeaderContainer = ({ closeDetails, expanded, children }) => {
 			noIndent
 			minor={headerType === 'main'}
 			small={headerType === 'expandable'}
+			onClick={onClick}
 		>
 			{headerType === 'main'
 				?	<SIcon link

@@ -88,13 +88,20 @@ export const Label = styled.label`
 	margin-right: 0 !important;
 `
 
-const DropdownIcon = ({active, ...rest}) => (
+const DropdownIcon = ({active, size, ...rest}) => (
 	<SIcon {...rest}
+		size={size}
 		name='dropdown'
 	/>
 )
 export const Caret = styled(DropdownIcon)`
-  transform: ${props => !props.active && 'translateX(-3px) translateY(3px) rotate(-90deg) !important'};
+	transform: ${
+		props => !props.active && (
+			props.size === 'large'
+			? 'translateX(0) translateY(0) rotate(-90deg) !important'
+			: 'translateX(-3px) translateY(3px) rotate(-90deg) !important'
+		)
+	};
 `
 
 const ButtonWithFilteredProps = ({ activeColor, menu, ...rest }) => (
@@ -138,22 +145,37 @@ export const Card = styled(CardWithFilteredProps)`
 	}
 `
 
-const CardContentPropFiltered = ({ head, minor, small, secondary, noIndent, ...rest }) => (
-	<SCard.Content {...rest} />
+const CardContentPropFiltered = ({ head, minor, small, secondary, noIndent, noBorders, onClick, children, ...rest }) => (
+	<SCard.Content {...rest} >
+		<div
+			onClick={onClick}
+		>
+			{children}
+		</div>
+	</SCard.Content>
 )
 export const CardSection = styled(CardContentPropFiltered).attrs({ })`
 	&&& {
 		padding-left: 55px;
+		>div {
+			width: 100%
+			height: 100%
+		}
 		${props => props.head && `{
 			display: flex;
 			align-items: center;
 			padding-top: 0;
 			padding-bottom: 0;
+			>div {
+				display: flex;
+				align-items: center;
+			}
+		}`}
+		${props => props.onClick && `{
+			cursor: pointer;
 		}`}
 		${props => props.minor && `{
 			min-height: 3.5em;
-			// padding-top: 0.464286em;
-			// padding-bottom: 0.464286em;
 		}`}
 		${props => props.small && `{
 			min-height: 2.5em;
@@ -164,6 +186,9 @@ export const CardSection = styled(CardContentPropFiltered).attrs({ })`
 		}`}
 		${props => props.noIndent && `{
 			padding-left: 0;
+		}`}
+		${props => props.noBorders && `{
+			border: none;
 		}`}
 	}
 `

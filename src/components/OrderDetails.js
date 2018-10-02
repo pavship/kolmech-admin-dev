@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
 import CollapsableCardSection from './CollapsableCardSection';
 import DetailsHeader from './DetailsHeader';
+import { CardSection } from './styled-semantic/styled-semantic';
 
 export default class OrderDetails extends Component {
   state = {
@@ -11,17 +12,17 @@ export default class OrderDetails extends Component {
   render() {
     const { expanded } = this.state 
     return (
-      <CollapsableCardSection 
-        title='Shiiit'
-      >
-        hello!
-      </CollapsableCardSection>
-      // <div>
-      //   <DetailsHeader
-      //     expanded={1}
-      //     title={'Shiiit'}
-      //   />
-      // </div>
+      <Fragment>
+        <CollapsableCardSection 
+          title='Shiiit'
+        >
+          hello!
+          sdfgsd
+          dsfgsdgfdsfgsd
+          dsfg
+        </CollapsableCardSection>
+        <CardSection></CardSection>
+        </Fragment>
     )
   }
 }
