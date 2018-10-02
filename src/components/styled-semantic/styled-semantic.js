@@ -2,8 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { 
 	Header as SHeader, 
-	// Label as SLabel, 
-	Button as SButton, 
+	// Label as SLabel,
+	Icon as SIcon, 
+	Button as SButton,
 	Card as SCard,
 	Popup as SPopup,
 	Dropdown as SDropdown
@@ -87,6 +88,15 @@ export const Label = styled.label`
 	margin-right: 0 !important;
 `
 
+const DropdownIcon = ({active, ...rest}) => (
+	<SIcon {...rest}
+		name='dropdown'
+	/>
+)
+export const Caret = styled(DropdownIcon)`
+  transform: ${props => !props.active && 'translateX(-3px) translateY(3px) rotate(-90deg) !important'};
+`
+
 const ButtonWithFilteredProps = ({ activeColor, menu, ...rest }) => (
 	<SButton {...rest} />
 )
@@ -128,27 +138,29 @@ export const Card = styled(CardWithFilteredProps)`
 	}
 `
 
-const CardContentPropFiltered = ({ secondary, minor, head, noIndent, ...rest }) => (
+const CardContentPropFiltered = ({ head, minor, small, secondary, noIndent, ...rest }) => (
 	<SCard.Content {...rest} />
 )
-export const CardSection = styled(CardContentPropFiltered).attrs({
-	// head extends minor style and has noIndent
-	minor: props => props.minor || props.head
-})`
+export const CardSection = styled(CardContentPropFiltered).attrs({ })`
 	&&& {
 		padding-left: 55px;
-		${props => props.secondary && `{
-			background: #f3f4f5;
-			color: rgba(0,0,0,.6);
-		}`}
-		${props => props.minor && `{
-			padding-top: 0.464286em;
-			padding-bottom: 0.464286em;
-			min-height: 3.5em;
-		}`}
 		${props => props.head && `{
 			display: flex;
 			align-items: center;
+			padding-top: 0;
+			padding-bottom: 0;
+		}`}
+		${props => props.minor && `{
+			min-height: 3.5em;
+			// padding-top: 0.464286em;
+			// padding-bottom: 0.464286em;
+		}`}
+		${props => props.small && `{
+			min-height: 2.5em;
+		}`}
+		${props => props.secondary && `{
+			background: #f3f4f5;
+			color: rgba(0,0,0,.6);
 		}`}
 		${props => props.noIndent && `{
 			padding-left: 0;

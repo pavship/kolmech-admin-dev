@@ -2,19 +2,18 @@ import React from 'react'
 
 import { Card } from './styled-semantic/styled-semantic'
 
-import DetailsHeader from './DetailsHeader'
+import GlobalContext from './special/GlobalContext'
+import DetailsMainHeader from './DetailsMainHeader'
 import EnquiryDetails from './EnquiryDetails'
 import OrderEdit from './OrderEdit'
+import OrderDetails from './OrderDetails'
 
-import GlobalContext from './special/GlobalContext'
-
-// TODO add delayed unmounting not to break sidebar on animating out 
 const Details = ({ closeDetails }) => {
 	return (
 		<GlobalContext>
 			{({ details: { type, id, enquiryId, editMode}, setDetails }) => (
 				<Card details fluid>
-					<DetailsHeader 
+					<DetailsMainHeader 
 						closeDetails={closeDetails}
 					/>
 					{type === 'Enquiry'
@@ -24,13 +23,18 @@ const Details = ({ closeDetails }) => {
 							/>
 						:	null
 					}
-					{type === 'Order' 
-						? <OrderEdit
-								id={id}
-								enquiryId={enquiryId}
-								setDetails={setDetails}
-							/>
-						:	null
+					{type === 'Order' &&
+						(id === 'new' || editMode
+							? <OrderEdit
+									id={id}
+									enquiryId={enquiryId}
+									closeDetails={closeDetails}
+									setDetails={setDetails}
+								/>
+							: <OrderDetails
+									id={id}
+								/>
+						)
 					}
 				</Card>
 			)}

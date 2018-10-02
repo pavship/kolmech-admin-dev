@@ -15,7 +15,7 @@ const SSidebar = styled(Sidebar)`
 		max-width: 680px !important;
 	` : `
 		width: 65% !important;
-		max-width: 1400px !important;
+		max-width: 980px !important;
 	`}
 `
 

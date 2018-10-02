@@ -42,12 +42,11 @@ class OrderEdit extends Component {
 			const res = await this.props.upsertOrder({ variables })
 			if (!this.componentIsMounted) return
 			this.setState({ loading: false, err: null })
-			console.log('res > ', res)
-			this.props.setDetails(null)
-			// this.props.setDetails({
-			// 	type: 'Order',
-			// 	id: res.data.upsertOrder.id
-			// })
+			// this.props.setDetails(null)
+			this.props.setDetails({
+				type: 'Order',
+				id: res.data.upsertOrder.id
+			})
 		} catch (err) {
 			if (!this.componentIsMounted) return
 			this.setState({
@@ -65,7 +64,7 @@ class OrderEdit extends Component {
 	}
 	render() {
 		const { loading } = this.state
-		const { id, setDetails } = this.props
+		const { id, closeDetails, setDetails } = this.props
 		const isNewEntity = id === 'new'
 		console.log(this.props.orderLocal)
 		const order = isNewEntity
@@ -138,9 +137,9 @@ class OrderEdit extends Component {
 						<A cancel
 							onClick={
 								id === 'new'
-									? () => setDetails(null)
+									? closeDetails
 									: () => setDetails({
-										type: 'Enquiry',
+										type: 'Order',
 										id
 									})
 							}

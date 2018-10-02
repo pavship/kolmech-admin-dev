@@ -17,10 +17,11 @@ const HeaderRow = styled.tr`
 
 const Td = styled.td`
 	padding-right: 4px;
+	// @ts-ignore
 	${props => props.w && `width: ${props.w};`}
 `
 
-const Table = ({ children, fields, primary }) => {
+const Table = ({ children, fields }) => {
 	// const fields = {{
 	// 	name: '',
 	// 	title: '№'
@@ -57,6 +58,7 @@ const Table = ({ children, fields, primary }) => {
 						return (
 						<Td
 							key={f.path}
+							// @ts-ignore
 							w={f.width}
 						>
 							{f.title}

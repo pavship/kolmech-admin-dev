@@ -258,8 +258,10 @@ class EnquiryDetails extends Component {
 				error, noteEditorDiff, noteKey, savingNote, activeCO } = this.state
 		const { enquiryQuery } = this.props
 		const isNewEnquiry = this.isNewEnquiry
-		if (enquiryQuery.loading) return "Загрузка..."
-		if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
+		// if (enquiryQuery.loading) return "Загрузка..."
+		// if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
+		if (enquiryQuery.loading) return <CardSection>Загрузка...</CardSection>
+		if (enquiryQuery.error) return <CardSection>Ошибка {enquiryQuery.error.message}</CardSection>
 		const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
 		const { org, model, qty, htmlNote, events } = enquiry
 		const coEvents = events && events.filter(e => e.doc)
@@ -380,7 +382,6 @@ class EnquiryDetails extends Component {
 											</InputTd>
 											<Td></Td>
 										</Tr>
-										
 									</tbody></Table>
 								</CardSection>
 								{ activeCO && 

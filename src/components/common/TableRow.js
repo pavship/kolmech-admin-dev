@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 
 import styled from 'styled-components'
-import { Icon } from 'semantic-ui-react'
+import { Caret } from '../styled-semantic/styled-semantic'
 
 import { getObjProp } from '../../utils/object'
 import { currency } from '../../utils/format'
@@ -9,21 +9,26 @@ import { currency } from '../../utils/format'
 const Row = styled.tr`
 	font-size: 1rem;
 	cursor: pointer;
-	&:hover {
-		background-color: rgba(0,0,0,.03);
-	}
+	border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 	// @ts-ignore
-	${props => props.active && `{
-		background-color: rgba(0,0,0,.03);
-		font-weight: bold;
-	}`}
 	${props => props.secondary && `{
 		background-color: rgba(0,0,50,.02);
 		// >td {
 		// 	padding-left: 3px;
 		// }
+		${!props.lastSecondaryRow && 'border-bottom: none;'}
 	}`}
-	border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+	// @ts-ignore
+	${props => props.active && `{
+		background: rgba(0,0,0,.05);
+		font-weight: bold;
+		border-top: 1px solid rgba(34, 36, 38, 0.15);
+		border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+	}`}
+	&:hover {
+		background: rgba(0,0,0,.05);
+    color: rgba(0,0,0,.95);
+	}
 `
 
 const Td = styled.td`
@@ -34,10 +39,6 @@ const Td = styled.td`
 			background: white !important;
 		}`
 	}
-`
-
-const Caret = styled(Icon)`
-  transform: ${props => !props.active && 'translateX(-3px) translateY(3px) rotate(-90deg) !important'};
 `
 
 const TableRow = ({ tableFields, rowFields, entity, expandFor, expanded, setExpanded, ...rest }) => {
@@ -76,7 +77,6 @@ const TableRow = ({ tableFields, rowFields, entity, expandFor, expanded, setExpa
 						)}}
 					>
 						<Caret
-							name='dropdown'
 							active={expanded ? 1 : 0}
 						/>
 					</Td>

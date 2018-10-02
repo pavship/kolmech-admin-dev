@@ -61,25 +61,34 @@ const EnquiriesTable = ({ enquiries }) => {
 													&& details.type === 'Enquiry'
 													&& id === details.id
 												}
-												onClick={() => 
+												onClick={() => {
 													setDetails({
 														type: 'Enquiry',
 														id
 													})
-												}
+													setExpanded({
+														id,
+														value: !isExpanded
+													})
+												}}
 											>
 											</TableRow>
-											{	isExpanded && enquiry.orders.map(order => {
+											{	isExpanded && enquiry.orders.map((order, i) => {
 												const { id, num } = order
 												return (
+													// @ts-ignore
 													<TableRow
 														secondary={1}
+														lastSecondaryRow={i === enquiry.orders.length - 1 ? 1 : 0}
 														key={id}
 														entity={order}
 														tableFields={tableFields}
 														rowFields={[{
 															path: 'num',
 															value: enquiry.num + '-' + num
+														},{
+															path: 'model.name',
+															value: enquiry.model.name
 														},{
 															path: 'lastCoEvents.0.doc.amount',
 															correctPath: 'amount'
