@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 
 import { graphql, compose } from 'react-apollo'
 import { getLayout, getLayoutOptions, setLayout } from '../graphql/layout'
@@ -15,7 +15,7 @@ const SSidebar = styled(Sidebar)`
 		max-width: 680px !important;
 	` : `
 		width: 65% !important;
-		max-width: 980px !important;
+		max-width: 780px !important;
 	`}
 `
 
@@ -30,11 +30,11 @@ class DetailsSidebar extends Component {
 		}, 300)
 	}
 	render() {
+		const { detailsClosing } = this.state
 		const { layout: { details } } = this.props
 		return (
 			<SSidebar
-				// visible={!!details && !details.closing}
-				visible={!!details && !this.state.detailsClosing}
+				visible={!!details && !detailsClosing}
 				type={details && details.type}
 				animation='overlay'
 				direction='right'

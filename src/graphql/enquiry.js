@@ -39,10 +39,6 @@ export const allEnquiries = gql`
 				dateLocal
 				qty
 				amount
-				org {
-					id
-					name
-				}
 			}
 		}
 	}

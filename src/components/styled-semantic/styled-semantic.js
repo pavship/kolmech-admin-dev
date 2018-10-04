@@ -1,5 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+
+// S prefix is used throughout the App just to have flexebility (two names for each component)
+// N prefix stands for NativeCssImplementation of a component (When html element is styled instead of semantic ui component) 
+
 import { 
 	Header as SHeader, 
 	// Label as SLabel,
@@ -189,6 +193,48 @@ export const CardSection = styled(CardContentPropFiltered).attrs({ })`
 		}`}
 		${props => props.noBorders && `{
 			border: none;
+		}`}
+	}
+`
+
+const NCardSectionPropFiltered = ({ head, minor, small, secondary, noIndent, topBorder, bottomBorder, children, ...rest }) => (
+		<div
+			{...rest}
+		>
+			{children}
+		</div>
+)
+export const NCardSection = styled(NCardSectionPropFiltered)`
+	& {
+		width: 100%
+		padding: 1em 1em 1em 55px;
+		${props => props.head && `{
+			display: flex;
+			align-items: center;
+			padding-top: 0;
+			padding-bottom: 0;
+		}`}
+		${props => props.onClick && `{
+			cursor: pointer;
+		}`}
+		${props => props.minor && `{
+			min-height: 3.5em;
+		}`}
+		${props => props.small && `{
+			min-height: 2.5em;
+		}`}
+		${props => props.secondary && `{
+			background: #f3f4f5;
+			color: rgba(0,0,0,.6);
+		}`}
+		${props => props.noIndent && `{
+			padding-left: 0;
+		}`}
+		${props => props.topBorder && `{
+			border-top: 1px solid rgba(34,36,38,.1);
+		}`}
+		${props => props.bottomBorder && `{
+			border-bottom: 1px solid rgba(34,36,38,.1);
 		}`}
 	}
 `

@@ -68,7 +68,6 @@ const TableRow = ({ tableFields, rowFields, entity, expandFor, expanded, setExpa
 						service
 						key={f.path}
 						onClick={(e) => {
-							console.log('e > ', e)
 							e.stopPropagation()
 							setExpanded({
 								id: entity.id,

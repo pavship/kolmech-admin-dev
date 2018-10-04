@@ -87,6 +87,9 @@ const EnquiriesTable = ({ enquiries }) => {
 															path: 'num',
 															value: enquiry.num + '-' + num
 														},{
+															path: 'org.name',
+															value: enquiry.org.name
+														},{
 															path: 'model.name',
 															value: enquiry.model.name
 														},{

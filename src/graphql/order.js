@@ -21,3 +21,47 @@ export const orderLocal = gql`
 		}
 	}
 `
+export const orderDetails = gql`
+	query OrderDetails ($id: ID!) {
+		order (id: $id) {
+			id
+            num
+			dateLocal
+            qty
+            amount
+			htmlNote
+			org {
+				id
+				name
+			}
+			model {
+				id
+				name
+			}
+			events {
+				id
+				datetimeLocal
+				htmlText
+				type
+				user {
+					id
+					person {
+						id
+						fName
+						lName 
+					}
+				}
+				status {
+					id
+					name
+					stage 
+				}
+				doc {
+					id
+					dateLocal
+					amount
+				}
+			}
+		}
+	}
+`

@@ -1,28 +1,25 @@
 import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
-import CollapsableCardSection from './CollapsableCardSection';
-import DetailsHeader from './DetailsHeader';
-import { CardSection } from './styled-semantic/styled-semantic';
+import CollapsableCardSection from './CollapsableCardSection'
 
 export default class OrderDetails extends Component {
-  state = {
-    expanded: false
-  } 
   render() {
-    const { expanded } = this.state 
+    const { order: {
+      id,
+      model,
+      qty
+    } } = this.props
     return (
-      <Fragment>
-        <CollapsableCardSection 
-          title='Shiiit'
-        >
-          hello!
-          sdfgsd
-          dsfgsdgfdsfgsd
-          dsfg
-        </CollapsableCardSection>
-        <CardSection></CardSection>
-        </Fragment>
+      <CollapsableCardSection
+        title={model.name}
+        subtitle={qty + 'шт'}
+      >
+        hello! 
+        sdfgsd
+        dsfgsdgfdsfgsd
+        dsfg
+      </CollapsableCardSection>
     )
   }
 }
