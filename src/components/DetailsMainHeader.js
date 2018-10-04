@@ -9,7 +9,7 @@ import GlobalContext from './special/GlobalContext'
 class DetailsMainHeader extends Component {
 	render() {
 		// const { type, entityQuery: { refetch }, entityLocal } = this.props
-		const { closeDetails } = this.props
+		const { closeDetails, loading, refresh } = this.props
 		return (
 			<GlobalContext>
 				{({ details: { type, id, editMode}, setDetails }) => (
@@ -24,6 +24,8 @@ class DetailsMainHeader extends Component {
 							<DetailsHeaderButtons
 								type={type}
 								id={id}
+								loading={loading}
+								refresh={refresh}
 								editMode={editMode || false}
 								edit={() => setDetails({type, id, editMode: true})}
 							/>

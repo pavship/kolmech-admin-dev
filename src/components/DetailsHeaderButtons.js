@@ -7,22 +7,8 @@ import { Div, Button } from './styled-semantic/styled-semantic'
 
 import RefreshButton from './common/RefreshButton'
 
-const settings = {
-	Enquiry: {
-		titleNew: 'Новая заявка',
-		titleExisting: 'Заявка №',
-		entityQueryName: 'enquiryDetails',
-		entityQuery: enquiryDetails
-	},
-	Order: {
-		new: 'Новый заказ',
-		existing: 'Заказ №'
-	}
-}
-
 // TODO refetch button
-const DetailsHeaderButtons = ({ type, id, editMode, edit }) => {
-	const { entityQuery } = settings[type]
+const DetailsHeaderButtons = ({ type, id, loading, refresh, editMode, edit }) => {
 	return (
 		<Div
 			ml='auto'
@@ -40,6 +26,10 @@ const DetailsHeaderButtons = ({ type, id, editMode, edit }) => {
 					)}
 				</Query>
 			} */}
+			<RefreshButton
+				loading={loading}
+				onClick={refresh}
+			/>
 			<Button
 				icon='edit'
 				activeColor='blue'
@@ -50,9 +40,9 @@ const DetailsHeaderButtons = ({ type, id, editMode, edit }) => {
 	)
 }
 
-// export default DetailsHeaderButtons
-export default compose(
-	graphql(enquiryDetails, { 
-		name: 'entityQuery', 
-		skip: (props) => props.type === 'Order' })
-)(DetailsHeaderButtons)
+export default DetailsHeaderButtons
+// export default compose(
+// 	graphql(enquiryDetails, { 
+// 		name: 'entityQuery', 
+// 		skip: (props) => props.type === 'Order' })
+// )(DetailsHeaderButtons)

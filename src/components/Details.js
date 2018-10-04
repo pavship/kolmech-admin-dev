@@ -21,7 +21,8 @@ const Details = ({ closeDetails }) => {
 						<Card details fluid>
 							<DetailsMainHeader 
 								closeDetails={closeDetails}
-								refetch={() => refetch()}
+								loading={loading}
+								refresh={() => refetch()}
 							/>
 							{type === 'Enquiry'
 								? <EnquiryDetails
