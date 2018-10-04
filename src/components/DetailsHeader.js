@@ -19,8 +19,6 @@ class DetailsHeader extends Component {
 				/>
 				{/* { id !== 'new' &&
 					<DetailsHeaderButtons
-						type={type}
-						id={id}
 						editMode={editMode || false}
 						edit={() => setDetails({type, id, editMode: true})}
 					/>
