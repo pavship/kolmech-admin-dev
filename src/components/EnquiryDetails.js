@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 
 import { Header as SHeader, Icon, Label, Form, Comment, 
 	Message, Dropdown } from 'semantic-ui-react'
-import { P, Button, CardSection } from './styled-semantic/styled-semantic'
+import { P, Button, Section } from './styled-semantic/styled-semantic'
 import styled from 'styled-components'
 
 import { graphql, compose } from 'react-apollo'
@@ -260,8 +260,8 @@ class EnquiryDetails extends Component {
 		const isNewEnquiry = this.isNewEnquiry
 		// if (enquiryQuery.loading) return "Загрузка..."
 		// if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
-		if (enquiryQuery.loading) return <CardSection>Загрузка...</CardSection>
-		if (enquiryQuery.error) return <CardSection>Ошибка {enquiryQuery.error.message}</CardSection>
+		if (enquiryQuery.loading) return <Section>Загрузка...</Section>
+		if (enquiryQuery.error) return <Section>Ошибка {enquiryQuery.error.message}</Section>
 		const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
 		const { org, model, qty, htmlNote, events } = enquiry
 		const coEvents = events && events.filter(e => e.doc)
@@ -297,7 +297,7 @@ class EnquiryDetails extends Component {
 								/>
 							}
 							{ !(editMode || isNewEnquiry) && <Fragment>
-								<CardSection>
+								<Section>
 									<Table><tbody>
 										<Tr>
 											<Td>Организация</Td>
@@ -383,7 +383,7 @@ class EnquiryDetails extends Component {
 											<Td></Td>
 										</Tr>
 									</tbody></Table>
-								</CardSection>
+								</Section>
 								{ activeCO && 
 									<EnquiryCommercialOffer 
 										id={activeCO} 

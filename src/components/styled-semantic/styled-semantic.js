@@ -9,7 +9,6 @@ import {
 	// Label as SLabel,
 	Icon as SIcon, 
 	Button as SButton,
-	Card as SCard,
 	Popup as SPopup,
 	Dropdown as SDropdown
 } from 'semantic-ui-react'
@@ -63,6 +62,7 @@ export const Span = styled(SpanWithFilteredProps)`
 `
 
 export const A = styled.a`
+	cursor: pointer;
 	${props => props.cancel && `{
 		padding-left: 15px;
 		color: rgba(0,0,0,.87);
@@ -134,77 +134,14 @@ export const Button = styled(ButtonWithFilteredProps)`
 	}
 `
 
-const CardWithFilteredProps = ({ details, ...rest }) => (
-	<SCard {...rest} />
-)
-export const Card = styled(CardWithFilteredProps)`
-	&&&& {
-		${props => baseSet(props)}
-	}
-	&&& {
-		${props => props.details && `{
-			border-radius: 0;
-			box-shadow: none;
-		}`}
-	}
-`
-
-const CardContentPropFiltered = ({ head, minor, small, secondary, noIndent, noBorders, onClick, children, ...rest }) => (
-	<SCard.Content {...rest} >
-		<div
-			onClick={onClick}
-		>
-			{children}
-		</div>
-	</SCard.Content>
-)
-export const CardSection = styled(CardContentPropFiltered).attrs({ })`
-	&&& {
-		padding-left: 55px;
-		>div {
-			width: 100%
-			height: 100%
-		}
-		${props => props.head && `{
-			display: flex;
-			align-items: center;
-			padding-top: 0;
-			padding-bottom: 0;
-			>div {
-				display: flex;
-				align-items: center;
-			}
-		}`}
-		${props => props.onClick && `{
-			cursor: pointer;
-		}`}
-		${props => props.minor && `{
-			min-height: 3.5em;
-		}`}
-		${props => props.small && `{
-			min-height: 2.5em;
-		}`}
-		${props => props.secondary && `{
-			background: #f3f4f5;
-			color: rgba(0,0,0,.6);
-		}`}
-		${props => props.noIndent && `{
-			padding-left: 0;
-		}`}
-		${props => props.noBorders && `{
-			border: none;
-		}`}
-	}
-`
-
-const NCardSectionPropFiltered = ({ head, minor, small, secondary, noIndent, topBorder, bottomBorder, children, ...rest }) => (
+const SectionPropFiltered = ({ head, minor, small, secondary, noIndent, topBorder, bottomBorder, children, ...rest }) => (
 		<div
 			{...rest}
 		>
 			{children}
 		</div>
 )
-export const NCardSection = styled(NCardSectionPropFiltered)`
+export const Section = styled(SectionPropFiltered)`
 	& {
 		width: 100%
 		padding: 1em 1em 1em 55px;
@@ -231,7 +168,7 @@ export const NCardSection = styled(NCardSectionPropFiltered)`
 			padding-left: 0;
 		}`}
 		${props => props.topBorder && `{
-			border-top: 1px solid rgba(34,36,38,.1);
+			border-top: 1px solid rgba(34,36,38,.15);
 		}`}
 		${props => props.bottomBorder && `{
 			border-bottom: 1px solid rgba(34,36,38,.1);

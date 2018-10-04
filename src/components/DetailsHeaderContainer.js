@@ -2,7 +2,7 @@ import React from 'react'
 
 import styled from 'styled-components'
 import { Icon } from 'semantic-ui-react'
-import { CardSection, Caret } from './styled-semantic/styled-semantic'
+import { Section, Caret } from './styled-semantic/styled-semantic'
 
 const SIcon = styled(Icon)`
 	&&& {
@@ -22,9 +22,10 @@ const SCaret = styled(Caret)`
 const DetailsHeaderContainer = ({ closeDetails, expanded, onClick, children }) => {
 	const headerType = !!closeDetails ? 'main' : 'expandable'
 	return (
-		<CardSection 
+		<Section
 			head
 			noIndent
+			bottomBorder
 			minor={headerType === 'main'}
 			small={headerType === 'expandable'}
 			onClick={onClick}
@@ -41,7 +42,7 @@ const DetailsHeaderContainer = ({ closeDetails, expanded, onClick, children }) =
 					/>
 			}
 			{children}
-		</CardSection>
+		</Section>
 	)
 }
 

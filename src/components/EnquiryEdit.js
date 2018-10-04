@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
 import { Form, Input, Button, Message } from 'semantic-ui-react'
-import { Div, Span, A, Label, CardSection, Dropdown } from './styled-semantic/styled-semantic.js'
+import { Div, Span, A, Label, Section, Dropdown } from './styled-semantic/styled-semantic.js'
 import DatePicker from './common/DatePicker'
 
 import { graphql, compose } from 'react-apollo'
@@ -199,7 +199,9 @@ class EnquiryEdit extends Component {
 		const someFieldHasError = this.fields.some(f => !!this.state[f].err)
 		return (
 					<Fragment>
-						<CardSection>
+						<Section
+							bottomBorder
+						>
 							<Form>
 								<Form.Field inline>
 									<Label>Дата</Label>
@@ -259,8 +261,8 @@ class EnquiryEdit extends Component {
 									<Span pl='6px'>шт.</Span>
 								</Form.Field>
 							</Form>
-						</CardSection>
-						<CardSection>
+						</Section>
+						<Section>
 							<Message
 								error
 								hidden={!err.message}
@@ -285,7 +287,7 @@ class EnquiryEdit extends Component {
 							>
 								Отмена
 							</A>
-						</CardSection>
+						</Section>
 					</Fragment>
 		)
 	}

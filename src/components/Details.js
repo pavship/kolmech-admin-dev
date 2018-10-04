@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import { Card } from './styled-semantic/styled-semantic'
 
@@ -18,7 +18,7 @@ const Details = ({ closeDetails }) => {
 					id={id}
 				>
 					{({ loading, error, refetch, entity }) =>
-						<Card details fluid>
+						<Fragment>
 							<DetailsMainHeader 
 								closeDetails={closeDetails}
 								loading={loading}
@@ -46,7 +46,7 @@ const Details = ({ closeDetails }) => {
 										)
 								)
 							}
-						</Card>
+						</Fragment>
 					}
 				</DetailsDataProvider>
 			)}

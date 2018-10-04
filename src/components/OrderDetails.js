@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
-import CollapsableCardSection from './CollapsableCardSection'
+import CollapsableSection from './CollapsableSection'
 
 export default class OrderDetails extends Component {
   render() {
@@ -11,7 +11,7 @@ export default class OrderDetails extends Component {
       qty
     } } = this.props
     return (
-      <CollapsableCardSection
+      <CollapsableSection
         title={model.name}
         subtitle={qty + 'шт'}
       >
@@ -19,7 +19,7 @@ export default class OrderDetails extends Component {
         sdfgsd
         dsfgsdgfdsfgsd
         dsfg
-      </CollapsableCardSection>
+      </CollapsableSection>
     )
   }
 }

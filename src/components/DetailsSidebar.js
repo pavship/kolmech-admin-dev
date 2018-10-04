@@ -41,6 +41,7 @@ class DetailsSidebar extends Component {
 			>
 				{ details &&
 					<Details
+						key={details.type + details.id}
 						closeDetails={this.closeDetails}
 					/>
 				}

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
 import { Form, Button, Message } from 'semantic-ui-react'
-import { Div, Span, A, Label, CardSection } from './styled-semantic/styled-semantic.js'
+import { Div, Span, A, Label, Section } from './styled-semantic/styled-semantic.js'
 
 import { graphql, compose } from 'react-apollo'
 import { orderLocal } from '../graphql/order'
@@ -89,7 +89,9 @@ class OrderEdit extends Component {
 					submit,
 					formState: { dateLocal, qty, amount }
 				}) => <Fragment>
-					<CardSection>
+					<Section
+						bottomBorder
+					>
 						<Form>
 							<Form.Field inline>
 								<Label>Дата</Label>
@@ -117,8 +119,8 @@ class OrderEdit extends Component {
 								/>
 							</Form.Field>
 						</Form>
-					</CardSection>
-					<CardSection>
+					</Section>
+					<Section>
 						{err &&
 							<Message
 								error
@@ -146,7 +148,7 @@ class OrderEdit extends Component {
 						>
 							Отмена
 						</A>
-					</CardSection>
+					</Section>
 				</Fragment>}
 			</SmartForm>
 		)
