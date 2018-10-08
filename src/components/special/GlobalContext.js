@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react'
 
-import { compose, graphql } from 'react-apollo'
+import cloneDeep from 'lodash/cloneDeep'
 
+import { compose, graphql } from 'react-apollo'
 import { getLayout, getLayoutOptions, setLayout, setExpanded } from '../../graphql/layout'
 
 // const GlobalContext = React.createContext()
@@ -25,13 +26,12 @@ import { getLayout, getLayoutOptions, setLayout, setExpanded } from '../../graph
 // 	}
 // }
 
-const GlobalContext = ({ children, layout, setLayout, setExpanded }) => {
-	const { details, extra } = layout
+const GlobalContext = ({ children, layout: { details, extra }, setLayout, setExpanded }) => {
   return children({
 		details,
 		extra,
-		setDetails: (details) => setLayout({variables: { layout: { ...layout, details } }}),
-		setExtra: (extra) => setLayout({variables: { layout: { ...layout, extra } }}),
+		setDetails: (details) => setLayout({ variables: { details } }),
+		setExtra: (extra) => setLayout({ variables: { extra } }),
 		setExpanded: (args) => setExpanded({variables: { args }}),
 	})
 }

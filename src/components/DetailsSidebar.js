@@ -25,7 +25,7 @@ class DetailsSidebar extends Component {
 		this.setState({ detailsClosing: true })
 		// set timeout for sidebar to finish animation
 		setTimeout(() => {
-			this.props.setLayout({variables: { details: null }})
+			this.props.setLayout({variables: { details: null, extra: null }})
 			this.setState({ detailsClosing: false })
 		}, 300)
 	}
@@ -39,7 +39,7 @@ class DetailsSidebar extends Component {
 				animation='overlay'
 				direction='right'
 			>
-				{ details &&
+				{details &&
 					<Details
 						key={details.type + details.id}
 						closeDetails={this.closeDetails}

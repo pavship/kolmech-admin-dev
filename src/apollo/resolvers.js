@@ -6,10 +6,13 @@ const resolvers = {
 		isExpanded: () => false
 	},
 	Mutation: {
-		setLayout: (_, { layout }, { cache }) => {
+		setLayout: (_, input, { cache }) => {
 			const query = getLayout
 			const data = cache.readQuery({ query })
-			data.layout = layout
+			data.layout = {
+				...data.layout,
+				...input
+			}
 			cache.writeQuery({ query, data })
 			return null
 		},
@@ -21,9 +24,6 @@ const resolvers = {
 			cache.writeQuery({ query, data })
 			return null
 		}
-		// updateAlteredEnquiry: (_, { key, value }, { cache }) => {
-		//     console.log(key, value)
-		// }
 	}
 }
 
