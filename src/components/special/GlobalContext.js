@@ -30,7 +30,12 @@ const GlobalContext = ({ children, layout: { details, extra }, setLayout, setExp
   return children({
 		details,
 		extra,
-		setDetails: (details) => setLayout({ variables: { details } }),
+		setDetails: (details) => {
+			setLayout({ variables: { 
+				details,
+				...details.type === 'Enquiry' && { extra: null }
+			}})
+		},
 		setExtra: (extra) => setLayout({ variables: { extra } }),
 		setExpanded: (args) => setExpanded({variables: { args }}),
 	})

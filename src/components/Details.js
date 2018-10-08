@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react'
 
+import styled from 'styled-components'
+
 import GlobalContext from './special/GlobalContext'
 import DetailsMainHeader from './DetailsMainHeader'
 import EnquiryDetails from './EnquiryDetails'
@@ -7,17 +9,27 @@ import OrderEdit from './OrderEdit'
 import OrderDetails from './OrderDetails'
 import DetailsDataProvider from './DetailsDataProvider';
 
+const Container = styled.div`
+	/* flex-grow: 1; */
+	width: 60%;
+`
+	// width: ${props => props.extra ? '100%' : `calc(100% - ${props.theme.widths.extraSidebar})`
+	// 	width: 100%;
+	// 	` : `
+	// 	width: 100%;
+	// `}
+
 const Details = ({ closeDetails }) => {
 	return (
 		<GlobalContext>
-			{({ details: { type, id, enquiryId, editMode}, setDetails }) => (
+			{({ details: { type, id, enquiryId, editMode}, extra, setDetails }) => (
 				<DetailsDataProvider
 					type={type}
 					id={id}
 				>
 					{({ loading, error, refetch, entity }) =>
-						<Fragment>
-							<DetailsMainHeader 
+						<Container>
+							<DetailsMainHeader
 								closeDetails={closeDetails}
 								loading={loading}
 								refresh={() => refetch()}
@@ -44,7 +56,7 @@ const Details = ({ closeDetails }) => {
 										)
 								)
 							}
-						</Fragment>
+						</Container>
 					}
 				</DetailsDataProvider>
 			)}

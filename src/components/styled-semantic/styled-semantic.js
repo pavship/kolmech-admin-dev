@@ -16,7 +16,8 @@ import {
 export const theme = {
 	widths: {
 		formLabel: '122px', //required calc(110px + 0.857143em)
-		detailsPL: '55px'
+		detailsPL: '55px',
+		extraSidebar: '250px'
 	},
 	colors: {
 		green: '#016936',
@@ -138,7 +139,7 @@ export const Button = styled(ButtonWithFilteredProps)`
 	}
 `
 
-const SectionPropFiltered = ({ head, minor, small, secondary, noIndent, topBorder, bottomBorder, children, ...rest }) => (
+const SectionPropFiltered = ({ head, minor, small, secondary, noLP, noIndent, topBorder, bottomBorder, children, ...rest }) => (
 		<div
 			{...rest}
 		>
@@ -168,8 +169,11 @@ export const Section = styled(SectionPropFiltered)`
 			background: #f3f4f5;
 			color: rgba(0,0,0,.6);
 		}`}
-		${props => props.noIndent && `{
+		${props => props.noLP && `{
 			padding-left: 0;
+		}`}
+		${props => props.noIndent && `{
+			padding-left: 1em;
 		}`}
 		${props => props.topBorder && `{
 			border-top: 1px solid rgba(34,36,38,.15);

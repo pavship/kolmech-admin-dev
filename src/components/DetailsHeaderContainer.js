@@ -4,11 +4,29 @@ import styled from 'styled-components'
 import { Icon } from 'semantic-ui-react'
 import { Section, Caret } from './styled-semantic/styled-semantic'
 
+// const SSection = styled(Section)`
+// 	&&& {
+// 		${props => props.head && `{
+// 			display: flex;
+// 			align-items: center;
+// 			padding-top: 0;
+// 			padding-bottom: 0;
+// 		}`}
+// 	}
+// 	padding: 1em
+// `
 const SIcon = styled(Icon)`
 	&&& {
 		box-sizing: content-box;
 		width: calc(55px - 1em);
 		margin: 0 0.5em;
+	}
+`
+const RightIcon = styled(Icon)`
+	&&& {
+		box-sizing: content-box;
+		width: calc(55px - 1em);
+		margin: 0 0.5em 0 auto;
 	}
 `
 const SCaret = styled(Caret)`
@@ -19,31 +37,43 @@ const SCaret = styled(Caret)`
 	}
 `
 
-const DetailsHeaderContainer = ({ closeDetails, expanded, disabled, onClick, children }) => {
-	const headerType = !!closeDetails ? 'main' : 'expandable'
+const DetailsHeaderContainer = ({ closeDetails, closeExtra, expanded, disabled, onClick, children }) => {
+	const headerType = 
+		!!closeDetails ? 'main' :
+		!!closeExtra ? 'extra' :
+		'expandable'
 	return (
 		<Section
 			head
-			noIndent
+			noLP
+			noIndent={headerType === 'extra'}
 			bottomBorder
 			minor={headerType === 'main'}
-			small={headerType === 'expandable'}
+			small={['expandable', 'extra'].includes(headerType)}
 			onClick={onClick}
 		>
-			{headerType === 'main'
+			{ headerType === 'main'
 				?	<SIcon link
 						size='big'
 						name='cancel'
 						onClick={closeDetails}
-					/>
+					/> :
 				// TODO make disabled work (grey out color)
-				:	<SCaret
+				headerType === 'expandable'
+				? <SCaret
 						size='large'
 						active={expanded ? 1 : 0}
 						disabled={disabled}
-					/>
+					/> : null
 			}
 			{children}
+			{ headerType === 'extra'
+				? <RightIcon
+						// size='large'
+						name='cancel'
+						onClick={closeExtra}
+					/> : null
+			}
 		</Section>
 	)
 }
