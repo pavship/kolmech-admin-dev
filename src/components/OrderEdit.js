@@ -4,19 +4,15 @@ import { Form, Button, Message } from 'semantic-ui-react'
 import { Div, Span, A, Label, Section } from './styled-semantic/styled-semantic.js'
 
 import { graphql, compose } from 'react-apollo'
-import { orderLocal } from '../graphql/order'
-import { allEnquiries, createEnquiry, updateEnquiry } from '../graphql/enquiry'
-// 
-import { upsertOrder } from '../graphql/order'
-import { createOrg } from '../graphql/org'
-import { allOrgsAndModels } from '../graphql/combinedQueries'
+import { orderLocal, upsertOrder } from '../graphql/order'
+import { allEnquiries } from '../graphql/enquiry'
+
+import { toLocalISOString } from '../utils/dates'
 
 import LocalDatePicker from './common/LocalDatePicker'
 import CurrencyInput from './common/CurrencyInput'
 import SmartForm from './common/SmartForm'
 import SmartInput from './common/SmartInput'
-
-import { toLocalISOString } from '../utils/dates'
 
 class OrderEdit extends Component {
 	componentIsMounted = true
@@ -42,7 +38,6 @@ class OrderEdit extends Component {
 			const res = await this.props.upsertOrder({ variables })
 			if (!this.componentIsMounted) return
 			this.setState({ loading: false, err: null })
-			// this.props.setDetails(null)
 			this.props.setDetails({
 				type: 'Order',
 				id: res.data.upsertOrder.id
@@ -155,33 +150,22 @@ class OrderEdit extends Component {
 }
 
 export default compose(
-	graphql(createOrg, {
-		name: 'createOrg',
-		options: {
-			update: (cache, { data: { createOrg } }) => {
-				const query = allOrgsAndModels
-				const data = cache.readQuery({ query })
-				data.orgs.push(createOrg)
-				data.orgs.sort((a, b) => a.name > b.name)
-				cache.writeQuery({ query, data })
+	graphql(upsertOrder, {
+			name: 'upsertOrder',
+			options: {
+				update: (cache, { data: responseData }) => {
+					const upsertedOrder = responseData.upsertOrder
+					console.log('this > ', this)
+					const query = allEnquiries
+					const data = cache.readQuery({ query })
+					const enquiry = data.enquiries.find(e => e.id === upsertedOrder.enquiry.id)
+					enquiry.orders = [
+						...enquiry.orders.filter(o => o.id !== upsertedOrder.id),
+						upsertedOrder
+					].sort((a, b) => a.num > b.num)
+					cache.writeQuery({ query, data })
+				}
 			}
-		}
 	}),
-	graphql(allOrgsAndModels, { name: 'allOrgsAndModels' }),
-	graphql(upsertOrder, { name: 'upsertOrder' }),
 	graphql(orderLocal, { name: 'orderLocal' }),
-	graphql(updateEnquiry, { name: 'updateEnquiry' }),
-	graphql(createEnquiry, {
-		name: 'createEnquiry',
-		options: {
-			update: (cache, { data: { createEnquiry } }) => {
-				const query = allEnquiries
-				const data = cache.readQuery({ query })
-				createEnquiry.curStatusEvents = [createEnquiry.events[0]]
-				createEnquiry.lastCoEvents = []
-				data.enquiries.unshift(createEnquiry)
-				cache.writeQuery({ query, data })
-			}
-		}
-	}),
 )(OrderEdit)

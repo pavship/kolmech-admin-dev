@@ -14,7 +14,8 @@ const defaults = {
     },
     layout: {
         __typename: 'Layout',
-        details: null
+        details: null,
+        extra: null
     }
 }
 

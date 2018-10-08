@@ -6,10 +6,10 @@ const resolvers = {
 		isExpanded: () => false
 	},
 	Mutation: {
-		setLayout: (_, { details }, { cache }) => {
+		setLayout: (_, { layout }, { cache }) => {
 			const query = getLayout
 			const data = cache.readQuery({ query })
-			data.layout.details = details
+			data.layout = layout
 			cache.writeQuery({ query, data })
 			return null
 		},

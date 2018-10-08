@@ -8,6 +8,9 @@ export const upsertOrder = gql`
 			dateLocal
 			qty
 			amount
+			enquiry {
+				id
+			}
 		}
 	}
 `

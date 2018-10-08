@@ -25,23 +25,22 @@ import { getLayout, getLayoutOptions, setLayout, setExpanded } from '../../graph
 // 	}
 // }
 
-const GlobalContext = ({ children, layout: { details }, setLayout, setExpanded }) => {
-  return (
-        <Fragment>
-            {children({
-                details,
-                setDetails: (details) => setLayout({variables: { details }}),
-                setExpanded: (args) => setExpanded({variables: { args }}),
-            })}
-        </Fragment>
-    )
+const GlobalContext = ({ children, layout, setLayout, setExpanded }) => {
+	const { details, extra } = layout
+  return children({
+		details,
+		extra,
+		setDetails: (details) => setLayout({variables: { layout: { ...layout, details } }}),
+		setExtra: (extra) => setLayout({variables: { layout: { ...layout, extra } }}),
+		setExpanded: (args) => setExpanded({variables: { args }}),
+	})
 }
 
 export default compose(
-    graphql(getLayout, getLayoutOptions),
-    graphql(setLayout, { name: 'setLayout' }),
-    graphql(setExpanded, { name: 'setExpanded' }),
+	graphql(getLayout, getLayoutOptions),
+	graphql(setLayout, { name: 'setLayout' }),
+	graphql(setExpanded, { name: 'setExpanded' }),
 )(GlobalContext)
-    
+	
 // export default GlobalContextProvider
 // export const GlobalContextConsumer = GlobalContext.Consumer
