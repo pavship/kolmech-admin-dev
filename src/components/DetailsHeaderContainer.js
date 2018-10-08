@@ -25,8 +25,7 @@ const SIcon = styled(Icon)`
 const RightIcon = styled(Icon)`
 	&&& {
 		box-sizing: content-box;
-		width: calc(55px - 1em);
-		margin: 0 0.5em 0 auto;
+		margin: 0 0 0 auto;
 	}
 `
 const SCaret = styled(Caret)`
@@ -68,8 +67,7 @@ const DetailsHeaderContainer = ({ closeDetails, closeExtra, expanded, disabled, 
 			}
 			{children}
 			{ headerType === 'extra'
-				? <RightIcon
-						// size='large'
+				? <RightIcon link
 						name='cancel'
 						onClick={closeExtra}
 					/> : null

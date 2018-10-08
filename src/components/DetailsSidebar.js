@@ -10,45 +10,26 @@ import Details from './Details';
 import DetailsExtra from './DetailsExtra';
 
 const SSidebar = styled(Sidebar)`
-	display: flex;
-	background-color: white !important;
-	transition: all .5s ease !important;
-	${props => `
-		&&&&.ui.visible.right.overlay.sidebar {
-			transform: translate3d(${props.extra ? '0' : '40%'},0,0);
-		}
-		${props.type === 'Enquiry'
-			? `
-				width: 65% !important;
-				max-width: 1000px !important;
-			` : `
-				width: 75% !important;
-				max-width: 1200px !important;
-			`
-			
-			
-			// (
-			// 	!props.extra ? `
-			// 		width: 85% !important;
-			// 		max-width: 1200px !important;
-			// 		// max-width: 780px !important;
-			// 	` : `
-			// 		width: 85% !important;
-			// 		max-width: 1030px !important;
-			// 	`
-			// )
-		}
-	`}
+	&&&& {
+		display: flex;
+		width: 120%;
+		background-color: white;
+		transition: all .5s ease;
+		max-width: ${props => 
+			props.type === 'Enquiry'
+			? '1000px'
+			: '1200px'
+		};
+		${props => !props.extra && `
+			&.ui.visible.right.overlay.sidebar {
+				transform: translate3d(40%,0,0);
+			}
+		`}
+		${props => props.extra && `
+			width: 86%;
+		`}
+	}
 `
-
-// const DetailsContainer = styled.div`
-// 	display: flex
-// 	width: ${props => props.extra ? '100%' : `calc(100% - ${props.theme.widths.extraSidebar})`
-// 		width: 100%;
-// 		` : `
-// 		width: 100%;
-// 	`}
-// `
 
 class DetailsSidebar extends Component {
 	state = { detailsClosing: false }

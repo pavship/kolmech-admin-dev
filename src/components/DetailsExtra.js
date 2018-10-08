@@ -9,15 +9,10 @@ import GlobalContext from './special/GlobalContext'
 import DetailsHeader from './DetailsHeader';
 
 const Container = styled.div`
-	/* flex-grow: 1; */
 	width: 40%;
-	border-left: 1px solid rgb(126, 126, 129);
+	/* border-left: 1px solid rgb(126, 126, 129); */
+	border-left: 1px solid rgb(156, 156, 159);
 `
-	// width: ${props => props.extra ? '100%' : `calc(100% - ${props.theme.widths.extraSidebar})`
-	// 	width: 100%;
-	// 	` : `
-	// 	width: 100%;
-	// `}
 
 const DetailsExtra = ({ closeExtra }) => {
 	return (
