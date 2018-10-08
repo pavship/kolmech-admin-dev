@@ -92,9 +92,8 @@ export const Label = styled.label`
 	margin-right: 0 !important;
 `
 
-const DropdownIcon = ({active, size, ...rest}) => (
+const DropdownIcon = ({active, disabled, ...rest}) => (
 	<SIcon {...rest}
-		size={size}
 		name='dropdown'
 	/>
 )
@@ -106,6 +105,11 @@ export const Caret = styled(DropdownIcon)`
 			: 'translateX(-3px) translateY(3px) rotate(-90deg) !important'
 		)
 	};
+	&&& {
+		${props => props.disabled && `{
+			color: rgba(0,0,0,.6);
+		}`}
+	}
 `
 
 const ButtonWithFilteredProps = ({ activeColor, menu, ...rest }) => (

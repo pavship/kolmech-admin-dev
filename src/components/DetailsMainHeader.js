@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 
+import { Button } from './styled-semantic/styled-semantic'
+
+import GlobalContext from './special/GlobalContext'
 import DetailsHeaderContainer from './DetailsHeaderContainer'
 import DetailsHeaderTitle from './DetailsHeaderTitle'
 import DetailsHeaderButtons from './DetailsHeaderButtons'
-
-import GlobalContext from './special/GlobalContext'
+import RefreshButton from './common/RefreshButton'
 
 class DetailsMainHeader extends Component {
 	render() {
@@ -20,12 +22,18 @@ class DetailsMainHeader extends Component {
 							id={id}
 						/>
 						{ id !== 'new' &&
-							<DetailsHeaderButtons
-								loading={loading}
-								refresh={refresh}
-								editMode={editMode || false}
-								edit={() => setDetails({type, id, editMode: true})}
-							/>
+							<DetailsHeaderButtons>
+								<RefreshButton
+									loading={loading}
+									onClick={refresh}
+								/>
+								<Button
+									icon='edit'
+									activeColor='blue'
+									active={editMode || false}
+									onClick={() => setDetails({type, id, editMode: true})}
+								/> 
+							</DetailsHeaderButtons>
 						}
 					</DetailsHeaderContainer>
 				)}

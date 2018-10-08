@@ -183,6 +183,13 @@ export const createEnquiry = gql`
 					amount
 				}
 			}
+			orders {
+				id
+				num
+				dateLocal
+				qty
+				amount
+			}
 		}
 	}
 `

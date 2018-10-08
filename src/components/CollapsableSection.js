@@ -19,9 +19,13 @@ class CollapsableSection extends Component {
   state = {
     expanded: false
   }
+  handleHeaderClick = () => {
+    if (!this.props.forceExpanded)
+      this.setState({ expanded: !this.state.expanded })
+  }
   render() {
-    const { expanded } = this.state
-    const { title, subtitle, children } = this.props
+    const { children, forceExpanded, ...headerProps } = this.props
+    const expanded = this.state.expanded || forceExpanded
     return (
       <OuterSection
         expanded={expanded ? 1 : 0}
@@ -29,11 +33,11 @@ class CollapsableSection extends Component {
         bottomBorder={expanded}
       >
         <DetailsHeader
+          {...headerProps}
           expanded={expanded}
-          title={title}
-          subtitle={subtitle}
+          disabled={forceExpanded}
           titleSize='small'
-          onClick={() => this.setState({ expanded: !expanded})}
+          onClick={this.handleHeaderClick}
         />
           {expanded &&
             <Section>

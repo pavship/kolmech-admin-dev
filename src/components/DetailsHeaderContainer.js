@@ -19,7 +19,7 @@ const SCaret = styled(Caret)`
 	}
 `
 
-const DetailsHeaderContainer = ({ closeDetails, expanded, onClick, children }) => {
+const DetailsHeaderContainer = ({ closeDetails, expanded, disabled, onClick, children }) => {
 	const headerType = !!closeDetails ? 'main' : 'expandable'
 	return (
 		<Section
@@ -36,9 +36,11 @@ const DetailsHeaderContainer = ({ closeDetails, expanded, onClick, children }) =
 						name='cancel'
 						onClick={closeDetails}
 					/>
+				// TODO make disabled work (grey out color)
 				:	<SCaret
 						size='large'
 						active={expanded ? 1 : 0}
+						disabled={disabled}
 					/>
 			}
 			{children}

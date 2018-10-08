@@ -4,6 +4,7 @@ export const getLayout = gql`
 	query getLayout {
 		layout @client {
 			details
+			extra
 		}
 	}
 `
