@@ -316,6 +316,7 @@ export default compose(
 				const data = cache.readQuery({ query })
 				createEnquiry.curStatusEvents = [createEnquiry.events[0]]
 				createEnquiry.lastCoEvents = []
+				createEnquiry.isExpanded = false
 				data.enquiries.unshift(createEnquiry)
 				cache.writeQuery({ query, data })
 			}

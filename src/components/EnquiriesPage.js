@@ -15,7 +15,7 @@ const Pushable = styled(Sidebar.Pushable)`
 `
 
 const EnquiriesPage = ({ 
-	allEnquiries: { loading, error, refetch, enquiries },
+	allEnquiries: { loading, error, refetch, networkStatus, enquiries },
 	refreshToken
 }) => {
 	return (
@@ -27,7 +27,7 @@ const EnquiriesPage = ({
 			/>
 			{loading && "Загрузка..."}
 			{error   && `Ошибка ${error.message}`}
-			{enquiries && 
+			{enquiries &&
 				<Pushable>
 					<DetailsSidebar />
 					<Sidebar.Pusher>
@@ -42,5 +42,7 @@ const EnquiriesPage = ({
 }
 
 export default compose(
-	graphql(allEnquiries, { name: 'allEnquiries' })
+	graphql(allEnquiries, {
+			name: 'allEnquiries'
+	})
 )(EnquiriesPage)
