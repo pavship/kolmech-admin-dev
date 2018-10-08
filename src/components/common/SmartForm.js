@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import { Component } from 'react'
 
 class SmartForm extends Component {
 	constructor(props){
@@ -57,13 +57,8 @@ class SmartForm extends Component {
 			submit: this.submit,
 			formState: this.state
 		}
+		// @ts-ignore
 		return children(state)
-		// return (
-		// 	<Fragment>
-		// 		{JSON.stringify(state, null, 2)}
-		// 		{ children(state) }
-		// 	</Fragment>
-		// )
 	}
 }
 

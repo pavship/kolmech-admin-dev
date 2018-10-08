@@ -1,10 +1,9 @@
-import React from 'react'
 import { compose, graphql } from 'react-apollo'
 
 import { enquiryDetails } from '../graphql/enquiry'
 import { orderDetails } from '../graphql/order'
 
-const DetailsDataProvider = ({ type, id, query1, query2, children }) => {
+const DetailsDataProvider = ({ type, query1, query2, children }) => {
   const query = query1 || query2
   const { loading, error, refetch } = query
   const entity =

@@ -66,7 +66,6 @@ class OrderEdit extends Component {
 		const { loading } = this.state
 		const { id, closeDetails, setDetails } = this.props
 		const isNewEntity = id === 'new'
-		console.log(this.props.orderLocal)
 		const order = isNewEntity
 			? {
 				dateLocal: toLocalISOString(new Date()).slice(0, 10),

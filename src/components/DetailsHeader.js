@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import DetailsHeaderContainer from './DetailsHeaderContainer'
 import DetailsHeaderTitle from './DetailsHeaderTitle'
-import DetailsHeaderButtons from './DetailsHeaderButtons'
+// import DetailsHeaderButtons from './DetailsHeaderButtons'
 
 class DetailsHeader extends Component {
 	render() {

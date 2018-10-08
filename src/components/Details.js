@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react'
 
-import { Card } from './styled-semantic/styled-semantic'
-
 import GlobalContext from './special/GlobalContext'
 import DetailsMainHeader from './DetailsMainHeader'
 import EnquiryDetails from './EnquiryDetails'
