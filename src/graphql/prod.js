@@ -12,7 +12,7 @@ import gql from 'graphql-tag'
 
 export const modelProds = gql`
 	query ModelProds ($modelId: ID!) {
-		prod (modelId: $modelId) {
+		modelProds (modelId: $modelId) {
 			id
 			fullnumber,
       hasDefect,
@@ -21,6 +21,7 @@ export const modelProds = gql`
 			dept {
 				id
 				name
+				type
 			}
 			order {
 				id

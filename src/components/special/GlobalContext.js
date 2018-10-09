@@ -1,7 +1,3 @@
-import React, { Fragment } from 'react'
-
-import cloneDeep from 'lodash/cloneDeep'
-
 import { compose, graphql } from 'react-apollo'
 import { getLayout, getLayoutOptions, setLayout, setExpanded } from '../../graphql/layout'
 

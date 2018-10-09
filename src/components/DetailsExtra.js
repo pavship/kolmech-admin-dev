@@ -1,12 +1,15 @@
 import React, { Fragment } from 'react'
 
 import styled from 'styled-components'
+import { Section } from '../components/styled-semantic/styled-semantic'
 
 import { Query } from 'react-apollo'
 import { modelProds } from '../graphql/prod'
 
 import GlobalContext from './special/GlobalContext'
-import DetailsHeader from './DetailsHeader';
+import DetailsHeader from './DetailsHeader'
+import ProdsByDept from './ProdsByDept'
+import DeptProdTable from './DeptProdTable'
 
 const Container = styled.div`
 	width: 40%;
@@ -18,34 +21,36 @@ const DetailsExtra = ({ closeExtra }) => {
 	return (
 		<GlobalContext>
 			{({ extra, setExtra }) => (
-				// <Query
-				// 	query={modelProds}
-				// 	variables={{ modelId }}
-				// >
-				// 	{({ loading, error, data }) => {
-				// 		if (loading) return 'Загрузка...'
-				// 		if (error) return `Ошибка ${error.message}`
-				// 		console.log('data > ', data)
-						// return (
-							<Container>
-								<DetailsHeader
-									title='Наличие на участках'
-									titleSize='small'
-									closeExtra={closeExtra}
-								/>
-								{extra &&
-									'Extra!'
-								}
-								{/* {type === 'Store'
-									? <ModelProdsList
-											modelId={modelId}
-										/>
-									:	null
-								} */}
-							</Container>
-						// )
-				// 	}}
-				// </Query>
+				<Container>
+					<DetailsHeader
+						title='Наличие на участках'
+						titleSize='small'
+						closeExtra={closeExtra}
+					/>
+					{!!extra &&
+						<Query
+							query={modelProds}
+							variables={{ modelId: extra.modelId }}
+						>
+							{({ loading, error, data }) => {
+								if (loading) return <Section noIndent >Загрузка...</Section>
+								if (error) return <Section noIndent >Ошибка {error.message}</Section>
+								return (
+									<ProdsByDept
+										prods={data.modelProds}
+									>
+										{({ depts }) =>
+											<DeptProdTable
+												depts={depts}
+											/>
+										}
+									</ProdsByDept>
+								)
+							}}
+						</Query>
+					}
+				</Container>
+						
 			)}
 		</GlobalContext>
 	)

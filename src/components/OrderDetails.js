@@ -32,7 +32,7 @@ export default class OrderDetails extends Component {
                 onClick={(e) => {
                   e.stopPropagation()
                   setExtra({
-                    type: 'store',
+                    type: 'Store',
                     modelId: model.id
                   })
                 }}
