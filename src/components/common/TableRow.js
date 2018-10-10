@@ -43,7 +43,7 @@ const Td = styled.td`
 const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, setExpanded, select, ...rest }) => {
 	// rowFields have precedence over tableFields
 	const fields = tableFields.map(f => rowFields.find(rf => rf.name === f.name) || f)
-	const { selected } = entity
+	const { selected, disabled } = entity
 	return (
 		<Row
 			{...rest}
@@ -87,7 +87,13 @@ const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, se
 						}}
 					>
 						<Icon
-							name={'check square outline'}
+							disabled={disabled}
+							name={
+								selected === 'partly' ? 'square' :
+								selected 
+									? 'check square outline'
+									: 'square outline'
+							}
 							// color={f.iconColor || false}
 						/>
 					</Td>

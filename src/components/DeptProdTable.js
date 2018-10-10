@@ -36,7 +36,9 @@ const fields = [{
 
 const DeptProdTable = ({ depts }) => {
 	return (
-		<ProdTableUtils>
+		<ProdTableUtils
+			depts={depts}
+		>
 			{({ select }) => (
 				<Fragment>
 					<Table
@@ -78,7 +80,19 @@ const DeptProdTable = ({ depts }) => {
 														// 		{/* <Label.Detail>ГП</Label.Detail> */}
 														// 	</Label>
 														// )
-													}
+													},
+													{
+														name: 'hasDefect',
+														path: 'hasDefect',
+														icon: 'warning sign',
+														iconColor: 'orange'
+													},
+													{
+														name: 'isSpoiled',
+														path: 'isSpoiled',
+														icon: 'broken chain',
+														iconColor: 'red'
+													},
 												]}
 											>
 											</TableRow>
@@ -92,6 +106,7 @@ const DeptProdTable = ({ depts }) => {
 														key={id}
 														entity={prod}
 														tableFields={tableFields}
+														select={() => select(id)}
 														rowFields={[
 															{
 																name: 'name',

@@ -1,5 +1,6 @@
 import { getLayout } from '../graphql/layout'
 import { allEnquiries } from '../graphql/enquiry'
+import { getLists } from '../graphql/lists'
 
 const resolvers = {
 	Enquiry: {
@@ -23,7 +24,16 @@ const resolvers = {
 			enquiry.isExpanded = value
 			cache.writeQuery({ query, data })
 			return null
-		}
+		},
+		setList: (_, { name, value }, { cache }) => {
+			const query = getLists
+			const data = cache.readQuery({ query })
+			console.log('data > ', data)
+			data.lists[name] = value
+			console.log('data > ', data)
+			cache.writeQuery({ query, data })
+			return null
+		},
 	}
 }
 

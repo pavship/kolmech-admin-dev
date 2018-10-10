@@ -13,11 +13,7 @@ const IconRight = styled(Icon)`
 
 export default class OrderDetails extends Component {
   render() {
-    const { order: {
-      id,
-      model,
-      qty
-    } } = this.props
+    const { order: { id, model, qty } } = this.props
     return (
       <GlobalContext>
         {({ extra, setExtra }) => (
@@ -33,7 +29,8 @@ export default class OrderDetails extends Component {
                   e.stopPropagation()
                   setExtra({
                     type: 'Store',
-                    modelId: model.id
+                    modelId: model.id,
+                    orderId: id
                   })
                 }}
               >

@@ -23,7 +23,7 @@ const Container = styled.div`
 const DetailsExtra = ({ closeExtra }) => {
 	return (
 		<GlobalContext>
-			{({ extra }) => (
+			{({ extra, selectedProdIds }) => (
 				<Container>
 					{!!extra && 
 						<Fragment>
@@ -49,6 +49,8 @@ const DetailsExtra = ({ closeExtra }) => {
 									return (
 										<ProdsByDept
 											prods={data.modelProds}
+											selectedIds={selectedProdIds}
+											orderId={extra.orderId}
 										>
 											{({ depts }) =>
 												<DeptProdTable

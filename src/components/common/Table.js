@@ -34,13 +34,12 @@ export class Table extends Component {
 		this.setState({ expandedIds: newIds })
 	}
 	render() {
-		console.log('isSelectable > ', this.isSelectable)
 		const { expandedIds } = this.state
 		const { fields, children } = this.props
 		const fieldsExtended = [
 			{ 
 				name: 'serviceField',
-				width: '25px'
+				width: '23px'
 			},
 			...this.isSelectable && [{
 				name: 'select',
@@ -50,7 +49,6 @@ export class Table extends Component {
 			// lastField is needed to take remaining width in fixed table-layout
 			{ name: 'lastField' }
 		]
-		console.log('fieldsExtended > ', fieldsExtended)
 		return (
 			<STable><tbody>
 			<Fragment>

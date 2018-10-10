@@ -1,5 +1,6 @@
 import { compose, graphql } from 'react-apollo'
 import { getLayout, getLayoutOptions, setLayout, setExpanded } from '../../graphql/layout'
+import { getLists, getListsOptions } from '../../graphql/lists'
 
 // const GlobalContext = React.createContext()
 
@@ -22,10 +23,16 @@ import { getLayout, getLayoutOptions, setLayout, setExpanded } from '../../graph
 // 	}
 // }
 
-const GlobalContext = ({ children, layout: { details, extra }, setLayout, setExpanded }) => {
+const GlobalContext = ({
+		children,
+		layout: { details, extra },
+		setLayout,
+		setExpanded,
+		lists: { selectedProdIds }
+}) => {
 	setLayout({ variables: { 
 		details: {"type":"Order","id":"cjmzkpstb00170983jkb7bcbq"},
-		extra: {"type":"Store","modelId":"cjcfy68q55d3x0149fcpq7l63"}
+		extra: {"type":"Store","modelId":"cjcfy68q55d3x0149fcpq7l63","orderId":"cjmzkpstb00170983jkb7bcbq"}
 	} })
   return children({
 		details,
@@ -38,6 +45,7 @@ const GlobalContext = ({ children, layout: { details, extra }, setLayout, setExp
 		},
 		setExtra: (extra) => setLayout({ variables: { extra } }),
 		setExpanded: (args) => setExpanded({variables: { args }}),
+		selectedProdIds,
 	})
 }
 
@@ -45,6 +53,7 @@ export default compose(
 	graphql(getLayout, getLayoutOptions),
 	graphql(setLayout, { name: 'setLayout' }),
 	graphql(setExpanded, { name: 'setExpanded' }),
+	graphql(getLists, getListsOptions),
 )(GlobalContext)
 	
 // export default GlobalContextProvider
