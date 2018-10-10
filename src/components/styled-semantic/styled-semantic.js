@@ -179,7 +179,7 @@ export const Section = styled(SectionPropFiltered)`
 			border-top: 1px solid rgba(34,36,38,.15);
 		}`}
 		${props => props.bottomBorder && `{
-			border-bottom: 1px solid rgba(34,36,38,.1);
+			border-bottom: 1px solid ${props.bottomBorder === 'dark' ? '#7e7e81' : 'rgba(34,36,38,.1)'};
 		}`}
 	}
 `

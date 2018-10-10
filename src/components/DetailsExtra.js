@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Section } from '../components/styled-semantic/styled-semantic'
 
 import { Query } from 'react-apollo'
+import { modelLocal } from '../graphql/model'
 import { modelProds } from '../graphql/prod'
 
 import GlobalContext from './special/GlobalContext'
@@ -20,34 +21,43 @@ const Container = styled.div`
 const DetailsExtra = ({ closeExtra }) => {
 	return (
 		<GlobalContext>
-			{({ extra, setExtra }) => (
+			{({ extra }) => (
 				<Container>
-					<DetailsHeader
-						title='Наличие на участках'
-						titleSize='small'
-						closeExtra={closeExtra}
-					/>
-					{!!extra &&
-						<Query
-							query={modelProds}
-							variables={{ modelId: extra.modelId }}
-						>
-							{({ loading, error, data }) => {
-								if (loading) return <Section noIndent >Загрузка...</Section>
-								if (error) return <Section noIndent >Ошибка {error.message}</Section>
-								return (
-									<ProdsByDept
-										prods={data.modelProds}
-									>
-										{({ depts }) =>
-											<DeptProdTable
-												depts={depts}
-											/>
-										}
-									</ProdsByDept>
-								)
-							}}
-						</Query>
+					{!!extra && 
+						<Fragment>
+							<Query
+								query={modelLocal}
+								variables={{ id: extra.modelId }}
+							>
+								{({ data: { modelLocal } }) =>
+									<DetailsHeader
+										title={modelLocal.name + ' в наличии'}
+										titleSize='small'
+										closeExtra={closeExtra}
+									/>
+								}
+							</Query>
+							<Query
+								query={modelProds}
+								variables={{ modelId: extra.modelId }}
+							>
+								{({ loading, error, data }) => {
+									if (loading) return <Section noIndent >Загрузка...</Section>
+									if (error) return <Section noIndent >Ошибка {error.message}</Section>
+									return (
+										<ProdsByDept
+											prods={data.modelProds}
+										>
+											{({ depts }) =>
+												<DeptProdTable
+													depts={depts}
+												/>
+											}
+										</ProdsByDept>
+									)
+								}}
+							</Query>
+						</Fragment>
 					}
 				</Container>
 						

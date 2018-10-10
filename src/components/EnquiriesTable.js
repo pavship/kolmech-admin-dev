@@ -6,30 +6,37 @@ import Table from './common/Table'
 import TableRow from './common/TableRow'
 
 const fields = [{
+	name: 'num',
 	path: 'num',
 	title: '№',
 	width: '40px'
 },{
+	name: 'date',
 	path: 'dateLocal',
 	title: 'Дата',
 	width: '110px'
 },{
+	name: 'org',
 	path: 'org.name',
 	title: 'Организация',
 	width: '250px'
 },{
+	name: 'model',
 	path: 'model.name',
 	title: 'Изделие',
 	width: '250px'
 },{
+	name: 'qty',
 	path: 'qty',
 	title: 'Кол.',
 	width: '50px'
 },{
+	name: 'amount',
 	path: 'lastCoEvents.0.doc.amount',
 	title: 'Сумма',
 	width: '105px'
 },{
+	name: 'status',
 	path: 'curStatusEvents.0.status.name',
 	title: 'Статус',
 	width: '130px'
@@ -55,7 +62,13 @@ const EnquiriesTable = ({ enquiries }) => {
 												tableFields={tableFields}
 												expandFor='orders'
 												expanded={isExpanded}
-												setExpanded={setExpanded}
+												// setExpanded={setExpanded}
+												setExpanded={() => {
+													setExpanded({
+														id,
+														value: !isExpanded
+													}
+												)}}
 												active={
 													details
 													&& details.type === 'Enquiry'
@@ -84,17 +97,17 @@ const EnquiriesTable = ({ enquiries }) => {
 														entity={order}
 														tableFields={tableFields}
 														rowFields={[{
-															path: 'num',
+															name: 'num',
 															value: enquiry.num + '-' + num
 														},{
-															path: 'org.name',
+															name: 'org',
 															value: enquiry.org.name
 														},{
-															path: 'model.name',
+															name: 'model',
 															value: enquiry.model.name
 														},{
-															path: 'lastCoEvents.0.doc.amount',
-															correctPath: 'amount'
+															name: 'amount',
+															path: 'amount'
 														}]}
 														active={
 															details

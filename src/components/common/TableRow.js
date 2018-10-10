@@ -16,6 +16,7 @@ const Row = styled.tr`
 		// >td {
 		// 	padding-left: 3px;
 		// }
+		// @ts-ignore
 		${!props.lastSecondaryRow && 'border-bottom: none;'}
 	}`}
 	// @ts-ignore
@@ -33,47 +34,43 @@ const Row = styled.tr`
 
 const Td = styled.td`
 	padding-right: 4px;
-	${props => props.service && `
+	/* ${props => props.service && `
 		padding-left: 3px;
 		&:hover {
 			background: white !important;
 		}`
-	}
+	} */
 `
 
-const TableRow = ({ tableFields, rowFields, entity, expandFor, expanded, setExpanded, ...rest }) => {
-	// console.log('entity > ', entity)
-	const fields = !rowFields
-		? tableFields
-		: rowFields.reduce((fields, rf) => {
-				const f = fields.find(tf => rf.path === tf.path)
-				if (!f) return fields
-				if (rf.correctPath) f.path = rf.correctPath
-				if (rf.value) f.value = rf.value
-				return fields
-			}, tableFields.map(f => ({...f})))
+const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, setExpanded, ...rest }) => {
+	const fields = tableFields.map(f => rowFields.find(rf => rf.name === f.name) || f)
 	return (
 		<Row
 			{...rest}
 		>
 			{fields.map(f => {
-				let val = f.value || getObjProp(entity, f.path)
-				if (val && f.path.indexOf('amount') !== -1) val = currency(val)
+				// console.log(f)
+				let val = f.value || (f.path ? getObjProp(entity, f.path) : null)
+				if (val && f.name === 'amount') val = currency(val)
 				if (
-					f.path === 'serviceField'
+					f.name === 'serviceField'
 					&& typeof expanded !== 'undefined'
 					&& entity[expandFor].length
 				) return (
 					<Td
 						service
-						key={f.path}
+						key={f.name}
+						// onClick={(e) => {
+						// 	e.stopPropagation()
+						// 	setExpanded({
+						// 		id: entity.id,
+						// 		value: !entity.isExpanded
+						// 	}
+						// )}}
 						onClick={(e) => {
 							e.stopPropagation()
-							setExpanded({
-								id: entity.id,
-								value: !entity.isExpanded
-							}
-						)}}
+							setExpanded()
+						}}
 					>
 						<Caret
 							active={expanded ? 1 : 0}
@@ -82,7 +79,7 @@ const TableRow = ({ tableFields, rowFields, entity, expandFor, expanded, setExpa
 				)
 				return (
 					<Td
-						key={f.path}
+						key={f.name}
 					>
 						{val}
 					</Td>

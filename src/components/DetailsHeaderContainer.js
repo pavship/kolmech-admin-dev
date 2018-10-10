@@ -46,7 +46,7 @@ const DetailsHeaderContainer = ({ closeDetails, closeExtra, expanded, disabled, 
 			head
 			noLP
 			noIndent={headerType === 'extra'}
-			bottomBorder
+			bottomBorder={headerType === 'extra' ? 'dark' : true}
 			minor={headerType === 'main'}
 			small={['expandable', 'extra'].includes(headerType)}
 			onClick={onClick}
