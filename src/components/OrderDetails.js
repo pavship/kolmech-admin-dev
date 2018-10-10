@@ -6,6 +6,8 @@ import { Button } from './styled-semantic/styled-semantic'
 
 import GlobalContext from './special/GlobalContext'
 import CollapsableSection from './CollapsableSection'
+import ProdsByDept from './ProdsByDept';
+import DeptProdTable from './DeptProdTable';
 
 const IconRight = styled(Icon)`
   &&&& { margin: 0 -.42857143em 0 .42857143em; }
@@ -13,10 +15,10 @@ const IconRight = styled(Icon)`
 
 export default class OrderDetails extends Component {
   render() {
-    const { order: { id, model, qty } } = this.props
+    const { order: { id, model, qty, prods } } = this.props
     return (
       <GlobalContext>
-        {({ extra, setExtra }) => (
+        {({ extra, setExtra, selectedProdIds }) => (
           <CollapsableSection
             forceExpanded={!!extra}
             title={model.name}
@@ -39,10 +41,18 @@ export default class OrderDetails extends Component {
               </Button>
             }
           >
-            hello! 
-            sdfgsd
-            dsfgsdgfdsfgsd
-            dsfg
+            <ProdsByDept
+              prods={prods}
+              selectedIds={selectedProdIds}
+              orderProdsQty={qty}
+            >
+              {({ depts }) =>
+                <DeptProdTable
+                  depts={depts}
+                  skipFields={['reserve']}
+                />
+              }
+            </ProdsByDept>
           </CollapsableSection>
         )}
       </GlobalContext>

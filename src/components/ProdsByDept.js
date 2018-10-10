@@ -1,6 +1,10 @@
 import _ from 'lodash'
 
-const ProdsByDept = ({ prods, selectedIds, orderId, children }) => {
+const ProdsByDept = ({ prods, selectedIds, orderId, orderProdsQty, children }) => {
+  const mode = 
+    orderId
+    ? 'extra'
+    : 'order'
   const depts = _(prods)
     .sortBy(['dept.type', 'dept.name'])
     .groupBy('dept.name')
@@ -13,28 +17,45 @@ const ProdsByDept = ({ prods, selectedIds, orderId, children }) => {
         isSpoiled: _.countBy(prods, 'isSpoiled').true,
         prods: prods.map(p => ({
           ...p,
-          selected: selectedIds.includes(p.id),
-          disabled: !!p.order && p.order.id !== orderId
+          ...mode === 'extra' && {
+            selected: selectedIds.includes(p.id),
+            disabled: !!p.order && p.order.id !== orderId
+          }
         }))
       }
-      dept = {
-        ...dept,
-        selectedCount: _.countBy(dept.prods, 'selected').true || 0,
-        disabledCount: _.countBy(dept.prods, 'disabled').true || 0,
-        availCount: dept.count - (_.countBy(dept.prods, 'disabled').true || 0),
-        disabled: _.every(dept.prods, 'disabled'),
-      }
-      dept = {
-        ...dept,
-        selected:
-          dept.selectedCount === dept.availCount ? true :
-          dept.selectedCount === 0 ? false :
-          'partly'
+      if (mode === 'extra') {
+        dept = {
+          ...dept,
+          selectedCount: _.countBy(dept.prods, 'selected').true || 0,
+          disabledCount: _.countBy(dept.prods, 'disabled').true || 0,
+          availCount: dept.count - (_.countBy(dept.prods, 'disabled').true || 0),
+          disabled: _.every(dept.prods, 'disabled'),
+        }
+        dept = {
+          ...dept,
+          selected:
+            dept.selectedCount === dept.availCount ? true :
+            dept.selectedCount === 0 ? false :
+            'partly'
+        }
       }
       depts.push(dept)
-      // console.log('available > ', dept.available)
       return depts
     }, [])
+  if (mode === 'order') {
+    const unreservedProdsCount = 
+      orderProdsQty - depts.reduce(
+        (prodCount, d) => prodCount += d.prods.length
+      , 0)
+    if (unreservedProdsCount) {
+      depts.push({
+        id: 'unreserved',
+        name: 'Без резерва',
+        count: unreservedProdsCount,
+        prods: []
+      })
+    }
+  }
   console.log('depts > ', depts)
   return children({ depts })
 }

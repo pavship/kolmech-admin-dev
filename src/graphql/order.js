@@ -41,6 +41,18 @@ export const orderDetails = gql`
 				id
 				name
 			}
+			prods {
+				id
+				fullnumber,
+				hasDefect,
+				isSpoiled,
+				progress,
+				dept {
+					id
+					name
+					type
+				}
+			}
 			events {
 				id
 				datetimeLocal

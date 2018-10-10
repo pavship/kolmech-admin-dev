@@ -1,8 +1,5 @@
 import React, { Fragment } from 'react'
 
-import { Icon, Label } from 'semantic-ui-react'
-
-import GlobalContext from './special/GlobalContext'
 import Table from './common/Table'
 import TableRow from './common/TableRow'
 import ProdTableUtils from './ProdTableUtils';
@@ -34,7 +31,7 @@ const fields = [{
 	width: '85px'
 }]
 
-const DeptProdTable = ({ depts }) => {
+const DeptProdTable = ({ depts, skipFields = [] }) => {
 	return (
 		<ProdTableUtils
 			depts={depts}
@@ -42,12 +39,25 @@ const DeptProdTable = ({ depts }) => {
 			{({ select }) => (
 				<Fragment>
 					<Table
-						fields={fields}
+						fields={fields.filter(f => !skipFields.includes(f.name))}
 						select={select}
 					>
 						{({ tableFields, expandedIds, toggleExpanded }) => <Fragment>
 							{depts.map(dept => {
 									const { id } = dept
+									if (id === 'unreserved') return (
+										<TableRow
+											key={id}
+											entity={dept}
+											tableFields={tableFields}
+											rowFields={[
+												{
+													name: 'name',
+													value: dept.name + ' ('+ dept.count + ')'
+												},
+											]}
+										/>
+									)
 									const isExpanded = expandedIds.includes(id)
 									return (
 										<Fragment
@@ -94,8 +104,7 @@ const DeptProdTable = ({ depts }) => {
 														iconColor: 'red'
 													},
 												]}
-											>
-											</TableRow>
+											/>
 											{	isExpanded && dept.prods.map((prod, i) => {
 												const { id, progress } = prod
 												return (
@@ -140,8 +149,7 @@ const DeptProdTable = ({ depts }) => {
 															// 	id
 															// })
 														}}
-													>
-													</TableRow>
+													/>
 												)
 											})}
 										</Fragment>

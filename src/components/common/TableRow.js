@@ -40,7 +40,16 @@ const Td = styled.td`
 	`}
 `
 
-const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, setExpanded, select, ...rest }) => {
+const TableRow = ({
+	tableFields,
+	rowFields = [],
+	entity,
+	expandFor,
+	expanded,
+	setExpanded,
+	select,
+	...rest 
+}) => {
 	// rowFields have precedence over tableFields
 	const fields = tableFields.map(f => rowFields.find(rf => rf.name === f.name) || f)
 	const { selected, disabled } = entity
@@ -77,10 +86,11 @@ const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, se
 				)
 				if (
 					f.name === 'select'
+					&& typeof select !== 'undefined'
 				) return (
 					<Td
-						service
 						key={f.name}
+						service
 						onClick={(e) => {
 							e.stopPropagation()
 							select()
@@ -94,7 +104,6 @@ const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, se
 									? 'check square outline'
 									: 'square outline'
 							}
-							// color={f.iconColor || false}
 						/>
 					</Td>
 				)
