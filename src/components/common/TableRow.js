@@ -35,16 +35,15 @@ const Row = styled.tr`
 
 const Td = styled.td`
 	padding-right: 4px;
-	/* ${props => props.service && `
+	${props => props.service && `
 		padding-left: 3px;
-		&:hover {
-			background: white !important;
-		}`
-	} */
+	`}
 `
 
-const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, setExpanded, ...rest }) => {
+const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, setExpanded, select, ...rest }) => {
+	// rowFields have precedence over tableFields
 	const fields = tableFields.map(f => rowFields.find(rf => rf.name === f.name) || f)
+	const { selected } = entity
 	return (
 		<Row
 			{...rest}
@@ -58,8 +57,6 @@ const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, se
 						{f.content}
 					</Td>
 				)
-				let val = f.value || (f.path ? getObjProp(entity, f.path) : null)
-				if (val && f.name === 'amount') val = currency(val)
 				if (
 					f.name === 'serviceField'
 					&& typeof expanded !== 'undefined'
@@ -68,13 +65,6 @@ const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, se
 					<Td
 						service
 						key={f.name}
-						// onClick={(e) => {
-						// 	e.stopPropagation()
-						// 	setExpanded({
-						// 		id: entity.id,
-						// 		value: !entity.isExpanded
-						// 	}
-						// )}}
 						onClick={(e) => {
 							e.stopPropagation()
 							setExpanded()
@@ -85,18 +75,37 @@ const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, se
 						/>
 					</Td>
 				)
+				if (
+					f.name === 'select'
+				) return (
+					<Td
+						service
+						key={f.name}
+						onClick={(e) => {
+							e.stopPropagation()
+							select()
+						}}
+					>
+						<Icon
+							name={'check square outline'}
+							// color={f.iconColor || false}
+						/>
+					</Td>
+				)
+				let val = f.value || (f.path ? getObjProp(entity, f.path) : null)
+				if (val && f.name === 'amount') val = currency(val)
 				return (
-						<Td
-							key={f.name}
-						>
-							{val && f.icon &&
-								<Icon
-									name={f.icon}
-									color={f.iconColor || false}
-								/>
-							}
-							{val}
-						</Td>
+					<Td
+						key={f.name}
+					>
+						{val && f.icon &&
+							<Icon
+								name={f.icon}
+								color={f.iconColor || false}
+							/>
+						}
+						{val}
+					</Td>
 				)
 			})}
 		</Row>

@@ -5,6 +5,7 @@ import { Icon, Label } from 'semantic-ui-react'
 import GlobalContext from './special/GlobalContext'
 import Table from './common/Table'
 import TableRow from './common/TableRow'
+import ProdTableUtils from './ProdTableUtils';
 
 const fields = [{
 	name: 'name',
@@ -35,11 +36,12 @@ const fields = [{
 
 const DeptProdTable = ({ depts }) => {
 	return (
-		<GlobalContext>
-			{({ details, setDetails, setExpanded }) => (
+		<ProdTableUtils>
+			{({ select }) => (
 				<Fragment>
 					<Table
 						fields={fields}
+						select={select}
 					>
 						{({ tableFields, expandedIds, toggleExpanded }) => <Fragment>
 							{depts.map(dept => {
@@ -58,6 +60,7 @@ const DeptProdTable = ({ depts }) => {
 												onClick={() => {
 													toggleExpanded(id)
 												}}
+												select={() => select(id)}
 												rowFields={[
 													{
 														name: 'name',
@@ -134,7 +137,7 @@ const DeptProdTable = ({ depts }) => {
 					{/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
 				</Fragment>
 			)}
-		</GlobalContext>
+		</ProdTableUtils>
 	)
 }
 

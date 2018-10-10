@@ -22,6 +22,7 @@ const Td = styled.td`
 `
 
 export class Table extends Component {
+	isSelectable = typeof this.props.select !== 'undefined'
 	state={
 		expandedIds: []
 	}
@@ -33,6 +34,7 @@ export class Table extends Component {
 		this.setState({ expandedIds: newIds })
 	}
 	render() {
+		console.log('isSelectable > ', this.isSelectable)
 		const { expandedIds } = this.state
 		const { fields, children } = this.props
 		const fieldsExtended = [
@@ -40,10 +42,15 @@ export class Table extends Component {
 				name: 'serviceField',
 				width: '25px'
 			},
+			...this.isSelectable && [{
+				name: 'select',
+				width: '25px'
+			}],
 			...fields,
 			// lastField is needed to take remaining width in fixed table-layout
 			{ name: 'lastField' }
 		]
+		console.log('fieldsExtended > ', fieldsExtended)
 		return (
 			<STable><tbody>
 			<Fragment>

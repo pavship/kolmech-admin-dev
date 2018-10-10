@@ -14,6 +14,8 @@ import DeptProdTable from './DeptProdTable'
 
 const Container = styled.div`
 	width: 40%;
+	min-height: calc(100vh - 36px);
+	height: fit-content;
 	/* border-left: 1px solid rgb(126, 126, 129); */
 	border-left: 1px solid rgb(156, 156, 159);
 `
