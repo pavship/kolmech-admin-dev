@@ -23,6 +23,10 @@ import { getLayout, getLayoutOptions, setLayout, setExpanded } from '../../graph
 // }
 
 const GlobalContext = ({ children, layout: { details, extra }, setLayout, setExpanded }) => {
+	setLayout({ variables: { 
+		details: {"type":"Order","id":"cjmzkpstb00170983jkb7bcbq"},
+		extra: {"type":"Store","modelId":"cjcfy68q55d3x0149fcpq7l63"}
+	} })
   return children({
 		details,
 		extra,

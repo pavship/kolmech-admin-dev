@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import styled from 'styled-components'
+import { Icon } from 'semantic-ui-react'
 import { Caret } from '../styled-semantic/styled-semantic'
 
 import { getObjProp } from '../../utils/object'
@@ -50,6 +51,13 @@ const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, se
 		>
 			{fields.map(f => {
 				// console.log(f)
+				if (f.content) return (
+					<Td
+						key={f.name}
+					>
+						{f.content}
+					</Td>
+				)
 				let val = f.value || (f.path ? getObjProp(entity, f.path) : null)
 				if (val && f.name === 'amount') val = currency(val)
 				if (
@@ -78,11 +86,17 @@ const TableRow = ({ tableFields, rowFields = [], entity, expandFor, expanded, se
 					</Td>
 				)
 				return (
-					<Td
-						key={f.name}
-					>
-						{val}
-					</Td>
+						<Td
+							key={f.name}
+						>
+							{val && f.icon &&
+								<Icon
+									name={f.icon}
+									color={f.iconColor || false}
+								/>
+							}
+							{val}
+						</Td>
 				)
 			})}
 		</Row>

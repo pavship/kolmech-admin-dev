@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react'
 
-import GlobalContext from './special/GlobalContext'
+import { Icon, Label } from 'semantic-ui-react'
 
+import GlobalContext from './special/GlobalContext'
 import Table from './common/Table'
 import TableRow from './common/TableRow'
 
@@ -33,7 +34,6 @@ const fields = [{
 }]
 
 const DeptProdTable = ({ depts }) => {
-	console.log('depts > ', depts)
 	return (
 		<GlobalContext>
 			{({ details, setDetails, setExpanded }) => (
@@ -44,7 +44,6 @@ const DeptProdTable = ({ depts }) => {
 						{({ tableFields, expandedIds, toggleExpanded }) => <Fragment>
 							{depts.map(dept => {
 									const { id } = dept
-									console.log('expandedIds > ', expandedIds)
 									const isExpanded = expandedIds.includes(id)
 									return (
 										<Fragment
@@ -59,10 +58,29 @@ const DeptProdTable = ({ depts }) => {
 												onClick={() => {
 													toggleExpanded(id)
 												}}
+												rowFields={[
+													{
+														name: 'name',
+														value: dept.name + ' ('+ dept.count + ')'
+													},
+													{
+														name: 'progress',
+														path: 'readyCount',
+														icon: 'checkmark',
+														iconColor: 'green'
+														// content: (
+														// 	<Label basic>
+														// 		<Icon name='checkmark' color='green' />
+														// 			{dept.readyCount}
+														// 		{/* <Label.Detail>ГП</Label.Detail> */}
+														// 	</Label>
+														// )
+													}
+												]}
 											>
 											</TableRow>
 											{	isExpanded && dept.prods.map((prod, i) => {
-												const { id, num } = prod
+												const { id, progress } = prod
 												return (
 													// @ts-ignore
 													<TableRow
@@ -71,20 +89,27 @@ const DeptProdTable = ({ depts }) => {
 														key={id}
 														entity={prod}
 														tableFields={tableFields}
-														rowFields={[{
-															name: 'name',
-															path: 'fullnumber'
-														},
-														// {
-														// 	path: 'org.name',
-														// 	value: dept.org.name
-														// },{
-														// 	path: 'model.name',
-														// 	value: dept.model.name
-														// },{
-														// 	path: 'lastCoEvents.0.doc.amount',
-														// 	correctPath: 'amount'
-														// }
+														rowFields={[
+															{
+																name: 'name',
+																path: 'fullnumber'
+															},
+															{
+																name: 'progress',
+																value: progress && progress + '%'
+															},
+															{
+																name: 'hasDefect',
+																path: 'hasDefect',
+																icon: 'warning sign',
+																iconColor: 'orange'
+															},
+															{
+																name: 'isSpoiled',
+																path: 'isSpoiled',
+																icon: 'broken chain',
+																iconColor: 'red'
+															},
 														]}
 														// active={
 														// 	details
