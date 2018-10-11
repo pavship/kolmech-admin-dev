@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { compose, graphql } from 'react-apollo'
-import { getLists, getListsOptions, setList } from '../graphql/lists'
+// import { getLists, getListsOptions, setList } from '../graphql/lists'
 
 import cloneDeep from 'lodash/cloneDeep'
 import without from 'lodash/without'
@@ -11,7 +11,8 @@ import find from 'lodash/fp/find'
 class ProdTableUtils extends Component {
 	select = (id) => {
 		const depts = cloneDeep(this.props.depts)
-		const { lists: { selectedProdIds }, setList } = this.props
+		// const { lists: { selectedProdIds }, setList } = this.props
+		const { selectedProdIds, setList } = this.props
 		const dept = find({ id }, depts) || find({ prods: [ { id } ]}, depts)
 		const prods = dept.prods
 		const entity = dept.id === id ? dept : find({ id }, prods)
@@ -24,13 +25,7 @@ class ProdTableUtils extends Component {
 			if (entity.selected === true) newList = difference(selectedProdIds, prods.map(p => p.id))
 			if ([ 'partly', false ].includes(entity.selected)) newList = union(selectedProdIds, prods.map(p => !p.disabled && p.id))
 		}
-		console.log('newList > ', newList)
-		setList({
-			variables: {
-				name: 'selectedProdIds',
-				value: newList
-			}
-		})
+		setList(newList)
 	}
 	render () {
 		const { children } = this.props
@@ -40,7 +35,8 @@ class ProdTableUtils extends Component {
 	}
 }
 
-export default compose(
-	graphql(getLists, getListsOptions),
-	graphql(setList, { name: 'setList' }),
-)(ProdTableUtils)
+export default ProdTableUtils
+// export default compose(
+	// graphql(getLists, getListsOptions),
+	// graphql(setList, { name: 'setList' }),
+// )(ProdTableUtils)

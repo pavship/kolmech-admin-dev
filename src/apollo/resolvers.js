@@ -26,6 +26,7 @@ const resolvers = {
 			return null
 		},
 		setList: (_, { name, value }, { cache }) => {
+			console.log('name, value > ', name, value)
 			const query = getLists
 			const data = cache.readQuery({ query })
 			console.log('data > ', data)
