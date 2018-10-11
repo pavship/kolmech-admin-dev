@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 import Table from './common/Table'
 import TableRow from './common/TableRow'
 import ProdTableUtils from './ProdTableUtils';
-import GlobalContext from './special/GlobalContext';
+// import GlobalContext from './special/GlobalContext';
 
 const fields = [{
 	name: 'name',
@@ -32,14 +32,13 @@ const fields = [{
 	width: '85px'
 }]
 
-const DeptProdTable = ({ depts, skipFields = [] }) => {
+const DeptProdTable = ({ depts, skipFields = [], setSelectedProdIds }) => {
 	return (
-		<GlobalContext>
-			{({ selectedProdIds, setSelectedProdIds }) => 
+		// <GlobalContext>
+		// 	{({ selectedProdIds, setSelectedProdIds }) => 
 				<ProdTableUtils
 					depts={depts}
-					selectedProdIds={selectedProdIds}
-					setList={(l) => setSelectedProdIds(l)}
+					setList={setSelectedProdIds}
 				>
 					{({ select }) => (
 						<Fragment>
@@ -166,8 +165,8 @@ const DeptProdTable = ({ depts, skipFields = [] }) => {
 						</Fragment>
 					)}
 				</ProdTableUtils>
-			}
-		</GlobalContext>
+		// 	}
+		// </GlobalContext>
 	)
 }
 

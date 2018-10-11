@@ -11,8 +11,8 @@ import find from 'lodash/fp/find'
 class ProdTableUtils extends Component {
 	select = (id) => {
 		const depts = cloneDeep(this.props.depts)
-		// const { lists: { selectedProdIds }, setList } = this.props
-		const { selectedProdIds, setList } = this.props
+		const { setList } = this.props
+		const selectedProdIds = depts.reduce((list, d) => [...list, ...d.prods.filter(p => p.selected)], [])
 		const dept = find({ id }, depts) || find({ prods: [ { id } ]}, depts)
 		const prods = dept.prods
 		const entity = dept.id === id ? dept : find({ id }, prods)
@@ -36,7 +36,3 @@ class ProdTableUtils extends Component {
 }
 
 export default ProdTableUtils
-// export default compose(
-	// graphql(getLists, getListsOptions),
-	// graphql(setList, { name: 'setList' }),
-// )(ProdTableUtils)

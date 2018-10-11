@@ -18,7 +18,7 @@ export default class OrderDetails extends Component {
     const { order: { id, model, qty, prods } } = this.props
     return (
       <GlobalContext>
-        {({ extra, setExtra, selectedProdIds }) => (
+        {({ extra, setExtra, selectedProdIds, setSelectedProdIds }) => (
           <CollapsableSection
             forceExpanded={!!extra}
             title={model.name}
@@ -49,6 +49,7 @@ export default class OrderDetails extends Component {
               {({ depts }) =>
                 <DeptProdTable
                   depts={depts}
+                  setSelectedProdIds={setSelectedProdIds}
                   skipFields={['reserve']}
                 />
               }

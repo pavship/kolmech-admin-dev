@@ -23,7 +23,7 @@ const Container = styled.div`
 const DetailsExtra = ({ closeExtra }) => {
 	return (
 		<GlobalContext>
-			{({ extra, selectedProdIds }) => (
+			{({ extra, selectedProdIds, setSelectedProdIds }) => (
 				<Container>
 					{!!extra && 
 						<Fragment>
@@ -55,6 +55,7 @@ const DetailsExtra = ({ closeExtra }) => {
 											{({ depts }) =>
 												<DeptProdTable
 													depts={depts}
+                  				setSelectedProdIds={setSelectedProdIds}
 												/>
 											}
 										</ProdsByDept>
