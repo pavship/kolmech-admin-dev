@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import styled from 'styled-components'
 
@@ -13,16 +13,11 @@ const Container = styled.div`
 	/* flex-grow: 1; */
 	width: 60%;
 `
-	// width: ${props => props.extra ? '100%' : `calc(100% - ${props.theme.widths.extraSidebar})`
-	// 	width: 100%;
-	// 	` : `
-	// 	width: 100%;
-	// `}
 
 const Details = ({ closeDetails }) => {
 	return (
 		<GlobalContext>
-			{({ details: { type, id, enquiryId, editMode}, extra, setDetails }) => (
+			{({ details: { type, id, enquiryId, editMode}, setDetails }) => (
 				<DetailsDataProvider
 					type={type}
 					id={id}

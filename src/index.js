@@ -54,6 +54,9 @@ const client = new ApolloClient({
 					getCacheKey({ __typename: 'Order', id: args.id }),
 				modelLocal: (_, args, { getCacheKey }) =>
 					getCacheKey({ __typename: 'Model', id: args.id }),
+				prodsLocal: (_, args, { getCacheKey }) =>
+					args.ids.map(id =>
+						getCacheKey({ __typename: 'Prod', id: id }))
 			}
 		}
 	})

@@ -10,7 +10,9 @@ import { modelProds } from '../graphql/prod'
 import GlobalContext from './special/GlobalContext'
 import DetailsHeader from './DetailsHeader'
 import ProdsByDept from './ProdsByDept'
+import ProdTableUtils from './ProdTableUtils'
 import DeptProdTable from './DeptProdTable'
+import ListProvider from './special/ListProvider';
 
 const Container = styled.div`
 	width: 40%;
@@ -47,18 +49,31 @@ const DetailsExtra = ({ closeExtra }) => {
 									if (loading) return <Section noIndent >Загрузка...</Section>
 									if (error) return <Section noIndent >Ошибка {error.message}</Section>
 									return (
-										<ProdsByDept
-											prods={data.modelProds}
-											selectedIds={selectedProdIds}
-											orderId={extra.orderId}
-										>
-											{({ depts }) =>
-												<DeptProdTable
-													depts={depts}
-                  				setSelectedProdIds={setSelectedProdIds}
-												/>
+										<ListProvider>
+											{({ list: expandedIds, toggle: toggleExpanded }) =>
+												<ProdsByDept
+													prods={data.modelProds}
+													selectedIds={selectedProdIds}
+													orderId={extra.orderId}
+													expandedIds={expandedIds}
+												>
+													{({ depts }) =>
+														<ProdTableUtils
+															depts={depts}
+															setList={setSelectedProdIds}
+														>
+															{({ select }) =>
+																<DeptProdTable
+																	depts={depts}
+																	select={select}
+																	expand={toggleExpanded}
+																/>
+															}
+														</ProdTableUtils>
+													}
+												</ProdsByDept>
 											}
-										</ProdsByDept>
+										</ListProvider>
 									)
 								}}
 							</Query>

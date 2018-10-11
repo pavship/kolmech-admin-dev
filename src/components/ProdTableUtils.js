@@ -12,7 +12,7 @@ class ProdTableUtils extends Component {
 	select = (id) => {
 		const depts = cloneDeep(this.props.depts)
 		const { setList } = this.props
-		const selectedProdIds = depts.reduce((list, d) => [...list, ...d.prods.filter(p => p.selected)], [])
+		const selectedProdIds = depts.reduce((list, d) => [...list, ...d.prods.filter(p => p.selected).map(p => p.id)], [])
 		const dept = find({ id }, depts) || find({ prods: [ { id } ]}, depts)
 		const prods = dept.prods
 		const entity = dept.id === id ? dept : find({ id }, prods)

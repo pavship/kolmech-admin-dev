@@ -46,7 +46,7 @@ const TableRow = ({
 	entity,
 	expandFor,
 	expanded,
-	setExpanded,
+	expand,
 	select,
 	...rest 
 }) => {
@@ -76,7 +76,7 @@ const TableRow = ({
 						key={f.name}
 						onClick={(e) => {
 							e.stopPropagation()
-							setExpanded()
+							expand()
 						}}
 					>
 						<Caret

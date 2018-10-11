@@ -32,141 +32,121 @@ const fields = [{
 	width: '85px'
 }]
 
-const DeptProdTable = ({ depts, skipFields = [], setSelectedProdIds }) => {
+const DeptProdTable = ({ depts, select, expand, skipFields = [] }) => {
 	return (
-		// <GlobalContext>
-		// 	{({ selectedProdIds, setSelectedProdIds }) => 
-				<ProdTableUtils
-					depts={depts}
-					setList={setSelectedProdIds}
-				>
-					{({ select }) => (
-						<Fragment>
-							<Table
-								fields={fields.filter(f => !skipFields.includes(f.name))}
-								select={select}
+		<Table
+			fields={fields.filter(f => !skipFields.includes(f.name))}
+			select={select}
+			expand={expand}
+		>
+			{({ tableFields }) => <Fragment>
+				{depts.map(dept => {
+						const { id, expanded } = dept
+						if (id === 'unreserved') return (
+							<TableRow
+								key={id}
+								entity={dept}
+								tableFields={tableFields}
+								rowFields={[
+									{
+										name: 'name',
+										value: dept.name + ' ('+ dept.count + ')'
+									},
+								]}
+							/>
+						)
+						return (
+							<Fragment
+								key={id}
 							>
-								{({ tableFields, expandedIds, toggleExpanded }) => <Fragment>
-									{depts.map(dept => {
-											const { id } = dept
-											if (id === 'unreserved') return (
-												<TableRow
-													key={id}
-													entity={dept}
-													tableFields={tableFields}
-													rowFields={[
-														{
-															name: 'name',
-															value: dept.name + ' ('+ dept.count + ')'
-														},
-													]}
-												/>
-											)
-											const isExpanded = expandedIds.includes(id)
-											return (
-												<Fragment
-													key={id}
-												>
-													<TableRow
-														entity={dept}
-														tableFields={tableFields}
-														expandFor='prods'
-														expanded={isExpanded}
-														setExpanded={() => toggleExpanded(id)}
-														onClick={() => {
-															toggleExpanded(id)
-														}}
-														select={() => select(id)}
-														rowFields={[
-															{
-																name: 'name',
-																value: dept.name + ' ('+ dept.count + ')'
-															},
-															{
-																name: 'progress',
-																path: 'readyCount',
-																icon: 'checkmark',
-																iconColor: 'green'
-																// content: (
-																// 	<Label basic>
-																// 		<Icon name='checkmark' color='green' />
-																// 			{dept.readyCount}
-																// 		{/* <Label.Detail>ГП</Label.Detail> */}
-																// 	</Label>
-																// )
-															},
-															{
-																name: 'hasDefect',
-																path: 'hasDefect',
-																icon: 'warning sign',
-																iconColor: 'orange'
-															},
-															{
-																name: 'isSpoiled',
-																path: 'isSpoiled',
-																icon: 'broken chain',
-																iconColor: 'red'
-															},
-														]}
-													/>
-													{	isExpanded && dept.prods.map((prod, i) => {
-														const { id, progress } = prod
-														return (
-															// @ts-ignore
-															<TableRow
-																secondary={1}
-																lastSecondaryRow={i === dept.prods.length - 1 ? 1 : 0}
-																key={id}
-																entity={prod}
-																tableFields={tableFields}
-																select={() => select(id)}
-																rowFields={[
-																	{
-																		name: 'name',
-																		path: 'fullnumber'
-																	},
-																	{
-																		name: 'progress',
-																		value: progress && progress + '%'
-																	},
-																	{
-																		name: 'hasDefect',
-																		path: 'hasDefect',
-																		icon: 'warning sign',
-																		iconColor: 'orange'
-																	},
-																	{
-																		name: 'isSpoiled',
-																		path: 'isSpoiled',
-																		icon: 'broken chain',
-																		iconColor: 'red'
-																	},
-																]}
-																// active={
-																// 	details
-																// 	&& details.type === 'Order'
-																// 	&& id === details.id
-																// }
-																onClick={() => {
-																	// setDetails({
-																	// 	type: 'Order',
-																	// 	id
-																	// })
-																}}
-															/>
-														)
-													})}
-												</Fragment>
-											)
-										})}
-								</Fragment>}
-							</Table>
-							{/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
-						</Fragment>
-					)}
-				</ProdTableUtils>
-		// 	}
-		// </GlobalContext>
+								<TableRow
+									entity={dept}
+									tableFields={tableFields}
+									expandFor='prods'
+									expanded={expanded}
+									expand={() => expand(id)}
+									onClick={() => expand(id)}
+									select={() => select(id)}
+									rowFields={[
+										{
+											name: 'name',
+											value: dept.name + ' ('+ dept.count + ')'
+										},
+										{
+											name: 'progress',
+											path: 'readyCount',
+											icon: 'checkmark',
+											iconColor: 'green'
+											// content: (
+											// 	<Label basic>
+											// 		<Icon name='checkmark' color='green' />
+											// 			{dept.readyCount}
+											// 		{/* <Label.Detail>ГП</Label.Detail> */}
+											// 	</Label>
+											// )
+										},
+										{
+											name: 'hasDefect',
+											path: 'hasDefect',
+											icon: 'warning sign',
+											iconColor: 'orange'
+										},
+										{
+											name: 'isSpoiled',
+											path: 'isSpoiled',
+											icon: 'broken chain',
+											iconColor: 'red'
+										},
+									]}
+								/>
+								{	expanded && dept.prods.map((prod, i) => {
+									const { id, progress } = prod
+									return (
+										// @ts-ignore
+										<TableRow
+											secondary={1}
+											lastSecondaryRow={i === dept.prods.length - 1 ? 1 : 0}
+											key={id}
+											entity={prod}
+											tableFields={tableFields}
+											select={() => select(id)}
+											rowFields={[
+												{
+													name: 'name',
+													path: 'fullnumber'
+												},
+												{
+													name: 'progress',
+													value: progress && progress + '%'
+												},
+												{
+													name: 'hasDefect',
+													path: 'hasDefect',
+													icon: 'warning sign',
+													iconColor: 'orange'
+												},
+												{
+													name: 'isSpoiled',
+													path: 'isSpoiled',
+													icon: 'broken chain',
+													iconColor: 'red'
+												},
+											]}
+											// active={
+											// 	details
+											// 	&& details.type === 'Order'
+											// 	&& id === details.id
+											// }
+											onClick={() => select(id)}
+										/>
+									)
+								})}
+							</Fragment>
+						)
+					})}
+			</Fragment>}
+		</Table>
+		// {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
 	)
 }
 

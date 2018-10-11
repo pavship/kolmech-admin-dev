@@ -45,93 +45,89 @@ const fields = [{
 const EnquiriesTable = ({ enquiries }) => {
 	return (
 		<GlobalContext>
-			{({ details, setDetails, setExpanded }) => (
-				<Fragment>
-					<Table
-						fields={fields}
-					>
-						{({ tableFields }) => <Fragment>
-							{enquiries.map(enquiry => {
-									const { id, isExpanded } = enquiry
-									return (
-										<Fragment
-											key={id}
-										>
+			{({ details, setDetails, setExpanded }) =>
+				<Table
+					fields={fields}
+				>
+					{({ tableFields }) => 
+						enquiries.map(enquiry => {
+							const { id, isExpanded } = enquiry
+							return (
+								<Fragment key={id} >
+									<TableRow
+										entity={enquiry}
+										tableFields={tableFields}
+										expandFor='orders'
+										expanded={isExpanded}
+										// setExpanded={setExpanded}
+										expand={() => {
+											setExpanded({
+												id,
+												value: !isExpanded
+											}
+										)}}
+										active={
+											details
+											&& details.type === 'Enquiry'
+											&& id === details.id
+										}
+										onClick={() => {
+											setDetails({
+												type: 'Enquiry',
+												id
+											})
+											setExpanded({
+												id,
+												value: !isExpanded
+											})
+										}}
+									>
+									</TableRow>
+									{	isExpanded && enquiry.orders.map((order, i) => {
+										const { id, num } = order
+										return (
+											// @ts-ignore
 											<TableRow
-												entity={enquiry}
+												secondary={1}
+												lastSecondaryRow={i === enquiry.orders.length - 1 ? 1 : 0}
+												key={id}
+												entity={order}
 												tableFields={tableFields}
-												expandFor='orders'
-												expanded={isExpanded}
-												// setExpanded={setExpanded}
-												setExpanded={() => {
-													setExpanded({
-														id,
-														value: !isExpanded
-													}
-												)}}
+												rowFields={[{
+													name: 'num',
+													value: enquiry.num + '-' + num
+												},{
+													name: 'org',
+													value: enquiry.org.name
+												},{
+													name: 'model',
+													value: enquiry.model.name
+												},{
+													name: 'amount',
+													path: 'amount'
+												}]}
 												active={
 													details
-													&& details.type === 'Enquiry'
+													&& details.type === 'Order'
 													&& id === details.id
 												}
 												onClick={() => {
 													setDetails({
-														type: 'Enquiry',
+														type: 'Order',
 														id
-													})
-													setExpanded({
-														id,
-														value: !isExpanded
 													})
 												}}
 											>
 											</TableRow>
-											{	isExpanded && enquiry.orders.map((order, i) => {
-												const { id, num } = order
-												return (
-													// @ts-ignore
-													<TableRow
-														secondary={1}
-														lastSecondaryRow={i === enquiry.orders.length - 1 ? 1 : 0}
-														key={id}
-														entity={order}
-														tableFields={tableFields}
-														rowFields={[{
-															name: 'num',
-															value: enquiry.num + '-' + num
-														},{
-															name: 'org',
-															value: enquiry.org.name
-														},{
-															name: 'model',
-															value: enquiry.model.name
-														},{
-															name: 'amount',
-															path: 'amount'
-														}]}
-														active={
-															details
-															&& details.type === 'Order'
-															&& id === details.id
-														}
-														onClick={() => {
-															setDetails({
-																type: 'Order',
-																id
-															})
-														}}
-													>
-													</TableRow>
-												)
-											})}
-										</Fragment>
-									)
-								})}
-						</Fragment>}
-					</Table>
-					{/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
-				</Fragment>
-			)}
+										)
+									})}
+								</Fragment>
+							)
+						}
+					)}
+				</Table>
+				// {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
+			}
 		</GlobalContext>
 	)
 }

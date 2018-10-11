@@ -1,15 +1,5 @@
 import gql from 'graphql-tag'
 
-// export const org = gql`
-// 	query org ($id: ID!) {
-// 		org (id: $id) {
-// 			id
-// 			inn
-// 			name
-// 		}
-// 	}
-// `
-
 export const modelProds = gql`
 	query ModelProds ($modelId: ID!) {
 		modelProds (modelId: $modelId) {
@@ -30,6 +20,22 @@ export const modelProds = gql`
 					id
 					num
 				}
+			}
+		}
+	}
+`
+export const prodsLocal = gql`
+	query ProdsLocal ($ids: [ID!]!) {
+		prodsLocal (ids: $ids) {
+			id
+			fullnumber,
+      hasDefect,
+      isSpoiled,
+      progress,
+			dept {
+				id
+				name
+				type
 			}
 		}
 	}

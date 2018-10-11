@@ -22,26 +22,31 @@ const Td = styled.td`
 `
 
 export class Table extends Component {
-	isSelectable = typeof this.props.select !== 'undefined'
-	state={
-		expandedIds: []
+	modes =  {
+		select: !!this.props.select,
+		expand: !!this.props.expand,
 	}
-	toggleExpanded = (id) => {
-		const newIds = [...this.state.expandedIds]
-		if (newIds.includes(id))
-			newIds.splice(newIds.indexOf(id), 1)
-		else newIds.push(id)
-		this.setState({ expandedIds: newIds })
-	}
+	// state={
+	// 	expandedIds: []
+	// }
+	// toggleExpanded = (id) => {
+	// 	const newIds = [...this.state.expandedIds]
+	// 	if (newIds.includes(id))
+	// 		newIds.splice(newIds.indexOf(id), 1)
+	// 	else newIds.push(id)
+	// 	this.setState({ expandedIds: newIds })
+	// }
 	render() {
-		const { expandedIds } = this.state
+		console.log('this.modes[select] > ', this.modes['select'])
+		console.log('this.modes[expand] > ', this.modes['expand'])
+		// const { expandedIds } = this.state
 		const { fields, children } = this.props
 		const fieldsExtended = [
 			{ 
 				name: 'serviceField',
 				width: '23px'
 			},
-			...this.isSelectable && [{
+			...this.modes['select'] && [{
 				name: 'select',
 				width: '25px'
 			}],
@@ -50,27 +55,27 @@ export class Table extends Component {
 			{ name: 'lastField' }
 		]
 		return (
-			<STable><tbody>
-			<Fragment>
-				<TableHeader>
-					{fieldsExtended.map(f => {
-						return (
-						<Td
-							key={f.name}
-							// @ts-ignore
-							w={f.width}
-						>
-							{f.title}
-						</Td>
-					)})}
-				</TableHeader>
-				{children({
-					tableFields: fieldsExtended.map(f => ({ name: f.name, path: f.path })),
-					expandedIds,
-					toggleExpanded: this.toggleExpanded
-				})}
-			</Fragment>
-			</tbody></STable>
+			<STable>
+				<tbody>
+					<Fragment>
+						<TableHeader>
+							{fieldsExtended.map(f => {
+								return (
+								<Td
+									key={f.name}
+									// @ts-ignore
+									w={f.width}
+								>
+									{f.title}
+								</Td>
+							)})}
+						</TableHeader>
+						{children({
+							tableFields: fieldsExtended.map(f => ({ name: f.name, path: f.path })),
+						})}
+					</Fragment>
+				</tbody>
+			</STable>
 		)
 	}
 }
