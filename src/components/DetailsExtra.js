@@ -13,6 +13,7 @@ import ProdsByDept from './ProdsByDept'
 import ProdTableUtils from './ProdTableUtils'
 import DeptProdTable from './DeptProdTable'
 import ListProvider from './special/ListProvider';
+import OrderContext from './special/OrderContext';
 
 const Container = styled.div`
 	width: 40%;
@@ -49,31 +50,39 @@ const DetailsExtra = ({ closeExtra }) => {
 									if (loading) return <Section noIndent >Загрузка...</Section>
 									if (error) return <Section noIndent >Ошибка {error.message}</Section>
 									return (
-										<ListProvider>
-											{({ list: expandedIds, toggle: toggleExpanded }) =>
-												<ProdsByDept
-													prods={data.modelProds}
-													selectedIds={selectedProdIds}
-													orderId={extra.orderId}
-													expandedIds={expandedIds}
-												>
-													{({ depts }) =>
-														<ProdTableUtils
-															depts={depts}
-															setList={setSelectedProdIds}
+										<OrderContext
+											id={extra.orderId}
+										>
+											{({ orderLocal }) =>
+												<ListProvider>
+													{({ list: expandedIds, toggle: toggleExpanded }) =>
+														<ProdsByDept
+															prods={data.modelProds}
+															selectedIds={selectedProdIds}
+															orderId={extra.orderId}
+															selectLimit={orderLocal.qty}
+															expandedIds={expandedIds}
 														>
-															{({ select }) =>
-																<DeptProdTable
+															{({ depts }) =>
+																<ProdTableUtils
 																	depts={depts}
-																	select={select}
-																	expand={toggleExpanded}
-																/>
+																	setList={setSelectedProdIds}
+																	selectLimit={orderLocal.qty}
+																>
+																	{({ select }) =>
+																		<DeptProdTable
+																			depts={depts}
+																			select={select}
+																			expand={toggleExpanded}
+																		/>
+																	}
+																</ProdTableUtils>
 															}
-														</ProdTableUtils>
+														</ProdsByDept>
 													}
-												</ProdsByDept>
+												</ListProvider>
 											}
-										</ListProvider>
+										</OrderContext>
 									)
 								}}
 							</Query>

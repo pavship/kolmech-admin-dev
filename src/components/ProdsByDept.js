@@ -6,16 +6,20 @@ const ProdsByDept = ({
     // extra
     selectedIds,
     orderId,
+    selectLimit,
     // order
     selectedProds,
     orderProdsQty,
     // epxpand
     expandedIds,
+    expanded
 }) => {
   const modes = {
     ...orderId && { extra: true },
+    ...orderId && selectLimit === selectedIds.length && { limitReached: true },
     ...!orderId && { order: true },
     ...expandedIds && { expand: true },
+    ...expanded && { expanded: true },
   }
   const allProds =
     modes['extra'] ? prods :
@@ -34,26 +38,39 @@ const ProdsByDept = ({
         ...modes['expand'] && {
           expanded: expandedIds.some(id => id === dept.id)
         },
-        prods: prods.map(p => ({
-          ...p,
-          ...modes['extra'] && {
-            selected: selectedIds.includes(p.id),
-            disabled: !!p.order && p.order.id !== orderId
-          },
-          ...modes['order'] && {
-            added: !prods.some(prod => prod.id === p.id),
-            removed: !selectedProds.some(sp => sp.id === p.id),
-          },
-        })),
+        ...modes['expanded'] && {
+          expanded: true
+        },
+        prods: prods.map(p => {
+          let prod = {
+            ...p,
+            ...modes['extra'] && {
+              selected: selectedIds.includes(p.id),
+              ordered: !!p.order && p.order.id !== orderId
+            },
+            ...modes['order'] && {
+              added: !prods.some(prod => prod.id === p.id),
+              removed: !selectedProds.some(sp => sp.id === p.id),
+            },
+          }
+          if (modes['extra']) {
+            prod = {
+              ...prod,
+              disabled:
+                prod.ordered
+                || modes['limitReached'] && !prod.selected
+            }
+          }
+          return prod
+        }),
       }
       if (modes['extra']) {
-        const disabledCount = dept.prods.filter(p => p.disabled).length || 0
+        const orderedCount = dept.prods.filter(p => p.ordered).length || 0
         dept = {
           ...dept,
           selectedCount: dept.prods.filter(p => p.selected).length || 0,
-          disabledCount,
-          availCount: dept.count - disabledCount,
-          disabled: dept.prods.every(p => p.disabled),
+          orderedCount,
+          availCount: dept.count - orderedCount
         }
         dept = {
           ...dept,
@@ -61,6 +78,12 @@ const ProdsByDept = ({
             dept.selectedCount === dept.availCount ? true :
             dept.selectedCount === 0 ? false :
             'partly'
+        }
+        dept = {
+          ...dept,
+          disabled:
+            dept.prods.every(p => p.disabled)
+            || modes['limitReached'] && [false, 'partly'].includes(dept.selected)
         }
       }
       depts.push(dept)

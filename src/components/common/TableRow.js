@@ -27,6 +27,9 @@ const Row = styled.tr`
 		border-top: 1px solid rgba(34, 36, 38, 0.15);
 		border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 	}`}
+	${props => props.bold && `
+		font-weight: bold;
+	`}
 	&:hover {
 		background: rgba(0,0,0,.05);
     color: rgba(0,0,0,.95);
@@ -59,13 +62,6 @@ const TableRow = ({
 		>
 			{fields.map(f => {
 				// console.log(f)
-				if (f.content) return (
-					<Td
-						key={f.name}
-					>
-						{f.content}
-					</Td>
-				)
 				if (
 					f.name === 'serviceField'
 					&& typeof expanded !== 'undefined'
@@ -105,6 +101,13 @@ const TableRow = ({
 									: 'square outline'
 							}
 						/>
+					</Td>
+				)
+				if (f.content) return (
+					<Td
+						key={f.name}
+					>
+						{f.content}
 					</Td>
 				)
 				let val = f.value || (f.path ? getObjProp(entity, f.path) : null)

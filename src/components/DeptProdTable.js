@@ -2,8 +2,6 @@ import React, { Fragment } from 'react'
 
 import Table from './common/Table'
 import TableRow from './common/TableRow'
-import ProdTableUtils from './ProdTableUtils';
-// import GlobalContext from './special/GlobalContext';
 
 const fields = [{
 	name: 'name',
@@ -32,7 +30,12 @@ const fields = [{
 	width: '85px'
 }]
 
-const DeptProdTable = ({ depts, select, expand, skipFields = [] }) => {
+const DeptProdTable = ({
+	depts,
+	select,
+	expand,
+	skipFields = []
+}) => {
 	return (
 		<Table
 			fields={fields.filter(f => !skipFields.includes(f.name))}
@@ -45,6 +48,7 @@ const DeptProdTable = ({ depts, select, expand, skipFields = [] }) => {
 						if (id === 'unreserved') return (
 							<TableRow
 								key={id}
+								bold
 								entity={dept}
 								tableFields={tableFields}
 								rowFields={[
@@ -77,13 +81,6 @@ const DeptProdTable = ({ depts, select, expand, skipFields = [] }) => {
 											path: 'readyCount',
 											icon: 'checkmark',
 											iconColor: 'green'
-											// content: (
-											// 	<Label basic>
-											// 		<Icon name='checkmark' color='green' />
-											// 			{dept.readyCount}
-											// 		{/* <Label.Detail>ГП</Label.Detail> */}
-											// 	</Label>
-											// )
 										},
 										{
 											name: 'hasDefect',
@@ -96,6 +93,10 @@ const DeptProdTable = ({ depts, select, expand, skipFields = [] }) => {
 											path: 'isSpoiled',
 											icon: 'broken chain',
 											iconColor: 'red'
+										},
+										{
+											name: 'reserve',
+											path: 'orderedCount',
 										},
 									]}
 								/>
@@ -132,12 +133,8 @@ const DeptProdTable = ({ depts, select, expand, skipFields = [] }) => {
 													iconColor: 'red'
 												},
 											]}
-											// active={
-											// 	details
-											// 	&& details.type === 'Order'
-											// 	&& id === details.id
-											// }
-											onClick={() => select(id)}
+											// active={}
+											onClick={select && (() => select(id))}
 										/>
 									)
 								})}

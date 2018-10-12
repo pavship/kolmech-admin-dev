@@ -25,7 +25,7 @@ export default class ModelProdsSection extends Component {
               />
             }
           >
-            {/* {extra && 
+            {extra && 
               <ProdDataProvider
                 ids={selectedProdIds}
               >
@@ -34,18 +34,20 @@ export default class ModelProdsSection extends Component {
                     prods={prods}
                     selectedProds={selectedProds}
                     orderProdsQty={qty}
+                    expanded
                   >
-                    {({ depts }) => null
-                      // <DeptProdTable
-                      //   depts={depts}
-                      //   skipFields={['reserve']}
-                      // />
+                    {({ depts }) =>
+                      <DeptProdTable
+                        depts={depts}
+                        skipFields={['reserve']}
+                        expand={() => null}
+                      />
                     }
                   </ProdsByDept>
                 }
               </ProdDataProvider>
             }
-            {!extra && 
+            {/* {!extra && 
               <ListProvider>
                 {({ list: selectedIds, setList: setSelectedProdIds}) =>
                   <ProdsByDept

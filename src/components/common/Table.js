@@ -26,20 +26,7 @@ export class Table extends Component {
 		select: !!this.props.select,
 		expand: !!this.props.expand,
 	}
-	// state={
-	// 	expandedIds: []
-	// }
-	// toggleExpanded = (id) => {
-	// 	const newIds = [...this.state.expandedIds]
-	// 	if (newIds.includes(id))
-	// 		newIds.splice(newIds.indexOf(id), 1)
-	// 	else newIds.push(id)
-	// 	this.setState({ expandedIds: newIds })
-	// }
 	render() {
-		console.log('this.modes[select] > ', this.modes['select'])
-		console.log('this.modes[expand] > ', this.modes['expand'])
-		// const { expandedIds } = this.state
 		const { fields, children } = this.props
 		const fieldsExtended = [
 			{ 
