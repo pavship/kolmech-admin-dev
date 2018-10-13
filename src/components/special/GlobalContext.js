@@ -31,10 +31,10 @@ const GlobalContext = ({
 		lists: { selectedProdIds },
 		setList
 }) => {
-	setLayout({ variables: { 
-		details: {"type":"Order","id":"cjmzkpstb00170983jkb7bcbq"},
-		extra: {"type":"Store","modelId":"cjcfy68q55d3x0149fcpq7l63","orderId":"cjmzkpstb00170983jkb7bcbq"}
-	} })
+	// setLayout({ variables: { 
+	// 	details: {"type":"Order","id":"cjmzkpstb00170983jkb7bcbq"},
+	// 	extra: {"type":"Store","modelId":"cjcfy68q55d3x0149fcpq7l63","orderId":"cjmzkpstb00170983jkb7bcbq"}
+	// } })
   return children({
 		details,
 		extra,

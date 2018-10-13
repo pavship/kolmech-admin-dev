@@ -139,7 +139,19 @@ export const Button = styled(ButtonWithFilteredProps)`
 	}
 `
 
-const SectionPropFiltered = ({ head, minor, small, secondary, noLP, noIndent, topBorder, bottomBorder, children, ...rest }) => (
+const SectionPropFiltered = ({
+	head,
+	minor,
+	small,
+	secondary,
+	noP,
+	noLP,
+	noIndent,
+	topBorder,
+	bottomBorder,
+	children,
+	...rest
+}) => (
 		<div
 			{...rest}
 		>
@@ -147,41 +159,39 @@ const SectionPropFiltered = ({ head, minor, small, secondary, noLP, noIndent, to
 		</div>
 )
 export const Section = styled(SectionPropFiltered)`
-	& {
-		width: 100%
-		padding: 1em 1em 1em 55px;
-		${props => props.head && `{
-			display: flex;
-			align-items: center;
-			padding-top: 0;
-			padding-bottom: 0;
-		}`}
-		${props => props.onClick && `{
-			cursor: pointer;
-		}`}
-		${props => props.minor && `{
-			min-height: 3.5em;
-		}`}
-		${props => props.small && `{
-			min-height: 2.5em;
-		}`}
-		${props => props.secondary && `{
-			background: #f3f4f5;
-			color: rgba(0,0,0,.6);
-		}`}
-		${props => props.noLP && `{
-			padding-left: 0;
-		}`}
-		${props => props.noIndent && `{
-			padding-left: 1em;
-		}`}
-		${props => props.topBorder && `{
-			border-top: 1px solid rgba(34,36,38,.15);
-		}`}
-		${props => props.bottomBorder && `{
-			border-bottom: 1px solid ${props.bottomBorder === 'dark' ? '#7e7e81' : 'rgba(34,36,38,.1)'};
-		}`}
-	}
+	width: 100%
+	padding: 1em 1em 1em 55px;
+	${props => props.head && `{
+		display: flex;
+		align-items: center;
+		padding-top: 0;
+		padding-bottom: 0;
+	}`}
+	${props => props.onClick && `{
+		cursor: pointer;
+	}`}
+	${props => props.minor && `{
+		min-height: 3.5em;
+	}`}
+	${props => props.small && `{
+		min-height: 2.5em;
+	}`}
+	${props => props.secondary && `{
+		background: #f3f4f5;
+		color: rgba(0,0,0,.6);
+	}`}
+	${props => props.noLP && `{
+		padding-left: 0;
+	}`}
+	${props => props.noIndent && `{
+		padding-left: 1em;
+	}`}
+	${props => props.topBorder && `{
+		border-top: 1px solid rgba(34,36,38,.15);
+	}`}
+	${props => props.bottomBorder && `{
+		border-bottom: 1px solid ${props.bottomBorder === 'dark' ? '#7e7e81' : 'rgba(34,36,38,.1)'};
+	}`}
 `
 
 const PopupWithFilteredProps = ({ showIf, ...rest }) => (

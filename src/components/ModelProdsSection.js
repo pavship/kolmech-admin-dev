@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
+import { Section, Button } from './styled-semantic/styled-semantic'
+
 import GlobalContext from './special/GlobalContext'
 import CollapsableSection from './CollapsableSection'
 import ProdsByDept from './ProdsByDept';
@@ -26,26 +28,58 @@ export default class ModelProdsSection extends Component {
             }
           >
             {extra && 
-              <ProdDataProvider
-                ids={selectedProdIds}
-              >
-                {({ prodsLocal: selectedProds }) =>
-                  <ProdsByDept
-                    prods={prods}
-                    selectedProds={selectedProds}
-                    orderProdsQty={qty}
-                    expanded
+              <Fragment>
+                <ProdDataProvider
+                  ids={selectedProdIds}
+                >
+                  {({ prodsLocal: selectedProds }) =>
+                    <ProdsByDept
+                      prods={prods}
+                      selectedProds={selectedProds}
+                      orderProdsQty={qty}
+                      expanded
+                    >
+                      {({ depts }) =>
+                        <DeptProdTable
+                          depts={depts}
+                          // fields={[{
+                          //   name: 'indent',
+                          //   width: '32px'
+                          // },{
+                          //   name: 'reserve',
+                          //   skip: true
+                          // }]}
+                          nameFieldWidth='200px'
+                          indent='32px'
+                          skipFields={['reserve']}
+                          expand={() => null}
+                        />
+                      }
+                    </ProdsByDept>
+                  }
+                </ProdDataProvider>
+                <Section
+                  // small
+                  minor
+                  head
+                >
+                  <Button
+                    primary
+                    compact
+                    circular
+                    menu
+                    ml='0'
+                    content='Зарезервировать'
+                    icon='gavel'
+                    // activeColor='green'
+                    // active={!!extra}
+                    // onClick={}
                   >
-                    {({ depts }) =>
-                      <DeptProdTable
-                        depts={depts}
-                        skipFields={['reserve']}
-                        expand={() => null}
-                      />
-                    }
-                  </ProdsByDept>
-                }
-              </ProdDataProvider>
+                    {/* Зарезервировать */}
+                      {/* <IconRight name='angle right' /> */}
+                  </Button>
+                </Section>
+              </Fragment>
             }
             {/* {!extra && 
               <ListProvider>

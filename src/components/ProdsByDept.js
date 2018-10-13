@@ -94,7 +94,7 @@ const ProdsByDept = ({
     if (unreservedProdsCount) {
       depts.push({
         id: 'unreserved',
-        name: 'Без резерва',
+        name: 'Не зарезерированны',
         count: unreservedProdsCount,
         prods: []
       })

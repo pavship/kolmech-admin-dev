@@ -36,7 +36,14 @@ const SCaret = styled(Caret)`
 	}
 `
 
-const DetailsHeaderContainer = ({ closeDetails, closeExtra, expanded, disabled, onClick, children }) => {
+const DetailsHeaderContainer = ({
+	closeDetails,
+	closeExtra,
+	expanded,
+	disabled,
+	onClick,
+	children
+}) => {
 	const headerType = 
 		!!closeDetails ? 'main' :
 		!!closeExtra ? 'extra' :
@@ -47,8 +54,11 @@ const DetailsHeaderContainer = ({ closeDetails, closeExtra, expanded, disabled, 
 			noLP
 			noIndent={headerType === 'extra'}
 			bottomBorder={headerType === 'extra' ? 'dark' : true}
-			minor={headerType === 'main'}
-			small={['expandable', 'extra'].includes(headerType)}
+			// bottomBorder={['expandable', 'extra'].includes(headerType) ? 'dark' : true}
+			small={['extra'].includes(headerType)}
+			minor={['expandable', 'main'].includes(headerType)}
+			// minor={headerType === 'main'}
+			// small={['expandable', 'extra'].includes(headerType)}
 			onClick={onClick}
 		>
 			{ headerType === 'main'
