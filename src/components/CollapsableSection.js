@@ -17,7 +17,6 @@ const OuterSection = styled(Section)`
 const InnerSection = styled(Section)`
   & {
     padding: 0;
-    margin-top: -1px;
     margin-bottom: -1px;
   }
 `
@@ -26,10 +25,6 @@ class CollapsableSection extends Component {
   state = {
     expanded: false
   }
-  // handleHeaderClick = () => {
-  //   if (!this.props.forceExpanded)
-  //     this.setState({ expanded: !this.state.expanded })
-  // }
   render() {
     const {
       children,

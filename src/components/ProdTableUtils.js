@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 import cloneDeep from 'lodash/cloneDeep'
 import without from 'lodash/without'

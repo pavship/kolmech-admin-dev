@@ -4,17 +4,6 @@ import styled from 'styled-components'
 import { Icon } from 'semantic-ui-react'
 import { Section, Caret } from './styled-semantic/styled-semantic'
 
-// const SSection = styled(Section)`
-// 	&&& {
-// 		${props => props.head && `{
-// 			display: flex;
-// 			align-items: center;
-// 			padding-top: 0;
-// 			padding-bottom: 0;
-// 		}`}
-// 	}
-// 	padding: 1em
-// `
 const SIcon = styled(Icon)`
 	&&& {
 		box-sizing: content-box;
@@ -53,7 +42,12 @@ const DetailsHeaderContainer = ({
 			head
 			noLP
 			noIndent={headerType === 'extra'}
-			bottomBorder={headerType === 'extra' ? 'dark' : true}
+			bottomBorder={
+				headerType === 'extra'
+				|| (headerType === 'expandable' && expanded)
+					? 'dark'
+					: true
+			}
 			// bottomBorder={['expandable', 'extra'].includes(headerType) ? 'dark' : true}
 			small={['extra'].includes(headerType)}
 			minor={['expandable', 'main'].includes(headerType)}

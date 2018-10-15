@@ -6,7 +6,16 @@ import DetailsHeaderButtons from './DetailsHeaderButtons'
 
 class DetailsHeader extends Component {
 	render() {
-		const { expanded, title, subtitle, titleSize, onClick, closeExtra, buttons } = this.props
+		const {
+			buttons,
+			title,
+			subtitle,
+			titleSize,
+			onClick,
+			closeExtra,
+			// expandable
+			expanded,
+		} = this.props
 		return (
 			<DetailsHeaderContainer
 				expanded={expanded}

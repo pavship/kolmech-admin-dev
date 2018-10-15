@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react'
-import _ from 'lodash'
+
+import cloneDeep from 'lodash/cloneDeep'
+
 import Table from './common/Table'
 import TableRow from './common/TableRow'
 
-const fields = [{
+const defaultFields = [{
 	name: 'name',
 	path: 'name',
 	title: 'Участок / № Изделия',
@@ -31,29 +33,21 @@ const fields = [{
 }]
 
 const DeptProdTable = ({
+	// data
 	depts,
-	// fields: propFields,
-	indent,
+	skipFields = [],
+	// methods
 	select,
 	expand,
-	skipFields = [],
+	// visual
+	indent,
 	nameFieldWidth
 }) => {
-	// const fields = defaultFields.map(f => {
-	// 	if (f.skip)
-	// })
-	// console.log(_.merge(fields, propFields))
-	// propFields.forEach(pf => {
-	// 	if (pf.skip) fields.splice(fields.findIndex(f => f.name === pf.name), 1)
-	// 	let field = fields.find(f => f.name === pf.name)
-	// 	field = { ...field, ...pf}
-	// });
+	const fields = cloneDeep(defaultFields)
 	if (nameFieldWidth) fields.find(f => f.name === 'name').width = nameFieldWidth
 	return (
 		<Table
 			fields={fields.filter(f => !skipFields.includes(f.name))}
-			// fields={fields.map(f => !skipFields.includes(f.name))}
-			// indent={'32px'}
 			indent={indent}
 			select={select}
 			expand={expand}

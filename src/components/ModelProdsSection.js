@@ -7,7 +7,7 @@ import CollapsableSection from './CollapsableSection'
 import ProdsByDept from './ProdsByDept';
 import DeptProdTable from './DeptProdTable';
 import ReserveProdsButton from './ReserveProdsButton'
-import ListProvider from './special/ListProvider'
+// import ListProvider from './special/ListProvider'
 import ProdDataProvider from './special/ProdDataProvider'
 
 export default class ModelProdsSection extends Component {
@@ -42,17 +42,10 @@ export default class ModelProdsSection extends Component {
                       {({ depts }) =>
                         <DeptProdTable
                           depts={depts}
-                          // fields={[{
-                          //   name: 'indent',
-                          //   width: '32px'
-                          // },{
-                          //   name: 'reserve',
-                          //   skip: true
-                          // }]}
-                          nameFieldWidth='200px'
-                          indent='32px'
                           skipFields={['reserve']}
                           expand={() => null}
+                          indent='32px'
+                          nameFieldWidth='200px'
                         />
                       }
                     </ProdsByDept>
@@ -71,13 +64,7 @@ export default class ModelProdsSection extends Component {
                     ml='0'
                     content='Зарезервировать'
                     icon='gavel'
-                    // activeColor='green'
-                    // active={!!extra}
-                    // onClick={}
-                  >
-                    {/* Зарезервировать */}
-                      {/* <IconRight name='angle right' /> */}
-                  </Button>
+                  />
                 </Section>
               </Fragment>
             }

@@ -58,7 +58,7 @@ const ProdsByDept = ({
               ...prod,
               disabled:
                 prod.ordered
-                || modes['limitReached'] && !prod.selected
+                || (modes['limitReached'] && !prod.selected)
             }
           }
           return prod
@@ -83,7 +83,7 @@ const ProdsByDept = ({
           ...dept,
           disabled:
             dept.prods.every(p => p.disabled)
-            || modes['limitReached'] && [false, 'partly'].includes(dept.selected)
+            || (modes['limitReached'] && [false, 'partly'].includes(dept.selected))
         }
       }
       depts.push(dept)
