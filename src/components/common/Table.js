@@ -36,7 +36,6 @@ const Table = ({
 		select: !!select,
 		expand: !!expand,
 	}
-	console.log('indent > ', indent)
 	const fieldsExtended = [
 		...modes['indent'] && [{
 			name: 'indent',
@@ -60,7 +59,7 @@ const Table = ({
 				<Fragment>
 					<TableHeader>
 						{fieldsExtended.map(f =>{
-							console.log(f)
+							// console.log(f)
 							return <Td
 								key={f.name}
 								// @ts-ignore

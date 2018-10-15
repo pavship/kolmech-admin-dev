@@ -24,21 +24,24 @@ const settings = {
 
 const DetailsHeaderTitle = ({ type, id, title, subtitle, titleSize }) => {
 	const { titleNew, titleExisting, localQueryName, localQuery } = settings[type || 'Enquiry']
+	console.log('type, id, > ', type, id, id === 'new', type === 'Order')
 	return (
 		<Header
 			m='0'
 			size={titleSize || 'medium'}
 		>
-			{(type === 'Enquiry' || type ==='Order')
-				? (
-					id === 'new'
-					? titleNew
-						// for existing entity get num and dateLocal from cache
-					: <Query
+			{/* {(() => {
+				if (type === 'Enquiry' || type === 'Order') {
+					if (id === 'new') return titleNew
+					console.log('куда на!')
+					return (
+						<Query
 							query={localQuery}
 							variables={{ id }}
+							skip={id === 'new'}
 						>
 							{({ data }) => {
+								console.log('hey bitch')
 								if (!(data && data[localQueryName])) return null
 								const { num, dateLocal } = data[localQueryName]
 								return (
@@ -51,7 +54,43 @@ const DetailsHeaderTitle = ({ type, id, title, subtitle, titleSize }) => {
 								)
 							}}
 						</Query>
-				) 
+					)
+				}
+				return (
+					<Fragment>
+						{title}
+						{subtitle &&
+							<DetailsHeaderSubitle
+								text={subtitle}
+							/>
+						}
+					</Fragment>
+				)
+			})()} */}
+			{(type === 'Enquiry' || type === 'Order')
+				? (
+					id === 'new'
+					? titleNew
+						// for existing entity get num and dateLocal from cache
+					: <Query
+							query={localQuery}
+							variables={{ id }}
+						>
+							{({ data }) => {
+								console.log('hey bitch')
+								if (!(data && data[localQueryName])) return null
+								const { num, dateLocal } = data[localQueryName]
+								return (
+									<Fragment>
+										{titleExisting}{num}
+										<DetailsHeaderSubitle
+											text={'от ' + dateLocal}
+										/>
+									</Fragment>
+								)
+							}}
+						</Query>
+				)
 				: <Fragment>
 						{title}
 						{subtitle &&

@@ -167,5 +167,8 @@ export default compose(
 				}
 			}
 	}),
-	graphql(orderLocal, { name: 'orderLocal' }),
+	graphql(orderLocal, {
+		name: 'orderLocal',
+		skip: (props) => props.id === 'new'
+	}),
 )(OrderEdit)

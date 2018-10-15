@@ -1,5 +1,9 @@
 import React, { Component, Fragment } from 'react'
 
+import { Mutation } from 'react-apollo'
+import { reserveProds } from '../graphql/order'
+
+import { Message } from 'semantic-ui-react'
 import { Section, Button } from './styled-semantic/styled-semantic'
 
 import GlobalContext from './special/GlobalContext'
@@ -8,7 +12,7 @@ import ProdsByDept from './ProdsByDept';
 import DeptProdTable from './DeptProdTable';
 import ReserveProdsButton from './ReserveProdsButton'
 // import ListProvider from './special/ListProvider'
-import ProdDataProvider from './special/ProdDataProvider'
+import ProdContext from './special/ProdContext'
 
 export default class ModelProdsSection extends Component {
   render() {
@@ -29,7 +33,7 @@ export default class ModelProdsSection extends Component {
           >
             {extra && 
               <Fragment>
-                <ProdDataProvider
+                <ProdContext
                   ids={selectedProdIds}
                 >
                   {({ prodsLocal: selectedProds }) =>
@@ -50,21 +54,43 @@ export default class ModelProdsSection extends Component {
                       }
                     </ProdsByDept>
                   }
-                </ProdDataProvider>
+                </ProdContext>
                 <Section
                   // small
                   minor
                   head
                 >
-                  <Button
-                    primary
-                    compact
-                    circular
-                    menu
-                    ml='0'
-                    content='Зарезервировать'
-                    icon='gavel'
-                  />
+                  <Mutation
+                    mutation={reserveProds}
+                    variables={{
+                      orderId: id,
+                      prodIds: selectedProdIds
+                    }}
+                  >
+                    {( reserveProds, { loading, error }) => 
+                      <Fragment>
+                        {error &&
+                          <Message
+                            error
+                            header='Зарезервировать не удалось..'
+                            content={error.message}
+                          />
+                        }
+                        <Button
+                          primary
+                          compact
+                          circular
+                          menu
+                          ml='0'
+                          content='Зарезервировать'
+                          icon='gavel'
+                          loading={loading}
+                          disabled={!selectedProdIds.length}
+                          onClick={reserveProds}
+                        />
+                      </Fragment>
+                    }
+                  </Mutation>
                 </Section>
               </Fragment>
             }
