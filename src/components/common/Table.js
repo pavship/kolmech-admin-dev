@@ -42,7 +42,7 @@ const Table = ({
 			width: indent
 		}],
 		{
-			name: 'serviceField',
+			name: 'service',
 			width: '23px'
 		},
 		...modes['select'] && [{

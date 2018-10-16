@@ -27,6 +27,7 @@ export default class ModelProdsSection extends Component {
               <ReserveProdsButton
                 modelId={model.id}
                 orderId={id}
+                prodIds={prods.map(p => p.id)}
               />
             }
           >

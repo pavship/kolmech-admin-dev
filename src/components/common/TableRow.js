@@ -63,7 +63,7 @@ const TableRow = ({
 			{fields.map(f => {
 				// console.log(f)
 				if (
-					f.name === 'serviceField'
+					f.name === 'service'
 					&& typeof expanded !== 'undefined'
 					&& entity[expandFor].length
 				) return (

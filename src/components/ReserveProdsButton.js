@@ -10,15 +10,16 @@ const IconRight = styled(Icon)`
   &&&& { margin: 0 -.42857143em 0 .42857143em; }
 `
 
-const ReserveProdsButton = ({ modelId, orderId }) => {
+const ReserveProdsButton = ({ modelId, orderId, prodIds }) => {
   return (
     <GlobalContext>
-      {({ extra, setExtra }) => (
+      {({ extra, setExtra, setSelectedProdIds }) => (
         <Button compact circular menu
           activeColor='green'
           active={!!extra}
           onClick={(e) => {
             e.stopPropagation()
+            setSelectedProdIds(prodIds)
             setExtra({
               type: 'Store',
               modelId,

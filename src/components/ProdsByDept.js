@@ -23,7 +23,7 @@ const ProdsByDept = ({
   }
   const allProds =
     modes['extra'] ? prods :
-    modes['order'] ? [...prods, ...selectedProds] : []
+    modes['order'] ? _.unionBy(prods, selectedProds, 'id') : []
   const depts = _(allProds)
     .sortBy('dept.type')
     .groupBy('dept.name')

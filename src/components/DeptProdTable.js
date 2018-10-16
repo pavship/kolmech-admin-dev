@@ -125,6 +125,10 @@ const DeptProdTable = ({
 											tableFields={tableFields}
 											select={() => select(id)}
 											rowFields={[
+												// {
+												// 	name: 'service',
+												// 	path: 'fullnumber'
+												// },
 												{
 													name: 'name',
 													path: 'fullnumber'
