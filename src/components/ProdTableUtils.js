@@ -43,7 +43,7 @@ class ProdTableUtils extends Component {
 				newList = difference(selectedProdIds, prods.map(p => p.id))
 			if (entity.selected === false) {
 				const idsWithinLimit = take(
-					prods.map(p => !p.disabled && p.id),
+					prods.filter(p => !p.disabled).map(p => p.id),
 					selectLimit - selectedProdIds.length
 				)
 				newList = union(selectedProdIds, idsWithinLimit)

@@ -17,7 +17,7 @@ const Container = styled.div`
 const Details = ({ closeDetails }) => {
 	return (
 		<GlobalContext>
-			{({ details: { type, id, enquiryId, editMode}, setDetails }) => (
+			{({ details: { type, id, enquiryId, editMode}, setDetails, setExpanded }) => (
 				<DetailsDataProvider
 					type={type}
 					id={id}
@@ -43,6 +43,7 @@ const Details = ({ closeDetails }) => {
 											enquiryId={enquiryId}
 											closeDetails={closeDetails}
 											setDetails={setDetails}
+											setExpanded={setExpanded}
 										/>
 									: (entity && 
 											<OrderDetails

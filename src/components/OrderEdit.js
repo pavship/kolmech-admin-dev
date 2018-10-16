@@ -42,6 +42,10 @@ class OrderEdit extends Component {
 				type: 'Order',
 				id: res.data.upsertOrder.id
 			})
+			this.props.setExpanded({
+				id: res.data.upsertOrder.id,
+				value: true
+			})
 		} catch (err) {
 			if (!this.componentIsMounted) return
 			this.setState({

@@ -18,7 +18,7 @@ export default class ModelProdsSection extends Component {
     const { order: { id, model, qty, prods } } = this.props
     return (
       <GlobalContext>
-        {({ extra, selectedProdIds }) => (
+        {({ extra, setExtra, selectedProdIds }) => (
           <CollapsableSection
             forceExpanded={!!extra}
             title={model.name}
@@ -79,7 +79,10 @@ export default class ModelProdsSection extends Component {
                           icon='gavel'
                           loading={loading}
                           disabled={!selectedProdIds.length}
-                          onClick={reserveProds}
+                          onClick={() => {
+                            reserveProds()
+                            setExtra(null)
+                          }}
                         />
                       </Section>
                       {error &&
