@@ -13,7 +13,7 @@ const Row = styled.tr`
 	border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 	// @ts-ignore
 	${props => props.secondary && `
-		background-color: rgba(0,0,50,.02);
+		background: rgba(0,0,50,.02);
 		// >td {
 		// 	padding-left: 3px;
 		// }
@@ -21,19 +21,19 @@ const Row = styled.tr`
 		${!props.lastSecondaryRow && 'border-bottom: none;'}
 	`}
 	// @ts-ignore
-	${props => props.active && `{
+	&:hover {
+		background: rgba(0,0,0,.05);
+		color: rgba(0,0,0,.95);
+	}
+	${props => props.active && `
 		background: rgba(0,0,0,.05);
 		font-weight: bold;
 		border-top: 1px solid rgba(34, 36, 38, 0.15);
 		border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-	}`}
+	`}
 	${props => props.bold && `
 		font-weight: bold;
 	`}
-	&:hover {
-		background: rgba(0,0,0,.05);
-    color: rgba(0,0,0,.95);
-	}
 `
 
 const Td = styled.td`

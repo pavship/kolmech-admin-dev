@@ -94,7 +94,7 @@ const ProdsByDept = ({
     if (unreservedProdsCount) {
       depts.unshift({
         id: 'unreserved',
-        name: 'Не зарезерированны',
+        name: 'Без резерва',
         count: unreservedProdsCount,
         prods: []
       })
