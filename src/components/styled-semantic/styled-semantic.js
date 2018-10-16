@@ -9,6 +9,7 @@ import {
 	// Label as SLabel,
 	Icon as SIcon, 
 	Button as SButton,
+	Message as SMessage,
 	Popup as SPopup,
 	Dropdown as SDropdown
 } from 'semantic-ui-react'
@@ -139,6 +140,23 @@ export const Button = styled(ButtonWithFilteredProps)`
 	}
 `
 
+const MessageWithFilteredProps = ({
+	section,
+	...rest
+}) => (
+	<SMessage {...rest} />
+)
+export const Message = styled(MessageWithFilteredProps)`
+	&&& {
+		${props => props.section && `
+			margin-top: 0;
+			padding-left: ${props.theme.widths.detailsPL};
+			box-shadow: 0 0 0 1px #e0b4b4, 0 0 0 0 transparent;
+			border-radius: 0;
+		`}
+	}
+`
+
 const SectionPropFiltered = ({
 	head,
 	minor,
@@ -150,16 +168,18 @@ const SectionPropFiltered = ({
 	topBorder,
 	bottomBorder,
 	children,
+	onClick,
 	...rest
 }) => (
 		<div
 			{...rest}
+			onClick={onClick || undefined}
 		>
 			{children}
 		</div>
 )
 export const Section = styled(SectionPropFiltered)`
-	width: 100%
+	width: 100%;
 	padding: 1em 1em 1em 55px;
 	${props => props.head && `{
 		display: flex;
@@ -187,10 +207,10 @@ export const Section = styled(SectionPropFiltered)`
 		padding-left: 1em;
 	}`}
 	${props => props.topBorder && `{
-		border-top: 1px solid rgba(34,36,38,.15);
+		border-top: 1px solid ${props.topBorder === 'dark' ? 'rgba(152, 153, 154, 1)' : 'rgba(34,36,38,.15)'};
 	}`}
 	${props => props.bottomBorder && `{
-		border-bottom: 1px solid ${props.bottomBorder === 'dark' ? '#7e7e81' : 'rgba(34,36,38,.1)'};
+		border-bottom: 1px solid ${props.bottomBorder === 'dark' ? 'rgba(126, 127, 129, 1)' : 'rgba(34,36,38,.1)'};
 	}`}
 `
 

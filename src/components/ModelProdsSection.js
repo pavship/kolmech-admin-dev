@@ -3,8 +3,7 @@ import React, { Component, Fragment } from 'react'
 import { Mutation } from 'react-apollo'
 import { reserveProds } from '../graphql/order'
 
-import { Message } from 'semantic-ui-react'
-import { Section, Button } from './styled-semantic/styled-semantic'
+import { Section, Button, Message } from './styled-semantic/styled-semantic'
 
 import GlobalContext from './special/GlobalContext'
 import CollapsableSection from './CollapsableSection'
@@ -55,27 +54,20 @@ export default class ModelProdsSection extends Component {
                     </ProdsByDept>
                   }
                 </ProdContext>
-                <Section
-                  // small
-                  minor
-                  head
+                <Mutation
+                  mutation={reserveProds}
+                  variables={{
+                    orderId: id,
+                    prodIds: selectedProdIds
+                  }}
                 >
-                  <Mutation
-                    mutation={reserveProds}
-                    variables={{
-                      orderId: id,
-                      prodIds: selectedProdIds
-                    }}
-                  >
-                    {( reserveProds, { loading, error }) => 
-                      <Fragment>
-                        {error &&
-                          <Message
-                            error
-                            header='Зарезервировать не удалось..'
-                            content={error.message}
-                          />
-                        }
+                  {( reserveProds, { loading, error }) => 
+                    <Fragment>
+                      <Section
+                        minor
+                        head
+                        topBorder='dark'
+                      >
                         <Button
                           primary
                           compact
@@ -88,10 +80,18 @@ export default class ModelProdsSection extends Component {
                           disabled={!selectedProdIds.length}
                           onClick={reserveProds}
                         />
-                      </Fragment>
-                    }
-                  </Mutation>
-                </Section>
+                      </Section>
+                      {error &&
+                        <Message
+                          section
+                          error
+                          header='Зарезервировать не удалось..'
+                          content={error.message}
+                        />
+                      }
+                    </Fragment>
+                  }
+                </Mutation>
               </Fragment>
             }
             {/* {!extra && 

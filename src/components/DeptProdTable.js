@@ -4,6 +4,7 @@ import cloneDeep from 'lodash/cloneDeep'
 
 import Table from './common/Table'
 import TableRow from './common/TableRow'
+import { orderDetails } from '../graphql/order';
 
 const defaultFields = [{
 	name: 'name',
@@ -27,7 +28,7 @@ const defaultFields = [{
 	width: '65px'
 },{
 	name: 'reserve',
-	path: 'enquiry.num',
+	// path: 'enquiry.num',
 	title: 'Резерв',
 	width: '85px'
 }]
@@ -58,7 +59,7 @@ const DeptProdTable = ({
 						if (id === 'unreserved') return (
 							<TableRow
 								key={id}
-								bold
+								// bold
 								entity={dept}
 								tableFields={tableFields}
 								rowFields={[
@@ -107,11 +108,13 @@ const DeptProdTable = ({
 										{
 											name: 'reserve',
 											path: 'orderedCount',
+											icon: 'gavel',
+											iconColor: 'brown'
 										},
 									]}
 								/>
 								{	expanded && dept.prods.map((prod, i) => {
-									const { id, progress } = prod
+									const { id, progress, order } = prod
 									return (
 										// @ts-ignore
 										<TableRow
@@ -142,6 +145,10 @@ const DeptProdTable = ({
 													icon: 'broken chain',
 													iconColor: 'red'
 												},
+												{
+													name: 'reserve',
+													value: order && order.enquiry.num + '-' + order.num,
+												}
 											]}
 											// active={}
 											onClick={select && (() => select(id))}

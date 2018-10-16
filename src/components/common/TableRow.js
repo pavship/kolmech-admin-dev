@@ -12,14 +12,14 @@ const Row = styled.tr`
 	cursor: pointer;
 	border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 	// @ts-ignore
-	${props => props.secondary && `{
+	${props => props.secondary && `
 		background-color: rgba(0,0,50,.02);
 		// >td {
 		// 	padding-left: 3px;
 		// }
 		// @ts-ignore
 		${!props.lastSecondaryRow && 'border-bottom: none;'}
-	}`}
+	`}
 	// @ts-ignore
 	${props => props.active && `{
 		background: rgba(0,0,0,.05);

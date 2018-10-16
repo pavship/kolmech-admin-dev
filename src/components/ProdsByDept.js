@@ -83,7 +83,7 @@ const ProdsByDept = ({
           ...dept,
           disabled:
             dept.prods.every(p => p.disabled)
-            || (modes['limitReached'] && [false, 'partly'].includes(dept.selected))
+            || (modes['limitReached'] && [false].includes(dept.selected))
         }
       }
       depts.push(dept)
@@ -92,7 +92,7 @@ const ProdsByDept = ({
   if (modes['order']) {
     const unreservedProdsCount = orderProdsQty - selectedProds.length
     if (unreservedProdsCount) {
-      depts.push({
+      depts.unshift({
         id: 'unreserved',
         name: 'Не зарезерированны',
         count: unreservedProdsCount,

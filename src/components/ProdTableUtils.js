@@ -39,9 +39,9 @@ class ProdTableUtils extends Component {
 					: [...selectedProdIds, id]
 		}
 		if (entity.__typename === 'Dept') {
-			if (entity.selected === true) 
+			if ([ 'partly', true ].includes(entity.selected))
 				newList = difference(selectedProdIds, prods.map(p => p.id))
-			if ([ 'partly', false ].includes(entity.selected)) {
+			if (entity.selected === false) {
 				const idsWithinLimit = take(
 					prods.map(p => !p.disabled && p.id),
 					selectLimit - selectedProdIds.length
