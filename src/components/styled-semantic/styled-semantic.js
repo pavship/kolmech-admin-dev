@@ -193,7 +193,10 @@ export const Section = styled(SectionPropFiltered)`
 	${props => props.minor && `{
 		min-height: 3.5em;
 	}`}
-	${props => props.small && `{
+	${props => !props.size && props.head && `{
+		min-height: 3.5em;
+	}`}
+	${props => props.size === 'small' && `{
 		min-height: 2.5em;
 	}`}
 	${props => props.secondary && `{

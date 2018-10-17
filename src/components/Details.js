@@ -22,10 +22,14 @@ const Details = ({ closeDetails }) => {
 					type={type}
 					id={id}
 				>
-					{({ loading, error, refetch, entity }) =>
+					{({ loading, error, refetch, entity, localEntity }) =>
 						<Container>
 							<DetailsMainHeader
+								type={type}
+								localEntity={localEntity}
 								closeDetails={closeDetails}
+								setDetails={setDetails}
+								editMode={editMode}
 								loading={loading}
 								refresh={() => refetch()}
 							/>

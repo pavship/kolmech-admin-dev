@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 
 import styled from 'styled-components'
+import { Icon } from 'semantic-ui-react'
 import { Section } from '../components/styled-semantic/styled-semantic'
 
 import { Query } from 'react-apollo'
@@ -37,8 +38,15 @@ const DetailsExtra = ({ closeExtra }) => {
 								{({ data: { modelLocal } }) =>
 									<DetailsHeader
 										title={modelLocal.name + ' в наличии'}
-										titleSize='small'
-										closeExtra={closeExtra}
+										size='small'
+										noIndent
+										bottomBorder='dark'
+										buttons={
+											<Icon link
+												name='cancel'
+												onClick={closeExtra}
+											/>
+										}
 									/>
 								}
 							</Query>

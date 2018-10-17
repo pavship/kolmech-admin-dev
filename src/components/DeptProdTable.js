@@ -4,7 +4,6 @@ import cloneDeep from 'lodash/cloneDeep'
 
 import Table from './common/Table'
 import TableRow from './common/TableRow'
-import { orderDetails } from '../graphql/order';
 
 const defaultFields = [{
 	name: 'name',
@@ -28,7 +27,6 @@ const defaultFields = [{
 	width: '65px'
 },{
 	name: 'reserve',
-	// path: 'enquiry.num',
 	title: 'Резерв',
 	width: '85px'
 }]

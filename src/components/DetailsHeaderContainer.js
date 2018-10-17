@@ -11,12 +11,6 @@ const SIcon = styled(Icon)`
 		margin: 0 0.5em;
 	}
 `
-const RightIcon = styled(Icon)`
-	&&& {
-		box-sizing: content-box;
-		margin: 0 0 0 auto;
-	}
-`
 const SCaret = styled(Caret)`
 	&&& {
 		box-sizing: content-box;
@@ -26,43 +20,37 @@ const SCaret = styled(Caret)`
 `
 
 const DetailsHeaderContainer = ({
-	closeDetails,
-	closeExtra,
+	children,
+	// style
+	size,
+	bottomBorder,
+	close,
 	expanded,
 	disabled,
 	onClick,
-	children
+	noIndent,
 }) => {
-	const headerType = 
-		!!closeDetails ? 'main' :
-		!!closeExtra ? 'extra' :
-		'expandable'
+	const modes = {
+		...close && { close: true },
+		...(typeof expanded !== 'undefined') && { expand: true },
+	}
 	return (
 		<Section
 			head
 			noLP
-			noIndent={headerType === 'extra'}
-			bottomBorder={
-				headerType === 'extra'
-				|| (headerType === 'expandable' && expanded)
-					? 'dark'
-					: true
-			}
-			// bottomBorder={['expandable', 'extra'].includes(headerType) ? 'dark' : true}
-			small={['extra'].includes(headerType)}
-			minor={['expandable', 'main'].includes(headerType)}
-			// minor={headerType === 'main'}
-			// small={['expandable', 'extra'].includes(headerType)}
+			noIndent={noIndent}
+			bottomBorder={bottomBorder || true}
+			size={size || undefined}
 			onClick={onClick}
 		>
-			{ headerType === 'main'
+			{ modes['close']
 				?	<SIcon link
 						size='big'
 						name='cancel'
-						onClick={closeDetails}
+						onClick={close}
 					/> :
 				// TODO make disabled work (grey out color)
-				headerType === 'expandable'
+				modes['expand']
 				? <SCaret
 						size='large'
 						active={expanded ? 1 : 0}
@@ -70,12 +58,6 @@ const DetailsHeaderContainer = ({
 					/> : null
 			}
 			{children}
-			{ headerType === 'extra'
-				? <RightIcon link
-						name='cancel'
-						onClick={closeExtra}
-					/> : null
-			}
 		</Section>
 	)
 }

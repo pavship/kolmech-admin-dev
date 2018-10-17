@@ -41,6 +41,7 @@ class CollapsableSection extends Component {
         <DetailsHeader
           {...headerProps}
           expanded={expanded}
+          bottomBorder={expanded && 'dark'}
           disabled={forceExpanded}
           titleSize='small'
           onClick={
@@ -48,11 +49,11 @@ class CollapsableSection extends Component {
             && (() => this.setState({ expanded: !this.state.expanded }))
           }
         />
-          {expanded &&
-            <InnerSection>
-              {children}
-            </InnerSection>
-          }
+        {expanded &&
+          <InnerSection>
+            {children}
+          </InnerSection>
+        }
       </OuterSection>
     )
   }

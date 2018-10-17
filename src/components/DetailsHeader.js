@@ -8,10 +8,14 @@ class DetailsHeader extends Component {
 	render() {
 		const {
 			buttons,
+			size,
+			noIndent,
+			bottomBorder,
 			title,
 			subtitle,
 			titleSize,
 			onClick,
+			// extra
 			closeExtra,
 			// expandable
 			expanded,
@@ -20,12 +24,14 @@ class DetailsHeader extends Component {
 			<DetailsHeaderContainer
 				expanded={expanded}
 				onClick={onClick}
-				closeExtra={closeExtra}
+				size={size}
+				noIndent={noIndent}
+				bottomBorder={bottomBorder}
 			>
 				<DetailsHeaderTitle
 					title={title}
 					subtitle={subtitle}
-					titleSize={titleSize}
+					size={titleSize || size}
 				/>
 				{ buttons &&
 					<DetailsHeaderButtons>
