@@ -50,7 +50,6 @@ const TableRow = ({
 	// rowFields have precedence over tableFields
 	const fields = tableFields.map(f => rowFields.find(rf => rf.name === f.name) || f)
 	const { selected, disabled } = entity
-	console.log('rowFields > ', rowFields)
 	return (
 		<Row
 			{...rest}
@@ -107,9 +106,6 @@ const TableRow = ({
 				)
 				let val = f.value || (f.path ? getObjProp(entity, f.path) : null)
 				if (val && f.name === 'amount') val = currency(val)
-				if (
-					f.name === 'service'
-				) console.log('f > ', f)
 				return (
 					<Td
 						key={f.name}

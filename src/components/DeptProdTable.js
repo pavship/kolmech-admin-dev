@@ -115,7 +115,6 @@ const DeptProdTable = ({
 								/>
 								{	expanded && dept.prods.map((prod, i) => {
 									const { id, progress, order, added, removed } = prod
-									console.log('prod > ', prod)
 									return (
 										// @ts-ignore
 										<TableRow

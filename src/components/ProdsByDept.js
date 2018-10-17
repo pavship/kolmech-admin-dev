@@ -103,7 +103,7 @@ const ProdsByDept = ({
     }
   }
   const xor = !!_.xorBy(oriProds, selectedProds, 'id').length
-  console.log('depts > ', depts)
+  // console.log('depts > ', depts)
   return children({ depts, xor })
 }
 

@@ -20,7 +20,7 @@ const PickerDiv = styled.div`
 
 class LocalDatePicker extends Component {
     handleDayChange = (pickedDate) => {
-        console.log('pickedDate > ', pickedDate)
+        // console.log('pickedDate > ', pickedDate)
         const { setField, field: { name }} = this.props
         if (!isValidDate(pickedDate)) {
             setField(name, {
