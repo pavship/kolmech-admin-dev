@@ -10,6 +10,7 @@ const ProdsByDept = ({
     // order
     selectedProds = [],
     orderProdsQty,
+    diff, //diff mode
     // epxpand
     expandedIds,
     expanded
@@ -18,6 +19,7 @@ const ProdsByDept = ({
     ...orderId && { extra: true },
     ...orderId && selectLimit === selectedIds.length && { limitReached: true },
     ...!orderId && { order: true },
+    ...diff && { diff: true },
     ...expandedIds && { expand: true },
     ...expanded && { expanded: true },
   }
@@ -48,7 +50,7 @@ const ProdsByDept = ({
               selected: selectedIds.includes(p.id),
               ordered: !!p.order && p.order.id !== orderId
             },
-            ...modes['order'] && {
+            ...modes['order'] && modes['diff'] && {
               added: !oriProds.some(op => op.id === p.id),
               removed: !selectedProds.some(sp => sp.id === p.id),
             },

@@ -31,7 +31,6 @@ export default class ModelProdsSection extends Component {
               />
             }
           >
-            {extra && 
               <ProdContext
                 ids={selectedProdIds}
               >
@@ -41,9 +40,10 @@ export default class ModelProdsSection extends Component {
                     selectedProds={selectedProds}
                     orderProdsQty={qty}
                     expanded
+                    diff={!!extra}
                   >
                     {({ depts, xor }) =>
-              <Fragment>
+                      <Fragment>
                         <DeptProdTable
                           depts={depts}
                           skipFields={['reserve']}
@@ -51,54 +51,54 @@ export default class ModelProdsSection extends Component {
                           indent='32px'
                           nameFieldWidth='200px'
                         />
-                      
-                <Mutation
-                  mutation={reserveProds}
-                  variables={{
-                    orderId: id,
-                    prodIds: selectedProdIds
-                  }}
-                >
-                  {( reserveProds, { loading, error }) => 
-                    <Fragment>
-                      <Section
-                        minor
-                        head
-                        topBorder='dark'
-                      >
-                        <Button
-                          primary
-                          compact
-                          circular
-                          menu
-                          ml='0'
-                          content='Зарезервировать'
-                          icon='gavel'
-                          loading={loading}
-                          disabled={!xor}
-                          onClick={() => {
-                            reserveProds()
-                            setExtra(null)
+                        {extra && 
+                        <Mutation
+                          mutation={reserveProds}
+                          variables={{
+                            orderId: id,
+                            prodIds: selectedProdIds
                           }}
-                        />
-                      </Section>
-                      {error &&
-                        <Message
-                          section
-                          error
-                          header='Зарезервировать не удалось..'
-                          content={error.message}
-                        />
-                      }
-                    </Fragment>
-                  }
-                </Mutation>
-              </Fragment>
-                  }
+                        >
+                          {( reserveProds, { loading, error }) => 
+                            <Fragment>
+                              <Section
+                                minor
+                                head
+                                topBorder='dark'
+                              >
+                                <Button
+                                  primary
+                                  compact
+                                  circular
+                                  menu
+                                  ml='0'
+                                  content='Резервировать'
+                                  icon='gavel'
+                                  loading={loading}
+                                  disabled={!xor}
+                                  onClick={() => {
+                                    reserveProds()
+                                    setExtra(null)
+                                  }}
+                                />
+                              </Section>
+                              {error &&
+                                <Message
+                                  section
+                                  error
+                                  header='Зарезервировать не удалось..'
+                                  content={error.message}
+                                />
+                              }
+                            </Fragment>
+                          }
+                        </Mutation>
+                        }
+                      </Fragment>
+                    }
                   </ProdsByDept>
                 }
               </ProdContext>
-            }
             {/* {!extra && 
               <ListProvider>
                 {({ list: selectedIds, setList: setSelectedProdIds}) =>

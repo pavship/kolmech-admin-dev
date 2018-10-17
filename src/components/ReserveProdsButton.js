@@ -27,8 +27,9 @@ const ReserveProdsButton = ({ modelId, orderId, prodIds }) => {
             })
           }}
         >
-          Зарезервировать
-            <IconRight name='angle right' />
+          <Icon name='gavel' />
+          Резервирование
+          <IconRight name='angle right' />
         </Button>
       )}
     </GlobalContext>
