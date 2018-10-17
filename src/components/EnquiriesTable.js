@@ -31,6 +31,10 @@ const fields = [{
 	title: 'Кол.',
 	width: '50px'
 },{
+	name: 'reserved',
+	title: 'Рез.',
+	width: '50px'
+},{
 	name: 'amount',
 	path: 'lastCoEvents.0.doc.amount',
 	title: 'Сумма',
@@ -84,7 +88,7 @@ const EnquiriesTable = ({ enquiries }) => {
 									>
 									</TableRow>
 									{	isExpanded && enquiry.orders.map((order, i) => {
-										const { id, num } = order
+										const { id, num, prods } = order
 										return (
 											// @ts-ignore
 											<TableRow
@@ -102,6 +106,9 @@ const EnquiriesTable = ({ enquiries }) => {
 												},{
 													name: 'model',
 													value: enquiry.model.name
+												},{
+													name: 'reserved',
+													value: prods.length
 												},{
 													name: 'amount',
 													path: 'amount'

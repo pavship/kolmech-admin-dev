@@ -32,18 +32,18 @@ export default class ModelProdsSection extends Component {
             }
           >
             {extra && 
+              <ProdContext
+                ids={selectedProdIds}
+              >
+                {({ prodsLocal: selectedProds }) =>
+                  <ProdsByDept
+                    prods={prods}
+                    selectedProds={selectedProds}
+                    orderProdsQty={qty}
+                    expanded
+                  >
+                    {({ depts, xor }) =>
               <Fragment>
-                <ProdContext
-                  ids={selectedProdIds}
-                >
-                  {({ prodsLocal: selectedProds }) =>
-                    <ProdsByDept
-                      prods={prods}
-                      selectedProds={selectedProds}
-                      orderProdsQty={qty}
-                      expanded
-                    >
-                      {({ depts }) =>
                         <DeptProdTable
                           depts={depts}
                           skipFields={['reserve']}
@@ -51,10 +51,7 @@ export default class ModelProdsSection extends Component {
                           indent='32px'
                           nameFieldWidth='200px'
                         />
-                      }
-                    </ProdsByDept>
-                  }
-                </ProdContext>
+                      
                 <Mutation
                   mutation={reserveProds}
                   variables={{
@@ -78,7 +75,7 @@ export default class ModelProdsSection extends Component {
                           content='Зарезервировать'
                           icon='gavel'
                           loading={loading}
-                          disabled={!selectedProdIds.length}
+                          disabled={!xor}
                           onClick={() => {
                             reserveProds()
                             setExtra(null)
@@ -97,6 +94,10 @@ export default class ModelProdsSection extends Component {
                   }
                 </Mutation>
               </Fragment>
+                  }
+                  </ProdsByDept>
+                }
+              </ProdContext>
             }
             {/* {!extra && 
               <ListProvider>

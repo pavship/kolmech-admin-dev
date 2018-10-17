@@ -11,20 +11,14 @@ const Row = styled.tr`
 	font-size: 1rem;
 	cursor: pointer;
 	border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-	// @ts-ignore
-	${props => props.secondary && `
-		background: rgba(0,0,50,.02);
-		// >td {
-		// 	padding-left: 3px;
-		// }
-		// @ts-ignore
-		${!props.lastSecondaryRow && 'border-bottom: none;'}
-	`}
-	// @ts-ignore
-	&:hover {
+	:hover {
 		background: rgba(0,0,0,.05);
 		color: rgba(0,0,0,.95);
 	}
+	${props => props.secondary && `
+		background: rgba(0,0,50,.02);
+		${!props.lastSecondaryRow ? 'border-bottom: none;' : ''}
+	`}
 	${props => props.active && `
 		background: rgba(0,0,0,.05);
 		font-weight: bold;
@@ -56,6 +50,7 @@ const TableRow = ({
 	// rowFields have precedence over tableFields
 	const fields = tableFields.map(f => rowFields.find(rf => rf.name === f.name) || f)
 	const { selected, disabled } = entity
+	console.log('rowFields > ', rowFields)
 	return (
 		<Row
 			{...rest}
@@ -112,6 +107,9 @@ const TableRow = ({
 				)
 				let val = f.value || (f.path ? getObjProp(entity, f.path) : null)
 				if (val && f.name === 'amount') val = currency(val)
+				if (
+					f.name === 'service'
+				) console.log('f > ', f)
 				return (
 					<Td
 						key={f.name}

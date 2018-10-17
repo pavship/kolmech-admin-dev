@@ -115,6 +115,7 @@ const DeptProdTable = ({
 								/>
 								{	expanded && dept.prods.map((prod, i) => {
 									const { id, progress, order, added, removed } = prod
+									console.log('prod > ', prod)
 									return (
 										// @ts-ignore
 										<TableRow
@@ -125,14 +126,12 @@ const DeptProdTable = ({
 											tableFields={tableFields}
 											select={() => select(id)}
 											rowFields={[
-												{
+												...(added || removed) ? [{
 													name: 'service',
 													value: true,
-													...(added || removed) && {
-														icon: added ? 'plus' : 'minus',
-														iconColor: added ? 'green' : 'red'
-													}
-												},
+													icon: added ? 'plus' : 'minus',
+													iconColor: added ? 'green' : 'red'
+												}] : [],
 												{
 													name: 'name',
 													path: 'fullnumber'

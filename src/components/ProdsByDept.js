@@ -2,13 +2,13 @@ import _ from 'lodash'
 
 const ProdsByDept = ({
     children,
-    prods,
+    prods: oriProds,
     // extra
     selectedIds,
     orderId,
     selectLimit,
     // order
-    selectedProds,
+    selectedProds = [],
     orderProdsQty,
     // epxpand
     expandedIds,
@@ -22,8 +22,8 @@ const ProdsByDept = ({
     ...expanded && { expanded: true },
   }
   const allProds =
-    modes['extra'] ? prods :
-    modes['order'] ? _.unionBy(prods, selectedProds, 'id') : []
+    modes['extra'] ? oriProds :
+    modes['order'] ? _.unionBy(oriProds, selectedProds, 'id') : []
   const depts = _(allProds)
     .sortBy('dept.type')
     .groupBy('dept.name')
@@ -49,7 +49,7 @@ const ProdsByDept = ({
               ordered: !!p.order && p.order.id !== orderId
             },
             ...modes['order'] && {
-              added: !prods.some(prod => prod.id === p.id),
+              added: !oriProds.some(op => op.id === p.id),
               removed: !selectedProds.some(sp => sp.id === p.id),
             },
           }
@@ -100,8 +100,9 @@ const ProdsByDept = ({
       })
     }
   }
+  const xor = !!_.xorBy(oriProds, selectedProds, 'id').length
   console.log('depts > ', depts)
-  return children({ depts })
+  return children({ depts, xor })
 }
 
 export default ProdsByDept

@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { orderFragmentBasic } from './order'
 
 export const allEnquiries = gql`
 	query AllEnquiries {
@@ -34,14 +35,14 @@ export const allEnquiries = gql`
 				}
 			}
 			orders {
-				id
-				num
-				dateLocal
-				qty
-				amount
+				...OrderFragmentBasic
+				prods {
+					id
+				}
 			}
 		}
 	}
+	${orderFragmentBasic}
 `
 export const enquiryDetails = gql`
 	query EnquiryDetails ($id: ID!) {
