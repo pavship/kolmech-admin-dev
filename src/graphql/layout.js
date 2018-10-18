@@ -10,9 +10,11 @@ export const getLayout = gql`
 `
 
 export const getLayoutOptions = ({
-	props: ({ data: { layout } }) => ({
-	  	layout
-	})
+	props: ({ data: { layout } }) => {
+		return {
+			layout: layout || {}
+		}
+	}
 })
 
 export const setLayout = gql`

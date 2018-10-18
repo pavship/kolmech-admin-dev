@@ -10,7 +10,7 @@ export const getLists = gql`
 
 export const getListsOptions = ({
 	props: ({ data: { lists } }) => ({
-    lists
+    lists: lists || {}
 	})
 })
 
