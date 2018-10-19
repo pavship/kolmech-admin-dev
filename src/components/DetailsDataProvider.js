@@ -22,7 +22,6 @@ const DetailsDataProvider = ({
     type === 'Enquiry' ? localQuery.enquiryLocal :
     type === 'Order' ? localQuery.orderLocal
     : null
-  console.log('localEntity > ', localEntity)
   return children({
     loading,
     error,

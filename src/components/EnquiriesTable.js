@@ -105,7 +105,7 @@ const EnquiriesTable = ({ enquiries }) => {
 													value: enquiry.org.name
 												},{
 													name: 'model',
-													value: enquiry.model.name
+													value: enquiry.model && enquiry.model.name //check only for migration from aws
 												},{
 													name: 'reserved',
 													value: prods.length

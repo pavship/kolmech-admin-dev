@@ -15,8 +15,6 @@ class DetailsHeader extends Component {
 			subtitle,
 			titleSize,
 			onClick,
-			// extra
-			closeExtra,
 			// expandable
 			expanded,
 		} = this.props
