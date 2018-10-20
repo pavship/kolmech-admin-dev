@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Fragment } from 'react'
 
 import { Mutation } from 'react-apollo'
 import { reserveProds } from '../graphql/order'

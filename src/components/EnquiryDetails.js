@@ -479,8 +479,8 @@ export default compose(
 				data = cache.readQuery({ query })
 				// @ts-ignore
 				const enquiry = data.enquiries.find(e => e.id === props.id)
-				enquiry.curStatusEvents = [newEvent]
-				if (newEvent.doc) enquiry.lastCoEvents = [newEvent]
+				enquiry.status = newEvent.status
+				if (newEvent.doc) enquiry.docs.push(newEvent.doc)
 				cache.writeQuery({ query, data })
 			},
 			// refetchQueries:[ 'allEnquiries' ]
