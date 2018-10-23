@@ -14,7 +14,6 @@ import {stateToHTML} from 'draft-js-export-html'
 class DraftEditor extends React.Component {
 	constructor(props){
 		super(props)
-		console.log('props > ', props)
 		let editorState
 		if (props.initFromHtml) {
 			const blocksFromHTML = convertFromHTML(props.initFromHtml)

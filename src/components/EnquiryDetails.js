@@ -217,7 +217,6 @@ class EnquiryDetails extends Component {
 	saveNote = async () => {
 		try {
 			let htmlNote = this.noteEditorRef.current.exportHtml()
-			console.log('htmlNote > ', htmlNote)
 			if (htmlNote === this.props.enquiryQuery.enquiry.htmlNote) {
 				return this.setState({ noteKey: this.state.noteKey + 1, noteEditorDiff: false })
 			}
