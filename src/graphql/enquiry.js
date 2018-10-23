@@ -191,7 +191,7 @@ export const updateEnquiry = gql`
 					}
 				}
 				status { ...StatusFragment }
-				docs { ...DocFragmentBasic }
+				doc { ...DocFragmentBasic }
 			}
 		}
 	}

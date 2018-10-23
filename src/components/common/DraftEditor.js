@@ -1,12 +1,20 @@
 import React from 'react'
-import { Editor, EditorState, ContentState, RichUtils, convertFromHTML,
-		getDefaultKeyBinding, KeyBindingUtil } from 'draft-js'
+import {
+	Editor,
+	EditorState,
+	ContentState,
+	RichUtils,
+	convertFromHTML,
+	getDefaultKeyBinding,
+	KeyBindingUtil
+} from 'draft-js'
 import 'draft-js/dist/Draft.css'
 import {stateToHTML} from 'draft-js-export-html'
 
 class DraftEditor extends React.Component {
 	constructor(props){
 		super(props)
+		console.log('props > ', props)
 		let editorState
 		if (props.initFromHtml) {
 			const blocksFromHTML = convertFromHTML(props.initFromHtml)
@@ -21,14 +29,16 @@ class DraftEditor extends React.Component {
 		}
 		this.state = { 
 			editorState,
-			oriContent: editorState.getCurrentContent() }
+			oriContent: editorState.getCurrentContent()
+		}
 	}
 	onChange = (editorState) => {
 		this.setState({ editorState })
-        const newContent = editorState.getCurrentContent()
-        const { setEditorHasText, setEditorDiff } = this.props
+		const newContent = editorState.getCurrentContent()
+		const { setEditorHasText, setEditorDiff, setHasFocus } = this.props
 		if (editorState && setEditorHasText) setEditorHasText(newContent.hasText())
-		if (setEditorDiff) this.props.setEditorDiff(newContent !== this.state.oriContent)
+		if (setEditorDiff) setEditorDiff(newContent !== this.state.oriContent)
+		if (setHasFocus) setHasFocus(editorState.getSelection().getHasFocus())
 	}
 	kolmechKeyBindingFn = (e) => {
 		// catch Ctrl + Enter event
@@ -60,12 +70,13 @@ class DraftEditor extends React.Component {
 	}
 	render() {
 		return (
-			<Editor 
+			<Editor
 				editorState={this.state.editorState}
 				onChange={this.onChange}
 				handleKeyCommand={this.handleKeyCommand}
 				keyBindingFn={this.kolmechKeyBindingFn}
-				readOnly={this.props.readOnly} />
+				readOnly={this.props.readOnly}
+			/>
 		)
 	}
 }

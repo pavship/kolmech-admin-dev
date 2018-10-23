@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 
 import { Header as SHeader, Icon, Label, Form, Comment, 
 	Message, Dropdown } from 'semantic-ui-react'
-import { P, Button, Section } from './styled-semantic/styled-semantic'
+import { P, Div, Button, Section } from './styled-semantic/styled-semantic'
 import styled from 'styled-components'
 
 import { graphql, compose } from 'react-apollo'
@@ -11,7 +11,7 @@ import { enquiryDetails, newEnquiry, createEnquiryEvent,
 
 import GlobalContext from './special/GlobalContext'
 
-import DraftEditor from './common/DraftEditor'
+import WrappedDraftEditor from './common/WrappedDraftEditor'
 import { sanitize } from 'dompurify'
 import { currency } from '../utils/format'
 
@@ -134,26 +134,6 @@ const CText = styled(Comment.Text)`
 	&>table>tbody>tr>td>span {
 		margin-right: 5px;
 	}
-`
-
-const EditorWrapper = styled.div`
-	/* padding: .78571429em 1em; */
-	/* TODO cool concept: borders appear only when editing
-		margin-left: -15px;
-		border: none; 
-	*/
-	padding: calc(0.678571em - 1px) 1em;
-	margin: 0;
-	border: 1px solid rgba(34,36,38,.15);
-	border-radius: .28571429rem;
-	transition: color .1s ease,border-color .1s ease;
-	/* line-height: 1em; */
-	line-height: 1.4285em;
-	${props => props.withButton && 'margin-bottom: 1em'}
-`
-
-const CommentEditorWrapper = EditorWrapper.extend`
-	margin: 0 0 1em 6.35em;
 `
 
 const CMessage = styled(Message)`
@@ -331,19 +311,28 @@ class EnquiryDetails extends Component {
 										<Tr>
 											<Td>Примечания</Td>
 											<EditorTd>
-												<EditorWrapper 
-													withButton={noteEditorDiff}
-												>
-													<DraftEditor ref={this.noteEditorRef} key={noteKey}
-														initFromHtml={htmlNote}
-														setEditorDiff={this.setNoteEditorDiff}
-														onSave={this.saveNote} /> 
-												</EditorWrapper> 
-												{ noteEditorDiff &&
-													<Button content='Сохранить примечания' labelPosition='left' icon='save' primary floated='left' 
+												<WrappedDraftEditor
+													key={noteKey}
+													borderless
+													ref={this.noteEditorRef}
+													initFromHtml={htmlNote}
+													setEditorDiff={this.setNoteEditorDiff}
+													diff={noteEditorDiff}
+													onSave={this.saveNote}
+												/>
+												{noteEditorDiff &&
+													<Button
+														mt='.67857143em'
+														content='Сохранить примечание'
+														labelPosition='left'
+														icon='save'
+														primary
+														floated='left'
 														onClick={this.saveNote}
 														disabled={savingNote}
-														loading={savingNote} /> }
+														loading={savingNote}
+													/>
+												}
 											</EditorTd>
 											<Td></Td>
 										</Tr>
@@ -429,19 +418,23 @@ class EnquiryDetails extends Component {
 										)
 									})}
 									<Form reply error={!!error}>
-										<CommentEditorWrapper>
-											<DraftEditor ref={this.editorRef} 
+										<Div m='0 0 1em 6.35em'>
+											<WrappedDraftEditor
+												ref={this.editorRef} 
 												setEditorHasText={this.setEditorHasText}
-												onSave={this.createComment} />
-										</CommentEditorWrapper>
+												onSave={this.createComment}
+											/>
+										</Div>
 										<CMessage
 											error
 											header='Коммент добавить не удалось..'
-											content={error} />
+											content={error}
+										/>
 										<Button content='Добавить коммент' labelPosition='left' icon='edit' primary floated='right' 
 											onClick={this.createComment}
 											disabled={!editorHasText}
-											loading={creatingComment} />
+											loading={creatingComment}
+										/>
 									</Form>
 								</Comments>
 							</Fragment> }
