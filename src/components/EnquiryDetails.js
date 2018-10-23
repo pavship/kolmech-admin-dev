@@ -232,13 +232,10 @@ class EnquiryDetails extends Component {
 		}
 	}
   render() { 
-		// console.log(this.state, this.props);
 		const { editorHasText, creatingComment, changingStatus, statusPending, 
 				error, noteEditorDiff, noteKey, savingNote, activeCO } = this.state
 		const { enquiryQuery } = this.props
 		const isNewEnquiry = this.isNewEnquiry
-		// if (enquiryQuery.loading) return "Загрузка..."
-		// if (enquiryQuery.error) return `Ошибка ${enquiryQuery.error.message}`
 		if (enquiryQuery.loading) return <Section>Загрузка...</Section>
 		if (enquiryQuery.error) return <Section>Ошибка {enquiryQuery.error.message}</Section>
 		const enquiry = isNewEnquiry ? enquiryQuery.newEnquiry : enquiryQuery.enquiry
