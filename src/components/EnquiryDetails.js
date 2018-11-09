@@ -314,7 +314,7 @@ class EnquiryDetails extends Component {
 													initFromHtml={htmlNote}
 													setEditorDiff={this.setNoteEditorDiff}
 													diff={noteEditorDiff}
-													onSave={this.saveNote}
+													onCtrlEnter={this.saveNote}
 												/>
 												{noteEditorDiff &&
 													<Button

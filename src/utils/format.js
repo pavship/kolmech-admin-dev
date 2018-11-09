@@ -3,3 +3,6 @@ export const currency = (num, trailing) => {
     if (!trailing) curNum = curNum.slice(0,-3)
     return curNum + ' ₽'
 }
+export const isNaN = Number.isNaN || function(value) {     
+    return value !== value;
+}
