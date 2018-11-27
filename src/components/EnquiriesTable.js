@@ -19,7 +19,11 @@ const fields = [{
 	name: 'org',
 	path: 'org.name',
 	title: 'Организация',
-	width: '260px'
+	width: '225px'
+},{
+	name: 'emps',
+	path: 'org.name',
+	width: '45px'
 },{
 	name: 'model',
 	path: 'model.name',
@@ -48,13 +52,13 @@ const fields = [{
 const EnquiriesTable = ({ enquiries }) => {
 	return (
 		<GlobalContext>
-			{({ details, setDetails, setExpanded }) =>
+			{({ details, setDetails, bottomPanel, setBottomPanel, setExpanded }) =>
 				<Table
 					fields={fields}
 				>
 					{({ tableFields }) => 
 						enquiries.map(enquiry => {
-							const { id, isExpanded, docs } = enquiry
+							const { id, org, docs, isExpanded } = enquiry
 							const active = details
 								&& details.type === 'Enquiry'
 								&& id === details.id
@@ -66,10 +70,24 @@ const EnquiriesTable = ({ enquiries }) => {
 										rowFields={[{
 											name: 'amount',
 											value: docs.length && docs[docs.length - 1].amount
+										},{
+											name: 'emps',
+											icon: org.employees.count ? 'user' : 'user plus',
+											iconColor: 'grey',
+											type: 'onHover',
+											value: org.employees.count || ' ',
+											onClick: () => {
+												setBottomPanel({
+													type: 'Employees',
+													orgId: org.id
+												})
+											},
+											active: bottomPanel
+												&& bottomPanel.type === 'Employees'
+												&& bottomPanel.orgId === org.id
 										}]}
 										expandFor='orders'
 										expanded={isExpanded}
-										// setExpanded={setExpanded}
 										expand={() => {
 											setExpanded({
 												id,

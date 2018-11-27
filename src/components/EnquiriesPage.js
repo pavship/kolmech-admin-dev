@@ -31,13 +31,13 @@ const EnquiriesPage = ({
 		{error   && `Ошибка ${error.message}`}
 		{enquiries &&
 			<GlobalContext>
-				{({ details }) =>
+				{({ bottomPanel }) =>
 					<Pushable>
 						<DetailsSidebar />
 						<Sidebar.Pusher>
 							<PanelPusher
 								panel={ <EnquiriesBottomPanel /> }
-								panelVisible={!!details}
+								panelVisible={!!bottomPanel}
 							>
 								<EnquiriesTable
 									enquiries={enquiries}

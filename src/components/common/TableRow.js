@@ -30,10 +30,32 @@ const Row = styled.tr`
 	`}
 `
 
+const tdActiveStyle = `
+	background: rgba(0,0,0,.12);
+	.icon {
+		opacity: 1 !important;
+	}
+`
+
 const Td = styled.td`
 	padding-right: 4px;
-	${props => props.service && `
-		padding-left: 3px;
+	white-space: nowrap;
+	overflow: hidden;
+  text-overflow: ellipsis;
+	${props => props.service && `padding-left: 3px;`}
+	${Row}:not(:hover) & {
+		${props => props.type === 'onHover' && !props.active && `
+			opacity: 0 !important;
+		`}
+	}
+	${props => props.type === 'onHover' && `
+		padding-left: 5px;
+		transition: background .3s ease;
+		:hover {
+			${tdActiveStyle}
+		}
+		${props.active ? tdActiveStyle : ''}
+		// ${props.active ? 'background: red !important;' : ''}
 	`}
 `
 
@@ -55,7 +77,6 @@ const TableRow = ({
 			{...rest}
 		>
 			{fields.map(f => {
-				// console.log(f)
 				if (
 					f.name === 'service'
 					&& typeof expanded !== 'undefined'
@@ -109,11 +130,21 @@ const TableRow = ({
 				return (
 					<Td
 						key={f.name}
+						type={f.type}
+						active={f.active}
+						onClick={!!f.onClick ? 
+							e => {
+								e.stopPropagation()
+								f.onClick()
+							}
+							: undefined
+						}
 					>
 						{val && f.icon &&
 							<Icon
+								link={!!f.onClick}
 								name={f.icon}
-								color={f.iconColor || false}
+								color={f.iconColor || undefined}
 							/>
 						}
 						{val}
