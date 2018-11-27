@@ -159,7 +159,6 @@ export default compose(
 			options: {
 				update: (cache, { data: responseData }) => {
 					const upsertedOrder = responseData.upsertOrder
-					console.log('this > ', this)
 					const query = allEnquiries
 					const data = cache.readQuery({ query })
 					const enquiry = data.enquiries.find(e => e.id === upsertedOrder.enquiry.id)

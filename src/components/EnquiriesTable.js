@@ -55,6 +55,9 @@ const EnquiriesTable = ({ enquiries }) => {
 					{({ tableFields }) => 
 						enquiries.map(enquiry => {
 							const { id, isExpanded, docs } = enquiry
+							const active = details
+								&& details.type === 'Enquiry'
+								&& id === details.id
 							return (
 								<Fragment key={id} >
 									<TableRow
@@ -73,11 +76,7 @@ const EnquiriesTable = ({ enquiries }) => {
 												value: !isExpanded
 											}
 										)}}
-										active={
-											details
-											&& details.type === 'Enquiry'
-											&& id === details.id
-										}
+										active={active}
 										onClick={() => {
 											setDetails({
 												type: 'Enquiry',
@@ -85,7 +84,7 @@ const EnquiriesTable = ({ enquiries }) => {
 											})
 											setExpanded({
 												id,
-												value: !isExpanded
+												value: !active ? true : !isExpanded
 											})
 										}}
 									>

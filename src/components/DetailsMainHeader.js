@@ -25,9 +25,9 @@ const DetailsMainHeader = ({
 	refresh,
 	setDetails,
 	editMode,
-	localEntity = {}
+	localEntity
 }) => {
-	const { id, num, dateLocal } = localEntity
+	const { id, num, dateLocal } = localEntity || {}
 	return (
 		<DetailsHeaderContainer
 			close={closeDetails}
