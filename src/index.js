@@ -48,6 +48,8 @@ const client = new ApolloClient({
 		},
 		cacheRedirects: {
 			Query: {
+				orgLocal: (_, args, { getCacheKey }) =>
+					getCacheKey({ __typename: 'Org', id: args.id }),
 				enquiryLocal: (_, args, { getCacheKey }) =>
 					getCacheKey({ __typename: 'Enquiry', id: args.id }),
 				orderLocal: (_, args, { getCacheKey }) =>

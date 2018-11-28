@@ -29,3 +29,12 @@ export const createOrg = gql`
         }
     }
 `
+
+export const orgLocal = gql`
+	query OrgLocal ($id: ID!) {
+		orgLocal (id: $id) {
+			id
+            name
+		}
+	}
+`

@@ -9,7 +9,7 @@ const fields = [{
 	name: 'num',
 	path: 'num',
 	title: '№',
-	width: '40px'
+	width: '45px'
 },{
 	name: 'date',
 	path: 'dateLocal',

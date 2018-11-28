@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 import { graphql, compose } from 'react-apollo'
 import { allEnquiries } from '../graphql/enquiry'
+import { setLayout } from '../graphql/layout'
 
 import styled from 'styled-components'
 import { Sidebar } from 'semantic-ui-react'
@@ -17,42 +18,59 @@ const Pushable = styled(Sidebar.Pushable)`
 	min-height: calc(100vh - 36px) !important;
 `
 
-const EnquiriesPage = ({ 
-	allEnquiries: { loading, error, refetch, networkStatus, enquiries },
-	refreshToken
-}) => {
-	return <>
-		<EnquiriesMenu
-			refetchEnquiries={() => refetch()}
-			enquiriesAreLoading={loading}
-			refreshToken={refreshToken}
-		/>
-		{loading && "Загрузка..."}
-		{error   && `Ошибка ${error.message}`}
-		{enquiries &&
-			<GlobalContext>
-				{({ bottomPanel }) =>
-					<Pushable>
-						<DetailsSidebar />
-						<Sidebar.Pusher>
-							<PanelPusher
-								panel={ <EnquiriesBottomPanel /> }
-								panelVisible={!!bottomPanel}
-							>
-								<EnquiriesTable
-									enquiries={enquiries}
-								/>
-							</PanelPusher>
-						</Sidebar.Pusher>
-					</Pushable>
-				}
-			</GlobalContext>
-		}
-	</>
+export class EnquiriesPage extends Component {
+	state = { panelClosing: false }
+	closePanel = () => {
+		this.setState({ panelClosing: true })
+		// set timeout for panel to finish animation
+		setTimeout(() => {
+			this.props.setLayout({variables: { bottomPanel: null }})
+			this.setState({ panelClosing: false })
+		}, 430)
+	}
+	render() {
+		const {
+			allEnquiries: { loading, error, refetch, networkStatus, enquiries },
+			refreshToken
+		} = this.props
+		const { panelClosing } = this.state
+		return <>
+			<EnquiriesMenu
+				refetchEnquiries={() => refetch()}
+				enquiriesAreLoading={loading}
+				refreshToken={refreshToken}
+			/>
+			{loading && "Загрузка..."}
+			{error   && `Ошибка ${error.message}`}
+			{enquiries &&
+				<GlobalContext>
+					{({ bottomPanel }) =>
+						<Pushable>
+							<DetailsSidebar />
+							<Sidebar.Pusher>
+								<PanelPusher
+									panel={ 
+										<EnquiriesBottomPanel
+											closePanel={this.closePanel}
+										/>
+									}
+									panelRendered={!!bottomPanel}
+									panelVisible={!!bottomPanel && !panelClosing}
+								>
+									<EnquiriesTable
+										enquiries={enquiries}
+									/>
+								</PanelPusher>
+							</Sidebar.Pusher>
+						</Pushable>
+					}
+				</GlobalContext>
+			}
+		</>
+	}
 }
 
 export default compose(
-	graphql(allEnquiries, {
-			name: 'allEnquiries'
-	})
+	graphql(allEnquiries, { name: 'allEnquiries' }),
+	graphql(setLayout, { name: 'setLayout' })
 )(EnquiriesPage)
