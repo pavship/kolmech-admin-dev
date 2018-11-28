@@ -155,6 +155,9 @@ const MessagePropFilter = ({
 	<SMessage {...rest} />
 )
 export const Message = styled(MessagePropFilter)`
+	&&&& {
+		${props => baseSet(props)}
+	}
 	&&& {
 		${props => props.section && `
 			margin-top: 0;

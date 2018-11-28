@@ -41,7 +41,7 @@ export class EnquiriesPage extends Component {
 				refreshToken={refreshToken}
 			/>
 			{loading && "Загрузка..."}
-			{error   && `Ошибка ${error.message}`}
+			{error && `Ошибка ${error.message}`}
 			{enquiries &&
 				<GlobalContext>
 					{({ bottomPanel }) =>

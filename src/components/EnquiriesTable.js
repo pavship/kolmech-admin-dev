@@ -72,10 +72,11 @@ const EnquiriesTable = ({ enquiries }) => {
 											value: docs.length && docs[docs.length - 1].amount
 										},{
 											name: 'emps',
-											icon: org.employees.count ? 'user' : 'user plus',
+											icon: org.employees.length ? 'user' : 'user plus',
 											iconColor: 'grey',
 											type: 'onHover',
-											value: org.employees.count || ' ',
+											styles: ['center'],
+											value: org.employees.length || ' ',
 											onClick: () => {
 												setBottomPanel({
 													type: 'Employees',

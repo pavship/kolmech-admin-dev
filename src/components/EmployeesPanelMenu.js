@@ -26,7 +26,7 @@ const ClosePanelIcon =  styled(Icon)`
 	}
 `
 
-const EmployeesMenu = ({
+export default ({
 	closePanel,
 	refetchEnquiries,
 	enquiriesAreLoading,
@@ -110,5 +110,3 @@ const EmployeesMenu = ({
 		</GlobalContext>
 	)
 }
-
-export default EmployeesMenu

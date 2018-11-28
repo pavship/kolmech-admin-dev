@@ -55,7 +55,9 @@ const Td = styled.td`
 			${tdActiveStyle}
 		}
 		${props.active ? tdActiveStyle : ''}
-		// ${props.active ? 'background: red !important;' : ''}
+	`}
+	${props => props.styles && props.styles.includes('center') && `
+		text-align: center;
 	`}
 `
 
@@ -118,33 +120,43 @@ const TableRow = ({
 						/>
 					</Td>
 				)
-				if (f.content) return (
+				const {
+					content,
+					name,
+					value,
+					path,
+					onClick,
+					icon,
+					iconColor,
+					...rest
+				} = f
+				if (content) return (
 					<Td
-						key={f.name}
+						key={name}
 					>
-						{f.content}
+						{content}
 					</Td>
 				)
-				let val = f.value || (f.path ? getObjProp(entity, f.path) : null)
-				if (val && f.name === 'amount') val = currency(val)
+				let val = value || (path ? getObjProp(entity, path) : null)
+				if (val && name === 'amount') val = currency(val)
 				return (
 					<Td
-						key={f.name}
-						type={f.type}
-						active={f.active}
-						onClick={!!f.onClick ? 
-							e => {
-								e.stopPropagation()
-								f.onClick()
-							}
+						key={name}
+						{...rest}
+						onClick={
+							!!onClick
+							? e => {
+									e.stopPropagation()
+									onClick()
+								}
 							: undefined
 						}
 					>
-						{val && f.icon &&
+						{val && icon &&
 							<Icon
-								link={!!f.onClick}
-								name={f.icon}
-								color={f.iconColor || undefined}
+								link={!!onClick}
+								name={icon}
+								color={iconColor || undefined}
 							/>
 						}
 						{val}
