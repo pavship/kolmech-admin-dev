@@ -5,6 +5,7 @@ export const telFragment = gql`
 		id
 		number
 		type
+		country
 		note
 		default
 	}

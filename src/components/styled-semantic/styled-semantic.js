@@ -28,7 +28,7 @@ export const theme = {
 	}
 }
 const getThemeColor = (color) => theme.colors[color] || color
-const baseSet = ({ theme, bt, bb, bc, c, d, fs, fw, lh, mw, m, mb, mt, ml, p, pl, pr, pt, ta, va, w, ws }) => {
+const baseSet = ({ theme, bt, bb, bc, c, d, fs, fw, lh, mw, m, mb, mt, ml, ovy, p, pl, pr, pt, ta, va, w, ws }) => {
 	return `
 		${bt 	? `border-top: ${bt};`								: ''}
 		${bb 	? `border-bottom: ${bb};`							: ''}
@@ -40,9 +40,10 @@ const baseSet = ({ theme, bt, bb, bc, c, d, fs, fw, lh, mw, m, mb, mt, ml, p, pl
 		${lh 	? `line-height: ${lh};`								: ''}
 		${mw 	? `max-width: ${mw};`									: ''}
 		${m 	? `margin: ${m};`											: ''}
-		${mb 	? `margin-bottom: ${mb};`								: ''}
+		${mb 	? `margin-bottom: ${mb};`							: ''}
 		${mt 	? `margin-top: ${mt};`								: ''}
 		${ml 	? `margin-left: ${ml};`								: ''}
+		${ovy ? `overflow-y: ${ovy};`								: ''}
 		${p 	? `padding: ${p};`										: ''}
 		${pl 	? `padding-left: ${pl};`							: ''}
 		${pr 	? `padding-right: ${pr};`							: ''}
@@ -98,6 +99,25 @@ export const Header = styled(HeaderPropFilter)`
 		${props => props.inline && `{
 			margin: 0;
 			padding: 0 1rem;
+		}`}
+	}
+`
+
+const IconPropFilter = ({ activeColor, ...rest }) => (
+	<SIcon {...rest} />
+)
+export const Icon = styled(IconPropFilter)`
+	&&&& {
+		${props => baseSet(props)}
+	}
+	&&& {
+		${props => props.activeColor && `{
+			&:hover {
+				color: ${getThemeColor(props.activeColor)} !important;
+			}
+			&.active {
+				color: ${getThemeColor(props.activeColor)} !important;
+			}
 		}`}
 	}
 `

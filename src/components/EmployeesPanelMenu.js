@@ -71,7 +71,7 @@ export default ({
 						active={ !bottomPanel.id }
 						// onClick={() => setBottomPanel({...bottomPanel, id:})}
 						onClick={() => setBottomPanel(
-							produce(bottomPanel, draftPanel => delete draftPanel.id)
+							produce(bottomPanel, draftPanel => { delete draftPanel.id })
 						)}
 					/>
 					{/* {details && (

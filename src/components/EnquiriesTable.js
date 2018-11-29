@@ -23,7 +23,7 @@ const fields = [{
 },{
 	name: 'emps',
 	path: 'org.name',
-	width: '45px'
+	width: '50px'
 },{
 	name: 'model',
 	path: 'model.name',

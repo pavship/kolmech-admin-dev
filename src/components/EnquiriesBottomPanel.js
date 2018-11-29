@@ -1,15 +1,15 @@
 import React from 'react'
+import produce from 'immer'
 import { Query } from 'react-apollo'
 import { orgEmployees } from '../graphql/employee'
 
 import styled from 'styled-components'
 
+import { Message } from './styled-semantic/styled-semantic';
 import GlobalContext from './special/GlobalContext'
 import EmployeesPanelMenu from './EmployeesPanelMenu'
-import Employee from './Employee'
+import EmployeeDetails from './Employee/Details'
 import EmployeeEdit from './EmployeeEdit'
-// import { Message } from 'semantic-ui-react';
-import { Message } from './styled-semantic/styled-semantic';
 import EmployeesTable from './Employee/EmployeesTable';
 
 const EmployeesPanelBody = styled.div`
@@ -28,6 +28,14 @@ const EmployeeDetailsSection = styled.div`
   min-height: 100%;
 `
 
+const processEmp = emp =>
+  produce(emp, draft => {
+    const { lName, fName, mName } = draft.person
+    draft.person.fullname = [lName, fName, mName].join(' ')
+  })
+
+const processEmps = emps => emps.map(emp => processEmp(emp))
+
 export default ({
   closePanel
 }) => {
@@ -40,9 +48,8 @@ export default ({
         <Query
           query={orgEmployees}
           variables={{ orgId: bottomPanel.orgId }}
-          onCompleted={(data) => console.log(data)}
         >
-          {({ loading, error, data }) => 
+          {({ loading, error, data, refetch }) => 
             <EmployeesPanelBody>
               <EmployeesPanelTableSection>
                 {loading && "Загрузка..."}
@@ -57,28 +64,37 @@ export default ({
                         </>}
                       />
                     : <EmployeesTable
-                        employees={data.orgEmployees}
+                        emps={data.orgEmployees}
                       />
                   }
                   <pre>{JSON.stringify(data.orgEmployees, null, 2)}</pre>
                 </>}
               </EmployeesPanelTableSection>
               <EmployeeDetailsSection>
-                {/* <pre>{JSON.stringify(bottomPanel, null, 2)}</pre> */}
                 {!bottomPanel.id &&
                   <EmployeeEdit 
                     orgId={bottomPanel.orgId}
+                    refetchQueries={refetch}
                   />
                 }
                 {data && data.orgEmployees && bottomPanel.id && <>
                   {/* TODO change to function with two return statements */}
                   {bottomPanel.editMode
                     ? <EmployeeEdit
+                        emp={data.orgEmployees.find(e => e.id === bottomPanel.id)}
                         orgId={bottomPanel.orgId}
-                        emp={data.orgEmployees.find(e => e.id === bottomPanel.id)}
+                        // toggleEditMode={() => setBottomPanel({
+                        //   // bottomPanel: produce(bottomPanel, draft => { delete draft.editMode })
+                        //   bottomPanel: { ...bottomPanel, editMode: false }
+                        // })}
+                        toggleEditMode={() => setBottomPanel(
+                          produce(bottomPanel, draft => { delete draft.editMode })
+                        )}
+                        refetchQueries={refetch}
                       />
-                    : <Employee
-                        emp={data.orgEmployees.find(e => e.id === bottomPanel.id)}
+                    : <EmployeeDetails
+                        emp={processEmp(data.orgEmployees.find(e => e.id === bottomPanel.id))}
+                        toggleEditMode={() => setBottomPanel({ ...bottomPanel, editMode: true })}
                       />
                   }
                   <pre>{JSON.stringify(data.orgEmployees, null, 2)}</pre>

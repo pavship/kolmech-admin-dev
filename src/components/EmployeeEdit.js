@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
 
-import { Icon } from 'semantic-ui-react'
 import DetailsHeader from './DetailsHeader'
 import EmployeeForm from './EmployeeForm'
 import { Div } from './styled-semantic/styled-semantic'
@@ -10,7 +9,9 @@ export default class EmployeeEdit extends Component {
   render() {
     const { 
       emp,
-      orgId
+      orgId,
+      toggleEditMode,
+      refetchQueries
     } = this.props
     // existing emp
     const { fName, lName, mName } = emp || {}
@@ -36,10 +37,13 @@ export default class EmployeeEdit extends Component {
       />
       <Div
         p='1em'
+        // ovy='scroll'
       >
         <EmployeeForm
           emp={emp}
           orgId={orgId}
+          toggleEditMode={toggleEditMode}
+          refetchQueries={refetchQueries}
         />
       </Div>
     </>
