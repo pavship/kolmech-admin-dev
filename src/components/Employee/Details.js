@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Div, Icon } from '../styled-semantic/styled-semantic';
+import { Div, Icon } from '../styled/styled-semantic';
 import DetailsHeader from '../DetailsHeader'
 import Employee from './Employee'
 

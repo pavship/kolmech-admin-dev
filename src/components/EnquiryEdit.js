@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
 import { Form, Input, Button, Message } from 'semantic-ui-react'
-import { Div, Span, A, Label, Section, Dropdown } from './styled-semantic/styled-semantic.js'
+import { Div, Span, A, Label, Section, Dropdown } from './styled/styled-semantic.js'
 import DatePicker from './common/DatePicker'
 
 import { graphql, compose } from 'react-apollo'

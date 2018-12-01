@@ -2,7 +2,7 @@ import React from 'react'
 import { connect, getIn } from 'formik'
 import styled from 'styled-components'
 import { Form } from 'semantic-ui-react'
-import { Label } from '../styled-semantic/styled-semantic';
+import { Label } from '../styled/styled-semantic';
 import FormikInput from './FormikInput'
 
 const SFormikInput = styled(FormikInput)`

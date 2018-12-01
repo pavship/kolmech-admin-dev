@@ -10,6 +10,7 @@ const fields = [{
 	title: 'ФИО',
 	width: '250px'
 }]
+
 export default ({
   emps
 }) => {
@@ -54,6 +55,7 @@ export default ({
                   onClick={() => {
                     setBottomPanel({
                       ...bottomPanel,
+                      editMode: false,
                       id
                     })
                   }}

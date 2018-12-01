@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react'
 import NumberFormat from 'react-number-format'
 
 import { Input } from 'semantic-ui-react'
-import { Span } from '../styled-semantic/styled-semantic'
+import { Span } from '../styled/styled-semantic'
 
 class CurrencyInput extends Component {
 	render() {

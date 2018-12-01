@@ -2,7 +2,7 @@ import React from 'react'
 
 import styled from 'styled-components'
 import { Icon } from 'semantic-ui-react'
-import { Caret } from '../styled-semantic/styled-semantic'
+import { Caret } from '../styled/styled-semantic'
 
 import { getObjProp } from '../../utils/object'
 import { currency } from '../../utils/format'

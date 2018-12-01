@@ -34,15 +34,6 @@ const client = new ApolloClient({
 			}
 		})
 	},
-	onError: ({ graphQLErrors, networkError }) => {
-    // if (graphQLErrors) {
-    //   sendToLoggingService(graphQLErrors);
-    // }
-    if (networkError) {
-			console.log('networkError!!! > ', networkError)
-      // logoutUser();
-    }
-  },
 	clientState: {
 		defaults,
 		resolvers,

@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Mutation } from 'react-apollo'
 
-import DetailsHeader from './DetailsHeader'
-import EmployeeForm from './EmployeeForm'
-import { Div } from './styled-semantic/styled-semantic'
+import DetailsHeader from '../DetailsHeader'
+import EmployeeForm from './Form'
+import { Div } from '../styled/styled-semantic'
 
 export default class EmployeeEdit extends Component {
   render() {
+    console.log('EmployeeEdit > ')
     const { 
       emp,
       orgId,
@@ -37,7 +37,8 @@ export default class EmployeeEdit extends Component {
       />
       <Div
         p='1em'
-        // ovy='scroll'
+        oy='auto'
+        h='315px'
       >
         <EmployeeForm
           emp={emp}

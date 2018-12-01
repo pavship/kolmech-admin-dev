@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect, getIn } from 'formik'
 import { Form } from 'semantic-ui-react'
-import { Label, Input } from '../styled-semantic/styled-semantic';
+import { Label, Input } from '../styled/styled-semantic';
 import InputMask from 'react-input-mask'
 import FormikInput from './FormikInput.js';
 
@@ -45,7 +45,7 @@ class FormikTelField extends Component {
               {(inputProps) =>
                 <Input
                   w='270px !important'
-                  placeholder='Номер телефона'
+                  // placeholder='Номер телефона'
                   label={inputLabel}
                   {...rest}
                   {...inputProps}
@@ -55,7 +55,7 @@ class FormikTelField extends Component {
           : <FormikInput
               w='270px !important'
               name={name}
-              placeholder='Телефон с кодом страны'
+              // placeholder='Телефон с кодом страны'
               label={inputLabel}
               {...rest}
             />

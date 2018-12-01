@@ -2,14 +2,14 @@ import React from 'react'
 import produce from 'immer'
 
 import { Query } from 'react-apollo'
-import { orgLocal } from '../graphql/org'
+import { orgLocal } from '../../graphql/org'
 
 import styled from 'styled-components'
 import { Icon } from 'semantic-ui-react'
-import { Header, Button, Span } from './styled-semantic/styled-semantic'
+import { Header, Button, Span } from '../styled/styled-semantic'
 
-import GlobalContext from './special/GlobalContext'
-import EnquiriesSubmenu from './EnquiriesSubmenu'
+import GlobalContext from '../special/GlobalContext'
+import EnquiriesSubmenu from '../EnquiriesSubmenu'
 
 const MenuDiv = styled.div`
 	display: flex;

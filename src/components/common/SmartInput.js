@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import debounce from 'lodash/debounce'
-import { Input } from '../styled-semantic/styled-semantic'
+import { Input } from '../styled/styled-semantic'
 import { isNaN } from '../../utils/format'
 
 // INFO built-in handling of 'int' number type

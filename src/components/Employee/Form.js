@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import { updatedDiff } from 'deep-object-diff';
 import { flatten, unflatten } from 'flat'
-import { Mutation } from 'react-apollo';
-import { upsertEmployee, orgEmployees } from '../graphql/employee';
+import { projectEntity, preparePayload } from '../form/utils';
 
-import { Formik, getIn, FieldArray } from 'formik'
+import { Mutation } from 'react-apollo';
+import { upsertEmployee } from '../../graphql/employee';
+
+import { Formik, FieldArray } from 'formik'
 import { Form, Dropdown } from 'semantic-ui-react';
-// import {  } from 'formik-semantic-ui'
-import { Button, A, Message } from './styled-semantic/styled-semantic';
-import FormikField from './form/FormikField'
-import FormikTelField from './form/FormikTelField';
+import { Button, A, Message } from '../styled/styled-semantic';
+import FormikField from '../form/FormikField'
+import FormikTelField from '../form/FormikTelField';
 
 // position
 // fName
@@ -21,6 +22,18 @@ import FormikTelField from './form/FormikTelField';
 //   email
 //   confirmed
 // }
+
+const formSchema = {
+  person: {
+    lName: '',
+    fName: '',
+    mName: '',
+    tels: [{
+      number: '',
+      country: 'rus',
+    }]
+  }
+}
 
 const countryOtions = [
   { key: 'rus', text: '+7', value: 'rus' },
@@ -35,29 +48,7 @@ export default class EmployeeForm extends Component {
       toggleEditMode,
       refetchQueries
     } = this.props
-    let initialValues = {
-      person: {
-        id: '',
-        lName: '',
-        fName: '',
-        mName: '',
-        tels: [{
-          number: '',
-          country: 'rus',
-        }]
-      }
-    }
-    const flatIni = flatten(initialValues)
-    const flatEmp = emp && flatten(emp)
-    // not-empty-initial-values are then added to payload (for new entities)
-    const flatIniNotEmpty = {}
-    Object.keys(flatIni).forEach(k => {
-      if (flatIni[k]) flatIniNotEmpty[k] = flatIni[k]
-      // initial blank values substituted by existing entity
-      if (emp && flatEmp[k]) flatIni[k] = flatEmp[k]
-    })
-    if (emp) initialValues = unflatten(flatIni)
-    console.log('flatIniNotEmpty > ', flatIniNotEmpty)
+    const initialValues = emp ? projectEntity(emp, formSchema) : formSchema
     console.log('initialValues > ', initialValues)
     return (
       <Mutation
@@ -75,25 +66,32 @@ export default class EmployeeForm extends Component {
           <Formik
             initialValues={initialValues}
             onSubmit={async (values, { resetForm }) => {
-              let updatedValues = updatedDiff(initialValues, values)
-              // not-empty-initial-values are added to payload (for new entities)
-              if (!emp) {
-                const flatUpd = flatten(updatedValues)
-                Object.keys(flatIniNotEmpty).forEach(k => {
-                  if (!flatUpd[k]) flatUpd[k] = flatIniNotEmpty[k]
-                })
-                updatedValues = unflatten(flatUpd)
-              }
-              const input = {
-                ...emp && { id: emp.id },
-                ...!emp && { orgId },
-                ...updatedValues
-              }
-              console.log('input > ', input)
-              const upserted = await upsertEmployee({ variables: { input } })
-              console.log('upserted > ', upserted)
-              if (emp) toggleEditMode()
-              resetForm()
+
+              // let updatedValues = updatedDiff(initialValues, values)
+              // // not-empty-initial-values are added to payload (for new entities)
+              // if (!emp) {
+              //   const flatUpd = flatten(updatedValues)
+              //   Object.keys(flatIniNotEmpty).forEach(k => {
+              //     if (!flatUpd[k]) flatUpd[k] = flatIniNotEmpty[k]
+              //   })
+              //   updatedValues = unflatten(flatUpd)
+              // }
+              // // exclude tels with empty number
+              // console.log('updatedValues > ', updatedValues)
+              // const filteredTels = updatedValues.person.tels.filter(t => !!t.number)
+              // if (!filteredTels.length) delete updatedValues.person.tels
+              //   else updatedValues.person.tels = filteredTels
+              // console.log('updatedValues after tels > ', updatedValues)
+              // const input = {
+              //   ...emp && { id: emp.id },
+              //   ...!emp && { orgId },
+              //   ...updatedValues
+              // }
+              // console.log('input > ', input)
+              // const input = preparePayload(values, initialValues, formSchema)
+              // const upserted = await upsertEmployee({ variables: { input } })
+              // if (emp) toggleEditMode()
+              // else resetForm()
             }}
           >
             {({
@@ -191,7 +189,7 @@ export default class EmployeeForm extends Component {
                   loading={loading}
                 />
                 <A cancel
-                  onClick={ emp ? toggleEditMode : handleReset}
+                  onClick={emp ? toggleEditMode : handleReset}
                 >
                   {emp ? 'Отмена' : 'Очистить'}
                 </A>

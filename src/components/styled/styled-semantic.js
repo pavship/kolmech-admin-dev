@@ -28,7 +28,7 @@ export const theme = {
 	}
 }
 const getThemeColor = (color) => theme.colors[color] || color
-const baseSet = ({ theme, bt, bb, bc, c, d, fs, fw, lh, mw, m, mb, mt, ml, ovy, p, pl, pr, pt, ta, va, w, ws }) => {
+const baseSet = ({ theme, bt, bb, bc, c, d, fs, fw, h, lh, mw, m, mb, mt, ml, o, ox, oy, p, pl, pr, pt, ta, va, w, ws }) => {
 	return `
 		${bt 	? `border-top: ${bt};`								: ''}
 		${bb 	? `border-bottom: ${bb};`							: ''}
@@ -37,13 +37,16 @@ const baseSet = ({ theme, bt, bb, bc, c, d, fs, fw, lh, mw, m, mb, mt, ml, ovy, 
 		${d 	? `display: ${d};`										: ''}
 		${fs 	? `font-size: ${fs};`									: ''}
 		${fw 	? `font-weight: ${fw};`								: ''}
+		${h 	? `height: ${h};`											: ''}
 		${lh 	? `line-height: ${lh};`								: ''}
 		${mw 	? `max-width: ${mw};`									: ''}
 		${m 	? `margin: ${m};`											: ''}
 		${mb 	? `margin-bottom: ${mb};`							: ''}
 		${mt 	? `margin-top: ${mt};`								: ''}
 		${ml 	? `margin-left: ${ml};`								: ''}
-		${ovy ? `overflow-y: ${ovy};`								: ''}
+		${o  	? `opacity: ${o};`										: ''}
+		${ox  ? `overflow-x: ${ox};`								: ''}
+		${oy  ? `overflow-y: ${oy};`								: ''}
 		${p 	? `padding: ${p};`										: ''}
 		${pl 	? `padding-left: ${pl};`							: ''}
 		${pr 	? `padding-right: ${pr};`							: ''}

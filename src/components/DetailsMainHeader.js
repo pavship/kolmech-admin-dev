@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import { Button } from './styled-semantic/styled-semantic'
+import { Button } from './styled/styled-semantic'
 
 import DetailsHeaderContainer from './DetailsHeaderContainer'
 import DetailsHeaderTitle from './DetailsHeaderTitle'

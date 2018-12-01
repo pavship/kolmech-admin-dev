@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ThemeProvider } from 'styled-components'
-import { theme } from './components/styled-semantic/styled-semantic'
+import { theme } from './components/styled/styled-semantic'
 
 import Root from './components/Root'
 
