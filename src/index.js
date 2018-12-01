@@ -35,13 +35,17 @@ const client = new ApolloClient({
 		})
 	},
 	onError: ({ graphQLErrors, networkError }) => {
-    // if (graphQLErrors) {
-    //   sendToLoggingService(graphQLErrors);
-    // }
+    if (graphQLErrors) {
+			console.log('graphQLErrors!!! > ', graphQLErrors)
+      // sendToLoggingService(graphQLErrors);
+    }
     if (networkError) {
 			console.log('networkError!!! > ', networkError)
       // logoutUser();
-    }
+		}
+		// networkError!!! >  SyntaxError: Unexpected token I in JSON at position 0
+    // at JSON.parse (<anonymous>)
+    // at index.js:43
   },
 	clientState: {
 		defaults,

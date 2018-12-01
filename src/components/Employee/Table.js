@@ -9,6 +9,10 @@ const fields = [{
 	name: 'fullname',
 	title: 'ФИО',
 	width: '250px'
+},{
+  name: 'tel',
+  title: 'Телефон',
+  width: '120px'
 }]
 
 export default ({
@@ -22,7 +26,7 @@ export default ({
 				>
 					{({ tableFields }) => 
 						emps.map(emp => {
-							const { id, person: { lName, fName, mName } } = emp
+							const { id, person: { lName, fName, mName, tels } } = emp
 							const active = bottomPanel.id === id
 							return (
                 <TableRow
@@ -32,6 +36,9 @@ export default ({
                   rowFields={[{
                     name: 'fullname',
                     value: [lName, fName, mName].join(' ')
+                  },{
+                    name: 'tel',
+                    value: tels && tels.length && tels[0].number || ''
                   }
                   // ,{
                   //   name: 'emps',

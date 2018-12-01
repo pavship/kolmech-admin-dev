@@ -48,8 +48,9 @@ export default class EmployeeForm extends Component {
       toggleEditMode,
       refetchQueries
     } = this.props
+    console.log('emp > ', emp)
     const initialValues = emp ? projectEntity(emp, formSchema) : formSchema
-    console.log('initialValues > ', initialValues)
+    // console.log('initialValues > ', initialValues)
     return (
       <Mutation
         mutation={upsertEmployee}
