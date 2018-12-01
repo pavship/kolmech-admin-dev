@@ -1,3 +1,5 @@
+import { updatedDiff } from 'deep-object-diff';
+
 export const projectEntity = (entity, schema) => {
   let result = {}
   handleObj(schema, entity, result)
@@ -5,7 +7,9 @@ export const projectEntity = (entity, schema) => {
 }
 
 export const preparePayload = (values, initialValues, schema) => {
-
+  let result = {}
+  handlePayloadObj(schema, initialValues, values, result)
+  return result
 }
 
 const handleArr = (arrSchema, arr = [], resultArr) => {
@@ -13,17 +17,17 @@ const handleArr = (arrSchema, arr = [], resultArr) => {
   const type = typeof arrSchema[0]
   // TODO handle array of primitives (now only collections)
   if (type === 'object') {
-    if (!arr.length) return handleObj(arrSchema[0], {}, resultArr[0] = {})
-    else arr.forEach((obj, i) => handleObj(arrSchema[0], obj, resultArr[i] = {}))
+    return arr.length
+      ? arr.forEach((obj, i) => handleObj(arrSchema[0], obj, resultArr[i] = {}))
+      : handleObj(arrSchema[0], {}, resultArr[0] = {})
   }
 }
 
 const handleObj = (objSchema, obj = {}, result) => {
-  // preserve id of entity objects
+  // preserve ids of entity objects
   if (obj.id) result.id = obj.id
   Object.keys(objSchema).forEach(k => {
     const type = typeof objSchema[k]
-    console.log(k, type)
     // NOTE form schema should contain only non-empty nested objects
     if (type === 'object' && Array.isArray(objSchema[k]))
       return handleArr(objSchema[k], obj[k], result[k] = [])
@@ -32,6 +36,38 @@ const handleObj = (objSchema, obj = {}, result) => {
     result[k] = obj[k] || objSchema[k]
   })
 }
+
+const handlePayloadObj = (objSchema, initialObj, obj, result) => {
+  // preserve ids of entity objects
+  if (obj.id) result.id = obj.id
+  Object.keys(objSchema).forEach(k => {
+    const type = typeof objSchema[k]
+    console.log(k, type)
+    // NOTE form schema should contain only non-empty nested objects
+    if (type === 'object' && Array.isArray(objSchema[k]))
+      return handlePayloadArr(objSchema[k], initialObj[k], obj[k], result[k] = [])
+    if (type === 'object')
+      return handlePayloadObj(objSchema[k], initialObj[k], obj[k], result[k] = {})
+    result[k] =
+      // result includes changed values
+      obj[k] !== initialObj[k] ? obj[k] :
+      // and non-empty initial values
+      !!objSchema[k] ? objSchema[k]
+      : undefined
+    console.log('result[k] > ', k, result[k])
+  })
+}
+
+const handlePayloadArr = (arrSchema, initialArr, arr, resultArr) => {
+  // NOTE schema array should contain one element only just to define schema
+  const type = typeof arrSchema[0]
+  // TODO handle array of primitives (now only collections)
+  if (type === 'object') {
+    // arr should contain at least one element
+    return arr.forEach((obj, i) => handleObj(arrSchema[0], initialArr[i], obj, resultArr[i] = {}))
+  }
+}
+
 
 // const flatIni = flatten(initialValues)
 // const flatEmp = emp && flatten(emp)

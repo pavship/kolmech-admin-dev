@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
-import { updatedDiff } from 'deep-object-diff';
-import { flatten, unflatten } from 'flat'
 import { projectEntity, preparePayload } from '../form/utils';
 
 import { Mutation } from 'react-apollo';
 import { upsertEmployee } from '../../graphql/employee';
 
-import { Formik, FieldArray } from 'formik'
+import { Formik, FieldArray, getIn } from 'formik'
 import { Form, Dropdown } from 'semantic-ui-react';
 import { Button, A, Message } from '../styled/styled-semantic';
 import FormikField from '../form/FormikField'
@@ -41,6 +39,7 @@ const countryOtions = [
 ]
 
 export default class EmployeeForm extends Component {
+  initialValues = this.props.emp ? projectEntity(this.props.emp, formSchema) : formSchema
   render() {
     const {
       emp,
@@ -49,7 +48,8 @@ export default class EmployeeForm extends Component {
       refetchQueries
     } = this.props
     console.log('emp > ', emp)
-    const initialValues = emp ? projectEntity(emp, formSchema) : formSchema
+    // const initialValues = emp ? projectEntity(emp, formSchema) : formSchema
+    const initialValues = this.initialValues
     // console.log('initialValues > ', initialValues)
     return (
       <Mutation
@@ -88,8 +88,10 @@ export default class EmployeeForm extends Component {
               //   ...!emp && { orgId },
               //   ...updatedValues
               // }
-              // console.log('input > ', input)
-              // const input = preparePayload(values, initialValues, formSchema)
+              console.log('initialValues > ', initialValues)
+              console.log('values > ', values)
+              const input = preparePayload(values, initialValues, formSchema)
+              console.log('input > ', input)
               // const upserted = await upsertEmployee({ variables: { input } })
               // if (emp) toggleEditMode()
               // else resetForm()
@@ -131,9 +133,14 @@ export default class EmployeeForm extends Component {
                             <Dropdown
                               tabIndex={-1}
                               name={`person.tels.${i}.country`}
-                              value={values.person.tels[i].country}
+                              value={getIn(values, `person.tels.${i}.country`)}
+                              // value={values.person.tels[i].country}
+                              // value={tel.country}
                               options={countryOtions}
-                              onChange={(e, { name, value }) => setFieldValue( name, value )}
+                              onChange={(e, { name, value }) => {
+                                e.preventDefault()
+                                console.log('name, value > ', name, value)
+                                setFieldValue( name, value )}}
                             />
                           }
                           country={values.person.tels[i].country}
