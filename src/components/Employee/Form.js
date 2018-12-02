@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import { projectEntity, preparePayload } from '../form/utils';
-
+import cloneDeep from 'lodash/cloneDeep';
 import { Mutation } from 'react-apollo';
-import { upsertEmployee } from '../../graphql/employee';
+import { upsertEmployee, orgEmployees } from '../../graphql/employee';
 
-import { Formik, FieldArray, getIn } from 'formik'
+import { Formik, getIn, FieldArray } from 'formik'
 import { Form, Dropdown } from 'semantic-ui-react';
 import { Button, A, Message } from '../styled/styled-semantic';
 import FormikField from '../form/FormikField'
 import FormikTelField from '../form/FormikTelField';
+import { projectEntity, preparePayload } from '../form/utils';
 
 // position
 // fName
@@ -21,25 +21,12 @@ import FormikTelField from '../form/FormikTelField';
 //   confirmed
 // }
 
-const formSchema = {
-  person: {
-    lName: '',
-    fName: '',
-    mName: '',
-    tels: [{
-      number: '',
-      country: 'rus',
-    }]
-  }
-}
-
 const countryOtions = [
   { key: 'rus', text: '+7', value: 'rus' },
   { key: 'notRus', text: 'прочие', value: 'notRus' },
 ]
 
 export default class EmployeeForm extends Component {
-  initialValues = this.props.emp ? projectEntity(this.props.emp, formSchema) : formSchema
   render() {
     const {
       emp,
@@ -47,10 +34,19 @@ export default class EmployeeForm extends Component {
       toggleEditMode,
       refetchQueries
     } = this.props
-    console.log('emp > ', emp)
-    // const initialValues = emp ? projectEntity(emp, formSchema) : formSchema
-    const initialValues = this.initialValues
-    // console.log('initialValues > ', initialValues)
+    let schema = {
+      person: {
+        lName: '',
+        fName: '',
+        mName: '',
+        tels: [{
+          number: '',
+          country: 'rus',
+        }]
+      }
+    }
+    const initialValues = emp ? cloneDeep(projectEntity(emp, schema)) : schema
+    console.log('initialValues > ', initialValues)
     return (
       <Mutation
         mutation={upsertEmployee}
@@ -66,35 +62,16 @@ export default class EmployeeForm extends Component {
         {(upsertEmployee, { loading, error }) =>
           <Formik
             initialValues={initialValues}
-            onSubmit={async (values, { resetForm }) => {
-
-              // let updatedValues = updatedDiff(initialValues, values)
-              // // not-empty-initial-values are added to payload (for new entities)
-              // if (!emp) {
-              //   const flatUpd = flatten(updatedValues)
-              //   Object.keys(flatIniNotEmpty).forEach(k => {
-              //     if (!flatUpd[k]) flatUpd[k] = flatIniNotEmpty[k]
-              //   })
-              //   updatedValues = unflatten(flatUpd)
-              // }
-              // // exclude tels with empty number
-              // console.log('updatedValues > ', updatedValues)
-              // const filteredTels = updatedValues.person.tels.filter(t => !!t.number)
-              // if (!filteredTels.length) delete updatedValues.person.tels
-              //   else updatedValues.person.tels = filteredTels
-              // console.log('updatedValues after tels > ', updatedValues)
-              // const input = {
-              //   ...emp && { id: emp.id },
-              //   ...!emp && { orgId },
-              //   ...updatedValues
-              // }
-              console.log('initialValues > ', initialValues)
+            onSubmit={(values, { resetForm }) => {
               console.log('values > ', values)
-              const input = preparePayload(values, initialValues, formSchema)
+
+              const input = preparePayload(values, initialValues, schema)
               console.log('input > ', input)
+
               // const upserted = await upsertEmployee({ variables: { input } })
+              // console.log('upserted > ', upserted)
               // if (emp) toggleEditMode()
-              // else resetForm()
+              // resetForm()
             }}
           >
             {({
@@ -133,40 +110,17 @@ export default class EmployeeForm extends Component {
                             <Dropdown
                               tabIndex={-1}
                               name={`person.tels.${i}.country`}
-                              value={getIn(values, `person.tels.${i}.country`)}
-                              // value={values.person.tels[i].country}
-                              // value={tel.country}
+                              value={values.person.tels[i].country}
                               options={countryOtions}
-                              onChange={(e, { name, value }) => {
-                                e.preventDefault()
-                                console.log('name, value > ', name, value)
-                                setFieldValue( name, value )}}
+                              onChange={(e, { name, value }) => setFieldValue( name, value )}
                             />
                           }
                           country={values.person.tels[i].country}
                         />
                       ))}
                     </>
-                    // <div>
-                    //   {values.friends.map((friend, index) => (
-                    //     <div key={index}>
-                    //       <Field name={`friends[${index}]name`} />
-                    //       <Field name={`friends.${index}.age`} /> // both these conventions do
-                    //       the same
-                    //       <button type="button" onClick={() => arrayHelpers.remove(index)}>
-                    //         -
-                    //       </button>
-                    //     </div>
-                    //   ))}
-                    //   <button
-                    //     type="button"
-                    //     onClick={() => arrayHelpers.push({ name: '', age: '' })}
-                    //   >
-                    //     +
-                    //   </button>
-                    // </div>
                   )}
-                />
+                  />
                 {/* <FormikTelField
                   name='person.tels[0].number'
                   inputLabel={
@@ -197,7 +151,7 @@ export default class EmployeeForm extends Component {
                   loading={loading}
                 />
                 <A cancel
-                  onClick={emp ? toggleEditMode : handleReset}
+                  onClick={ emp ? toggleEditMode : handleReset}
                 >
                   {emp ? 'Отмена' : 'Очистить'}
                 </A>
