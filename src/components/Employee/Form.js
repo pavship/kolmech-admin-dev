@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import cloneDeep from 'lodash/cloneDeep';
+
 import { Mutation } from 'react-apollo';
 import { upsertEmployee, orgEmployees } from '../../graphql/employee';
 
-import { Formik, getIn, FieldArray } from 'formik'
-import { Form, Dropdown } from 'semantic-ui-react';
+import { object, array, string } from 'yup'
+import { Formik, FieldArray } from 'formik'
+import { Dropdown } from 'semantic-ui-react';
 import { Button, A, Message } from '../styled/styled-semantic';
-import FormikField from '../form/FormikField'
-import FormikTelField from '../form/FormikTelField';
+import Field from '../form/Field';
 import { projectEntity, preparePayload } from '../form/utils';
 
 // position
@@ -21,10 +22,18 @@ import { projectEntity, preparePayload } from '../form/utils';
 //   confirmed
 // }
 
-const countryOtions = [
-  { key: 'rus', text: '+7', value: 'rus' },
-  { key: 'notRus', text: 'прочие', value: 'notRus' },
-]
+
+const validationSchema = object().shape({
+  person: object().shape({
+    lName: string().min(2).max(255),
+    fName: string().min(2).max(255).required(),
+    mName: string().min(2).max(255),
+    tels: array().of(object().shape({
+      number: string().min(7).max(25),
+      // country: 
+    }))
+  })
+})
 
 export default class EmployeeForm extends Component {
   render() {
@@ -46,7 +55,6 @@ export default class EmployeeForm extends Component {
       }
     }
     const initialValues = emp ? cloneDeep(projectEntity(emp, schema)) : schema
-    console.log('initialValues > ', initialValues)
     return (
       <Mutation
         mutation={upsertEmployee}
@@ -62,16 +70,13 @@ export default class EmployeeForm extends Component {
         {(upsertEmployee, { loading, error }) =>
           <Formik
             initialValues={initialValues}
-            onSubmit={(values, { resetForm }) => {
-              console.log('values > ', values)
-
+            validationSchema={validationSchema}
+            onSubmit={async (values, { resetForm }) => {
               const input = preparePayload(values, initialValues, schema)
-              console.log('input > ', input)
-
-              // const upserted = await upsertEmployee({ variables: { input } })
-              // console.log('upserted > ', upserted)
-              // if (emp) toggleEditMode()
-              // resetForm()
+              const upserted = await upsertEmployee({ variables: { input } })
+              console.log('upserted > ', upserted)
+              if (emp) toggleEditMode()
+              resetForm()
             }}
           >
             {({
@@ -81,81 +86,46 @@ export default class EmployeeForm extends Component {
               handleReset,
               setFieldValue
             }) =>
-              <Form
-                onSubmit={handleSubmit}
-                error={!!error}
-              >
-                <FormikField
+              <>
+                <Field
                   label='Фамилия'
                   name='person.lName'
                 />
-                <FormikField
+                <Field
                   label='Имя'
                   required
                   name='person.fName'
                 />
-                <FormikField
+                <Field
                   label='Отчество'
                   name='person.mName'
                 />
-                <FieldArray
+                <Field
+                  label='Телефон'
                   name='person.tels'
-                  render={arrayHelpers => (
-                    <>
-                      {values.person.tels.map((tel, i) => (
-                        <FormikTelField
-                          key={i}
-                          name={`person.tels.${i}.number`}
-                          inputLabel={
-                            <Dropdown
-                              tabIndex={-1}
-                              name={`person.tels.${i}.country`}
-                              value={values.person.tels[i].country}
-                              options={countryOtions}
-                              onChange={(e, { name, value }) => setFieldValue( name, value )}
-                            />
-                          }
-                          country={values.person.tels[i].country}
-                        />
-                      ))}
-                    </>
-                  )}
-                  />
-                {/* <FormikTelField
-                  name='person.tels[0].number'
-                  inputLabel={
-                    <Dropdown
-                      tabIndex={-1}
-                      name='person.tels[0].country'
-                      // value={values['person.country']}
-                      value={getIn(values, 'person.tels[0].country')}
-                      // defaultValue={country.curVal}
-                      options={countryOtions}
-                      // onChange={handleChange}
-                      onChange={(e, { name, value }) => setFieldValue( name, value )}
-                      // onChange={(e, { name, value }) => setField('country', { value })}
-                    />
-                  }
-                  country={getIn(values, 'person.tels[0].country')}
-                /> */}
-                <Message
-                  error
-                  header='Не удалось добавить..'
-                  content={error && error.message}
                 />
+                {!!error &&
+                  <Message
+                    error
+                    header='Не удалось добавить..'
+                    content={error && error.message}
+                  />
+                }
                 <Button
                   ml='122px'
-                  type="submit"
+                  // type="submit"
+                  type='button'
                   primary
                   content={emp ? 'Сохранить' : 'Добавить'}
                   loading={loading}
+                  onClick={handleSubmit}
                 />
                 <A cancel
                   onClick={ emp ? toggleEditMode : handleReset}
                 >
                   {emp ? 'Отмена' : 'Очистить'}
                 </A>
-              </Form>
+              </>
             }
           </Formik>
         }

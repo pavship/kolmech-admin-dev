@@ -1,17 +1,27 @@
 import React, { Component, Fragment } from 'react'
 
-import { Form, Input, Button, Message } from 'semantic-ui-react'
-import { Div, Span, A, Label, Section, Dropdown } from './styled/styled-semantic.js'
-import DatePicker from './common/DatePicker'
+import cloneDeep from 'lodash/cloneDeep'
+import validateInn from '../utils/validateInn'
+import { isValidDate, toLocalISOString, fromLocalISOString }from '../utils/dates'
 
 import { graphql, compose } from 'react-apollo'
 import { allEnquiries, createEnquiry, updateEnquiry } from '../graphql/enquiry'
 import { createOrg } from '../graphql/org'
 import { allOrgsAndModels } from '../graphql/combinedQueries'
 
-import cloneDeep from 'lodash/cloneDeep'
-import validateInn from '../utils/validateInn'
-import { isValidDate, toLocalISOString, fromLocalISOString }from '../utils/dates'
+import styled from 'styled-components'
+import { Form, Input, Button, Message, Dropdown as SDropdown } from 'semantic-ui-react'
+import { Div, Span, A, Label, Section } from './styled/styled-semantic.js'
+import DatePicker from './common/DatePicker'
+
+const Dropdown = styled(SDropdown)`
+	&&&&&& {
+		width: 350px;
+		&:hover {
+			border-color: rgba(34, 36, 38, 0.15);
+		}
+	}
+`
 
 class EnquiryEdit extends Component {
 	constructor(props){

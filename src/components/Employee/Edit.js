@@ -6,7 +6,6 @@ import { Div } from '../styled/styled-semantic'
 
 export default class EmployeeEdit extends Component {
   render() {
-    console.log('EmployeeEdit > ')
     const { 
       emp,
       orgId,

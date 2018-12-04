@@ -24,7 +24,9 @@ export const theme = {
 	},
 	colors: {
 		green: '#016936',
-		blue: '#0E6EB8'
+		blue: '#0E6EB8',
+		error: '#9f3a38',
+		errorBorder: '#e0b4b4'
 	}
 }
 const getThemeColor = (color) => theme.colors[color] || color
@@ -278,13 +280,10 @@ export const Input = styled(InputPropFilter)`
 `
 
 export const Dropdown = styled(SDropdown)`
-	&&&&&& {
-		width: 350px;
-		&:hover {
-			border-color: rgba(34, 36, 38, 0.15);
-		}
+	&&&& {
+		${props => baseSet(props)}
 	}
-	`
+`
 
 const FormFieldPropFilter = ({ w, ...rest }) => (
 	<SForm.Field {...rest} />

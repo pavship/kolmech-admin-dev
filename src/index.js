@@ -41,6 +41,9 @@ const client = new ApolloClient({
     }
     if (networkError) {
 			console.log('networkError!!! > ', networkError)
+			console.log('networkError.name > ', networkError.name)
+			console.log('networkError.message > ', networkError.message)
+			console.log(networkError === 'SyntaxError: Unexpected token I in JSON at position 0')
       // logoutUser();
 		}
 		// networkError!!! >  SyntaxError: Unexpected token I in JSON at position 0

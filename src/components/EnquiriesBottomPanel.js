@@ -39,7 +39,6 @@ const processEmps = emps => emps.map(emp => processEmp(emp))
 export default ({
   closePanel
 }) => {
-  console.log('render EBpanel')
   return (
     <GlobalContext>
       {({ bottomPanel, setBottomPanel }) => <>
