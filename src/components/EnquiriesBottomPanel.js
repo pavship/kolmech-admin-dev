@@ -77,17 +77,13 @@ export default ({
                       /> :
                     bottomPanel.editMode
                     ? <EmployeeEdit
-                          emp={data.orgEmployees.find(e => e.id === bottomPanel.id)}
-                          orgId={bottomPanel.orgId}
-                          // toggleEditMode={() => setBottomPanel({
-                          //   // bottomPanel: produce(bottomPanel, draft => { delete draft.editMode })
-                          //   bottomPanel: { ...bottomPanel, editMode: false }
-                          // })}
-                          toggleEditMode={() => setBottomPanel(
-                            produce(bottomPanel, draft => { delete draft.editMode })
-                          )}
-                          refetchQueries={refetch}
-                        />
+                        emp={data.orgEmployees.find(e => e.id === bottomPanel.id)}
+                        orgId={bottomPanel.orgId}
+                        toggleEditMode={() => setBottomPanel(
+                          produce(bottomPanel, draft => { delete draft.editMode })
+                        )}
+                        refetchQueries={refetch}
+                      />
                     : <EmployeeDetails
                         emp={processEmp(data.orgEmployees.find(e => e.id === bottomPanel.id))}
                         toggleEditMode={() => setBottomPanel({ ...bottomPanel, editMode: true })}

@@ -4,7 +4,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { Mutation } from 'react-apollo';
 import { upsertEmployee, orgEmployees } from '../../graphql/employee';
 
-import { object, array, string } from 'yup'
+import { object, array, lazy, string } from 'yup'
 import { Formik, FieldArray } from 'formik'
 import { Dropdown } from 'semantic-ui-react';
 import { Button, A, Message } from '../styled/styled-semantic';
@@ -23,19 +23,23 @@ import { projectEntity, preparePayload } from '../form/utils';
 // }
 
 
-const validationSchema = object().shape({
+const validationSchema = (emp) => object().shape({
+  orgId: lazy(_ => emp ? string().notRequired() : string().matches(/^[a-z0-9]{25}$/).required()),
   person: object().shape({
-    lName: string().min(2).max(255),
+    lName: lazy(value => !value ? string() : string().min(2).max(255)),
     fName: string().min(2).max(255).required(),
-    mName: string().min(2).max(255),
+    mName: lazy(value => !value ? string() : string().min(2).max(255)),
     tels: array().of(object().shape({
-      number: string().min(7).max(25),
-      // country: 
+      country: string().oneOf(['rus', 'notRus']),
+      number: lazy(value => !value ? string() : string().min(7).max(25)),
     }))
   })
 })
 
 export default class EmployeeForm extends Component {
+  didMount = false
+  componentDidMount() { this.didMount = true }
+  componentWillUnmount() { this.didMount = false }
   render() {
     const {
       emp,
@@ -54,12 +58,14 @@ export default class EmployeeForm extends Component {
         }]
       }
     }
+    if (!emp) schema = {...schema, orgId}
     const initialValues = emp ? cloneDeep(projectEntity(emp, schema)) : schema
     return (
       <Mutation
         mutation={upsertEmployee}
         onCompleted={refetchQueries}
-        onError={refetchQueries}
+        // onError={refetchQueries}
+        // onError={(err) => console.log('err > ', err)}
         // refetchQueries={[{
         //   query: orgEmployees,
         //   variables: {
@@ -70,13 +76,16 @@ export default class EmployeeForm extends Component {
         {(upsertEmployee, { loading, error }) =>
           <Formik
             initialValues={initialValues}
-            validationSchema={validationSchema}
+            validationSchema={validationSchema(emp)}
             onSubmit={async (values, { resetForm }) => {
+              console.log('initialValues > ', initialValues)
               const input = preparePayload(values, initialValues, schema)
+              console.log('upsertEmployee input > ', input)
               const upserted = await upsertEmployee({ variables: { input } })
               console.log('upserted > ', upserted)
-              if (emp) toggleEditMode()
-              resetForm()
+              return emp
+                ? toggleEditMode()
+                : this.didMount && resetForm()
             }}
           >
             {({

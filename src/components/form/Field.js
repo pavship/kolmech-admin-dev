@@ -30,7 +30,10 @@ const Label = styled.div`
 
 const Content = styled.div`
   flex: 1 1 auto;
-  min-width: 210px;
+`
+
+const InputContainer = styled.div`
+  max-width: 210px
 `
 
 const Error = styled.div`
@@ -77,13 +80,15 @@ const Field = ({
               )}
             />
           : <>
-              <FormikInput
-                {...rest}
-                name={name}
-                type={type}
-              />
+              <InputContainer>
+                <FormikInput
+                  {...rest}
+                  name={name}
+                  type={type}
+                />
+              </InputContainer>
               <Error>
-                {getIn(formik.errors, name)}
+                {getIn(formik.touched, name) ? getIn(formik.errors, name) : ''}
               </Error>
             </>
         }

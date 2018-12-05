@@ -27,10 +27,7 @@ const ClosePanelIcon =  styled(Icon)`
 `
 
 export default ({
-	closePanel,
-	refetchEnquiries,
-	enquiriesAreLoading,
-	refreshToken
+	closePanel
 }) => {
 	return (
 		<GlobalContext>
@@ -50,55 +47,15 @@ export default ({
 							return null
 						}}
 					</Query>
-					{/* <Button compact circular menu
-						w='118.5px'
-						ml='0'
-						ta='left'
-						activeColor='blue' 
-						onClick={refetchEnquiries}
-					>
-						<Icon 
-							name='refresh'
-							color={enquiriesAreLoading ? 'blue' : undefined} 
-							loading={enquiriesAreLoading}
-						/>
-						{enquiriesAreLoading ? 'Загрузка' : 'Обновить'}
-					</Button> */}
 					<Button compact circular menu
 						activeColor='green'
 						icon='plus'
 						// content=''
 						active={ !bottomPanel.id }
-						// onClick={() => setBottomPanel({...bottomPanel, id:})}
 						onClick={() => setBottomPanel(
-							produce(bottomPanel, draftPanel => { delete draftPanel.id })
+							produce(bottomPanel, draft => { delete draft.id })
 						)}
 					/>
-					{/* {details && (
-						(details.type === 'Enquiry' && details.id !== 'new')
-						|| (details.type === 'Order' && details.id === 'new')
-					) &&
-						<EnquiriesSubmenu />
-					}
-					<Query query={orgLocal}>
-						{ ({ data }) => {
-							if (data && data.me) {
-								const { fName, lName } = data.me.person
-								const menuNameTitle = fName + ' ' + (lName ? `${lName.slice(0,1)}.` : '')
-								return (
-									<Header inline
-										ml='auto'
-										size='small'
-										content={menuNameTitle} 
-									/>
-							)} else return null
-						}}
-					</Query>
-					<Icon link
-						name='log out'
-						size='large'
-						onClick={() => refreshToken(null)} 
-					/> */}
 					<ClosePanelIcon 
 						link
 						name='cancel'

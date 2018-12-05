@@ -53,11 +53,13 @@ class FormikInput extends Component {
 		const { formik, name, ...rest } = this.props
 		return (
 			<Input
+				w='100%'
 			// type={type === 'int' ? 'number' : type}
 				name={name}
 				value={getIn(formik.values, name)}
-				error={!!getIn(formik.errors, name)}
+				error={getIn(formik.touched, name) && !!getIn(formik.errors, name)}
 				onChange={formik.handleChange}
+				onBlur={formik.handleBlur}
 				{...rest}
 				// onBlur={this.onBlur}
 				// ref={input => this.input = input}
