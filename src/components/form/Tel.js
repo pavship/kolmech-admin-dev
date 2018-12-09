@@ -8,7 +8,7 @@ import FormikInput from './FormikInput.js';
 
 const countryOtions = [
   { key: 'rus', text: '+7', value: 'rus' },
-  { key: 'notRus', text: 'прочие', value: 'notRus' },
+  { key: 'notRus', text: '+', value: 'notRus' },
 ]
 
 const DropdownPropFilter = ({ inputError, ...rest }) => (
@@ -60,7 +60,7 @@ class Tel extends Component {
           >
             {(inputProps) =>
               <Input
-                w='280px !important'
+                w='240px !important'
                 // placeholder='Номер телефона'
                 error={touched && !!error}
                 label={renderDropdown()}
@@ -70,7 +70,7 @@ class Tel extends Component {
             }
           </InputMask>
         : <FormikInput
-            w='280px !important'
+            w='240px !important'
             name={baseName + '.number'}
             error={touched && !!error}
             // placeholder='Телефон с кодом страны'

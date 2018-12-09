@@ -2,10 +2,6 @@ export const projectEntity = (entity, schema) => {
   let result = {}
   handleObj(schema, entity, result)
   return result
-  // return {
-  //   ...result,
-  //   orgId: 'kdjsj'
-  // }
 }
 
 export const preparePayload = (values, initialValues, schema) => {

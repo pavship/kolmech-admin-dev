@@ -1,10 +1,9 @@
 import React from 'react'
 
-import { Div, Icon } from '../styled/styled-semantic';
+import { Div, Icon } from '../styled/styled-semantic'
 import DetailsHeader from '../DetailsHeader'
-import Employee from './Employee'
-import List from '../list/List';
-import { empSchema } from '../schema/employee';
+import List from '../list/List'
+import { listSchema } from '../../schema/employee'
 
 export default ({
   emp,
@@ -30,7 +29,7 @@ export default ({
     >
       <List
         entity={emp}
-        schema={empSchema}
+        schema={listSchema}
       />
     </Div>
   </>

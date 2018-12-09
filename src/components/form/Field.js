@@ -30,10 +30,11 @@ const Label = styled.div`
 
 const Content = styled.div`
   flex: 1 1 auto;
+  max-width: calc(100% - 122px);
 `
 
 const InputContainer = styled.div`
-  max-width: 210px
+  max-width: 240px
 `
 
 const Error = styled.div`

@@ -19,8 +19,8 @@ export default class EmployeeEdit extends Component {
       <DetailsHeader
         title={
           emp
-          ? 'Редактирование'
-          : 'Добавление представителя'
+          ? 'Редактировать'
+          : 'Добавить представителя'
         }
         size='small'
         noIndent

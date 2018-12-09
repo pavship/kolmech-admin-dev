@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from 'lodash/cloneDeep'
 
-import { Mutation } from 'react-apollo';
-import { upsertEmployee, orgEmployees } from '../../graphql/employee';
+import { Mutation } from 'react-apollo'
+import { upsertEmployee, orgEmployees } from '../../graphql/employee'
 
-import { object, array, lazy, string } from 'yup'
-import { Formik, FieldArray } from 'formik'
-import { Dropdown } from 'semantic-ui-react';
-import { Button, A, Message } from '../styled/styled-semantic';
-import Field from '../form/Field';
-import { projectEntity, preparePayload } from '../form/utils';
+import { Formik } from 'formik'
+import { projectEntity, preparePayload } from '../form/utils'
+import { formikSchema, validationSchema } from '../../schema/employee'
+import Field from '../form/Field'
+
+import { Button, A, Message } from '../styled/styled-semantic'
 
 // position
 // fName
@@ -22,20 +22,6 @@ import { projectEntity, preparePayload } from '../form/utils';
 //   confirmed
 // }
 
-
-const validationSchema = (emp) => object().shape({
-  orgId: lazy(_ => emp ? string().notRequired() : string().matches(/^[a-z0-9]{25}$/).required()),
-  person: object().shape({
-    lName: lazy(value => !value ? string() : string().min(2).max(255)),
-    fName: string().min(2).max(255).required(),
-    mName: lazy(value => !value ? string() : string().min(2).max(255)),
-    tels: array().of(object().shape({
-      country: string().oneOf(['rus', 'notRus']),
-      number: lazy(value => !value ? string() : string().min(7).max(25)),
-    }))
-  })
-})
-
 export default class EmployeeForm extends Component {
   didMount = false
   componentDidMount() { this.didMount = true }
@@ -47,23 +33,12 @@ export default class EmployeeForm extends Component {
       toggleEditMode,
       refetchQueries
     } = this.props
-    let schema = {
-      person: {
-        lName: '',
-        fName: '',
-        mName: '',
-        tels: [{
-          number: '',
-          country: 'rus',
-        }]
-      }
-    }
-    if (!emp) schema = {...schema, orgId}
-    const initialValues = emp ? cloneDeep(projectEntity(emp, schema)) : schema
+    let schema = emp ? formikSchema : {...formikSchema, orgId}
+    const initialValues = emp ? projectEntity(emp, schema) : schema
     return (
       <Mutation
         mutation={upsertEmployee}
-        onCompleted={refetchQueries}
+        // onCompleted={refetchQueries}
         // onError={refetchQueries}
         // onError={(err) => console.log('err > ', err)}
         // refetchQueries={[{

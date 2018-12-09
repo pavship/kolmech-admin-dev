@@ -43,7 +43,8 @@ const client = new ApolloClient({
 			console.log('networkError!!! > ', networkError)
 			console.log('networkError.name > ', networkError.name)
 			console.log('networkError.message > ', networkError.message)
-			console.log(networkError === 'SyntaxError: Unexpected token I in JSON at position 0')
+			console.log(networkError.message === 'Unexpected token I in JSON at position 0')
+			if (networkError.message === 'Unexpected token I in JSON at position 0') refreshToken(null)
       // logoutUser();
 		}
 		// networkError!!! >  SyntaxError: Unexpected token I in JSON at position 0
@@ -79,6 +80,15 @@ const client = new ApolloClient({
 		}
 	})
 })
+
+const refreshToken = (token) => {
+	if (token) {
+		localStorage.setItem(AUTH_TOKEN, token)
+	} else {
+		localStorage.removeItem(AUTH_TOKEN)
+		client.resetStore()
+	}
+}
 
 // const cache = new InMemoryCache({
 //     dataIdFromObject: object => {
