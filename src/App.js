@@ -17,9 +17,9 @@ import Root from './components/Root'
 // 	}
 // }
 
-const App = ({ token, client }) => (
+const App = ({ client }) => (
 	<ThemeProvider theme={theme}>
-		<Root token={token} client={client} />
+		<Root client={client} />
 	</ThemeProvider>
 )
 

@@ -153,13 +153,11 @@ const refreshToken = (token) => {
 //     connectToDevTools: true,
 // })
 
-const token = localStorage.getItem(AUTH_TOKEN)
-
 // client.cache.reset()
 
 ReactDOM.render(
 	<ApolloProvider client={client}>
-		<App token={token} client={client}/>
+		<App client={client}/>
 	</ApolloProvider>
 , document.getElementById('root'))
 

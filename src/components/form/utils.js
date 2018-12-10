@@ -10,17 +10,6 @@ export const preparePayload = (values, initialValues, schema) => {
   return result
 }
 
-const handleArr = (arrSchema, arr = [], resultArr) => {
-  // NOTE schema array should contain one element only just to define schema
-  const type = typeof arrSchema[0]
-  // TODO handle array of primitives (now only collections)
-  if (type === 'object') {
-    return arr.length
-      ? arr.forEach((obj, i) => handleObj(arrSchema[0], obj, resultArr[i] = {}))
-      : handleObj(arrSchema[0], {}, resultArr[0] = {})
-  }
-}
-
 const handleObj = (objSchema, obj = {}, result) => {
   // preserve ids of entity objects
   if (obj.id) result.id = obj.id
@@ -33,6 +22,17 @@ const handleObj = (objSchema, obj = {}, result) => {
       return handleObj(objSchema[k], obj[k], result[k] = {})
     result[k] = obj[k] || objSchema[k]
   })
+}
+
+const handleArr = (arrSchema, arr = [], resultArr) => {
+  // NOTE schema array should contain one element only just to define schema
+  const type = typeof arrSchema[0]
+  // TODO handle array of primitives (now only collections)
+  if (type === 'object') {
+    return arr.length
+      ? arr.forEach((obj, i) => handleObj(arrSchema[0], obj, resultArr[i] = {}))
+      : handleObj(arrSchema[0], {}, resultArr[0] = {})
+  }
 }
 
 const handlePayloadObj = (objSchema, initialObj, obj, result) => {

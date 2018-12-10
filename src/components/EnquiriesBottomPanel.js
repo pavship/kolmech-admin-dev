@@ -53,6 +53,7 @@ export default ({
             if (loading) return 'Загрузка..'
             if (error) return `Ошибка ${error.message}`
             const emps = data.orgEmployees
+            const activeEmp = bottomPanel.id && data.orgEmployees.find(e => e.id === bottomPanel.id)
             return (
               <EmployeesPanelBody>
                 <EmployeesPanelTableSection>
@@ -75,9 +76,11 @@ export default ({
                         orgId={bottomPanel.orgId}
                         refetchQueries={refetch}
                       /> :
+                    !activeEmp.person ?
+                      null :
                     bottomPanel.editMode
                     ? <EmployeeEdit
-                        emp={data.orgEmployees.find(e => e.id === bottomPanel.id)}
+                        emp={activeEmp}
                         orgId={bottomPanel.orgId}
                         toggleEditMode={() => setBottomPanel(
                           produce(bottomPanel, draft => { delete draft.editMode })
@@ -85,7 +88,7 @@ export default ({
                         refetchQueries={refetch}
                       />
                     : <EmployeeDetails
-                        emp={processEmp(data.orgEmployees.find(e => e.id === bottomPanel.id))}
+                        emp={processEmp(activeEmp)}
                         toggleEditMode={() => setBottomPanel({ ...bottomPanel, editMode: true })}
                       />
                   }

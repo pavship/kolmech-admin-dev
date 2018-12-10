@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import cloneDeep from 'lodash/cloneDeep'
 
 import { Mutation } from 'react-apollo'
 import { upsertEmployee, orgEmployees } from '../../graphql/employee'
@@ -38,7 +37,7 @@ export default class EmployeeForm extends Component {
     return (
       <Mutation
         mutation={upsertEmployee}
-        // onCompleted={refetchQueries}
+        onCompleted={refetchQueries}
         // onError={refetchQueries}
         // onError={(err) => console.log('err > ', err)}
         // refetchQueries={[{

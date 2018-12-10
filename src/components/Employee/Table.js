@@ -1,4 +1,5 @@
 import React from 'react'
+import { formatTel } from '../../utils/format'
 
 import GlobalContext from '../special/GlobalContext'
 
@@ -12,7 +13,7 @@ const fields = [{
 },{
   name: 'tel',
   title: 'Телефон',
-  width: '120px'
+  width: '140px'
 }]
 
 export default ({
@@ -26,7 +27,8 @@ export default ({
 				>
 					{({ tableFields }) => 
 						emps.map(emp => {
-							const { id, person: { lName, fName, mName, tels } } = emp
+              const { id, person } = emp
+              const { lName, fName, mName, tels } = person || {}
 							const active = bottomPanel.id === id
 							return (
                 <TableRow
@@ -35,10 +37,12 @@ export default ({
                   tableFields={tableFields}
                   rowFields={[{
                     name: 'fullname',
-                    value: [lName, fName, mName].join(' ')
+                    value: person
+                      ? [lName, fName, mName].join(' ')
+                      : 'Персональные данные удалены'
                   },{
                     name: 'tel',
-                    value: tels && tels.length && tels[0].number || ''
+                    value: tels && tels.length && formatTel(tels[0]) || ''
                   }
                   // ,{
                   //   name: 'emps',
