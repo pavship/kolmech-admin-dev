@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { Mutation } from 'react-apollo'
-import { upsertEmployee, orgEmployees } from '../../graphql/employee'
+import { upsertEmployee } from '../../graphql/employee'
 
 import { Formik } from 'formik'
 import { projectEntity, preparePayload } from '../form/utils'
@@ -37,26 +37,19 @@ export default class EmployeeForm extends Component {
     return (
       <Mutation
         mutation={upsertEmployee}
-        onCompleted={refetchQueries}
-        // onError={refetchQueries}
-        // onError={(err) => console.log('err > ', err)}
-        // refetchQueries={[{
-        //   query: orgEmployees,
-        //   variables: {
-        //     orgId
-        //   }
-        // }]}
+        onCompleted={() => refetchQueries()}
       >
         {(upsertEmployee, { loading, error }) =>
           <Formik
             initialValues={initialValues}
-            validationSchema={validationSchema(emp)}
+            validationSchema={validationSchema}
             onSubmit={async (values, { resetForm }) => {
-              console.log('initialValues > ', initialValues)
+              // console.log('values > ', values)
+              // console.log('initialValues > ', initialValues)
               const input = preparePayload(values, initialValues, schema)
-              console.log('upsertEmployee input > ', input)
+              // console.log('upsertEmployee input > ', input)
               const upserted = await upsertEmployee({ variables: { input } })
-              console.log('upserted > ', upserted)
+              // console.log('upserted > ', upserted)
               return emp
                 ? toggleEditMode()
                 : this.didMount && resetForm()

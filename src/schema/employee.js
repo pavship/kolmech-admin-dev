@@ -1,13 +1,16 @@
 import { object, lazy, string } from 'yup'
 
 import { validationSchema as personValidationSchema } from './person'
+import { idValidationType } from './commonTypes'
 
-export const validationSchema = (emp) => object().shape({
-  orgId: lazy(() => emp && emp.id
-    ? string()
-    : string().matches(/^[a-z0-9]{25}$/).required()
-  ),
-  person: personValidationSchema(emp && emp.person)
+export const validationSchema = object().shape({
+  id: idValidationType.notRequired(),
+  orgId: idValidationType
+		.when('id', (id, schema) => id
+			? schema.notRequired()
+			: schema.required()
+		),
+  person: personValidationSchema
 })
 
 export const formikSchema = {

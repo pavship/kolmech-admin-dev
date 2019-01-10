@@ -39,6 +39,8 @@ const handlePayloadObj = (objSchema, initialObj, obj, result) => {
   // preserve ids of entity objects
   if (obj.id) result.id = obj.id
   Object.keys(objSchema).forEach(k => {
+    // preserve any db entities' Ids
+    if (k.endsWith('Id')) return result[k] = objSchema[k]
     const type = typeof objSchema[k]
     // NOTE form schema should contain only non-empty nested objects
     if (type === 'object' && Array.isArray(objSchema[k]))
@@ -48,7 +50,7 @@ const handlePayloadObj = (objSchema, initialObj, obj, result) => {
     // result includes changed values
     if (obj[k] !== initialObj[k]) return result[k] = obj[k]
     // and non-empty initial values
-    if (!!objSchema[k]) return result[k] = objSchema[k]
+    if (!initialObj[k] && !!objSchema[k]) return result[k] = objSchema[k]
   })
 }
 
