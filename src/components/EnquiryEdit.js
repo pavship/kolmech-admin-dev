@@ -10,9 +10,17 @@ import { createOrg } from '../graphql/org'
 import { allOrgsAndModels } from '../graphql/combinedQueries'
 
 import styled from 'styled-components'
-import { Form, Input, Button, Message, Dropdown as SDropdown } from 'semantic-ui-react'
-import { Div, Span, A, Label, Section } from './styled/styled-semantic.js'
+import { Form, Input, Message, Dropdown as SDropdown } from 'semantic-ui-react'
+import { Div, Span, A, Label, Button, Section } from './styled/styled-semantic.js'
 import DatePicker from './common/DatePicker'
+import SecondarySection from './presentational/SecondarySection'
+import ModelForm from './Model/Form'
+
+const FormField = styled(Form.Field)`
+	&&&&&& {
+		${props => !props.visible ? 'display: none;' : ''}
+	}
+`
 
 const Dropdown = styled(SDropdown)`
 	&&&&&& {
@@ -42,7 +50,8 @@ class EnquiryEdit extends Component {
 			modelDdn: {
 				search: '',
 				loading: false
-			}
+			},
+			newModelSectionVisible: false
 		}
 		// gather form fields on oriEnquiry object
 		const oriEnquiry = cloneDeep(props.enquiry)
@@ -74,6 +83,7 @@ class EnquiryEdit extends Component {
 		if (!isNewEnquiry) this.state.diff = false
 		// console.log(this.state)
 	}
+	closeNewModelSection = () => this.setState({ newModelSectionVisible: false })
 	changeFieldValue = (field, newVal) => {
 		console.log('change ', field, ' to value > ', newVal)
 		const fieldObj = cloneDeep(this.state[field])
@@ -111,6 +121,10 @@ class EnquiryEdit extends Component {
 	selectModel = (e, { value }) => {
 		this.setState({ modelDdn: { search: '', loading: false } })
 		this.changeFieldValue('modelId', value)
+	}
+	submitNewModel = (modelId) => {
+		this.changeFieldValue('modelId', modelId)
+		this.closeNewModelSection()
 	}
 	createOrg = async (e, { value: inn }) => {
 		try {
@@ -200,7 +214,7 @@ class EnquiryEdit extends Component {
 		this.componentIsMounted = false
 	}
 	render() {
-		const { dateLocal, orgId, orgDdn, modelId, modelDdn, qty, diff, loading, err } = this.state
+		const { dateLocal, orgId, orgDdn, modelId, modelDdn, qty, diff, loading, err, newModelSectionVisible } = this.state
 		const { id, setDetails, allOrgsAndModels } = this.props
 		const selectedDate = fromLocalISOString(dateLocal.curVal)
 		const orgs = allOrgsAndModels.orgs
@@ -241,7 +255,12 @@ class EnquiryEdit extends Component {
 										onAddItem={this.createOrg}
 									/>
 								</Form.Field>
-								<Form.Field inline error={modelId.err} required>
+								<FormField
+									inline
+									required
+									visible={!newModelSectionVisible}
+									error={modelId.err}
+								>
 									<Label>Изделие</Label>
 									<Dropdown
 										loading={!models || modelDdn.loading}
@@ -257,11 +276,29 @@ class EnquiryEdit extends Component {
 										searchQuery={modelDdn.search}
 										onSearchChange={this.handleModelDropdownSearchChange}
 										noResultsMessage='Если не найдено, выберите "Нет в списке"'
-										// allowAdditions
-										// additionLabel='Добавить по ИНН: '
-										// onAddItem={this.createOrg}
 									/>
-								</Form.Field>
+									<Button
+										ml='5px'
+										icon='plus'
+										activeColor='green'
+										active={newModelSectionVisible}
+										onClick={() => this.setState({ newModelSectionVisible: true })}
+									/>
+								</FormField>
+								{newModelSectionVisible &&
+									<SecondarySection
+										title='Новое изделие'
+										onClose={this.closeNewModelSection}
+										content={
+											<ModelForm
+												model={undefined}
+												orgId={orgId.curVal || undefined}
+												refetchQueries={allOrgsAndModels.refetch}
+												onSubmit={this.submitNewModel}
+											/>
+										}
+									/>
+								}
 								<Form.Field inline required>
 									<Label>Кол-во</Label>
 									<Input type='number'

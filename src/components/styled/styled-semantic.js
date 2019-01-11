@@ -30,11 +30,12 @@ export const theme = {
 	}
 }
 const getThemeColor = (color) => theme.colors[color] || color
-const baseSet = ({ theme, bt, bb, bc, c, d, fs, fw, h, lh, mw, m, mb, mt, ml, o, ox, oy, p, pl, pr, pt, ta, va, w, ws }) => {
+const baseSet = ({ theme, bt, bb, bc, bs, c, d, fs, fw, h, lh, mw, m, mb, mt, ml, o, ox, oy, p, pl, pr, pt, ta, va, w, ws }) => {
 	return `
 		${bt 	? `border-top: ${bt};`								: ''}
 		${bb 	? `border-bottom: ${bb};`							: ''}
 		${bc 	? `background-color: ${bc};`					: ''}
+		${bs 	? `box-sizing: ${bs};`								: ''}
 		${c 	? `color: ${c};`											: ''}
 		${d 	? `display: ${d};`										: ''}
 		${fs 	? `font-size: ${fs};`									: ''}

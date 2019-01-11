@@ -34,7 +34,7 @@ const Content = styled.div`
 `
 
 const InputContainer = styled.div`
-  max-width: 240px
+  max-width: 240px;
 `
 
 const Error = styled.div`

@@ -1,45 +1,35 @@
 import React, { Component } from 'react'
 
 import { Mutation } from 'react-apollo'
-import { upsertEmployee } from '../../graphql/employee'
+import { upsertModel } from '../../graphql/model'
 
 import { Formik } from 'formik'
 import { projectEntity, preparePayload } from '../form/utils'
-import { formikSchema, validationSchema } from '../../schema/employee'
+import { formikSchema, validationSchema } from '../../schema/model'
 import Field from '../form/Field'
 
 import { Button, A, Message } from '../styled/styled-semantic'
 
-// position
-// fName
-// lName
-// mName
-// htmlNote
-// tels { ...TelFragment }
-// user {
-//   email
-//   confirmed
-// }
-
-export default class EmployeeForm extends Component {
+export default class ModelForm extends Component {
   didMount = false
   componentDidMount() { this.didMount = true }
   componentWillUnmount() { this.didMount = false }
   render() {
     const {
-      emp,
+      model,
       orgId,
       toggleEditMode,
-      refetchQueries
+      refetchQueries,
+      onSubmit,
     } = this.props
-    let schema = emp ? formikSchema : {...formikSchema, orgId}
-    const initialValues = emp ? projectEntity(emp, schema) : schema
+    let schema = model ? formikSchema : {...formikSchema, orgId}
+    const initialValues = model ? projectEntity(model, schema) : schema
     return (
       <Mutation
-        mutation={upsertEmployee}
+        mutation={upsertModel}
         onCompleted={() => refetchQueries()}
       >
-        {(upsertEmployee, { loading, error }) =>
+        {(upsertModel, { loading, error }) =>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -47,46 +37,31 @@ export default class EmployeeForm extends Component {
               // console.log('values > ', values)
               // console.log('initialValues > ', initialValues)
               const input = preparePayload(values, initialValues, schema)
-              // console.log('upsertEmployee input > ', input)
-              const upserted = await upsertEmployee({ variables: { input } })
+              // console.log('upsertModel input > ', input)
+              const upserted = await upsertModel({ variables: { input } })
               // console.log('upserted > ', upserted)
-              return emp
+              return model
                 ? toggleEditMode()
-                : this.didMount && resetForm()
+                : this.didMount && onSubmit(upserted.data.upsertModel.id)
             }}
           >
             {({
-              values,
-              handleChange,
               handleSubmit,
               handleReset,
-              setFieldValue
             }) =>
               <>
                 <Field
-                  label='Фамилия'
-                  name='person.lName'
-                />
-                <Field
-                  label='Имя'
+                  label='Наименование'
+                  name='name'
                   required
-                  name='person.fName'
                 />
                 <Field
-                  label='Отчество'
-                  name='person.mName'
+                  label='Артикул'
+                  name='article'
                 />
-                <Field
-                  label='Телефон'
-                  name='person.tels'
-                />
-                {/* TODO add email input */}
-                {/* <Field
-                  label='E-mail'
-                  name='person.email'
-                /> */}
                 {!!error &&
                   <Message
+                    d='block !important'
                     error
                     header='Не удалось добавить..'
                     content={error && error.message}
@@ -94,17 +69,16 @@ export default class EmployeeForm extends Component {
                 }
                 <Button
                   ml='122px'
-                  // type="submit"
                   type='button'
                   primary
-                  content={emp ? 'Сохранить' : 'Добавить'}
+                  content={model ? 'Сохранить' : 'Добавить'}
                   loading={loading}
                   onClick={handleSubmit}
                 />
                 <A cancel
-                  onClick={ emp ? toggleEditMode : handleReset}
+                  onClick={ model ? toggleEditMode : handleReset}
                 >
-                  {emp ? 'Отмена' : 'Очистить'}
+                  {model ? 'Отмена' : 'Очистить'}
                 </A>
               </>
             }
