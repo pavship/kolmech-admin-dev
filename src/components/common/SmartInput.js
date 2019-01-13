@@ -32,7 +32,7 @@ class SmartInput extends Component {
 	// so I check valueAsNumber html input attr onBlur and set error
 	onBlur = () => {
 		const { field: { name }, setField } = this.props
-		const { type, valueAsNumber } = this.input.inputRef
+		const { type, valueAsNumber } = this.input.inputRef || {}
 		if (type === 'number' && isNaN(valueAsNumber)) {
 			// this.input.inputRef.value = ''
 			setField(name, { err: {
@@ -47,7 +47,7 @@ class SmartInput extends Component {
 		return (
 			<Input
 				{...rest}
-				type={type === 'int' ? 'number' : type}
+				type={type === 'int' ? 'number' : (type || 'text')}
 				value={value}
 				onChange={this.handleInputChange}
 				onBlur={this.onBlur}

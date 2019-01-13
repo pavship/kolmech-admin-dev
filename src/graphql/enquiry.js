@@ -156,7 +156,7 @@ export const createEnquiry = gql`
 			}
 			orders {
 				id
-				num
+				fullnum
 				dateLocal
 				qty
 				amount

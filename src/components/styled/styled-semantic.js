@@ -61,7 +61,7 @@ const baseSet = ({ theme, bt, bb, bc, bs, c, d, fs, fw, h, lh, mw, m, mb, mt, ml
 	`
 }
 
-const DivPropFilter = ({ ml, inline, ...rest }) => (
+const DivPropFilter = ({ ml, w, inline, ...rest }) => (
 	<div {...rest} />
 )
 export const Div = styled(DivPropFilter)`

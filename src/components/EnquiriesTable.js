@@ -109,7 +109,7 @@ const EnquiriesTable = ({ enquiries }) => {
 									>
 									</TableRow>
 									{	isExpanded && enquiry.orders.map((order, i) => {
-										const { id, num, prods } = order
+										const { id, prods } = order
 										return (
 											// @ts-ignore
 											<TableRow
@@ -120,7 +120,7 @@ const EnquiriesTable = ({ enquiries }) => {
 												tableFields={tableFields}
 												rowFields={[{
 													name: 'num',
-													value: enquiry.num + '-' + num
+													path: 'fullnum'
 												},{
 													name: 'org',
 													value: enquiry.org.name

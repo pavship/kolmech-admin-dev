@@ -27,7 +27,7 @@ const DetailsMainHeader = ({
 	editMode,
 	localEntity
 }) => {
-	const { id, num, dateLocal } = localEntity || {}
+	const { id, num, fullnum, dateLocal } = localEntity || {}
 	return (
 		<DetailsHeaderContainer
 			close={closeDetails}
@@ -40,7 +40,7 @@ const DetailsMainHeader = ({
 			{ id && // existing entity
 				<Fragment>
 					<DetailsHeaderTitle
-						title={settings[type].titleExisting + num}
+						title={settings[type].titleExisting + ' ' + (num || fullnum)}
 						subtitle={'от ' + dateLocal}
 					/>
 					<DetailsHeaderButtons>
