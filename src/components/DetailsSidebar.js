@@ -5,9 +5,8 @@ import { getLayout, getLayoutOptions, setLayout } from '../graphql/layout'
 
 import styled from 'styled-components'
 import { Sidebar } from 'semantic-ui-react'
-
-import Details from './Details';
-import DetailsExtra from './DetailsExtra';
+import Details from './Details'
+import DetailsExtra from './DetailsExtra'
 
 const SSidebar = styled(Sidebar)`
 	&&&& {

@@ -69,6 +69,9 @@ export const upsertOrder = gql`
 			enquiry {
 				id
 			}
+			prods {
+				id
+			}
 		}
 	}
 	${orderFragmentBasic}

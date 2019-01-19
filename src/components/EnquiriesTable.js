@@ -58,7 +58,7 @@ const EnquiriesTable = ({ enquiries }) => {
 				>
 					{({ tableFields }) => 
 						enquiries.map(enquiry => {
-							const { id, org, docs, isExpanded } = enquiry
+							const { id, org, docs, isExpanded, model } = enquiry
 							const active = details
 								&& details.type === 'Enquiry'
 								&& id === details.id
@@ -74,8 +74,9 @@ const EnquiriesTable = ({ enquiries }) => {
 											name: 'emps',
 											icon: org.employees.length ? 'user' : 'user plus',
 											iconColor: 'grey',
-											type: 'onHover',
-											styles: ['center'],
+											hoverable: true,
+											hideUnhovered: true,
+											hasEntries: !!org.employees.length,
 											value: org.employees.length || ' ',
 											onClick: () => {
 												setBottomPanel({
@@ -86,6 +87,19 @@ const EnquiriesTable = ({ enquiries }) => {
 											active: bottomPanel
 												&& bottomPanel.type === 'Employees'
 												&& bottomPanel.orgId === org.id
+										},{
+											name: 'model',
+											path: 'model.name',
+											hoverable: true,
+											onClick: () => {
+												setDetails({
+													type: 'Model',
+													id: model.id
+												})
+											},
+											active: details
+												&& details.type === 'Employees'
+												&& details.id === model.id
 										}]}
 										expandFor='orders'
 										expanded={isExpanded}

@@ -32,6 +32,7 @@ const Row = styled.tr`
 
 const tdActiveStyle = `
 	background: rgba(0,0,0,.12);
+	opacity: 1 !important;
 	.icon {
 		opacity: 1 !important;
 	}
@@ -44,20 +45,21 @@ const Td = styled.td`
   text-overflow: ellipsis;
 	${props => props.service && `padding-left: 3px;`}
 	${Row}:not(:hover) & {
-		${props => props.type === 'onHover' && !props.active && `
+		${props => props.hoverable
+			&& props.hideUnhovered
+			&& !props.active
+			&& !props.hasEntries && `
 			opacity: 0 !important;
 		`}
 	}
-	${props => props.type === 'onHover' && `
-		padding-left: 5px;
+	${props => props.hoverable && `
 		transition: background .3s ease;
+		padding-left: ${props.hasEntries ? '5px' : '7.5px'};
+		${props.hideUnhovered && 'opacity: 0.8;'};
 		:hover {
 			${tdActiveStyle}
 		}
 		${props.active ? tdActiveStyle : ''}
-	`}
-	${props => props.styles && props.styles.includes('center') && `
-		text-align: center;
 	`}
 `
 

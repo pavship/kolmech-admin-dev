@@ -73,7 +73,6 @@ export class EnquiriesPage extends Component {
 export default compose(
 	graphql(allEnquiries, {
 		name: 'allEnquiries',
-		// options: { notifyOnNetworkStatusChange: true },
 	}),
 	graphql(setLayout, { name: 'setLayout' })
 )(EnquiriesPage)

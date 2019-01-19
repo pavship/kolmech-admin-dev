@@ -157,9 +157,6 @@ export default compose(
 	graphql(upsertOrder, {
 			name: 'upsertOrder',
 			options: {
-				refetchQueries: [
-					'allEnquiries',
-				],
 				update: (cache, { data: responseData }) => {
 					const upsertedOrder = responseData.upsertOrder
 					const query = allEnquiries

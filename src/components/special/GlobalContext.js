@@ -43,7 +43,6 @@ const GlobalContext = ({
 			setLayout({ variables: { 
 				details,
 				extra: null
-				// ...details.type === 'Enquiry' && { extra: null }
 			}})
 		},
 		setExtra: (extra) => setLayout({ variables: { extra } }),

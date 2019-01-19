@@ -46,7 +46,7 @@ class Root extends Component {
 		const { token } = this.state
 		return (
 			<Fragment>
-				{ !token 
+				{ !token
 				  ?	<LoginPage refreshToken={this.refreshToken} />
 				  : <Query query={me} >
 							{({ loading, error, data }) => {
@@ -56,7 +56,7 @@ class Root extends Component {
 									<EnquiriesPage refreshToken={this.refreshToken} me={data.me} />
 								)
 							}}
-					</Query> 
+					</Query>
 				}
 			</Fragment>
 		)
