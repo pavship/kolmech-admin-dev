@@ -54,8 +54,10 @@ const Td = styled.td`
 	}
 	${props => props.hoverable && `
 		transition: background .3s ease;
-		padding-left: ${props.hasEntries ? '5px' : '7.5px'};
-		${props.hideUnhovered && 'opacity: 0.8;'};
+		${props.hideUnhovered && `
+			opacity: 0.8;
+			padding-left: ${props.hasEntries ? '5px' : '7.5px'};
+		`};
 		:hover {
 			${tdActiveStyle}
 		}

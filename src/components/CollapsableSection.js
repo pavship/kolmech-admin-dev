@@ -31,7 +31,7 @@ class CollapsableSection extends Component {
       forceExpanded,
       ...headerProps
     } = this.props
-    const expanded = this.state.expanded || forceExpanded
+    const expanded = forceExpanded || this.state.expanded
     return (
       <OuterSection
         expanded={expanded ? 1 : 0}

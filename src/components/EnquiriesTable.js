@@ -98,7 +98,7 @@ const EnquiriesTable = ({ enquiries }) => {
 												})
 											},
 											active: details
-												&& details.type === 'Employees'
+												&& details.type === 'Model'
 												&& details.id === model.id
 										}]}
 										expandFor='orders'

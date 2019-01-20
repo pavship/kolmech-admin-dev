@@ -70,7 +70,7 @@ const Details = ({ closeDetails }) => {
 												/>
 											: (entity &&
 													<ModelDetails
-														order={entity}
+														model={entity}
 													/>
 												)
 										)
