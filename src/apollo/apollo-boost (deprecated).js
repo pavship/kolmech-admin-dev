@@ -1,10 +1,10 @@
 import ApolloClient from 'apollo-boost'
 import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory'
-import { AUTH_TOKEN } from './constants'
+import { AUTH_TOKEN } from '../constants'
 
-import defaults from './apollo/defaults'
-import resolvers from './apollo/resolvers'
-import typeDefs from './apollo/typeDefs'
+import defaults from './defaults'
+import resolvers from './resolvers'
+import typeDefs from './typeDefs'
 
 // init with Apollo Boost:
 // @ts-ignore
