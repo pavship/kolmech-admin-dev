@@ -24,7 +24,7 @@ export class EnquiriesPage extends Component {
 		this.setState({ panelClosing: true })
 		// set timeout for panel to finish animation
 		setTimeout(() => {
-			this.props.setLayout({variables: { bottomPanel: null }})
+			this.props.setLayout({variables: { input: { bottomPanel: null } } })
 			this.setState({ panelClosing: false })
 		}, 430)
 	}
@@ -49,7 +49,7 @@ export class EnquiriesPage extends Component {
 							<DetailsSidebar />
 							<Sidebar.Pusher>
 								<PanelPusher
-									panel={ 
+									panel={
 										<EnquiriesBottomPanel
 											closePanel={this.closePanel}
 										/>

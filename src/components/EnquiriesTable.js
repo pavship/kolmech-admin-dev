@@ -52,7 +52,7 @@ const fields = [{
 const EnquiriesTable = ({ enquiries }) => {
 	return (
 		<GlobalContext>
-			{({ details, setDetails, bottomPanel, setBottomPanel, setExpanded }) =>
+			{({ details,extra, setDetails, bottomPanel, setBottomPanel, setExpanded }) =>
 				<Table
 					fields={fields}
 				>
@@ -168,7 +168,6 @@ const EnquiriesTable = ({ enquiries }) => {
 						}
 					)}
 				</Table>
-				// {/* {name} <ProdQtyLabel color='grey' basic content={`${prods.length}шт`} /> */}
 			}
 		</GlobalContext>
 	)

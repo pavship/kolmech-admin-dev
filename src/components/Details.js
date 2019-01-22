@@ -61,13 +61,7 @@ const Details = ({ closeDetails }) => {
 									}
 									{type === 'Model' &&
 										(id === 'new' || editMode
-											? <OrderEdit
-													id={id}
-													enquiryId={enquiryId}
-													closeDetails={closeDetails}
-													setDetails={setDetails}
-													setExpanded={setExpanded}
-												/>
+											? <div></div>
 											: (entity &&
 													<ModelDetails
 														model={entity}

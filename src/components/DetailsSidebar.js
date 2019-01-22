@@ -36,12 +36,12 @@ class DetailsSidebar extends Component {
 		this.setState({ detailsClosing: true })
 		// set timeout for sidebar to finish animation
 		setTimeout(() => {
-			this.props.setLayout({variables: { details: null, extra: null }})
+			this.props.setLayout({variables: { input: { details: null, extra: null } }})
 			this.setState({ detailsClosing: false })
 		}, 300)
 	}
 	closeExtra = () => {
-		this.props.setLayout({variables: { extra: null }})
+		this.props.setLayout({variables: { input: { extra: null } }})
 	}
 	render() {
 		const { detailsClosing } = this.state
