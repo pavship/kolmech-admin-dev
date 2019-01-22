@@ -7,6 +7,7 @@ export default ({
 }) => {
   return <>
     <Drawings
+      modelId={model.id}
       drawings={model.drawings}
     />
   </>

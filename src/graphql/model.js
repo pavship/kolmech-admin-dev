@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { drawingFragmentBasic } from './drawing';
 
 export const modelFragmentBasic = gql`
 	fragment ModelFragmentBasic on Model {
@@ -11,8 +12,10 @@ export const modelFragmentBasic = gql`
 export const modelFragmentFull = gql`
 	fragment ModelFragmentFull on Model {
 		...ModelFragmentBasic
+		drawings { ...DrawingFragmentBasic }
 	}
 	${modelFragmentBasic}
+	${drawingFragmentBasic}
 `
 
 export const modelLocal = gql`
@@ -34,7 +37,7 @@ export const modelDetails = gql`
 `
 
 export const upsertModel = gql`
-	mutation upsertModel(
+	mutation UpsertModel(
 		$input: ModelInput!
 	) {
 		upsertModel(
