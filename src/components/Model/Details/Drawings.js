@@ -1,24 +1,100 @@
-import React, { Fragment } from 'react'
+import React, { Component } from 'react'
+
+import styled from 'styled-components'
+import posed, { PoseGroup } from 'react-pose'
 
 import CollapsableSection from '../../CollapsableSection'
+import Dropzone from 'react-dropzone'
+import { Icon, Button } from '../../styled/styled-semantic';
+import { Popup } from 'semantic-ui-react';
 
-export default ({
-  drawings
-}) => {
-  return (
-    <CollapsableSection
-      title='Чертежи'
-      subtitle={drawings ? drawings.length : ''}
-      // TODO add addDrawing button
-      // buttons={
-      //   <ReserveProdsButton
-      //     modelId={model.id}
-      //     orderId={id}
-      //     prodIds={prods.map(p => p.id)}
-      //   />
-      // }
+const DropzoneArea = styled.div`
+  position: relative;
+  :focus {
+    outline: none;
+  }
+`
+
+// const DropzoneOverlay = styled.div`
+const DropzoneOverlay = styled(posed.div({
+  enter: { opacity: 1 },
+  exit: { opacity: 0 },
+}))`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0,0,0,.65);
+`
+
+export default class Drawings extends Component {
+  render() {
+    const {
+      drawings
+    } = this.props
+    return (
+      <Dropzone
+      onDrop={() => console.log('drop!')}
+      disableClick
     >
-      lkdfjlkfdgj
-    </CollapsableSection>
-  )
+      {({
+        getRootProps,
+        getInputProps,
+        open,
+        isDragActive,
+      }) =>
+        <DropzoneArea
+          isDragActive={isDragActive}
+          {...getRootProps()}
+        >
+          <input {...getInputProps()} />
+          <PoseGroup>
+            {isDragActive &&
+              <DropzoneOverlay key='1'>
+                <Icon
+                  name='download'
+                  size='large'
+                  c='white'
+                />
+              </DropzoneOverlay>
+            }
+          </PoseGroup>
+          <CollapsableSection
+            title='Чертеж'
+            subtitle={drawings ? drawings.length : ''}
+            buttons={
+              <Popup
+                position='bottom right'
+                size='small'
+                flowing
+                trigger={
+                  <Button compact circular menu
+                    activeColor='green'
+                    icon='plus'
+                    active={ false }
+                    onClick={e => {
+                      e.stopPropagation()
+                      open()
+                    }}
+                  />
+                } 
+              >
+                <Popup.Content>
+                  <Icon name='info circle' />
+                  Можно также перетащить файлы в этот раздел
+                </Popup.Content>
+              </Popup>
+            }
+          >
+            lkdfjlkfdgj
+          </CollapsableSection>
+        </DropzoneArea>
+      }
+    </Dropzone>
+    )
+  }
 }
