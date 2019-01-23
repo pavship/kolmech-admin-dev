@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
 import { createDrawings } from '../../../graphql/drawing'
 
+import { Subscribe } from 'unstated';
 
 import styled from 'styled-components'
 import posed, { PoseGroup } from 'react-pose'
@@ -11,6 +12,8 @@ import CollapsableSection from '../../CollapsableSection'
 import Dropzone from 'react-dropzone'
 import { Icon, Button, Span } from '../../styled/styled-semantic';
 import { Popup } from 'semantic-ui-react';
+import GlobalNotifications from '../../notifications/GlobalNotifications';
+import NotificationsContainer from '../../notifications/NotificationsContainer';
 
 const DropzoneArea = styled.div`
   position: relative;
@@ -45,89 +48,106 @@ export default class Drawings extends Component {
       drawings
     } = this.props
     return (
-      <Mutation
-        mutation={createDrawings}
+      <Subscribe
+        to={[NotificationsContainer]}
       >
-        {(createDrawings, { loading, error }) => 
-          <Dropzone
-            onDrop={async (acceptedFiles, rejectedFiles) => {
-              const res = await createDrawings({
-                variables: {
-                  modelId,
-                  files: acceptedFiles
-                }
-              })
-              console.log('res > ', res)
-            }}
-            disableClick
+        {notifications =>
+          <Mutation
+            mutation={createDrawings}
           >
-            {({
-              getRootProps,
-              getInputProps,
-              open,
-              isDragActive,
-            }) =>
-              <DropzoneArea
-                isDragActive={isDragActive}
-                {...getRootProps()}
+            {(createDrawings, { loading, error }) => 
+              <Dropzone
+                onDrop={async (acceptedFiles) => {
+                  if (!acceptedFiles.length) return
+                  const res = await createDrawings({
+                    variables: {
+                      modelId,
+                      files: acceptedFiles
+                    }
+                  })
+                  console.log('res > ', res)
+                }}
+                disableClick
+                accept={['image/*']}
+                // onDropRejected={() => createNotification({
+                //   title: 'owfull man!'
+                // })}
+                // onDropRejected={() => notifications.create({
+                //   title: 'owfull man!'
+                // })}
+                // onDropRejected={() => notifications.create({
+                //   title: 'owfull man!'
+                // })}
               >
-                <input {...getInputProps()} />
-                <PoseGroup>
-                  {isDragActive &&
-                    <DropzoneOverlay key='1'>
-                      <Icon
-                        name='download'
-                        size='large'
-                        c='white'
-                      />
-                    </DropzoneOverlay>
-                  }
-                </PoseGroup>
-                <CollapsableSection
-                  title='Чертеж '
-                  subtitle={
-                    <Span
-                      ml='10px'
-                      fs='1.2em'
+                {({
+                  getRootProps,
+                  getInputProps,
+                  open,
+                  isDragActive,
+                }) =>
+                  <DropzoneArea
+                    isDragActive={isDragActive}
+                    {...getRootProps()}
+                  >
+                    <input {...getInputProps()} />
+                    <PoseGroup>
+                      {isDragActive &&
+                        <DropzoneOverlay key='1'>
+                          <Icon
+                            name='download'
+                            size='large'
+                            c='white'
+                          />
+                        </DropzoneOverlay>
+                      }
+                    </PoseGroup>
+                    <CollapsableSection
+                      title='Чертеж '
+                      subtitle={
+                        <Span
+                          ml='10px'
+                          fs='1.2em'
+                        >
+                          <Icon
+                            name='file outline'
+                            mr='4px'
+                          />
+                          {drawings.length}
+                        </Span>
+                      }
+                      buttons={
+                        <Popup
+                          position='bottom right'
+                          size='small'
+                          flowing
+                          trigger={
+                            <Button compact circular menu
+                              activeColor='green'
+                              icon='plus'
+                              active={ false }
+                              onClick={e => {
+                                e.stopPropagation()
+                                open()
+                              }}
+                            />
+                          } 
+                        >
+                          <Popup.Content>
+                            <Icon name='info circle' />
+                            Можно также перетащить файлы в этот раздел
+                          </Popup.Content>
+                        </Popup>
+                      }
                     >
-                      <Icon
-                        name='file outline'
-                        mr='4px'
-                      />
-                      {drawings.length}
-                    </Span>
-                  }
-                  buttons={
-                    <Popup
-                      position='bottom right'
-                      size='small'
-                      flowing
-                      trigger={
-                        <Button compact circular menu
-                          activeColor='green'
-                          icon='plus'
-                          active={ false }
-                          onClick={e => {
-                            e.stopPropagation()
-                            open()
-                          }}
-                        />
-                      } 
-                    >
-                      <Popup.Content>
-                        <Icon name='info circle' />
-                        Можно также перетащить файлы в этот раздел
-                      </Popup.Content>
-                    </Popup>
-                  }
-                >
-                  lkdfjlkfdgj
-                </CollapsableSection>
-              </DropzoneArea>
+                      lkdfjlkfdgj
+                    </CollapsableSection>
+                  </DropzoneArea>
+                }
+              </Dropzone>
             }
-          </Dropzone>
+          </Mutation>
         }
-      </Mutation>
+      </Subscribe>
     )
   }
 }

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 
 import { AUTH_TOKEN } from '../constants'
 import { isTokenExpired } from '../utils/jwtHelper'
@@ -45,7 +45,7 @@ class Root extends Component {
 	render() {
 		const { token } = this.state
 		return (
-			<Fragment>
+			<>
 				{ !token
 				  ?	<LoginPage refreshToken={this.refreshToken} />
 				  : <Query query={me} >
@@ -58,7 +58,7 @@ class Root extends Component {
 							}}
 					</Query>
 				}
-			</Fragment>
+			</>
 		)
 	}
 }

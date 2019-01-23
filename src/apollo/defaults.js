@@ -21,7 +21,8 @@ const defaults = {
     lists: {
         __typename: 'Lists',
         selectedProdIds: [],
-    }
+    },
+    notifications: []
 }
 
 export default defaults

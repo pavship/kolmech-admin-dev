@@ -6,4 +6,11 @@ export default `
 		editMode: Boolean
 		closing: Boolean
 	}
+	type Query {
+    notifications: [Notification]!
+	}
+	type Notification {
+		title: String
+		content: String
+  }
 `
