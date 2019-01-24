@@ -1,16 +1,21 @@
 import React from 'react'
+import cuid from 'cuid'
 import { Container } from 'unstated'
-import { cloneDeep } from 'apollo-utilities';
+import { cloneDeep } from 'apollo-utilities'
 
-export default class NotificationsContainer extends Container {
+export default class NotificationsProvider extends Container {
   state = {
     messages: []
   }
-  create(message) {
-    console.log('message > ', message)
+  create = message => {
+    message.id = cuid()
     this.setState(({ messages }) => ({
       messages: [...cloneDeep(messages), message]
     }))
-    console.log('this.state.messages > ', this.state.messages)
+  }
+  dismiss = messageId => {
+    this.setState(({ messages }) => ({
+      messages: messages.filter(m => m.id !== messageId)
+    }))
   }
 }

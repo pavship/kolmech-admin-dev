@@ -2,61 +2,61 @@ import React from "react"
 import reactDom from 'react-dom'
 
 import styled from 'styled-components'
-import posed from 'react-pose'
+import posed, { PoseGroup } from 'react-pose'
 import Notification from "./Notification"
-
-// const NotificationsHolder = styled(posed.ul({
-//   open: { x: '0%' },
-//   closed: { x: '-100%' }
-// }))`
-// 	position: fixed;
-//   bottom: 0;
-// 	left: 0;
-//   width: 100%;
-//   // Height of 0 in order to allow events to propagate to the main part of the app.
-//   z-index: 1;
-// `
 
 const NotificationsHolder = styled.div`
 	position: fixed;
   bottom: 0;
+	top: 0;
 	left: 0;
   width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	pointer-events: none;
   z-index: 1;
 `
 
-const PosedList = styled(posed.ul({
-  open: { x: '0%' },
-  closed: { x: '-100%' }
-}))`
-	list-style: none;
-	margin: 0;
-	padding: 0;
-`
-
-const PosedItem = posed.li({
-  open: { y: 0, opacity: 1 },
-  closed: { y: 20, opacity: 0 }
-});
+const PosedItem = posed.div({
+  boobl: {
+		y: 200,
+		opacity: 0,
+	},
+  enter: {
+		y: 0,
+		opacity: 1,
+	},
+	exit: {
+		x: -400,
+		opacity: 0,
+	},
+})
 
 export default ({
-	messages
+	messages,
+	dismissNotification
 }) => {
+	// this Portal is never unmounted
   return reactDom.createPortal(
 		<NotificationsHolder>
-		<PosedList
-			pose={messages.length ? 'open' : 'closed'}
-		>
-			{messages.map((m, i) =>
-				<PosedItem
-					key={i}
-				>
-					<Notification
-						message={m}
-					/>
-				</PosedItem>
-			)}
-		</PosedList>,
+			<PoseGroup
+				animateOnMount
+				preEnterPose='boobl'
+			>
+				{messages.map(m =>
+					<PosedItem
+						key={m.id}
+						initialPose="boobl"
+					>
+						<Notification
+							message={m}
+							dismissNotification={dismissNotification}
+						/>
+					</PosedItem>
+				)}
+			</PoseGroup>
 		</NotificationsHolder>,
 		document.getElementById('kolmech-notifications')
 	)

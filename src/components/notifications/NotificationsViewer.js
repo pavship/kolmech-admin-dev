@@ -9,13 +9,15 @@ export default () => {
 		<Subscribe
 			to={[NotificationsProvider]}
 		>
-			{({ state: { messages }}) =>
-				messages.length
-				? <Notifications
+			{notificationsProvider => {
+				const { dismiss, state: { messages } } = notificationsProvider
+				return (
+					<Notifications
 						messages={messages}
+						dismissNotification={dismiss}
 					/>
-				: null
-			}
+				)
+			}}
 		</Subscribe>
 	)
 }

@@ -9,15 +9,12 @@ const resolvers = {
 	},
 	Mutation: {
 		setLayout: (_, { input }, { cache }) => {
-			console.log('input > ', input)
 			const query = getLayout
 			const data = cache.readQuery({ query })
-			console.log('data > ', data)
 			data.layout = {
 				...data.layout,
 				...cloneDeep(input)
 			}
-			console.log('data > ', data)
 			cache.writeQuery({ query, data })
 			return null
 		},
