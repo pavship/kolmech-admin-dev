@@ -8,12 +8,12 @@ import { Subscribe } from 'unstated';
 import styled from 'styled-components'
 import posed, { PoseGroup } from 'react-pose'
 
-import CollapsableSection from '../../CollapsableSection'
 import Dropzone from 'react-dropzone'
-import { Icon, Button, Span } from '../../styled/styled-semantic';
-import { Popup } from 'semantic-ui-react';
-import GlobalNotifications from '../../notifications/GlobalNotifications';
-import NotificationsContainer from '../../notifications/NotificationsContainer';
+
+import { Icon, Button, Span } from '../../styled/styled-semantic'
+import { Popup } from 'semantic-ui-react'
+import CollapsableSection from '../../CollapsableSection'
+import NotificationsProvider from '../../notifications/NotificationsProvider'
 
 const DropzoneArea = styled.div`
   position: relative;
@@ -22,7 +22,6 @@ const DropzoneArea = styled.div`
   }
 `
 
-// const DropzoneOverlay = styled.div`
 const DropzoneOverlay = styled(posed.div({
   enter: { opacity: 1 },
   exit: { opacity: 0 },
@@ -39,9 +38,6 @@ const DropzoneOverlay = styled(posed.div({
 `
 
 export default class Drawings extends Component {
-  // handleDrop =  => {
-  //   console.log(droppedFiles)
-  // }
   render() {
     const {
       modelId,
@@ -49,7 +45,7 @@ export default class Drawings extends Component {
     } = this.props
     return (
       <Subscribe
-        to={[NotificationsContainer]}
+        to={[NotificationsProvider]}
       >
         {notifications =>
           <Mutation
@@ -69,15 +65,11 @@ export default class Drawings extends Component {
                 }}
                 disableClick
                 accept={['image/*']}
-                // onDropRejected={() => createNotification({
-                //   title: 'owfull man!'
-                // })}
-                // onDropRejected={() => notifications.create({
-                //   title: 'owfull man!'
-                // })}
-                // onDropRejected={() => notifications.create({
-                //   title: 'owfull man!'
-                // })}
+                onDropRejected={() => notifications.create({
+                  type: 'error',
+                  title: 'Недопустимый формат файла',
+                  content: 'Поддерживаются только изображения .jpeg или .png',
+                })}
               >
                 {({
                   getRootProps,

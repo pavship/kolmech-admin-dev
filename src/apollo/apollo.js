@@ -11,7 +11,7 @@ import { AUTH_TOKEN } from '../constants'
 
 import defaults from './defaults'
 import resolvers from './resolvers'
-import typeDefs from './typeDefs'
+// import typeDefs from './typeDefs'
 
 // init with Apollo Client:
 const cache = new InMemoryCache({
@@ -79,7 +79,7 @@ export const client = new ApolloClient({
 		withClientState({
       defaults,
 			resolvers,
-			typeDefs,
+			// typeDefs,
       cache
 		}),
 		// new HttpLink({ uri: 'http://localhost:4000' })

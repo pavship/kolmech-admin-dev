@@ -4,17 +4,18 @@ import styled from 'styled-components'
 // S prefix is used throughout the App just to have flexebility (two names for each component)
 // N prefix stands for NativeCssImplementation of a component (When html element is styled instead of semantic ui component) 
 
-import { 
-	Header as SHeader, 
-	// Label as SLabel,
-	Icon as SIcon, 
-	Button as SButton,
-	Message as SMessage,
-	Popup as SPopup,
-	Input as SInput,
-	Dropdown as SDropdown,
-	Form as SForm
-} from 'semantic-ui-react'
+import {
+    Header as SHeader,
+    // Label as SLabel,
+    Icon as SIcon,
+    Button as SButton,
+    Message as SMessage,
+    Popup as SPopup,
+    Input as SInput,
+    Dropdown as SDropdown,
+    Form as SForm,
+    Ref
+} from 'semantic-ui-react';
 
 export const theme = {
 	widths: {
@@ -30,7 +31,7 @@ export const theme = {
 	}
 }
 const getThemeColor = (color) => theme.colors[color] || color
-const baseSet = ({ theme, bt, bb, bc, bs, c, d, fs, fw, h, lh, mw, m, mb, mt, ml, mr, o, ox, oy, p, pl, pr, pt, ta, va, w, ws }) => {
+const baseSet = ({ theme, bt, bb, bc, bs, c, d, fs, fw, h, lh, mw, minw, m, mb, mt, ml, mr, o, ox, oy, p, pl, pr, pt, ta, va, w, ws }) => {
 	return `
 		${bt 	? `border-top: ${bt};`								: ''}
 		${bb 	? `border-bottom: ${bb};`							: ''}
@@ -43,6 +44,7 @@ const baseSet = ({ theme, bt, bb, bc, bs, c, d, fs, fw, h, lh, mw, m, mb, mt, ml
 		${h 	? `height: ${h};`											: ''}
 		${lh 	? `line-height: ${lh};`								: ''}
 		${mw 	? `max-width: ${mw};`									: ''}
+		${minw? `min-width: ${minw};`								: ''}
 		${m 	? `margin: ${m};`											: ''}
 		${mb 	? `margin-bottom: ${mb};`							: ''}
 		${mt 	? `margin-top: ${mt};`								: ''}
@@ -272,9 +274,11 @@ export const Label = styled.label`
 	margin-right: 0 !important;
 `
 
-const InputPropFilter = ({ w, ...rest }) => (
-	<SInput {...rest} />
-)
+const InputPropFilter = React.forwardRef(({ w, ...rest }, ref) => (
+	<Ref innerRef={ref}>
+		<SInput {...rest} />
+	</Ref>
+))
 export const Input = styled(InputPropFilter)`
 	&&&& {
 		${props => baseSet(props)}

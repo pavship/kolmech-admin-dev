@@ -1,3 +1,4 @@
+// not used
 export default `
 	type Details {
 		type: String
@@ -6,11 +7,4 @@ export default `
 		editMode: Boolean
 		closing: Boolean
 	}
-	type Query {
-    notifications: [Notification]!
-	}
-	type Notification {
-		title: String
-		content: String
-  }
 `
