@@ -9,13 +9,25 @@ export default class NotificationsProvider extends Container {
   }
   create = message => {
     message.id = cuid()
+    // notification will auto dismiss
+    message.timerId = setTimeout(() => {
+      this.dismiss(message.id)
+    }, 3500)
     this.setState(({ messages }) => ({
-      messages: [...cloneDeep(messages), message]
+      messages: [...cloneDeep(messages), message],
     }))
   }
   dismiss = messageId => {
     this.setState(({ messages }) => ({
       messages: messages.filter(m => m.id !== messageId)
+    }))
+  }
+  cancelAutoDismiss = messageId => {
+    const message = cloneDeep(this.state.messages.find(m => m.id === messageId))
+    clearTimeout(message.timerId)
+    delete message.timerId
+    this.setState(({ messages }) => ({
+      messages: [...messages.filter(m => m.id !== messageId), message]
     }))
   }
 }

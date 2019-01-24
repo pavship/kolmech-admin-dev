@@ -10,11 +10,16 @@ export default () => {
 			to={[NotificationsProvider]}
 		>
 			{notificationsProvider => {
-				const { dismiss, state: { messages } } = notificationsProvider
+				const {
+					state: { messages },
+					dismiss,
+					cancelAutoDismiss,
+			} = notificationsProvider
 				return (
 					<Notifications
 						messages={messages}
 						dismissNotification={dismiss}
+						cancelAutoDismiss={cancelAutoDismiss}
 					/>
 				)
 			}}
