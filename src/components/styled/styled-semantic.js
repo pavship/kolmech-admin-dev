@@ -33,35 +33,35 @@ export const theme = {
 const getThemeColor = (color) => theme.colors[color] || color
 const baseSet = ({ theme, bt, bb, bc, bs, c, d, fs, fw, h, lh, mw, minw, m, mb, mt, ml, mr, o, ox, oy, p, pe, pl, pr, pt, ta, va, w, ws }) => {
 	return `
-		${bt 	? `border-top: ${bt};`								: ''}
-		${bb 	? `border-bottom: ${bb};`							: ''}
-		${bc 	? `background-color: ${bc};`					: ''}
-		${bs 	? `box-sizing: ${bs};`								: ''}
-		${c 	? `color: ${c};`											: ''}
-		${d 	? `display: ${d};`										: ''}
-		${fs 	? `font-size: ${fs};`									: ''}
-		${fw 	? `font-weight: ${fw};`								: ''}
-		${h 	? `height: ${h};`											: ''}
-		${lh 	? `line-height: ${lh};`								: ''}
-		${mw 	? `max-width: ${mw};`									: ''}
-		${minw? `min-width: ${minw};`								: ''}
-		${m 	? `margin: ${m};`											: ''}
-		${mb 	? `margin-bottom: ${mb};`							: ''}
-		${mt 	? `margin-top: ${mt};`								: ''}
-		${ml 	? `margin-left: ${ml};`								: ''}
-		${mr 	? `margin-right: ${mr};`							: ''}
-		${o  	? `opacity: ${o};`										: ''}
-		${ox  ? `overflow-x: ${ox};`								: ''}
-		${oy  ? `overflow-y: ${oy};`								: ''}
-		${p 	? `padding: ${p};`										: ''}
-		${pl 	? `padding-left: ${pl};`							: ''}
-		${pe 	? `pointer-events: ${pe};`						: ''}
-		${pr 	? `padding-right: ${pr};`							: ''}
-		${pt 	? `padding-top: ${pt};`								: ''}
-		${ta 	? `text-align: ${ta};`								: ''}
-		${va 	? `vertical-align: ${va};`						: ''}
-		${w 	? `width: ${theme.widths[w] || w};`		: ''}
-		${ws 	? `word-spacing: ${ws};`							: ''}
+		${bt 	? `border-top: ${bt};`														: ''}
+		${bb 	? `border-bottom: ${bb};`													: ''}
+		${bc 	? `background-color: ${bc};`											: ''}
+		${bs 	? `box-sizing: ${bs};`														: ''}
+		${c 	? `color: ${c};`																	: ''}
+		${d 	? `display: ${d};`																: ''}
+		${fs 	? `font-size: ${fs};`															: ''}
+		${fw 	? `font-weight: ${fw};`														: ''}
+		${h 	? `height: ${h};`																	: ''}
+		${lh 	? `line-height: ${lh};`														: ''}
+		${mw 	? `max-width: ${mw};`															: ''}
+		${minw? `min-width: ${minw};`														: ''}
+		${m 	? `margin: ${m};`																	: ''}
+		${mb 	? `margin-bottom: ${mb};`													: ''}
+		${mt 	? `margin-top: ${mt};`														: ''}
+		${ml 	? `margin-left: ${ml};`														: ''}
+		${mr 	? `margin-right: ${mr};`													: ''}
+		${o  	? `opacity: ${o};`																: ''}
+		${ox  ? `overflow-x: ${ox};`														: ''}
+		${oy  ? `overflow-y: ${oy};`														: ''}
+		${p 	? `padding: ${p};`																: ''}
+		${pl 	? `padding-left: ${pl};`													: ''}
+		${pe 	? `pointer-events: ${pe};`												: ''}
+		${pr 	? `padding-right: ${pr};`													: ''}
+		${pt 	? `padding-top: ${pt};`														: ''}
+		${ta 	? `text-align: ${ta};`														: ''}
+		${va 	? `vertical-align: ${va};`												: ''}
+		${w 	? `width: ${(theme.widths && theme.widths[w]) || w};`		: ''}
+		${ws 	? `word-spacing: ${ws};`													: ''}
 	`
 }
 

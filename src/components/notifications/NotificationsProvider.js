@@ -12,7 +12,7 @@ export default class NotificationsProvider extends Container {
     // notification will auto dismiss
     message.timerId = setTimeout(() => {
       this.dismiss(message.id)
-    }, 3500)
+    }, 5000)
     this.setState(({ messages }) => ({
       messages: [...cloneDeep(messages), message],
     }))

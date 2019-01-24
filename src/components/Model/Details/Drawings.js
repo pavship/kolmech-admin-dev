@@ -11,7 +11,6 @@ import posed, { PoseGroup } from 'react-pose'
 import Dropzone from 'react-dropzone'
 
 import { Icon, Button, Span } from '../../styled/styled-semantic'
-import { Popup } from 'semantic-ui-react'
 import CollapsableSection from '../../CollapsableSection'
 import NotificationsProvider from '../../notifications/NotificationsProvider'
 
@@ -64,7 +63,7 @@ export default class Drawings extends Component {
                   console.log('res > ', res)
                 }}
                 disableClick
-                accept={['image/*']}
+                accept='image/jpeg, image/png'
                 onDropRejected={() => notifications.create({
                   type: 'error',
                   title: 'Недопустимый формат файла',
@@ -101,34 +100,26 @@ export default class Drawings extends Component {
                           fs='1.2em'
                         >
                           <Icon
-                            name='file outline'
+                            name='file image outline'
                             mr='4px'
                           />
                           {drawings.length}
                         </Span>
                       }
                       buttons={
-                        <Popup
-                          position='bottom right'
-                          size='small'
-                          flowing
-                          trigger={
-                            <Button compact circular menu
-                              activeColor='green'
-                              icon='plus'
-                              active={ false }
-                              onClick={e => {
-                                e.stopPropagation()
-                                open()
-                              }}
-                            />
-                          } 
-                        >
-                          <Popup.Content>
-                            <Icon name='info circle' />
-                            Можно также перетащить файлы в этот раздел
-                          </Popup.Content>
-                        </Popup>
+                        <Button compact circular menu
+                          activeColor='green'
+                          icon='plus'
+                          active={ false }
+                          onClick={e => {
+                            e.stopPropagation()
+                            notifications.create({
+                              type: 'warning',
+                              content: 'Чтобы загрузить файлы, перетащите их в раздел',
+                            })
+                            open()
+                          }}
+                        />
                       }
                     >
                       lkdfjlkfdgj

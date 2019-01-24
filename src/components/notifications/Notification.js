@@ -9,10 +9,15 @@ export default ({
   return (
 		<Message
 			m='0 0 2rem 2rem'
-			minw='350px'
+			mw='550px'
 			pe='all'
 			compact
 			size='large'
+			icon={
+				type === 'error' ? 'exclamation' :
+				type === 'warning' ? 'info' :
+				undefined
+			}
 			header={title}
 			content={content}
 			error={type === 'error'}
