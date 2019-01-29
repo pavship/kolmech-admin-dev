@@ -6,7 +6,8 @@ import { Section } from './styled/styled-semantic'
 import DetailsHeader from './DetailsHeader'
 
 const OuterSection = styled(Section)`
-  & { 
+  & {
+    width: 100%;
     padding: 0;
     ${props => props.expanded && `{
       margin-top: -1px;
@@ -16,6 +17,7 @@ const OuterSection = styled(Section)`
 `
 const InnerSection = styled(Section)`
   & {
+    width: 100%;
     padding: 0;
     margin-bottom: -1px;
   }
@@ -23,7 +25,7 @@ const InnerSection = styled(Section)`
 
 class CollapsableSection extends Component {
   state = {
-    expanded: false
+    expanded: !!this.props.initiallyExpanded
   }
   render() {
     const {

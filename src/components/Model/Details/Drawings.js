@@ -13,6 +13,8 @@ import Dropzone from 'react-dropzone'
 import { Icon, Button, Span } from '../../styled/styled-semantic'
 import CollapsableSection from '../../CollapsableSection'
 import NotificationsProvider from '../../notifications/NotificationsProvider'
+import Drawing from './Drawing';
+import SelectableListProvider from '../../special/SelectableListProvider';
 
 const DropzoneArea = styled.div`
   position: relative;
@@ -36,6 +38,37 @@ const DropzoneOverlay = styled(posed.div({
   background-color: rgba(0,0,0,.65);
 `
 
+const MenuOverlay = styled(posed.div({
+  enter: { opacity: 1 },
+  exit: { opacity: 0 },
+}))`
+  position: absolute;
+  z-index: 1;
+  top: 1px;
+  right: 0;
+  left: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255,255,255,1);
+`
+
+const CancelIcon = styled(Icon)`
+  &&& {
+		box-sizing: content-box;
+		width: calc(55px - 1em);
+		margin: 0 0.5em;
+	}
+`
+
+const TrashIcon = styled(Icon)`
+  :hover {
+    color: #db2828;
+  }
+`
+
+
+
 export default class Drawings extends Component {
   render() {
     const {
@@ -44,11 +77,22 @@ export default class Drawings extends Component {
     } = this.props
     return (
       <Subscribe
-        to={[NotificationsProvider]}
+        to={[NotificationsProvider, SelectableListProvider]}
       >
-        {notifications =>
+        {(
+          notifications,
+          {
+            state: { list: selectedDrawings },
+            select: selectDrawing,
+            deselectAll: deselectAllDrawings
+          }) =>
           <Mutation
             mutation={createDrawings}
+            onError={err => notifications.create({
+              type: 'error',
+              title: 'Ошибка загрузки файлов',
+              content: err.message,
+            })}
           >
             {(createDrawings, { loading, error }) => 
               <Dropzone
@@ -91,12 +135,36 @@ export default class Drawings extends Component {
                           />
                         </DropzoneOverlay>
                       }
+                      {selectedDrawings.length &&
+                        <MenuOverlay key='2' >
+                          <CancelIcon
+                            link
+                            size='large'
+                            name='cancel'
+                            onClick={() => deselectAllDrawings()}
+                          />
+                          <Span
+                            fs='1.1em'
+                            c='rgba(0,0,0,.75)'
+                            fw='700'
+                          >
+                            Выбрано чертежей: {drawings.length}
+                          </Span>
+                          <TrashIcon
+                            link
+                            m='0 23px 0 auto'
+                            name='trash alternate outline'
+                            size='large'
+                          />
+                        </MenuOverlay>
+                      }
                     </PoseGroup>
                     <CollapsableSection
+                      initiallyExpanded={!!drawings.length}
                       title='Чертеж '
                       subtitle={
                         <Span
-                          ml='10px'
+                          // ml='10px'
                           fs='1.2em'
                         >
                           <Icon
@@ -119,10 +187,17 @@ export default class Drawings extends Component {
                             })
                             open()
                           }}
+                          loading={loading}
                         />
                       }
                     >
-                      lkdfjlkfdgj
+                      {drawings.length &&
+                        <Drawing
+                          drawing={drawings[0]}
+                          select={selectDrawing}
+                          selected={!!selectedDrawings.includes(drawings[0].id)}
+                        />
+                      }
                     </CollapsableSection>
                   </DropzoneArea>
                 }

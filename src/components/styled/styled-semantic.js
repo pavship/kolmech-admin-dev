@@ -113,7 +113,7 @@ export const Header = styled(HeaderPropFilter)`
 	}
 `
 
-const IconPropFilter = ({ activeColor, ...rest }) => (
+const IconPropFilter = ({ activeColor, active, ...rest }) => (
 	<SIcon {...rest} />
 )
 export const Icon = styled(IconPropFilter)`

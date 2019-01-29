@@ -17,7 +17,7 @@ const SSidebar = styled(Sidebar)`
 		max-width: ${props => 
 			props.type === 'Enquiry'
 			? '1000px'
-			: '1200px'
+			: '1320px'
 		};
 		${props => !props.extra && `
 			&.ui.visible.right.overlay.sidebar {

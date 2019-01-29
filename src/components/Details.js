@@ -12,7 +12,7 @@ import ModelDetails from './Model/Details'
 
 const Container = styled.div`
 	/* flex-grow: 1; */
-	width: 60%;
+	width: 60%;  // evaluates to 792px
 `
 
 const Details = ({ closeDetails }) => {

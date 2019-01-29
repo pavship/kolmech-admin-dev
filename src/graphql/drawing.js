@@ -4,7 +4,7 @@ import { fileFragmentBasic } from './file'
 export const drawingFragmentBasic = gql`
 	fragment DrawingFragmentBasic on Drawing {
 		id
-		file { ...FileFragmentBasic }
+		files { ...FileFragmentBasic }
 	}
 	${fileFragmentBasic}
 `
