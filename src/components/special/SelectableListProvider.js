@@ -13,4 +13,9 @@ export default class SelectableListProvider extends Container {
     }))
   }
   deselectAll = () => this.setState({ list: [] })
+  deselectMany = items => {
+    this.setState(({ list }) => ({
+      list: [ ...list.filter(i => !items.includes(i)) ]
+    }))
+  }
 }

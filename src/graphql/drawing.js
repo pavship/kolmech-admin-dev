@@ -23,3 +23,9 @@ export const createDrawings = gql`
 	}
 	${drawingFragmentBasic}
 `
+
+export const deleteDrawings = gql`
+	mutation DeleteDrawings( $ids: [ID!]! ) {
+		deleteDrawings(ids: $ids) { count }
+	}
+`

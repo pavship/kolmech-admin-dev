@@ -9,13 +9,16 @@ export default ({
   return (
 		<Message
 			m='0 0 2rem 2rem'
+			w='unset'
 			mw='550px'
+			pr='4em'
 			pe='all'
 			compact
 			size='large'
 			icon={
 				type === 'error' ? 'exclamation' :
 				type === 'warning' ? 'info' :
+				type === 'success' ? 'check' :
 				undefined
 			}
 			header={title}

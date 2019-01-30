@@ -198,7 +198,7 @@ export const Message = styled(MessagePropFilter)`
 	}
 `
 
-const SectionPropFiltered = ({
+const SectionPropFiltered = React.forwardRef(({
 	head,
 	minor,
 	small,
@@ -211,17 +211,19 @@ const SectionPropFiltered = ({
 	children,
 	onClick,
 	...rest
-}) => (
+}, ref) => (
 		<div
+			ref={ref}
 			{...rest}
 			onClick={onClick || undefined}
 		>
 			{children}
 		</div>
-)
+))
 export const Section = styled(SectionPropFiltered)`
 	width: 100%;
 	padding: 1em 1em 1em 55px;
+	${props => baseSet(props)}
 	${props => props.head && `{
 		display: flex;
 		align-items: center;
