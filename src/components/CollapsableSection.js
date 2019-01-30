@@ -33,9 +33,6 @@ class CollapsableSection extends Component {
   state = {
     expanded: !!this.props.initiallyExpanded
   }
-  // componentDidMount() {
-  //   if (!!this.props.initiallyExpanded) this.expand()
-  // }
   expand = () => this.setState({ expanded: true })
   render() {
     const {

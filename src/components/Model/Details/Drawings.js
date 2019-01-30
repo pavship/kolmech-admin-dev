@@ -70,9 +70,8 @@ export default class Drawings extends Component {
   render() {
     const {
       model,
-      modelId,
-      drawings
     } = this.props
+    const { id: modelId, drawings } = model
     const selectableList = new SelectableListProvider()
     return (
       <Subscribe
@@ -98,7 +97,7 @@ export default class Drawings extends Component {
               content: err.message,
             })}
           >
-            {(createDrawings, { loading: creating, error: createError, client }) =>
+            {(createDrawings, { loading: creating, client }) =>
               <Mutation
                 mutation={deleteDrawings}
                 onCompleted={() => notifications.create({
@@ -111,7 +110,7 @@ export default class Drawings extends Component {
                   content: err.message,
                 })}
               >
-                {(deleteDrawings, { loading: deleting, error: deleteError }) =>
+                {(deleteDrawings, { loading: deleting }) =>
                   <Dropzone
                     onDrop={async (acceptedFiles) => {
                       if (!acceptedFiles.length) return
@@ -146,7 +145,7 @@ export default class Drawings extends Component {
                     {({
                       getRootProps,
                       getInputProps,
-                      open,
+                      open: openFileDialog,
                       isDragActive,
                     }) =>
                       <DropzoneArea
@@ -204,15 +203,6 @@ export default class Drawings extends Component {
                         <CollapsableSection
                           ref={component => this.collapsableSection = component}
                           initiallyExpanded={!!drawings.length}
-                          // innerHeight={!!drawings.length 
-                          //   ? (() => {
-                          //     const { files } = drawings[0]
-                          //     const oriImage = files.find(f => f.isOri)
-                          //     const image = files.find(f => f.width === 792) || oriImage
-                          //     return image.height
-                          //   })()
-                          //   : undefined
-                          // }
                           disabled={!drawings.length}
                           title='Чертеж '
                           subtitle={
@@ -237,18 +227,22 @@ export default class Drawings extends Component {
                                   type: 'warning',
                                   content: 'Чтобы загрузить файлы, перетащите их в раздел',
                                 })
-                                open()
+                                openFileDialog()
                               }}
                               loading={creating}
                             />
                           }
                         >
                           {drawings.length &&
-                            <Drawing
-                              drawing={drawings[0]}
-                              select={selectDrawing}
-                              selected={!!selectedDrawings.includes(drawings[0].id)}
-                            />
+                            drawings.map(drw => 
+                              <Drawing
+                                key={drw.id}
+                                drawing={drw}
+                                select={selectDrawing}
+                                selected={!!selectedDrawings.includes(drw.id)}
+                                selectMode={!!selectedDrawings.length}
+                              />
+                            )
                           }
                         </CollapsableSection>
                       </DropzoneArea>

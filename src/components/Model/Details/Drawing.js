@@ -5,55 +5,48 @@ import posed from 'react-pose'
 import { Icon } from '../../styled/styled-semantic';
 
 const Container = styled.div`
+  position: relative;
   width: 100%;
   height: calc(792px/${props => props.proportion});
   max-height: 100%;
-  position: relative;
+  box-sizing: content-box;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: rgba(0,0,50,.03);
-  border-bottom: 1px solid rgba(126,127,129,1);
+  border-bottom: 3px solid white;
 `
 
 const ImgSpacer = posed.div({
   shrinked: {
     width:  'calc(100% - 60px)',
-    height: ({ proportion }) => `calc(100% - 60px/${proportion})`
+    height: ({ proportion }) => `calc(100% - 60px/${proportion})`,
   },
   fullsize: {
     width: '100%',
-    height: '100%'
+    height: '100%',
   }
 })
 
 const Image = styled.img`
   width: 100%;
   height: 100%;
+  ${({ shrinked }) => shrinked && 'border-radius: 4px;'}
 `
 
-// const Mask = styled(posed.div({
-//   hoverable: true,
-//   init: { opacity: 0 },
-//   hover: { opacity: 1 }
-// }))`
 const Mask = styled.div`
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  opacity: 0;
   cursor: pointer;
-  background-image: linear-gradient(to bottom,rgba(0,0,0,0.26),transparent 56px,transparent);
-  transition: opacity .135s cubic-bezier(0.0,0.0,0.2,1);
-  /* pointer-events: none; */
+  transition: background-image .135s cubic-bezier(0.0,0.0,0.2,1);
   :hover {
-    opacity: 1;
+    background-image: linear-gradient(to bottom,rgba(0,0,0,0.26),transparent 56px,transparent);
   }
-  ${({ hide }) => hide && `
-    opacity: 1;
-    background-image: unset;
+  ${props => props.hide && `
+    background-image: unset !important;
   `}
 `
 
@@ -62,7 +55,14 @@ const CheckBox = styled(Icon)`
   top: 7px;
   left: 10px;
   color: white;
-  ${({ active }) => active ? 'opacity: 1 !important;' : ''}
+  &&& {
+    opacity: ${props => 
+      props.active ? '1 !important' :
+      props.selectMode ? '.5 !important' : '0'};
+  }
+  ${Mask}:hover && {
+    opacity: ${props => props.selectMode ? '1 !important' : '.5'};
+  }
 `
 
 const Check = styled(Icon)`
@@ -70,23 +70,27 @@ const Check = styled(Icon)`
   left: 5px;
   top: 4px;
   &&& {
-    ${({ active }) => `
-      opacity: ${active ? '.9 !important' : '.2'};
-      :hover {
-        opacity: ${active ? '.9' : '.5'} !important;
-      }
-    `}
+    opacity: ${props => props.active ? '.9 !important' : '0'};
+    :hover {
+      opacity: .5 !important;
+    }
+  }
+  ${Mask}:hover && {
+    opacity: ${props => 
+      props.active ? '.9 !important' :
+      props.selectMode ? '.5 !important' : '.2'};
   }
 `
 
 export default ({
   drawing: { id, files },
   select,
-  selected
+  selected,
+  selectMode
 }) => {
   const oriImage = files.find(f => f.isOri)
   const image = files.find(f => f.width === 792) || oriImage
-  const { path, filename, width, height} = image
+  const { path, width, height} = image
   const proportion = width/height
   return (
     <Container
@@ -95,7 +99,7 @@ export default ({
       <Mask
         hide={selected}
         onClick={() => {
-          if (selected) return select(id) // deselect drawing
+          if (selected || selectMode) return select(id) // deselect drawing if selected, select if in the selectMode
           // otherwise open fullsize image in new tab
           const win = window.open(oriImage.path, '_blank')
           win.focus()
@@ -107,6 +111,7 @@ export default ({
           size='big'
           fs='2.2em'
           active={selected}
+          selectMode={selectMode}
           color={selected ? 'grey' : undefined}
         >
           <Check
@@ -116,6 +121,7 @@ export default ({
             color='black'
             c={selected ? '#fff !important' : undefined}
             active={selected}
+            selectMode={selectMode}
             onClick={e => {
               e.stopPropagation()
               select(id)
@@ -132,7 +138,7 @@ export default ({
           src={path}
           width={width}
           height={height}
-          
+          shrinked={selected}
         />
       </ImgSpacer>
     </Container>
