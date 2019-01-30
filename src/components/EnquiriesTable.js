@@ -4,6 +4,7 @@ import GlobalContext from './special/GlobalContext'
 
 import Table from './common/Table'
 import TableRow from './common/TableRow'
+import { Div, Icon } from './styled/styled-semantic'
 
 const fields = [{
 	name: 'num',
@@ -58,13 +59,14 @@ const EnquiriesTable = ({ enquiries }) => {
 				>
 					{({ tableFields }) => 
 						enquiries.map(enquiry => {
-							const { id, org, docs, isExpanded, model } = enquiry
+							const { id, org, docs, isExpanded, model, orders } = enquiry
 							const active = details
 								&& details.type === 'Enquiry'
 								&& id === details.id
 							return (
 								<Fragment key={id} >
 									<TableRow
+										lineHeight='21px'
 										entity={enquiry}
 										tableFields={tableFields}
 										rowFields={[{
@@ -89,7 +91,7 @@ const EnquiriesTable = ({ enquiries }) => {
 												&& bottomPanel.orgId === org.id
 										},{
 											name: 'model',
-											path: 'model.name',
+											component: 'modelComponent',
 											hoverable: true,
 											onClick: () => {
 												setDetails({
@@ -100,6 +102,9 @@ const EnquiriesTable = ({ enquiries }) => {
 											active: details
 												&& details.type === 'Model'
 												&& details.id === model.id
+										},{
+											name: 'reserved',
+											value: orders.reduce((res, o) => res += o.prods.length, 0),
 										}]}
 										expandFor='orders'
 										expanded={isExpanded}
@@ -120,16 +125,36 @@ const EnquiriesTable = ({ enquiries }) => {
 												value: !active ? true : !isExpanded
 											})
 										}}
+										modelComponent={
+											<Div
+												d='flex'
+											>
+												<Div
+													minw='215px'
+												>
+													{model.name}
+												</Div>
+												{!!model.drawings.length &&
+													<Icon
+														mr='5px'
+														o='.6'
+														name='image outline'
+														color='grey'
+														size='large'
+													/>
+												}
+											</Div>
+										}
 									>
 									</TableRow>
-									{	isExpanded && enquiry.orders.map((order, i) => {
+									{	isExpanded && orders.map((order, i) => {
 										const { id, prods } = order
 										return (
 											// @ts-ignore
 											<TableRow
+												key={id}
 												secondary={1}
 												lastSecondaryRow={i === enquiry.orders.length - 1 ? 1 : 0}
-												key={id}
 												entity={order}
 												tableFields={tableFields}
 												rowFields={[{

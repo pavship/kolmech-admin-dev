@@ -15,6 +15,9 @@ const Row = styled.tr`
 		background: rgba(0,0,0,.05);
 		color: rgba(0,0,0,.95);
 	}
+	${props => props.lineHeight && `
+		line-height: ${props.lineHeight};
+	`}
 	${props => props.secondary && `
 		background: rgba(0,0,50,.02);
 		${!props.lastSecondaryRow ? 'border-bottom: none;' : ''}
@@ -65,16 +68,17 @@ const Td = styled.td`
 	`}
 `
 
-const TableRow = ({
-	tableFields,
-	rowFields = [],
-	entity,
-	expandFor,
-	expanded,
-	expand,
-	select,
-	...rest 
-}) => {
+const TableRow = props => {
+	const {
+		tableFields,
+		rowFields = [],
+		entity,
+		expandFor,
+		expanded,
+		expand,
+		select,
+		...rest 
+	} = props
 	// rowFields have precedence over tableFields
 	const fields = tableFields.map(f => rowFields.find(rf => rf.name === f.name) || f)
 	const { selected, disabled } = entity
@@ -125,6 +129,7 @@ const TableRow = ({
 					</Td>
 				)
 				const {
+					component,
 					content,
 					name,
 					value,
@@ -134,11 +139,21 @@ const TableRow = ({
 					iconColor,
 					...rest
 				} = f
-				if (content) return (
+				if (component || content) return (
 					<Td
 						key={name}
+						{...rest}
+						onClick={
+							!!onClick
+							? e => {
+									e.stopPropagation()
+									onClick()
+								}
+							: undefined
+						}
 					>
-						{content}
+						{component ? props[component] : null}
+						{content ? content : null}
 					</Td>
 				)
 				let val = value || (path ? getObjProp(entity, path) : null)

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-export const fileFragmentBasic = gql`
-	fragment FileFragmentBasic on File {
+export const fileFragmentFull = gql`
+	fragment FileFragmentFull on File {
 		id
 		path
 		size

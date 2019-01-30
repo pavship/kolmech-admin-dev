@@ -1,12 +1,19 @@
 import gql from 'graphql-tag'
-import { fileFragmentBasic } from './file'
+import { fileFragmentFull } from './file'
 
 export const drawingFragmentBasic = gql`
 	fragment DrawingFragmentBasic on Drawing {
 		id
-		files { ...FileFragmentBasic }
 	}
-	${fileFragmentBasic}
+`
+
+export const drawingFragmentFull = gql`
+	fragment DrawingFragmentFull on Drawing {
+		...DrawingFragmentBasic
+		files { ...FileFragmentFull }
+	}
+	${drawingFragmentBasic}
+	${fileFragmentFull}
 `
 
 export const createDrawings = gql`
@@ -18,10 +25,10 @@ export const createDrawings = gql`
 			modelId: $modelId
 			files: $files
 		) {
-			...DrawingFragmentBasic
+			...DrawingFragmentFull
 		}
 	}
-	${drawingFragmentBasic}
+	${drawingFragmentFull}
 `
 
 export const deleteDrawings = gql`

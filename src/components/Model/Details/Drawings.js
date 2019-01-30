@@ -31,6 +31,7 @@ const DropzoneOverlay = styled(posed.div({
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;

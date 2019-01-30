@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { drawingFragmentBasic } from './drawing';
+import { drawingFragmentBasic, drawingFragmentFull } from './drawing';
 
 export const modelFragmentBasic = gql`
 	fragment ModelFragmentBasic on Model {
@@ -9,13 +9,22 @@ export const modelFragmentBasic = gql`
 	}
 `
 
-export const modelFragmentFull = gql`
-	fragment ModelFragmentFull on Model {
+export const modelFragmentWithDrawings = gql`
+	fragment ModelFragmentWithDrawings on Model {
 		...ModelFragmentBasic
 		drawings { ...DrawingFragmentBasic }
 	}
 	${modelFragmentBasic}
 	${drawingFragmentBasic}
+`
+
+export const modelFragmentFull = gql`
+	fragment ModelFragmentFull on Model {
+		...ModelFragmentBasic
+		drawings { ...DrawingFragmentFull }
+	}
+	${modelFragmentBasic}
+	${drawingFragmentFull}
 `
 
 export const modelLocal = gql`
