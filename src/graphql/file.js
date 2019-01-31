@@ -7,8 +7,8 @@ export const fileFragmentFull = gql`
 		size
 		filename
 		mimetype
-		isOri
 		width
 		height
+		imgFor
 	}
 `

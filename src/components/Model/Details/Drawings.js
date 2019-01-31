@@ -6,8 +6,11 @@ import { createDrawings, deleteDrawings } from '../../../graphql/drawing'
 import { Subscribe } from 'unstated'
 import NotificationsProvider from '../../notifications/NotificationsProvider'
 import SelectableListProvider from '../../special/SelectableListProvider'
+import ToggleableBoolProvider from '../../special/ToggleableBoolProvider'
 
 import Dropzone from 'react-dropzone'
+
+
 
 import styled from 'styled-components'
 import posed, { PoseGroup } from 'react-pose'
@@ -53,7 +56,7 @@ const MenuOverlay = styled(posed.div({
   background-color: rgba(255,255,255,1);
 `
 
-const CancelIcon = styled(Icon)`
+const MenuLeftIcon = styled(Icon)`
   &&& {
 		box-sizing: content-box;
 		width: calc(55px - 1em);
@@ -74,9 +77,14 @@ export default class Drawings extends Component {
     } = this.props
     const { id: modelId, drawings } = model
     const selectableList = new SelectableListProvider()
+    const toggleableBool = new ToggleableBoolProvider()
     return (
       <Subscribe
-        to={[NotificationsProvider, selectableList]}
+        to={[
+          NotificationsProvider,
+          selectableList,
+          toggleableBool
+        ]}
       >
         {( notifications,
           {
@@ -84,6 +92,11 @@ export default class Drawings extends Component {
             select: selectDrawing,
             deselectAll: deselectAllDrawings,
             deselectMany: deselectManyDrawings
+          },
+          {
+            state: { bool: sortMode },
+            enable: enableSortMode,
+            disable: disableSortMode,
           }
         ) =>
           <Mutation
@@ -166,7 +179,7 @@ export default class Drawings extends Component {
                           }
                           {selectedDrawings.length &&
                             <MenuOverlay key='2' >
-                              <CancelIcon
+                              <MenuLeftIcon
                                 link
                                 size='large'
                                 name='cancel'
@@ -200,6 +213,24 @@ export default class Drawings extends Component {
                               />
                             </MenuOverlay>
                           }
+                          {sortMode &&
+                            <MenuOverlay key='3' >
+                              <MenuLeftIcon
+                                link
+                                name='check'
+                                size='large'
+                                color='grey'
+                                onClick={() => disableSortMode()}
+                              />
+                              <Span
+                                fs='1.1em'
+                                c='rgba(0,0,0,.75)'
+                                fw='700'
+                              >
+                                Сортировка
+                              </Span>
+                            </MenuOverlay>
+                          }
                         </PoseGroup>
                         <CollapsableSection
                           ref={component => this.collapsableSection = component}
@@ -217,11 +248,11 @@ export default class Drawings extends Component {
                               {drawings.length}
                             </Span>
                           }
-                          buttons={
+                          buttons={<>
                             <Button compact circular menu
                               activeColor='green'
                               icon='plus'
-                              active={ false }
+                              // active={false}
                               onClick={e => {
                                 e.stopPropagation()
                                 notifications.create({
@@ -232,18 +263,34 @@ export default class Drawings extends Component {
                               }}
                               loading={creating}
                             />
-                          }
+                            <Button compact circular menu
+                              // activeColor='green'
+                              icon='sort'
+                              // active={}
+                              onClick={e => {
+                                e.stopPropagation()
+                                notifications.create({
+                                  type: 'warning',
+                                  content: 'Чтобы изменить порядок, выберите и перетащите нужные чертежи',
+                                })
+                                enableSortMode()
+                              }}
+                            />
+                          </>}
                         >
                           {drawings.length &&
-                            drawings.map(drw => 
-                              <Drawing
-                                key={drw.id}
-                                drawing={drw}
-                                select={selectDrawing}
-                                selected={!!selectedDrawings.includes(drw.id)}
-                                selectMode={!!selectedDrawings.length}
-                              />
-                            )
+                            <PoseGroup>
+                              {drawings.map(drw =>
+                                <Drawing
+                                  key={drw.id}
+                                  drawing={drw}
+                                  select={selectDrawing}
+                                  selected={!!selectedDrawings.includes(drw.id)}
+                                  selectMode={!!selectedDrawings.length}
+                                  sortMode={sortMode}
+                                />
+                              )}
+                            </PoseGroup>
                           }
                         </CollapsableSection>
                       </DropzoneArea>

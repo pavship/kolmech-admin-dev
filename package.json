@@ -21,6 +21,7 @@
     "jwt-decode": "^2.2.0",
     "react": "^16.7.0",
     "react-apollo": "^2.4.0",
+    "react-beautiful-dnd": "^10.0.4",
     "react-day-picker": "^7.2.4",
     "react-dom": "^16.7.0",
     "react-dropzone": "^8.0.3",

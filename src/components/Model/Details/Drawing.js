@@ -4,12 +4,18 @@ import styled from 'styled-components'
 import posed from 'react-pose'
 import { Icon } from '../../styled/styled-semantic';
 
-const Container = styled.div`
+const AspectRatioDiv = styled.div`
   position: relative;
   width: 100%;
-  height: calc(792px/${props => props.proportion});
-  max-height: 100%;
-  box-sizing: content-box;
+  padding-top: ${props => 100/props.proportion}%;
+`
+
+const Container = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,6 +53,9 @@ const Mask = styled.div`
   }
   ${props => props.hide && `
     background-image: unset !important;
+  `}
+  ${props => props.off && `
+    display: none;
   `}
 `
 
@@ -86,61 +95,67 @@ export default ({
   drawing: { id, files },
   select,
   selected,
-  selectMode
+  selectMode,
+  sortMode
 }) => {
-  const oriImage = files.find(f => f.isOri)
-  const image = files.find(f => f.width === 792) || oriImage
+  const oriImage = files.find(f => f.imgFor === 'ORIGINAL')
+  const image = files.find(f => f.imgFor === 'FEED_792') || oriImage
   const { path, width, height} = image
   const proportion = width/height
   return (
-    <Container
+    <AspectRatioDiv
       proportion={proportion}
     >
-      <Mask
-        hide={selected}
-        onClick={() => {
-          if (selected || selectMode) return select(id) // deselect drawing if selected, select if in the selectMode
-          // otherwise open fullsize image in new tab
-          const win = window.open(oriImage.path, '_blank')
-          win.focus()
-        }}
-      >
-        <CheckBox
-          link
-          name='square'
-          size='big'
-          fs='2.2em'
-          active={selected}
-          selectMode={selectMode}
-          color={selected ? 'grey' : undefined}
+      <Container>
+        <Mask
+          hide={selected}
+          off={sortMode}
+          onClick={() => {
+            // deselect drawing if selected, select if in the selectMode
+            if (selected || selectMode) return select(id)
+            // otherwise open fullsize image in new tab
+            const win = window.open(oriImage.path, '_blank')
+            win.focus()
+          }}
         >
-          <Check
+          <CheckBox
             link
-            name='check'
-            size='small'
-            color='black'
-            c={selected ? '#fff !important' : undefined}
+            name='square'
+            size='big'
+            fs='2.2em'
             active={selected}
+            d={sortMode ? 'none !important' : undefined}
             selectMode={selectMode}
-            onClick={e => {
-              e.stopPropagation()
-              select(id)
-            }}
+            color={selected ? 'grey' : undefined}
+          >
+            <Check
+              link
+              name='check'
+              size='small'
+              color='black'
+              c={selected ? '#fff !important' : undefined}
+              active={selected}
+              selectMode={selectMode}
+              onClick={e => {
+                e.stopPropagation()
+                select(id)
+              }}
+            />
+          </CheckBox>
+        </Mask>
+        <ImgSpacer
+          pose={(selected || sortMode) ? 'shrinked' : 'fullsize'}
+          proportion={proportion}
+          onClick={() => selected && select(id)}
+        >
+          <Image
+            src={path}
+            width={width}
+            height={height}
+            shrinked={selected || sortMode}
           />
-        </CheckBox>
-      </Mask>
-      <ImgSpacer
-        pose={selected ? 'shrinked' : 'fullsize'}
-        proportion={proportion}
-        onClick={() => selected && select(id)}
-      >
-        <Image
-          src={path}
-          width={width}
-          height={height}
-          shrinked={selected}
-        />
-      </ImgSpacer>
-    </Container>
+        </ImgSpacer>
+      </Container>
+    </AspectRatioDiv>
   )
 }
