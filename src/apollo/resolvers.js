@@ -1,7 +1,7 @@
 import { getLayout } from '../graphql/layout'
 import { allEnquiries } from '../graphql/enquiry'
 import { getLists } from '../graphql/lists'
-import { cloneDeep } from 'apollo-utilities';
+import { cloneDeep } from 'apollo-utilities'
 
 const resolvers = {
 	Enquiry: {

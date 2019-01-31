@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { SortableElement } from 'react-sortable-hoc'
+
 import styled from 'styled-components'
 import posed from 'react-pose'
 import { Icon } from '../../styled/styled-semantic';
@@ -8,6 +10,7 @@ const AspectRatioDiv = styled.div`
   position: relative;
   width: 100%;
   padding-top: ${props => 100/props.proportion}%;
+  margin-bottom: 3px;
 `
 
 const Container = styled.div`
@@ -20,7 +23,6 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   background-color: rgba(0,0,50,.03);
-  border-bottom: 3px solid white;
 `
 
 const ImgSpacer = posed.div({
@@ -37,7 +39,6 @@ const ImgSpacer = posed.div({
 const Image = styled.img`
   width: 100%;
   height: 100%;
-  ${({ shrinked }) => shrinked && 'border-radius: 4px;'}
 `
 
 const Mask = styled.div`
@@ -91,7 +92,7 @@ const Check = styled(Icon)`
   }
 `
 
-export default ({
+export default SortableElement(({
   drawing: { id, files },
   select,
   selected,
@@ -102,7 +103,7 @@ export default ({
   const image = files.find(f => f.imgFor === 'FEED_792') || oriImage
   const { path, width, height} = image
   const proportion = width/height
-  return (
+  return (<div>
     <AspectRatioDiv
       proportion={proportion}
     >
@@ -152,10 +153,9 @@ export default ({
             src={path}
             width={width}
             height={height}
-            shrinked={selected || sortMode}
           />
         </ImgSpacer>
       </Container>
-    </AspectRatioDiv>
+    </AspectRatioDiv></div>
   )
-}
+})

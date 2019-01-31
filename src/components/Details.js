@@ -15,7 +15,7 @@ const Container = styled.div`
 	width: 60%;  // evaluates to 792px
 `
 
-const Details = ({ closeDetails }) => {
+const Details = ({ closeDetails, sidebarRef }) => {
 	return (
 		<GlobalContext>
 			{({ details: { type, id, enquiryId, editMode }, setDetails, setExpanded }) => (
@@ -65,6 +65,7 @@ const Details = ({ closeDetails }) => {
 											: (entity &&
 													<ModelDetails
 														model={entity}
+														sidebarRef={sidebarRef}
 													/>
 												)
 										)

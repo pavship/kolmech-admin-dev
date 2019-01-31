@@ -4,7 +4,7 @@ import { graphql, compose } from 'react-apollo'
 import { getLayout, getLayoutOptions, setLayout } from '../graphql/layout'
 
 import styled from 'styled-components'
-import { Sidebar } from 'semantic-ui-react'
+import { Sidebar, Ref } from 'semantic-ui-react';
 import Details from './Details'
 import DetailsExtra from './DetailsExtra'
 
@@ -47,26 +47,29 @@ class DetailsSidebar extends Component {
 		const { detailsClosing } = this.state
 		const { layout: { details, extra } } = this.props
 		return (
-			<SSidebar
-				visible={!!details && !detailsClosing}
-				extra={!!extra ? 1: 0}
-				type={details && details.type}
-				animation='overlay'
-				direction='right'
-			>
-				{details &&
-					<Fragment>
-						<Details
-							key={details.type + details.id}
-							closeDetails={this.closeDetails}
-						/>
-						<DetailsExtra
-							extra={extra}
-							closeExtra={this.closeExtra}
-						/>
-					</Fragment>
-				}
-			</SSidebar>
+			<Ref innerRef={node => this.sidebarRef = node}>
+				<SSidebar
+					visible={!!details && !detailsClosing}
+					extra={!!extra ? 1: 0}
+					type={details && details.type}
+					animation='overlay'
+					direction='right'
+				>
+					{details &&
+						<Fragment>
+							<Details
+								key={details.type + details.id}
+								closeDetails={this.closeDetails}
+								sidebarRef={this.sidebarRef}
+							/>
+							<DetailsExtra
+								extra={extra}
+								closeExtra={this.closeExtra}
+							/>
+						</Fragment>
+					}
+				</SSidebar>
+			</Ref>
 		)
 	}
 }

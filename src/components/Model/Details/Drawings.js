@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { cloneDeep } from 'apollo-utilities'
 
 import { Mutation } from 'react-apollo'
 import { createDrawings, deleteDrawings } from '../../../graphql/drawing'
@@ -10,13 +11,11 @@ import ToggleableBoolProvider from '../../special/ToggleableBoolProvider'
 
 import Dropzone from 'react-dropzone'
 
-
-
 import styled from 'styled-components'
 import posed, { PoseGroup } from 'react-pose'
 import { Icon, Button, Span } from '../../styled/styled-semantic'
 import CollapsableSection from '../../CollapsableSection'
-import Drawing from './Drawing'
+import SortableDrawings from './SortableDrawings'
 
 const DropzoneArea = styled.div`
   position: relative;
@@ -71,19 +70,29 @@ const TrashIcon = styled(Icon)`
 `
 
 export default class Drawings extends Component {
+  state = {
+    sortedDrawings: this.props.model.drawings && this.props.model.drawings.sort((a, b) => a.sortOrder < b.sortOrder ? -1 : 1)
+  }
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    this.setState(({ sortedDrawings }) => {
+      const list = cloneDeep(sortedDrawings)
+      const [ removed ] = list.splice(oldIndex, 1)
+      list.splice(newIndex, 0, removed)
+      return { sortedDrawings: list }
+    })
+  }
+  toggleableBool = new ToggleableBoolProvider()
   render() {
-    const {
-      model,
-    } = this.props
+    const { model, sidebarRef } = this.props
     const { id: modelId, drawings } = model
+    const { sortedDrawings } = this.state
     const selectableList = new SelectableListProvider()
-    const toggleableBool = new ToggleableBoolProvider()
     return (
       <Subscribe
         to={[
           NotificationsProvider,
           selectableList,
-          toggleableBool
+          this.toggleableBool
         ]}
       >
         {( notifications,
@@ -219,7 +228,7 @@ export default class Drawings extends Component {
                                 link
                                 name='check'
                                 size='large'
-                                color='grey'
+                                c='#016936'
                                 onClick={() => disableSortMode()}
                               />
                               <Span
@@ -252,7 +261,6 @@ export default class Drawings extends Component {
                             <Button compact circular menu
                               activeColor='green'
                               icon='plus'
-                              // active={false}
                               onClick={e => {
                                 e.stopPropagation()
                                 notifications.create({
@@ -264,9 +272,7 @@ export default class Drawings extends Component {
                               loading={creating}
                             />
                             <Button compact circular menu
-                              // activeColor='green'
                               icon='sort'
-                              // active={}
                               onClick={e => {
                                 e.stopPropagation()
                                 notifications.create({
@@ -278,20 +284,14 @@ export default class Drawings extends Component {
                             />
                           </>}
                         >
-                          {drawings.length &&
-                            <PoseGroup>
-                              {drawings.map(drw =>
-                                <Drawing
-                                  key={drw.id}
-                                  drawing={drw}
-                                  select={selectDrawing}
-                                  selected={!!selectedDrawings.includes(drw.id)}
-                                  selectMode={!!selectedDrawings.length}
-                                  sortMode={sortMode}
-                                />
-                              )}
-                            </PoseGroup>
-                          }
+                          <SortableDrawings
+                            sortedDrawings={sortedDrawings}
+                            selectDrawing={selectDrawing}
+                            selectedDrawings={selectedDrawings}
+                            sortMode={sortMode}
+                            onSortEnd={this.onSortEnd}
+                            getContainer={() => sidebarRef}
+                          />
                         </CollapsableSection>
                       </DropzoneArea>
                     }
