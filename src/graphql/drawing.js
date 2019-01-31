@@ -37,3 +37,9 @@ export const deleteDrawings = gql`
 		deleteDrawings(ids: $ids) { count }
 	}
 `
+
+export const setDrawingsSortOrder = gql`
+	mutation SetDrawingsSortOrder( $ids: [ID!]! ) {
+		setDrawingsSortOrder(ids: $ids) { count }
+	}
+`

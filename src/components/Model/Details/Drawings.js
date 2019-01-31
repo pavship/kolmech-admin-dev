@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { cloneDeep } from 'apollo-utilities'
 
 import { Mutation } from 'react-apollo'
-import { createDrawings, deleteDrawings } from '../../../graphql/drawing'
+import { createDrawings, deleteDrawings, setDrawingsSortOrder } from '../../../graphql/drawing'
 
 import { Subscribe } from 'unstated'
 import NotificationsProvider from '../../notifications/NotificationsProvider'
@@ -16,6 +16,7 @@ import posed, { PoseGroup } from 'react-pose'
 import { Icon, Button, Span } from '../../styled/styled-semantic'
 import CollapsableSection from '../../CollapsableSection'
 import SortableDrawings from './SortableDrawings'
+import { Loader } from 'semantic-ui-react';
 
 const DropzoneArea = styled.div`
   position: relative;
@@ -134,168 +135,196 @@ export default class Drawings extends Component {
                 })}
               >
                 {(deleteDrawings, { loading: deleting }) =>
-                  <Dropzone
-                    onDrop={async (acceptedFiles) => {
-                      if (!acceptedFiles.length) return
-                      const res = await createDrawings({
-                        variables: {
-                          modelId,
-                          files: acceptedFiles
-                        }
-                      })
-                      if (!res) return
-                      const { data } = res
-                      client.writeData({
-                        id: `Model:${modelId}`,
-                        data: {
-                          ...model,
-                          drawings: [
-                            ...drawings,
-                            ...data.createDrawings
-                          ]
-                        }
-                      })
-                      this.collapsableSection.expand()
-                    }}
-                    disableClick
-                    accept='image/jpeg, image/png'
-                    onDropRejected={() => notifications.create({
-                      type: 'error',
-                      title: 'Недопустимый формат файла',
-                      content: 'Поддерживаются только изображения .jpeg или .png',
-                    })}
+                  <Mutation
+                    mutation={setDrawingsSortOrder}
                   >
-                    {({
-                      getRootProps,
-                      getInputProps,
-                      open: openFileDialog,
-                      isDragActive,
-                    }) =>
-                      <DropzoneArea
-                        isDragActive={isDragActive}
-                        {...getRootProps()}
+                    {(setDrawingsSortOrder, { loading: sorting }) =>
+                      <Dropzone
+                        onDrop={async (acceptedFiles) => {
+                          if (!acceptedFiles.length) return
+                          const res = await createDrawings({
+                            variables: {
+                              modelId,
+                              files: acceptedFiles
+                            }
+                          })
+                          if (!res) return
+                          const { data } = res
+                          client.writeData({
+                            id: `Model:${modelId}`,
+                            data: {
+                              ...model,
+                              drawings: [
+                                ...drawings,
+                                ...data.createDrawings
+                              ]
+                            }
+                          })
+                          this.collapsableSection.expand()
+                        }}
+                        disableClick
+                        accept='image/jpeg, image/png'
+                        onDropRejected={() => notifications.create({
+                          type: 'error',
+                          title: 'Недопустимый формат файла',
+                          content: 'Поддерживаются только изображения .jpeg или .png',
+                        })}
                       >
-                        <input {...getInputProps()} />
-                        <PoseGroup>
-                          {isDragActive &&
-                            <DropzoneOverlay key='1'>
-                              <Icon
-                                name='download'
-                                size='large'
-                                c='white'
-                              />
-                            </DropzoneOverlay>
-                          }
-                          {selectedDrawings.length &&
-                            <MenuOverlay key='2' >
-                              <MenuLeftIcon
-                                link
-                                size='large'
-                                name='cancel'
-                                onClick={() => deselectAllDrawings()}
-                              />
-                              <Span
-                                fs='1.1em'
-                                c='rgba(0,0,0,.75)'
-                                fw='700'
-                              >
-                                Выбрано чертежей: {selectedDrawings.length}
-                              </Span>
-                              <TrashIcon
-                                link
-                                m='0 23px 0 auto'
-                                name='trash alternate outline'
-                                size='large'
-                                onClick={async () => {
-                                  const ids = selectedDrawings
-                                  const res = await deleteDrawings({ variables: { ids }})
-                                  if (!res) return
-                                  client.writeData({
-                                    id: `Model:${modelId}`,
-                                    data: {
-                                      ...model,
-                                      drawings: [ ...drawings.filter(drw => !ids.includes(drw.id)) ]
-                                    }
-                                  })
-                                  deselectManyDrawings(ids)
-                                }}
-                              />
-                            </MenuOverlay>
-                          }
-                          {sortMode &&
-                            <MenuOverlay key='3' >
-                              <MenuLeftIcon
-                                link
-                                name='check'
-                                size='large'
-                                c='#016936'
-                                onClick={() => disableSortMode()}
-                              />
-                              <Span
-                                fs='1.1em'
-                                c='rgba(0,0,0,.75)'
-                                fw='700'
-                              >
-                                Сортировка
-                              </Span>
-                            </MenuOverlay>
-                          }
-                        </PoseGroup>
-                        <CollapsableSection
-                          ref={component => this.collapsableSection = component}
-                          initiallyExpanded={!!drawings.length}
-                          disabled={!drawings.length}
-                          title='Чертеж '
-                          subtitle={
-                            <Span
-                              fs='1.2em'
+                        {({
+                          getRootProps,
+                          getInputProps,
+                          open: openFileDialog,
+                          isDragActive,
+                        }) =>
+                          <DropzoneArea
+                            isDragActive={isDragActive}
+                            {...getRootProps()}
+                          >
+                            <input {...getInputProps()} />
+                            <PoseGroup>
+                              {isDragActive &&
+                                <DropzoneOverlay key='1'>
+                                  <Icon
+                                    name='download'
+                                    size='large'
+                                    c='white'
+                                  />
+                                </DropzoneOverlay>
+                              }
+                              {selectedDrawings.length &&
+                                <MenuOverlay key='2' >
+                                  <MenuLeftIcon
+                                    link
+                                    size='large'
+                                    name='cancel'
+                                    onClick={() => deselectAllDrawings()}
+                                  />
+                                  <Span
+                                    fs='1.1em'
+                                    c='rgba(0,0,0,.75)'
+                                    fw='700'
+                                  >
+                                    Выбрано чертежей: {selectedDrawings.length}
+                                  </Span>
+                                  <TrashIcon
+                                    link
+                                    m='0 23px 0 auto'
+                                    name='trash alternate outline'
+                                    size='large'
+                                    onClick={async () => {
+                                      const ids = selectedDrawings
+                                      const res = await deleteDrawings({ variables: { ids }})
+                                      if (!res) return
+                                      client.writeData({
+                                        id: `Model:${modelId}`,
+                                        data: {
+                                          ...model,
+                                          drawings: [ ...drawings.filter(drw => !ids.includes(drw.id)) ]
+                                        }
+                                      })
+                                      deselectManyDrawings(ids)
+                                    }}
+                                  />
+                                </MenuOverlay>
+                              }
+                              {sortMode &&
+                                <MenuOverlay key='3' >
+                                  <MenuLeftIcon
+                                    link
+                                    name='check'
+                                    size='large'
+                                    c='#016936'
+                                    onClick={async () => {
+                                      await setDrawingsSortOrder({ variables: {
+                                        ids: sortedDrawings.map(drw => drw.id)
+                                      }})
+                                      sortedDrawings.forEach((drw, i) => {
+                                        client.writeData({
+                                          id: `Drawing:${drw.id}`,
+                                          data: {
+                                            ...drw,
+                                            sortOrder: i
+                                          }
+                                        })
+                                      })
+                                      disableSortMode()
+                                    }}
+                                  />
+                                  <Span
+                                    fs='1.1em'
+                                    c='rgba(0,0,0,.75)'
+                                    fw='700'
+                                  >
+                                    Сортировка
+                                  </Span>
+                                  <Span
+                                    ml='auto'
+                                  >
+                                    <Loader
+                                      inline
+                                      active={sorting}
+                                    />
+                                  </Span>
+                                </MenuOverlay>
+                              }
+                            </PoseGroup>
+                            <CollapsableSection
+                              ref={component => this.collapsableSection = component}
+                              initiallyExpanded={!!drawings.length}
+                              disabled={!drawings.length}
+                              title='Чертеж '
+                              subtitle={
+                                <Span
+                                  fs='1.2em'
+                                >
+                                  <Icon
+                                    name='file image outline'
+                                    mr='4px'
+                                  />
+                                  {drawings.length}
+                                </Span>
+                              }
+                              buttons={<>
+                                <Button compact circular menu
+                                  activeColor='green'
+                                  icon='plus'
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    notifications.create({
+                                      type: 'warning',
+                                      content: 'Чтобы загрузить файлы, перетащите их в раздел',
+                                    })
+                                    openFileDialog()
+                                  }}
+                                  loading={creating}
+                                />
+                                <Button compact circular menu
+                                  icon='sort'
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    notifications.create({
+                                      type: 'warning',
+                                      content: 'Чтобы изменить порядок, выберите и перетащите нужные чертежи',
+                                    })
+                                    enableSortMode()
+                                  }}
+                                />
+                              </>}
                             >
-                              <Icon
-                                name='file image outline'
-                                mr='4px'
+                              <SortableDrawings
+                                sortedDrawings={sortedDrawings}
+                                selectDrawing={selectDrawing}
+                                selectedDrawings={selectedDrawings}
+                                sortMode={sortMode}
+                                onSortEnd={this.onSortEnd}
+                                getContainer={() => sidebarRef}
                               />
-                              {drawings.length}
-                            </Span>
-                          }
-                          buttons={<>
-                            <Button compact circular menu
-                              activeColor='green'
-                              icon='plus'
-                              onClick={e => {
-                                e.stopPropagation()
-                                notifications.create({
-                                  type: 'warning',
-                                  content: 'Чтобы загрузить файлы, перетащите их в раздел',
-                                })
-                                openFileDialog()
-                              }}
-                              loading={creating}
-                            />
-                            <Button compact circular menu
-                              icon='sort'
-                              onClick={e => {
-                                e.stopPropagation()
-                                notifications.create({
-                                  type: 'warning',
-                                  content: 'Чтобы изменить порядок, выберите и перетащите нужные чертежи',
-                                })
-                                enableSortMode()
-                              }}
-                            />
-                          </>}
-                        >
-                          <SortableDrawings
-                            sortedDrawings={sortedDrawings}
-                            selectDrawing={selectDrawing}
-                            selectedDrawings={selectedDrawings}
-                            sortMode={sortMode}
-                            onSortEnd={this.onSortEnd}
-                            getContainer={() => sidebarRef}
-                          />
-                        </CollapsableSection>
-                      </DropzoneArea>
+                            </CollapsableSection>
+                          </DropzoneArea>
+                        }
+                      </Dropzone>
                     }
-                  </Dropzone>
+                  </Mutation>
                 }
               </Mutation>
             }
