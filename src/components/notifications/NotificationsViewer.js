@@ -1,28 +1,22 @@
 import React from 'react'
 
-import { Subscribe } from 'unstated'
-import NotificationsProvider from './NotificationsProvider'
+import NotificationsContext from './NotificationsContext'
 import Notifications from './Notifications'
 
 export default () => {
   return (
-		<Subscribe
-			to={[NotificationsProvider]}
-		>
-			{notificationsProvider => {
-				const {
-					state: { messages },
-					dismiss,
-					cancelAutoDismiss,
-			} = notificationsProvider
-				return (
-					<Notifications
-						messages={messages}
-						dismissNotification={dismiss}
-						cancelAutoDismiss={cancelAutoDismiss}
-					/>
-				)
-			}}
-		</Subscribe>
+		<NotificationsContext.Consumer>
+			{({
+				state: { messages },
+				dismiss,
+				cancelAutoDismiss,
+			}) =>
+				<Notifications
+					messages={messages}
+					dismissNotification={dismiss}
+					cancelAutoDismiss={cancelAutoDismiss}
+				/>
+			}
+		</NotificationsContext.Consumer>
 	)
 }

@@ -4,7 +4,7 @@ import { Mutation } from 'react-apollo'
 import { createDrawings, deleteDrawings, setDrawingsSortOrder } from '../../../graphql/drawing'
 
 import { Subscribe } from 'unstated'
-import NotificationsProvider from '../../notifications/NotificationsProvider'
+import { NotificationsConsumer } from '../../notifications/NotificationsContext'
 import SelectableListProvider from '../../special/SelectableListProvider'
 import ToggleableBoolProvider from '../../special/ToggleableBoolProvider'
 
@@ -72,10 +72,8 @@ export default class Drawings extends Component {
     const { model, sidebarRef } = this.props
     const { id: modelId, drawings } = model
     return (
-                <Subscribe
-                  to={[ NotificationsProvider ]}
-                >
-                  {({ create: notify }) =>
+                <NotificationsConsumer>
+                  {({ notify }) =>
               <Mutation
                 mutation={createDrawings}
                 onCompleted={() => notify({
@@ -351,7 +349,7 @@ export default class Drawings extends Component {
                 }
               </Mutation>
             }
-          </Subscribe>
+          </NotificationsConsumer>
     )
   }
 }
