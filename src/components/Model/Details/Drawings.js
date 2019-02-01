@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { cloneDeep } from 'apollo-utilities'
 
 import { Mutation } from 'react-apollo'
 import { createDrawings, deleteDrawings, setDrawingsSortOrder } from '../../../graphql/drawing'
@@ -76,14 +75,14 @@ export default class Drawings extends Component {
                 <Subscribe
                   to={[ NotificationsProvider ]}
                 >
-                  {notifications =>
+                  {({ create: notify }) =>
               <Mutation
                 mutation={createDrawings}
-                onCompleted={() => notifications.create({
+                onCompleted={() => notify({
                   type: 'success',
                   title: 'Файлы успешно загружены'
                 })}
-                onError={err => notifications.create({
+                onError={err => notify({
                   type: 'error',
                   title: 'Ошибка загрузки файлов',
                   content: err.message,
@@ -92,11 +91,11 @@ export default class Drawings extends Component {
                 {(createDrawings, { loading: creating, client }) =>
                   <Mutation
                     mutation={deleteDrawings}
-                    onCompleted={() => notifications.create({
+                    onCompleted={() => notify({
                       type: 'success',
                       title: 'Файлы удалены'
                     })}
-                    onError={err => notifications.create({
+                    onError={err => notify({
                       type: 'error',
                       title: 'Ошибка удаления файлов',
                       content: err.message,
@@ -105,11 +104,11 @@ export default class Drawings extends Component {
                     {(deleteDrawings, { loading: deleting }) =>
                       <Mutation
                         mutation={setDrawingsSortOrder}
-                        onCompleted={() => notifications.create({
+                        onCompleted={() => notify({
                           type: 'success',
                           content: 'Новый порядок чертежей установлен'
                         })}
-                        onError={err => notifications.create({
+                        onError={err => notify({
                           type: 'error',
                           title: 'Ошибка сортировки',
                           content: err.message,
@@ -117,7 +116,6 @@ export default class Drawings extends Component {
                       >
                         {(setDrawingsSortOrder, { loading: sorting }) =>
       <SortedCollectionProvider
-        key={Math.random()}
         collection={drawings}
         sortBy='sortOrder'
       >
@@ -166,7 +164,7 @@ export default class Drawings extends Component {
                             }}
                             disableClick
                             accept='image/jpeg, image/png'
-                            onDropRejected={() => notifications.create({
+                            onDropRejected={() => notify({
                               type: 'error',
                               title: 'Недопустимый формат файла',
                               content: 'Поддерживаются только изображения .jpeg или .png',
@@ -175,7 +173,7 @@ export default class Drawings extends Component {
                             {({
                               getRootProps,
                               getInputProps,
-                              open,
+                              open: openFileDialog,
                               isDragActive,
                             }) =>
                               <DropzoneArea
@@ -309,11 +307,11 @@ export default class Drawings extends Component {
                                       icon='plus'
                                       onClick={e => {
                                         e.stopPropagation()
-                                        notifications.create({
+                                        notify({
                                           type: 'warning',
                                           content: 'Чтобы загрузить файлы, перетащите их в раздел',
                                         })
-                                        open()
+                                        openFileDialog()
                                       }}
                                       loading={creating}
                                     />
@@ -321,7 +319,7 @@ export default class Drawings extends Component {
                                       icon='sort'
                                       onClick={e => {
                                         e.stopPropagation()
-                                        notifications.create({
+                                        notify({
                                           type: 'warning',
                                           content: 'Чтобы изменить порядок, выберите и перетащите нужные чертежи',
                                         })
