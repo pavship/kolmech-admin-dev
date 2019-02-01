@@ -3,14 +3,14 @@ import { SortableContainer } from 'react-sortable-hoc'
 import Drawing from './Drawing'
 
 export default SortableContainer(({
-  sortedDrawings,
+  drawings,
   selectDrawing,
   selectedDrawings,
   sortMode
 }) => {
   return (
     <div>
-      {sortedDrawings.map((drw, i) =>
+      {drawings.map((drw, i) =>
         <Drawing
           key={drw.id}
           index={i}

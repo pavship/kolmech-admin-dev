@@ -19,6 +19,7 @@ const Pushable = styled(Sidebar.Pushable)`
 `
 
 export class EnquiriesPage extends Component {
+	// TODO refactor -> move bottomPanel logic to PanelProvider, switch to Apollo Query components
 	state = { panelClosing: false }
 	closePanel = () => {
 		this.setState({ panelClosing: true })
@@ -73,6 +74,7 @@ export class EnquiriesPage extends Component {
 export default compose(
 	graphql(allEnquiries, {
 		name: 'allEnquiries',
+		alias: 'allEnquiriesQuery'
 	}),
 	graphql(setLayout, { name: 'setLayout' })
 )(EnquiriesPage)

@@ -4,7 +4,7 @@ import { SortableElement } from 'react-sortable-hoc'
 
 import styled from 'styled-components'
 import posed from 'react-pose'
-import { Icon } from '../../styled/styled-semantic';
+import { Icon } from '../../../styled/styled-semantic';
 
 const AspectRatioDiv = styled.div`
   position: relative;

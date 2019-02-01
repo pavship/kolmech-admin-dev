@@ -48,7 +48,10 @@ class Root extends Component {
 			<>
 				{ !token
 				  ?	<LoginPage refreshToken={this.refreshToken} />
-				  : <Query query={me} >
+					: <Query
+							query={me}
+							displayName='meQuery'
+						>
 							{({ loading, error, data }) => {
 								if (loading) return null
 								if (error) return `Error!: ${error.message}`
