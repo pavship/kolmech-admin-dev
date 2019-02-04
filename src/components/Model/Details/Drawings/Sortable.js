@@ -4,7 +4,7 @@ import Drawing from './Drawing'
 
 export default SortableContainer(({
   drawings,
-  selectDrawing,
+  toggleDrawingSelection,
   selectedDrawings,
   sortMode
 }) => {
@@ -15,7 +15,7 @@ export default SortableContainer(({
           key={drw.id}
           index={i}
           drawing={drw}
-          select={selectDrawing}
+          toggleSelection={toggleDrawingSelection}
           selected={!!selectedDrawings.includes(drw.id)}
           selectMode={!!selectedDrawings.length}
           sortMode={sortMode}

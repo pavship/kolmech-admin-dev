@@ -94,7 +94,7 @@ const Check = styled(Icon)`
 
 export default SortableElement(({
   drawing: { id, files },
-  select,
+  toggleSelection,
   selected,
   selectMode,
   sortMode
@@ -113,7 +113,7 @@ export default SortableElement(({
           off={sortMode}
           onClick={() => {
             // deselect drawing if selected, select if in the selectMode
-            if (selected || selectMode) return select(id)
+            if (selected || selectMode) return toggleSelection(id)
             // otherwise open fullsize image in new tab
             const win = window.open(oriImage.path, '_blank')
             win.focus()
@@ -139,7 +139,7 @@ export default SortableElement(({
               selectMode={selectMode}
               onClick={e => {
                 e.stopPropagation()
-                select(id)
+                toggleSelection(id)
               }}
             />
           </CheckBox>
@@ -147,7 +147,7 @@ export default SortableElement(({
         <ImgSpacer
           pose={(selected || sortMode) ? 'shrinked' : 'fullsize'}
           proportion={proportion}
-          onClick={() => selected && select(id)}
+          onClick={() => selected && toggleSelection(id)}
         >
           <Image
             src={path}
