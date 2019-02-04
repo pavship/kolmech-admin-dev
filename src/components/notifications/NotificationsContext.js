@@ -46,13 +46,13 @@ export class NotificationsProvider extends Component {
 export const NotificationsConsumer = ({ children }) => (
   <NotificationsContext.Consumer>
     {({ create: notify }) =>
-      <PureChild>
-        {children({ notify })}
+      <PureChild notify={notify} >
+        {children}
       </PureChild>
     }
   </NotificationsContext.Consumer>
 )
 
-const PureChild = React.memo(({ children }) => children)
+const PureChild = React.memo(({ notify, children }) => children({ notify }))
 
 
