@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 
 import { AUTH_TOKEN } from '../constants'
 import { isTokenExpired } from '../utils/jwtHelper'
@@ -8,6 +9,7 @@ import { me } from '../graphql/user'
 
 import LoginPage from './LoginPage'
 import EnquiriesPage from './EnquiriesPage'
+import PaymentsPage from './Payments/Page'
 
 class Root extends Component {
 	state = {
@@ -45,7 +47,7 @@ class Root extends Component {
 	render() {
 		const { token } = this.state
 		return (
-			<>
+			<Router>
 				{ !token
 				  ?	<LoginPage refreshToken={this.refreshToken} />
 					: <Query
@@ -55,13 +57,33 @@ class Root extends Component {
 							{({ loading, error, data }) => {
 								if (loading) return null
 								if (error) return `Error!: ${error.message}`
-								return (
-									<EnquiriesPage refreshToken={this.refreshToken} me={data.me} />
-								)
+								return <Switch>
+									<Route
+										exact
+										path="/"
+										render={() => (
+											<EnquiriesPage
+												refreshToken={this.refreshToken}
+												me={data.me}
+											/>
+										)}
+									/>
+									<Route
+										exact
+										path="/pay"
+										render={() => (
+											<PaymentsPage
+												refreshToken={this.refreshToken}
+												me={data.me}
+											/>
+										)}
+									/>
+									<Redirect to="/pay" />
+								</Switch>
 							}}
 					</Query>
 				}
-			</>
+			</Router>
 		)
 	}
 }
