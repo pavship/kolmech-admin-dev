@@ -13,9 +13,9 @@ import { Loader } from 'semantic-ui-react'
 import { Icon, Button, Span } from '../../styled/styled-semantic'
 import CollapsableSection from '../../CollapsableSection'
 import SortableDrawingsList from './Drawings/Sortable'
-import SortedCollectionProvider from './Drawings/SortedCollectionProvider';
-import StatefulList from '../../special/StatefulList';
-import StatefulBool from '../../special/StatefulBool';
+import SortedCollectionProvider from './Drawings/SortedCollectionProvider'
+import StatefulList from '../../special/StatefulList'
+import StatefulBool from '../../special/StatefulBool'
 
 const DropzoneArea = styled.div`
   position: relative;
