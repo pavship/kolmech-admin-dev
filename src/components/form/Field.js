@@ -42,11 +42,11 @@ const Error = styled.div`
 `
 
 const Field = ({
+  label,
+  required,
   name,
   type,
   formik,
-  label,
-  required,
   inputLabel,
   ...rest
 }) => {
@@ -58,6 +58,7 @@ const Field = ({
   return (
     <Container>
       <Label
+        className='fz-formFieldLabel'
         required={required}
       >
         {label}
@@ -93,15 +94,6 @@ const Field = ({
               </Error>
             </>
         }
-        
-        {/* {Array.isArray(content)
-          ? content.map((item, i) => 
-              <Fragment key={i}>
-                {component(item)}
-              </Fragment>
-            )
-          : component(content)
-        } */}
       </Content>
     </Container>
   )

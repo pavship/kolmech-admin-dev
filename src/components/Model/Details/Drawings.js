@@ -109,7 +109,7 @@ export default class Drawings extends Component {
                       content: err.message,
                     })}
                   >
-                                        {(setDrawingsSortOrder, { loading: sorting }) =>
+                    {(setDrawingsSortOrder, { loading: sorting }) =>
                       <SortedCollectionProvider
                         collection={drawings}
                         sortBy='sortOrder'

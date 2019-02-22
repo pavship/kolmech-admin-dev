@@ -1,20 +1,11 @@
 import React, { Component } from 'react'
-import produce from 'immer'
-// import memoize from 'memoize-one'
+import { produce } from 'immer'
 
-export default class SortedCollectionProvider extends Component {
-  // sort = () => {
-  //   const { collection, sortBy } = this.props
-  //   return collection.sort((a, b) => a[sortBy] < b[sortBy] ? -1 : 1)
-  // }
-  // sort = memoize(watchedVar => {
-  //   const { collection, sortBy } = this.props
-  //   return this.setState({
-  //     sortedCollection: collection.sort((a, b) => a[sortBy] < b[sortBy] ? -1 : 1)
-  //   })
-  // })
+export default class CollectionUtils extends Component {
   state = {
-    sortedCollection: []
+    collection: [],
+    sortedBy: '',
+    direction: null
   }
   static getDerivedStateFromProps(props, state) {
     if( props.collection !== state.prevPropsCollection) {
@@ -27,15 +18,19 @@ export default class SortedCollectionProvider extends Component {
     }
     return null
   }
-  move = ( oldIndex, newIndex ) => {
+  sortBy = field => {
     this.setState(produce(draft => {
       const [ removed ] = draft.sortedCollection.splice(oldIndex, 1)
       draft.sortedCollection.splice(newIndex, 0, removed)
     }))
   }
   render() {
-    const { children } = this.props
+    console.log('> SortedCollectionProvider render')
+    const { children, collection } = this.props
+    console.log('collection > ', collection)
+    // this.sort(collection)
     const { sortedCollection } = this.state
+    console.log('sortedCollection > ', sortedCollection)
     return children({
       sortedCollection,
       move: this.move
