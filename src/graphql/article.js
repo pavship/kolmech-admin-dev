@@ -4,6 +4,7 @@ export const articleFragmentBasic = gql`
 	fragment ArticleFragmentBasic on Article {
 		id
 		rusName
+		isIncome
 	}
 `
 
@@ -11,7 +12,6 @@ export const articleFragmentFull = gql`
 	fragment ArticleFragmentFull on Article {
 		...ArticleFragmentBasic
 		isLoan
-		isIncome
 	}
 	${articleFragmentBasic}
 `

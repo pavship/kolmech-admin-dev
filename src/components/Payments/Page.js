@@ -6,7 +6,7 @@ import { payments } from '../../graphql/payment'
 
 import styled from 'styled-components'
 import PaymentForm from './Form'
-import PaymentTable from './Table_SemanticUI(deprecated)'
+import PaymentTable from './Table'
 
 const Container = styled.div`
   height: 900px;
@@ -50,9 +50,9 @@ export default ({
                 />
               </TopSection>
               <BottomSection>
-                  <PaymentTable
-                    payments={data.payments}
-                  />
+                <PaymentTable
+                  payments={data.payments}
+                />
               </BottomSection>
             </>
           }

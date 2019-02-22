@@ -55,6 +55,7 @@ const Td = styled.td`
 			opacity: 0 !important;
 		`}
 	}
+	${props => props.color && `color: ${props.color};`}
 	${props => props.hoverable && `
 		transition: background .3s ease;
 		${props.hideUnhovered && `
@@ -79,8 +80,11 @@ const TableRow = props => {
 		select,
 		...rest 
 	} = props
-	// rowFields have precedence over tableFields
-	const fields = tableFields.map(f => rowFields.find(rf => rf.name === f.name) || f)
+	// rowFields are merged into tableFields
+	const fields = tableFields.map(f => {
+		const rowField = rowFields.find(rf => rf.name === f.name)
+		return rowField ? { ...f, ...rowField } : f
+	})
 	const { selected, disabled } = entity
 	return (
 		<Row
