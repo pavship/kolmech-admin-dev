@@ -49,8 +49,8 @@ const handlePayloadObj = (objSchema, initialObj, obj, result) => {
       return handlePayloadObj(objSchema[k], initialObj[k], obj[k], result[k] = {})
     // result includes changed values
     if (obj[k] !== initialObj[k]) return result[k] = obj[k]
-    // and non-empty initial values
-    if (!initialObj[k] && !!objSchema[k]) return result[k] = objSchema[k]
+    // and non-empty schema values
+    if (!!objSchema[k]) return result[k] = objSchema[k]
   })
 }
 

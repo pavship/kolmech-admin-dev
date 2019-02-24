@@ -16,6 +16,11 @@ const Container = styled.div`
 `
 
 const fields = [{
+  name: 'dateLocal',
+  path: 'dateLocal',
+	title: 'Дата и время',
+	width: '145px'
+},{
   name: 'article',
   path: 'article.rusName',
 	title: 'Статья',
@@ -43,13 +48,17 @@ export default ({
       >
         {({ tableFields }) => 
           payments.map(payment => {
-            const { id, amount,  article: { isIncome } } = payment
+            const { id, dateLocal, amount,  article: { isIncome } } = payment
             return (
               <TableRow
                 key={id}
                 entity={payment}
                 tableFields={tableFields}
                 rowFields={[
+                  {
+                    name: 'dateLocal',
+                    value: dateLocal.slice(0,16).replace('T', ' '),
+                  },
                   {
                     name: 'amount',
                     value: isIncome ? amount : -amount,

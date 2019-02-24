@@ -102,14 +102,14 @@ export default ({
                       initialValues={initialValues}
                       validationSchema={validationSchema}
                       onSubmit={async (values, { resetForm }) => {
-                        // console.log('values > ', values)
-                        // console.log('initialValues > ', initialValues)
+                        console.log('values > ', values)
+                        console.log('initialValues > ', initialValues)
                         const input = preparePayload(values, initialValues, schema)
-                        // console.log('upsertPayment input > ', input)
+                        console.log('input > ', input)
                         await upsertPayment({ variables: { input } })
                         // const upserted = await upsertPayment({ variables: { input } })
                         // console.log('upserted > ', upserted)
-                        return resetForm()
+                        // return resetForm()
                       }}
                     >
                       {({
@@ -119,6 +119,12 @@ export default ({
                         <Fields
                           labelWidth={formLabelWidth}
                         >
+                          <Field
+                            label='Дата'
+                            required
+                            name='dateLocal'
+                            type='date'
+                          />
                           <Field
                             label='Статья'
                             required
