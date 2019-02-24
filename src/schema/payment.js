@@ -13,6 +13,11 @@ export const validationSchema = object().shape({
       ? schema.notRequired()
       : schema.required('выберите основание платежа')
     ),
+  personId: idValidationType
+    .when('id', (id, schema) => id
+      ? schema.notRequired()
+      : schema.required('выберите основание платежа')
+    ),
   amount: number()
     .positive('зачение должно быть положительным')
     .required('введите сумму')
@@ -20,5 +25,6 @@ export const validationSchema = object().shape({
 
 export const formikSchema = {
   articleId: '',
+  personId: '',
   amount: ''
 }

@@ -21,6 +21,11 @@ const fields = [{
 	title: 'Статья',
 	width: '180px'
 },{
+  name: 'person',
+  path: 'person.amoName',
+  title: 'Контрагент',
+  width: '200px'
+},{
   name: 'amount',
   path: 'amount',
   title: 'Сумма',

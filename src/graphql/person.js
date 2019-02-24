@@ -1,9 +1,11 @@
 import gql from 'graphql-tag'
 import { telFragment } from './tel'
 
+// TODO switch to using only amoName in the app
 export const personFragmentBasic = gql`
 	fragment PersonFragmentBasic on Person {
 		id
+		amoId
 		fName
 		lName
 		mName

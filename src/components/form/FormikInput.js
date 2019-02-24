@@ -15,25 +15,13 @@ class FormikInput extends Component {
 			...rest
 		} = this.props
 		const value = getIn(formik.values, name)
-		// if (handleSearchChange) return (
-		// 	<Dropdown
-		// 		fluid
-		// 		selection
-		// 		multiple={multiple}
-		// 		search={search}
-		// 		options={options}
-		// 		value={value}
-		// 		placeholder='Поиск в AmoCRM'
-		// 		onChange={(e, {value}) => formik.setFieldValue(name, value)}
-		// 		onSearchChange={this.handleSearchChange}
-		// 		disabled={isFetching}
-		// 		loading={isFetching}
-		// 	/>
-		// )
 		if (options) return (
 			<Dropdown
 				{...rest}
 				selection
+				fluid
+				search
+				noResultsMessage='Ничего не найдено'
 				value={value}
 				options={options}
 				onChange={(e, {value}) => formik.setFieldValue(name, value)}
