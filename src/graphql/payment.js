@@ -1,26 +1,31 @@
 import gql from 'graphql-tag'
 import { articleFragmentBasic, articleFragmentFull } from './article'
-import { personFragmentBasic } from './person';
+import { personFragmentBasic } from './person'
+import { accountFragmentBasic, accountFragmentFull } from './account'
 
 export const paymentFragmentBasic = gql`
 	fragment PaymentFragmentBasic on Payment {
 		id
 		dateLocal
 		amount
-		person { ...PersonFragmentBasic }
+		account { ...AccountFragmentBasic }
 		article { ...ArticleFragmentBasic }
+		person { ...PersonFragmentBasic }
 	}
+	${accountFragmentBasic}
 	${articleFragmentBasic}
 	${personFragmentBasic}
 `
 
-export const payments = gql`
-	query Payments {
-		payments { ...PaymentFragmentBasic }
+export const paymentsPage = gql`
+	query PaymentsPage {
+		accounts { ...AccountFragmentFull }
 		articles { ...ArticleFragmentFull }
+		payments { ...PaymentFragmentBasic }
 	}
-	${paymentFragmentBasic}
+	${accountFragmentFull}
 	${articleFragmentFull}
+	${paymentFragmentBasic}
 `
 
 export const upsertPayment = gql`

@@ -1,15 +1,15 @@
 import React from 'react'
-import { Div } from '../styled/styled-semantic';
 
 import { Query } from 'react-apollo'
-import { payments } from '../../graphql/payment'
+import { paymentsPage } from '../../graphql/payment'
 
 import styled from 'styled-components'
 import PaymentForm from './Form'
+import PaymentStats from './Stats'
 import PaymentTable from './Table'
 
 const Container = styled.div`
-  height: 900px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -17,17 +17,13 @@ const Container = styled.div`
 
 const TopSection = styled.div`
   flex: 1 0 content;
-  /* flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis */
+  min-height: 308px;
+  display: flex;
 `
 
 const BottomSection = styled.div`
   flex: 1 1 2000px;
   margin-top: 1rem;
-  /* flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis */
 `
 
 export default ({
@@ -35,7 +31,7 @@ export default ({
 }) => {
   return (
     <Query
-      query={payments}
+      query={paymentsPage}
     >
       {({ loading, error, data }) => 
         <Container>
@@ -46,6 +42,16 @@ export default ({
                 <PaymentForm
                   articles={data.articles.map(a => 
                     ({ key: a.id, text: a.rusName, value: a.id })
+                  )}
+                />
+                <PaymentStats
+                  // TODO make postgres aggregation query on server side instead of reduce here
+                  accounts={data.payments
+                    .reduce((accounts, p) => {
+                      const account = accounts.find(a => a.id === p.account.id)
+                      account.total += (p.isIncome ? 1 : -1) * p.amount
+                      return accounts
+                    }, data.accounts.map(a => ({ ...a, total: 0 }))
                   )}
                 />
               </TopSection>

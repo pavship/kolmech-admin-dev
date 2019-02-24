@@ -16,6 +16,9 @@ import { Button, A, Div } from '../styled/styled-semantic'
 import { persons } from '../../graphql/person';
 
 const Container = styled.div`
+  min-height: content;
+  max-width: 50%;
+  flex: 1 1 500px;
   box-shadow: 0 2px 4px 0 rgba(34,36,38,.12), 0 2px 10px 0 rgba(34,36,38,.15);
   border: 1px solid rgba(34,36,38,.15);
   border-radius: .28571429rem;
