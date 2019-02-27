@@ -124,23 +124,18 @@ export default ({
 									{(upsertPayment, { loading }) =>
 										<Formik
 											initialValues={initialValues}
-											// enableReinitialize={true}
 											validationSchema={validationSchema}
 											onSubmit={async (values, { resetForm }) => {
-												console.log('values > ', values)
+												// console.log('values > ', values)
 												const initialValues = payment ? projectEntity(payment, schema) : schema
-												console.log('initialValues > ', initialValues)
+												// console.log('initialValues > ', initialValues)
 												const input = preparePayload(values, initialValues, schema)
-												console.log('input > ', input)
+												// console.log('input > ', input)
 												await upsertPayment({ variables: { input } })
 												// const upserted = await upsertPayment({ variables: { input } })
 												// console.log('upserted > ', upserted)
 												return resetForm()
 											}}
-											// onReset={() => {
-											// 	schema = formikSchema(new Date)
-											// 	initialValues = payment ? projectEntity(payment, schema) : schema
-											// }}
 										>
 											{({
 												values,

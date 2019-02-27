@@ -48,7 +48,6 @@ export default ({
                   equipment={equipment}
                 />
                 <PaymentStats
-                  // TODO make postgres aggregation query on server side instead of reduce here
                   payments={payments}
                   accounts={accounts}
                 />

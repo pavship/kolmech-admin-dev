@@ -28,6 +28,7 @@ export default ({
 	payments,
 	accounts,
 }) => {
+	// TODO make postgres aggregation query on server side instead of reduce here
 	const accountsStats = payments
 		.reduce((accounts, p) => {
 			const account = accounts.find(a => a.id === p.account.id)
