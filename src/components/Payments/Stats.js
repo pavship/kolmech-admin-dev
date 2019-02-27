@@ -1,101 +1,128 @@
 import React from 'react'
 
 import styled from 'styled-components'
-import { Button, A, Div } from '../styled/styled-semantic'
-import { persons } from '../../graphql/person';
+import { Div } from '../styled/styled-semantic'
 import { Statistic } from 'semantic-ui-react'
+import { currency } from '../../utils/format';
 
-const Container = styled.div`
-  flex: 1 1 500px;
-  box-shadow: 0 2px 4px 0 rgba(34,36,38,.12), 0 2px 10px 0 rgba(34,36,38,.15);
-  border: 1px solid rgba(34,36,38,.15);
-  border-radius: .28571429rem;
-`
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  height: 52px;
-  padding: 0 2rem;
-  font-size: 1.28571429rem;
-  line-height: 1.28571429em;
-  font-weight: bold;
-  border-bottom: 1px solid rgba(34,36,38,.15);
+const SStatistic = styled(Statistic)`
+	&&&&>.value {
+		${({ color }) => color && `
+			color: ${
+				color === 'green' ? '#016936' :
+				color === 'red' ? '#9f3a38' :
+				color === 'purple' ? '#9924bf' :
+				// color === 'violet' ? '#5d31bb' :
+				''
+			};
+		`}
+		text-align: unset;
+	}
+	&&&&>.label {
+		padding-left: 2em;
+		text-align: unset;
+	}
 `
 
 export default ({
-  accounts,
+	payments,
+	accounts,
 }) => {
-  return (
-  // <Container>
-  //   <Header>
-  //     Остатки
-  //     <pre>{JSON.stringify(accounts, null, 2)}</pre>
-  //   </Header>
-  // </Container>
-    <Div
-      m='0 30px'
-    >
-      <Statistic.Group>
-        <Statistic>
-          <Statistic.Value
-            content={accounts.reduce((sum, a) => sum + a.total, 0) + ' ₽'}
-          />
-          <Statistic.Label
-            content='Касса, в т.ч.'
-          />
-          <Statistic.Group horizontal>
-            {accounts.map(({ id, name, total }) =>
-              <Statistic
-                key={id}
-                label={name}
-                value={total + ' ₽'} 
-              />
-            )}
-          </Statistic.Group>
-        </Statistic>
-        <Statistic>
-          <Statistic.Value
-            content={accounts.reduce((sum, a) => sum + a.total, 0) + ' ₽'}
-          />
-          <Statistic.Label
-            content='Нам должны, в т.ч.'
-          />
-          <Statistic.Group
-            horizontal
-            size='small'
-          >
-            {accounts.map(({ id, name, total }) =>
-              <Statistic
-                key={id}
-                label={name}
-                value={total + ' ₽'} 
-              />
-            )}
-          </Statistic.Group>
-        </Statistic>
-        <Statistic>
-          <Statistic.Value
-            content={accounts.reduce((sum, a) => sum + a.total, 0) + ' ₽'}
-          />
-          <Statistic.Label
-            content='Мы должны, в т.ч.'
-          />
-          <Statistic.Group
-            horizontal
-            size='small'
-          >
-            {accounts.map(({ id, name, total }) =>
-              <Statistic
-                key={id}
-                label={name}
-                value={total + ' ₽'} 
-              />
-            )}
-          </Statistic.Group>
-        </Statistic>
-      </Statistic.Group>
-    </Div>
-  )
+	const accountsStats = payments
+		.reduce((accounts, p) => {
+			const account = accounts.find(a => a.id === p.account.id)
+			account.total += (p.article.isIncome ? 1 : -1) * p.amount
+			return accounts
+		}, accounts.map(a => ({ ...a, total: 0 })))
+	const persons = payments
+		.map(p => p.person)
+		.reduce((uniquePersons, p) => {
+			if (!uniquePersons.find(up => up.id === p.id))
+				uniquePersons.push(p)
+			return uniquePersons
+		}, [])
+	const deptsAndLoans = payments
+		.filter(p => p.article.isLoan)
+		.reduce((depts, p) => {
+			const person = depts.find(d => d.id === p.person.id)
+			person.total += (p.article.isIncome ? 1 : -1) * p.amount
+			return depts
+		}, persons.map(a => ({ ...a, total: 0 })))
+		.reduce((split, d) => {
+			if (d.total > 0) split[1].push(d)
+			else if (d.total < 0) split[0].push({ ...d, total: -1*d.total})
+			return split
+		}, [[],[]])
+	return (
+		<Div
+			m='0 30px'
+		>
+			<Statistic.Group>
+				<SStatistic
+					color='green'
+				>
+					<Statistic.Value
+						content={currency(accountsStats.reduce((sum, a) => sum + a.total, 0))}
+					/>
+					<Statistic.Label
+						content='Касса, в т.ч.'
+					/>
+					<Statistic.Group horizontal>
+						{accountsStats.map(({ id, name, total }) =>
+							<Statistic
+								key={id}
+								label={name}
+								value={currency(total)} 
+							/>
+						)}
+					</Statistic.Group>
+				</SStatistic>
+				<SStatistic
+					color='purple'
+				>
+					<Statistic.Value
+						content={currency(deptsAndLoans[0].reduce((sum, l) => sum + l.total, 0))}
+					/>
+					<Statistic.Label
+						content='Нам должны, в т.ч.'
+					/>
+					<Statistic.Group
+						horizontal
+						size='small'
+					>
+						{deptsAndLoans[0].map(({ id, amoName, total }) =>
+							<Statistic
+								key={id}
+								label={amoName}
+								value={currency(total)} 
+							/>
+						)}
+					</Statistic.Group>
+				</SStatistic>
+				<SStatistic
+					color='red'
+				>
+					<Statistic.Value
+						content={currency(-deptsAndLoans[1].reduce((sum, d) => sum + d.total, 0))}
+					/>
+					<Statistic.Label
+						content='Мы должны, в т.ч.'
+					/>
+					<Statistic.Group
+						horizontal
+						size='small'
+					>
+						{deptsAndLoans[1].map(({ id, amoName, total }) =>
+							<Statistic
+								key={id}
+								label={amoName}
+								value={currency(total)}
+							/>
+						)}
+					</Statistic.Group>
+				</SStatistic>
+			</Statistic.Group>
+		</Div>
+	)
 }
 

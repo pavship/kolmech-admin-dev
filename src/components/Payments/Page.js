@@ -17,7 +17,7 @@ const Container = styled.div`
 
 const TopSection = styled.div`
   flex: 1 0 content;
-  min-height: 308px;
+  min-height: ${308 + 47.5*2}px;
   display: flex;
 `
 
@@ -33,31 +33,29 @@ export default ({
     <Query
       query={paymentsPage}
     >
-      {({ loading, error, data }) => 
+      {({ loading, error, data: {
+        payments,
+        articles,
+        accounts,
+        equipments: equipment
+      }}) => 
         <Container>
           { loading ? 'Загрузка...' :
-            error ? `Ошибка ${error.message}` : 
-            console.log('data > ', data) || <>
+            error ? `Ошибка ${error.message}` : <>
               <TopSection>
                 <PaymentForm
-                  articles={data.articles.map(a => 
-                    ({ key: a.id, text: a.rusName, value: a.id })
-                  )}
+                  articles={articles}
+                  equipment={equipment}
                 />
                 <PaymentStats
                   // TODO make postgres aggregation query on server side instead of reduce here
-                  accounts={data.payments
-                    .reduce((accounts, p) => {
-                      const account = accounts.find(a => a.id === p.account.id)
-                      account.total += (p.isIncome ? 1 : -1) * p.amount
-                      return accounts
-                    }, data.accounts.map(a => ({ ...a, total: 0 }))
-                  )}
+                  payments={payments}
+                  accounts={accounts}
                 />
               </TopSection>
               <BottomSection>
                 <PaymentTable
-                  payments={data.payments}
+                  payments={payments}
                 />
               </BottomSection>
             </>

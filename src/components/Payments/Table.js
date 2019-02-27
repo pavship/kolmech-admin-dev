@@ -31,6 +31,16 @@ const fields = [{
   title: 'Контрагент',
   width: '200px'
 },{
+  name: 'equipment',
+  path: 'equipment.name',
+  title: 'Оборудование',
+  width: '170px'
+},{
+  name: 'purpose',
+  path: 'purpose',
+  title: 'Назначение',
+  width: '270px'
+},{
   name: 'amount',
   path: 'amount',
   title: 'Сумма',

@@ -5,13 +5,14 @@ export const articleFragmentBasic = gql`
 		id
 		rusName
 		isIncome
+		isLoan
 	}
 `
 
 export const articleFragmentFull = gql`
 	fragment ArticleFragmentFull on Article {
 		...ArticleFragmentBasic
-		isLoan
+		relations
 	}
 	${articleFragmentBasic}
 `
