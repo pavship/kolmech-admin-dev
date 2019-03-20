@@ -39,7 +39,8 @@ const fields = [{
   name: 'purpose',
   path: 'purpose',
   title: 'Назначение',
-  width: '270px'
+  width: '270px',
+  truncated: true
 },{
   name: 'amount',
   path: 'amount',
@@ -58,7 +59,7 @@ export default ({
       >
         {({ tableFields }) => 
           payments.map(payment => {
-            const { id, dateLocal, amount,  article: { isIncome } } = payment
+            const { id, dateLocal, amount, article: { isIncome } } = payment
             return (
               <TableRow
                 key={id}

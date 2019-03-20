@@ -26,9 +26,7 @@ const BottomSection = styled.div`
   margin-top: 1rem;
 `
 
-export default ({
-  
-}) => {
+export default () => {
   return (
     <Query
       query={paymentsPage}

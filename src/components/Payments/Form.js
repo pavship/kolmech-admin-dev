@@ -47,7 +47,7 @@ export default ({
 	articles,
 	equipment
 }) => {
-	let schema = formikSchema(new Date)
+	let schema = formikSchema(new Date())
 	let initialValues = payment ? projectEntity(payment, schema) : schema
 	const formLabelWidth = '110px'
 	const articleOptions = articles.map(a => 
