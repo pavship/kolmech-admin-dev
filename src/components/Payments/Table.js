@@ -26,8 +26,7 @@ const fields = [{
 	title: 'Статья',
 	width: '180px'
 },{
-  name: 'person',
-  path: 'person.amoName',
+  name: 'counterparty',
   title: 'Контрагент',
   width: '200px'
 },{
@@ -59,7 +58,8 @@ export default ({
       >
         {({ tableFields }) => 
           payments.map(payment => {
-            const { id, dateLocal, amount, article: { isIncome } } = payment
+            const { id, dateLocal, amount, person } = payment
+            const isIncome = payment.article ? payment.article.isIncome : payment.isIncome
             return (
               <TableRow
                 key={id}
@@ -69,6 +69,10 @@ export default ({
                   {
                     name: 'dateLocal',
                     value: dateLocal.slice(0,16).replace('T', ' '),
+                  },
+                  {
+                    name: 'counterparty',
+                    path: person ? 'person.amoName' : 'org.name',
                   },
                   {
                     name: 'amount',

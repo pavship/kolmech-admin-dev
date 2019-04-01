@@ -75,7 +75,7 @@ export default ({
 									refetchPersons()
 									notify({
 										type: 'success',
-										title: 'Контакты синхронизированны'
+										title: 'Контакты синхронизированы'
 									})
 								}}
 								onError={err => notify({
