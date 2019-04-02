@@ -4,12 +4,14 @@ import { Query, Mutation } from 'react-apollo'
 import { paymentsPage } from '../../graphql/payment'
 
 import styled from 'styled-components'
+import PaymentChart from './Chart'
 import PaymentForm from './Form'
 import PaymentStats from './Stats'
 import PaymentTable from './Table'
-import { syncWithTochkaPayments } from '../../graphql/tochka';
-import { NotificationsConsumer } from '../notifications/NotificationsContext';
-import { Button } from '../styled/styled-semantic';
+import { syncWithTochkaPayments } from '../../graphql/tochka'
+import { NotificationsConsumer } from '../notifications/NotificationsContext'
+import { Button, Icon, Div } from '../styled/styled-semantic'
+import { Route, Link, matchPath } from 'react-router-dom';
 
 const Header = styled.div`
 	display: flex;
@@ -20,6 +22,10 @@ const Header = styled.div`
 	line-height: 1.28571429em;
 	font-weight: bold;
 	border-bottom: 1px solid rgba(34,36,38,.15);
+`
+
+const SLink = styled(Link)`
+  color: rgba(0,0,0,.87) !important;
 `
 
 const Container = styled.div`
@@ -44,78 +50,109 @@ export default () => {
   return (
     <NotificationsConsumer>
 			{({ notify }) =>
-					<Query
-            query={paymentsPage}
-						onError={err => notify({
-							type: 'error',
-							title: 'Ошибка загрузки платежей',
-							content: err.message,
-						})}
-					>
-            {({ loading: paymentsLoading,
-                error,
-								data: {
-                  payments,
-                  articles,
-                  accounts,
-                  equipments: equipment
-                },
-								refetch: refetchPayments
-							}) => <>
-                <Mutation
-                  mutation={syncWithTochkaPayments}
-                  onCompleted={() => {
-                    refetchPayments()
-                    notify({
-                      type: 'success',
-                      title: 'Платежи синхронизированы с банком'
-                    })
-                  }}
-                  onError={err => notify({
-                    type: 'error',
-                    title: 'Ошибка синхронизации с Точкой',
-                    content: err.message,
-                  })}
-                >
-                  {(syncWithTochkaPayments, { loading }) => 
-                    <Header>
-                      Платежи
-                      <Button
-                        ml='auto'
-                        icon='sync alternate'
-                        content='Точка Банк'
-                        onClick={() => syncWithTochkaPayments()}
-                        loading={loading}
+        <Query
+          query={paymentsPage}
+          onError={err => notify({
+            type: 'error',
+            title: 'Ошибка загрузки платежей',
+            content: err.message,
+          })}
+        >
+          {({ loading: paymentsLoading,
+              error,
+              data: {
+                payments,
+                articles,
+                accounts,
+                equipments: equipment
+              },
+              refetch: refetchPayments
+            }) => <>
+              <Mutation
+                mutation={syncWithTochkaPayments}
+                onCompleted={() => {
+                  refetchPayments()
+                  notify({
+                    type: 'success',
+                    title: 'Платежи синхронизированы с банком'
+                  })
+                }}
+                onError={err => notify({
+                  type: 'error',
+                  title: 'Ошибка синхронизации с Точкой',
+                  content: err.message,
+                })}
+              >
+                {(syncWithTochkaPayments, { loading }) => 
+                  <Header>
+                    <SLink to="/pay">Платежи</SLink>
+                    <Div
+                      ml='40px'
+                    >
+                      <SLink to="/pay/chart">
+                        <Icon
+                          link
+                          name='chart bar outline'
+                          size='large'
+                          active={!!matchPath(
+                            window.location.href.replace(/.*#/, ''),
+                            '/pay/chart'
+                          )}
+                          activeColor='blue'
+                        />
+                      </SLink>
+                    </Div>
+                    <Button
+                      ml='auto'
+                      icon='sync alternate'
+                      content='Точка Банк'
+                      onClick={() => syncWithTochkaPayments()}
+                      loading={loading}
+                    />
+                  </Header>
+                }
+              </Mutation>
+              <Container>
+                { paymentsLoading ? 'Загрузка...' :
+                  error ? `Ошибка ${error.message}` : <>
+                    <TopSection>
+                      <Route
+                        exact
+                        path="/pay"
+                        render={() => (<>
+                          <PaymentForm
+                            articles={articles}
+                            equipment={equipment}
+                          />
+                          <PaymentStats
+                            payments={payments}
+                            accounts={accounts}
+                          />
+                        </>)}
                       />
-                    </Header>
-                  }
-                </Mutation>
-                <Container>
-                  { paymentsLoading ? 'Загрузка...' :
-                    error ? `Ошибка ${error.message}` : <>
-                      <TopSection>
-                        <PaymentForm
-                          articles={articles}
-                          equipment={equipment}
-                        />
-                        <PaymentStats
-                          payments={payments}
-                          accounts={accounts}
-                        />
-                      </TopSection>
-                      <BottomSection>
-                        <PaymentTable
-                          payments={payments}
-                        />
-                      </BottomSection>
-                    </>
-                  }
-                </Container>
-              </>
-            }
-          </Query>
-        }
-      </NotificationsConsumer>
+                      <Route
+                        exact
+                        path="/pay/chart"
+                        render={() => (
+                          <PaymentChart
+                            payments={payments}
+                          />
+                        )}
+                      />
+                    </TopSection>
+                    <BottomSection>
+                      <PaymentTable
+                        payments={payments}
+                      />
+                    </BottomSection>
+                  </>
+                }
+              </Container>
+            </>
+          }
+        </Query>
+      }
+    </NotificationsConsumer>
   )
 }
 
