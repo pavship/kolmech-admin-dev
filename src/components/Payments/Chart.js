@@ -1,90 +1,96 @@
 import React from 'react'
 
-import Table from '../common/Table'
-import TableRow from '../common/TableRow'
+import { XAxis, YAxis, HorizontalGridLines, LineSeries, VerticalBarSeries, FlexibleWidthXYPlot } from 'react-vis'
 
 import styled from 'styled-components'
 
 const Container = styled.div`
-  margin-top: 1rem;
-  max-height: 100%;
-  border: 1px solid rgba(34,36,38,.15);
-  border-radius: 0.285714rem;
-  .fz-tableHeaderRow {
-    border-top: none !important;
-  }
+  width: 100%;
 `
-
-const fields = [{
-  name: 'dateLocal',
-  path: 'dateLocal',
-	title: 'Дата и время',
-	width: '145px'
-},{
-  name: 'article',
-  path: 'article.rusName',
-	title: 'Статья',
-	width: '180px'
-},{
-  name: 'counterparty',
-  title: 'Контрагент',
-  width: '200px'
-},{
-  name: 'equipment',
-  path: 'equipment.name',
-  title: 'Оборудование',
-  width: '170px'
-},{
-  name: 'purpose',
-  path: 'purpose',
-  title: 'Назначение',
-  width: '270px',
-  truncated: true
-},{
-  name: 'amount',
-  path: 'amount',
-  title: 'Сумма',
-  width: '140px'
-}]
 
 export default ({
   payments
 }) => {
-  //  TODO add CollectionUtils to support sorting
+  // const allDates = []
+  const startDate = payments[payments.length - 1].dateLocal.slice(0, 10)
+  const endDate = payments[0].dateLocal.slice(0, 10)
+  console.log('startDate > ', startDate)
+  console.log('endDate > ', endDate)
+  // console.log('Math.max(payments.map(p => p.dateLocal) > ', Math.max(payments.map(p => p.dateLocal)))
+  // for (let date = Math.min(payments.map(p => p.dateLocal))
+  // const data = payments.reduce((dates, p) => 
+  // , )
+  console.log('payments > ', payments)
+  const data = payments.map(p => {
+    // console.log('p > ', p)
+    const isIncome = p.article ? p.article.isIncome : p.isIncome
+    // console.log('isIncome > ', isIncome)
+    // console.log('(!!isIncome ? 1 : -1) * p.amount > ', (!!isIncome ? 1 : -1) * p.amount)
+    return {
+      x: new Date(p.dateLocal.slice(0, 10)).getTime(),
+      y: (!!isIncome ? 1 : -1) * p.amount
+    }
+  })
+  const [positive, negative, total] = data.reduce((arrs, p) => {
+    let length = arrs[0].length
+    if (!length || arrs[0][length - 1].x !== p.x) {
+      arrs.forEach(arr => arr.push({ x: p.x, y: 0, y0: 0 }))
+      console.log('arrs > ', arrs)
+      length = arrs[0].length
+    }
+    if (p.y > 0) arrs[0][length - 1].y += p.y
+    if (p.y < 0) {
+      arrs[1][length - 1].y0 += p.y
+    }
+    arrs[2][length - 1].y += p.y
+    return arrs
+  }, [[], [], []])
+  console.log('positive, negative, total > ', positive, negative, total)
+  let sum = 0
+  const lineData = total.reverse().reduce((lineData, p) => {
+    const pointIndex = (
+      lineData.findIndex(({ x }) => x === p.x) + 1
+      || lineData.push({ x: p.x, y: sum }) && lineData.push({ x: p.x, y: 0 })
+    ) - 1
+    lineData[pointIndex].y = sum += p.y
+    return lineData
+  }, [])
+  console.log('data > ', data)
+  const negativeValues = negative.map(p => ({
+    ...p,
+    y: 0,
+    y0: p.y < 0 ? p.y : 0
+  }))
   return (
     <Container>
-      <Table
-        fields={fields}
+      <FlexibleWidthXYPlot
+        height={400}
+        margin={{
+          left: 60
+        }}
+        stackBy="y"
       >
-        {({ tableFields }) => 
-          payments.map(payment => {
-            const { id, dateLocal, amount, person } = payment
-            const isIncome = payment.article ? payment.article.isIncome : payment.isIncome
-            return (
-              <TableRow
-                key={id}
-                entity={payment}
-                tableFields={tableFields}
-                rowFields={[
-                  {
-                    name: 'dateLocal',
-                    value: dateLocal.slice(0,16).replace('T', ' '),
-                  },
-                  {
-                    name: 'counterparty',
-                    path: person ? 'person.amoName' : 'org.name',
-                  },
-                  {
-                    name: 'amount',
-                    value: isIncome ? amount : -amount,
-                    color: isIncome ? '#016936' : '#9f3a38'
-                  }
-                ]}
-              />
-            )
-          }
-        )}
-      </Table>
+        <HorizontalGridLines />
+        <XAxis 
+          tickFormat={(d) => new Date(d).toLocaleDateString()}
+        />
+        <YAxis />
+        <LineSeries
+          data={lineData}
+        />
+        <VerticalBarSeries
+          stack={true}
+          // cluster='1'
+          data={negative}
+          color='rgb(255, 152, 51)'
+        />
+        <VerticalBarSeries
+          stack={true}
+          // cluster='0'
+          data={positive}
+          color='#4fb79b'
+        />
+      </FlexibleWidthXYPlot>
     </Container>
   )
 }

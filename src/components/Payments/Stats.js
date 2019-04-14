@@ -74,7 +74,10 @@ export default ({
 					<Statistic.Label
 						content='Касса, в т.ч.'
 					/>
-					<Statistic.Group horizontal>
+					<Statistic.Group
+						horizontal
+						size='small'
+					>
 						{accountsStats
 							.filter(a => !a.number)
 							.map(({ id, name, total }) =>
@@ -97,7 +100,10 @@ export default ({
 					<Statistic.Label
 						content='Счета, в т.ч.'
 					/>
-					<Statistic.Group horizontal>
+					<Statistic.Group
+						horizontal
+						size='small'
+					>
 						{accountsStats
 							.filter(a => !!a.number)
 							.map(({ id, name, total }) =>
@@ -125,7 +131,7 @@ export default ({
 						{deptsAndLoans[0].map(({ id, amoName, total }) =>
 							<Statistic
 								key={id}
-								label={amoName}
+								label={amoName.slice(0, amoName.lastIndexOf(' ') + 2) + '.'}
 								value={currency(total)} 
 							/>
 						)}
@@ -147,7 +153,7 @@ export default ({
 						{deptsAndLoans[1].map(({ id, amoName, total }) =>
 							<Statistic
 								key={id}
-								label={amoName}
+								label={amoName.slice(0, amoName.lastIndexOf(' ') + 2) + '.'}
 								value={currency(total)}
 							/>
 						)}

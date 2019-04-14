@@ -143,6 +143,7 @@ export default () => {
                     <BottomSection>
                       <PaymentTable
                         payments={payments}
+                        onClickRow={id => console.log('id > ', id)}
                       />
                     </BottomSection>
                   </>

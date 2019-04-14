@@ -48,7 +48,8 @@ const fields = [{
 }]
 
 export default ({
-  payments
+  payments,
+  onClickRow
 }) => {
   //  TODO add CollectionUtils to support sorting
   return (
@@ -80,6 +81,7 @@ export default ({
                     color: isIncome ? '#016936' : '#9f3a38'
                   }
                 ]}
+                onClick={() => onClickRow(id)}
               />
             )
           }
