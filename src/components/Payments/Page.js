@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Query, Mutation } from 'react-apollo'
 import { paymentsPage } from '../../graphql/payment'
@@ -39,6 +39,7 @@ const TopSection = styled.div`
   flex: 1 0 content;
   min-height: ${308 + 47.5*2}px;
   display: flex;
+  
 `
 
 const BottomSection = styled.div`
@@ -47,6 +48,7 @@ const BottomSection = styled.div`
 `
 
 export default () => {
+  const [activePayment, setActivePayment] = useState(null)
   return (
     <NotificationsConsumer>
 			{({ notify }) =>
@@ -121,6 +123,8 @@ export default () => {
                         path="/pay"
                         render={() => (<>
                           <PaymentForm
+                            payment={activePayment}
+                            reset={() => setActivePayment(null)}
                             articles={articles}
                             equipment={equipment}
                           />
@@ -143,7 +147,7 @@ export default () => {
                     <BottomSection>
                       <PaymentTable
                         payments={payments}
-                        onClickRow={id => console.log('id > ', id)}
+                        onClickRow={id => setActivePayment(payments.find(p => p.id === id))}
                       />
                     </BottomSection>
                   </>

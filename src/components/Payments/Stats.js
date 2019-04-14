@@ -5,6 +5,16 @@ import { Div } from '../styled/styled-semantic'
 import { Statistic } from 'semantic-ui-react'
 import { currency } from '../../utils/format';
 
+const Container = styled.div`
+	flex-grow: 1;
+	height: 100%;
+	margin-left: 30px;
+  overflow-y: auto;
+	>div {
+		width: 100%;
+	}
+`
+
 const SStatistic = styled(Statistic)`
 	&&&&>.value {
 		${({ color }) => color && `
@@ -59,9 +69,7 @@ export default ({
 			return split
 		}, [[],[]])
 	return (
-		<Div
-			m='0 30px'
-		>
+		<Container>
 			<Statistic.Group>
 				<SStatistic
 					color='green'
@@ -160,7 +168,7 @@ export default ({
 					</Statistic.Group>
 				</SStatistic>
 			</Statistic.Group>
-		</Div>
+		</Container>
 	)
 }
 
