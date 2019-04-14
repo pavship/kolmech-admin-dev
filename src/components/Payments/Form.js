@@ -121,7 +121,7 @@ export default ({
 											data: {
 												payments: produce(payments, draft => {
 													const foundIndex = draft.findIndex(p => p.id === upsertPayment.id)
-													foundIndex
+													return foundIndex
 														? draft.splice(foundIndex, 1, upsertPayment)
 														: draft.unshift(upsertPayment)
 												})

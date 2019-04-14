@@ -9,23 +9,16 @@ const Container = styled.div`
 `
 
 export default ({
-  payments
+  payments: allPayments
 }) => {
-  // const allDates = []
-  const startDate = payments[payments.length - 1].dateLocal.slice(0, 10)
-  const endDate = payments[0].dateLocal.slice(0, 10)
-  console.log('startDate > ', startDate)
-  console.log('endDate > ', endDate)
-  // console.log('Math.max(payments.map(p => p.dateLocal) > ', Math.max(payments.map(p => p.dateLocal)))
-  // for (let date = Math.min(payments.map(p => p.dateLocal))
-  // const data = payments.reduce((dates, p) => 
-  // , )
-  console.log('payments > ', payments)
+  const payments = allPayments.filter(p => !p.article || !p.article.isLoan)
+  // const startDate = payments[payments.length - 1].dateLocal.slice(0, 10)
+  // const endDate = payments[0].dateLocal.slice(0, 10)
+  // console.log('startDate > ', startDate)
+  // console.log('endDate > ', endDate)
+  // console.log('payments > ', payments)
   const data = payments.map(p => {
-    // console.log('p > ', p)
     const isIncome = p.article ? p.article.isIncome : p.isIncome
-    // console.log('isIncome > ', isIncome)
-    // console.log('(!!isIncome ? 1 : -1) * p.amount > ', (!!isIncome ? 1 : -1) * p.amount)
     return {
       x: new Date(p.dateLocal.slice(0, 10)).getTime(),
       y: (!!isIncome ? 1 : -1) * p.amount
@@ -35,7 +28,6 @@ export default ({
     let length = arrs[0].length
     if (!length || arrs[0][length - 1].x !== p.x) {
       arrs.forEach(arr => arr.push({ x: p.x, y: 0, y0: 0 }))
-      console.log('arrs > ', arrs)
       length = arrs[0].length
     }
     if (p.y > 0) arrs[0][length - 1].y += p.y
@@ -45,7 +37,7 @@ export default ({
     arrs[2][length - 1].y += p.y
     return arrs
   }, [[], [], []])
-  console.log('positive, negative, total > ', positive, negative, total)
+  // console.log('positive, negative, total > ', positive, negative, total)
   let sum = 0
   const lineData = total.reverse().reduce((lineData, p) => {
     const pointIndex = (
@@ -55,7 +47,6 @@ export default ({
     lineData[pointIndex].y = sum += p.y
     return lineData
   }, [])
-  console.log('data > ', data)
   const negativeValues = negative.map(p => ({
     ...p,
     y: 0,
