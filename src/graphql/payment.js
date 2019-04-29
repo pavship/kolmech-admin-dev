@@ -35,11 +35,13 @@ export const paymentsPage = gql`
 	query PaymentsPage {
 		accounts { ...AccountFragmentFull }
 		articles { ...ArticleFragmentFull }
+		orgs { ...OrgFragmentBasic }
 		equipments { ...EquipmentFragmentBasic }
 		payments { ...PaymentFragmentBasic }
 	}
 	${accountFragmentFull}
 	${articleFragmentFull}
+	${orgFragmentBasic}
 	${equipmentFragmentBasic}
 	${paymentFragmentBasic}
 `

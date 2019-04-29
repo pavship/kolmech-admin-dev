@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Mutation, Query } from 'react-apollo'
 import { upsertPayment, paymentsPage } from '../../graphql/payment'
@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import { Button, A, Div } from '../styled/styled-semantic'
 import { persons } from '../../graphql/person';
 import produce from 'immer';
+import { createOrg } from '../../graphql/org';
 
 const Container = styled.div`
 	min-height: content;
@@ -47,8 +48,10 @@ export default ({
 	payment,
 	reset,
 	articles,
+	orgs,
 	equipment
 }) => {
+	const [orgCounterparty, setOrgCounterparty] = useState(false)
 	let schema = formikSchema(new Date())
 	let initialValues = payment ? projectEntity(payment, schema) : schema
 	const formLabelWidth = '110px'
@@ -169,18 +172,75 @@ export default ({
 														options={articleOptions}
 													/>
 													{!bankPayment &&
-														<Field
-															label='Контрагент'
-															required
-															name='personId'
-															options={data.persons
-																? data.persons.map(p => 
-																	({ key: p.id, text: p.amoName || p.fName, value: p.id })
-																)
-																: undefined
-															}
-															loading={personsLoading}
-															disabled={personsLoading}
+														orgCounterparty ?
+															<Mutation
+																mutation={createOrg}
+																onCompleted={(res) => console.log('res > ', res) || notify({
+																	type: 'success',
+																	title: 'Организация добавлена'
+																})}
+																onError={err => notify({
+																	type: 'error',
+																	title: 'Ошибка. Организация не добавлена',
+																	content: err.message,
+																})}
+																// update={(cache, { data: { upsertPayment } }) => {
+																// 	const { payments } = cache.readQuery({ query: paymentsPage })
+																// 	cache.writeQuery({
+																// 		query: paymentsPage,
+																// 		data: {
+																// 			payments: produce(payments, draft => {
+																// 				const foundIndex = payments.findIndex(p => p.id === upsertPayment.id)
+																// 				foundIndex !== -1
+																// 					? draft.splice(foundIndex, 1, upsertPayment)
+																// 					: draft.unshift(upsertPayment)
+																// 			})
+																// 		}
+																// 	})
+																// }}
+															>
+																{(createOrg, { loading }) =>
+																	<Field
+																		label='Контрагент'
+																		required
+																		name='orgId'
+																		options={orgs
+																			? orgs.map(o => 
+																				({ key: o.id, text: o.name + ' (ИНН: ' + o.inn + ')', value: o.id })
+																			)
+																			: []
+																		}
+																		// loading={personsLoading}
+																		// disabled={personsLoading}
+																		allowAdditions
+																		additionLabel='Добавить по ИНН: '
+																		// onAddItem={createOrg}
+																		onAddItem={(e, { value: inn }) => createOrg({ variables: { inn } })}
+																		contentBeforeField={<div>
+																			Организация или <A
+																				onClick={() => setOrgCounterparty(false)}
+																			>Персона</A>
+																		</div>}
+																	/>
+																}
+															</Mutation> :
+															<Field
+																label='Контрагент'
+																required
+																name='personId'
+																options={data.persons
+																	? data.persons.map(p => 
+																		({ key: p.id, text: p.amoName || p.fName, value: p.id })
+																	)
+																	: []
+																}
+																loading={personsLoading}
+																disabled={personsLoading}
+																contentBeforeField={<div>
+																	Персона или <A
+																		onClick={() => setOrgCounterparty(true)}
+																	>Организация</A>
+																</div>}
 														/>
 													}
 													{values.articleId 
