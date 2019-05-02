@@ -8,6 +8,7 @@ import { orgFragmentBasic } from './org';
 export const paymentFragmentBasic = gql`
 	fragment PaymentFragmentBasic on Payment {
 		id
+		isIncome
 		dateLocal
 		amount
 		purpose

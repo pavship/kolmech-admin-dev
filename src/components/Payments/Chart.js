@@ -42,7 +42,7 @@ export default ({
   const lineData = total.reverse().reduce((lineData, p) => {
     const pointIndex = (
       lineData.findIndex(({ x }) => x === p.x) + 1
-      || lineData.push({ x: p.x, y: sum }) && lineData.push({ x: p.x, y: 0 })
+      || (lineData.push({ x: p.x, y: sum }) && lineData.push({ x: p.x, y: 0 }))
     ) - 1
     lineData[pointIndex].y = sum += p.y
     return lineData

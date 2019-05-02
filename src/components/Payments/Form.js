@@ -44,6 +44,18 @@ const Fields = styled.div`
 	}
 `
 
+const FieldSwitch = ({
+	children
+}) => {
+	const [orgCounterparty, setOrgCounterparty] = useState(false)
+	return (
+		children({
+			orgCounterparty,
+			setOrgCounterparty
+		})
+	)
+}
+
 export default ({
 	payment,
 	reset,
@@ -51,14 +63,14 @@ export default ({
 	orgs,
 	equipment
 }) => {
-	const [orgCounterparty, setOrgCounterparty] = useState(false)
+	// const [orgCounterparty, setOrgCounterparty] = useState(false)
 	let schema = formikSchema(new Date())
 	let initialValues = payment ? projectEntity(payment, schema) : schema
 	const formLabelWidth = '110px'
 	const articleOptions = articles.map(a => 
 		({ key: a.id, text: a.rusName, value: a.id })
 	)
-	const bankPayment = payment && payment.org
+	const bankPayment = payment && payment.isIncome !== null
 	return (
 		<NotificationsConsumer>
 			{({ notify }) =>
@@ -141,7 +153,11 @@ export default ({
 												// console.log('values > ', values)
 												// console.log('initialValues > ', initialValues)
 												const input = preparePayload(values, initialValues, schema)
-												if (!payment && !input.dateLocal) input.dateLocal = initialValues.dateLocal
+												if (!payment && !input.dateLocal) 
+													input.dateLocal = initialValues.dateLocal
+												// if (input.personId && input.orgId) orgCounterparty
+												// 	? delete input.personId
+												// 	: delete input.orgId
 												// console.log('input > ', input)
 												await upsertPayment({ variables: { input } })
 												// const upserted = await upsertPayment({ variables: { input } })
@@ -153,6 +169,7 @@ export default ({
 												values,
 												handleSubmit,
 												handleReset,
+												setFieldValue,
 											}) =>
 												<Fields
 													labelWidth={formLabelWidth}
@@ -171,78 +188,91 @@ export default ({
 														name='articleId'
 														options={articleOptions}
 													/>
-													{!bankPayment &&
-														orgCounterparty ?
-															<Mutation
-																mutation={createOrg}
-																onCompleted={(res) => console.log('res > ', res) || notify({
-																	type: 'success',
-																	title: 'Организация добавлена'
-																})}
-																onError={err => notify({
-																	type: 'error',
-																	title: 'Ошибка. Организация не добавлена',
-																	content: err.message,
-																})}
-																// update={(cache, { data: { upsertPayment } }) => {
-																// 	const { payments } = cache.readQuery({ query: paymentsPage })
-																// 	cache.writeQuery({
-																// 		query: paymentsPage,
-																// 		data: {
-																// 			payments: produce(payments, draft => {
-																// 				const foundIndex = payments.findIndex(p => p.id === upsertPayment.id)
-																// 				foundIndex !== -1
-																// 					? draft.splice(foundIndex, 1, upsertPayment)
-																// 					: draft.unshift(upsertPayment)
-																// 			})
-																// 		}
-																// 	})
-																// }}
-															>
-																{(createOrg, { loading }) =>
-																	<Field
-																		label='Контрагент'
-																		required
-																		name='orgId'
-																		options={orgs
-																			? orgs.map(o => 
-																				({ key: o.id, text: o.name + ' (ИНН: ' + o.inn + ')', value: o.id })
-																			)
-																			: []
-																		}
-																		// loading={personsLoading}
-																		// disabled={personsLoading}
-																		allowAdditions
-																		additionLabel='Добавить по ИНН: '
-																		// onAddItem={createOrg}
-																		onAddItem={(e, { value: inn }) => createOrg({ variables: { inn } })}
-																		contentBeforeField={<div>
-																			Организация или <A
-																				onClick={() => setOrgCounterparty(false)}
-																			>Персона</A>
-																		</div>}
-																	/>
-																}
-															</Mutation> :
-															<Field
-																label='Контрагент'
-																required
-																name='personId'
-																options={data.persons
-																	? data.persons.map(p => 
-																		({ key: p.id, text: p.amoName || p.fName, value: p.id })
-																	)
-																	: []
-																}
-																loading={personsLoading}
-																disabled={personsLoading}
-																contentBeforeField={<div>
-																	Персона или <A
-																		onClick={() => setOrgCounterparty(true)}
-																	>Организация</A>
-																</div>}
-														/>
-													}
+													{!bankPayment && (
+														<FieldSwitch>
+															{({orgCounterparty, setOrgCounterparty}) =>
+															orgCounterparty
+															? <Mutation
+																	mutation={createOrg}
+																	onCompleted={(res) => console.log('res > ', res) || notify({
+																		type: 'success',
+																		title: 'Организация добавлена'
+																	})}
+																	onError={err => notify({
+																		type: 'error',
+																		title: 'Ошибка. Организация не добавлена',
+																		content: err.message,
+																	})}
+																	update={(cache, { data: { createOrg } }) => {
+																		const { orgs } = cache.readQuery({ query: paymentsPage })
+																		cache.writeQuery({
+																			query: paymentsPage,
+																			data: {
+																				orgs: produce(orgs, draft => {
+																					const foundIndex = orgs.findIndex(o => o.id === createOrg.id)
+																					foundIndex !== -1
+																						? draft.splice(foundIndex, 1, createOrg)
+																						: draft.unshift(createOrg)
+																				})
+																			}
+																		})
+																		
+																	}}
+																>
+																	{(createOrg, { loading: orgsLoading }) =>
+																		<Field
+																			label='Контрагент'
+																			required
+																			name='orgId'
+																			options={orgs
+																				? orgs.map(o => 
+																					({ key: o.id, text: o.name + ' (ИНН: ' + o.inn + ')', value: o.id })
+																				)
+																				: []
+																			}
+																			loading={orgsLoading}
+																			disabled={orgsLoading}
+																			allowAdditions
+																			additionLabel='Добавить по ИНН: '
+																			onAddItem={async (e, { value: inn }) => {
+																				const created = await createOrg({ variables: { inn: inn.toString() } })
+																				setFieldValue('orgId', created && created.data && created.data.createOrg.id)
+																			}}
+																			contentBeforeField={<div>
+																				Организация или <A
+																					onClick={() => {
+																						setOrgCounterparty(false)
+																						setFieldValue('orgId', '')
+																					}}
+																				>Персона</A>
+																			</div>}
+																		/>
+																	}
+																</Mutation>
+															: <Field
+																	label='Контрагент'
+																	required
+																	name='personId'
+																	options={data.persons
+																		? data.persons.map(p => 
+																			({ key: p.id, text: p.amoName || p.fName, value: p.id })
+																		)
+																		: []
+																	}
+																	loading={personsLoading}
+																	disabled={personsLoading}
+																	contentBeforeField={<div>
+																		Персона или <A
+																			onClick={() => {
+																				setOrgCounterparty(true)
+																				setFieldValue('personId', '')
+																			}}
+																		>Организация</A>
+																	</div>}
+																/>
+															}
+														</FieldSwitch>
+													)}
 													{values.articleId 
 														&& articles.find(a => a.id === values.articleId).relations
 														&& articles.find(a => a.id === values.articleId).relations.includes('EQUIPMENT') &&
@@ -292,4 +322,3 @@ export default ({
 		</NotificationsConsumer>
 	)
 }
-
