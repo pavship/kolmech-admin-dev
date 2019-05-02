@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Mutation, Query } from 'react-apollo'
 import { upsertPayment, paymentsPage } from '../../graphql/payment'
@@ -44,10 +44,14 @@ const Fields = styled.div`
 	}
 `
 
-const FieldSwitch = ({
-	children
+const CounterpartyFieldSwitch = ({
+	children,
+	payment
 }) => {
-	const [orgCounterparty, setOrgCounterparty] = useState(false)
+	const [orgCounterparty, setOrgCounterparty] = useState(!!(payment && payment.org))
+	useEffect(() => {
+		setOrgCounterparty(!!(payment && payment.org))
+	}, [payment])
 	return (
 		children({
 			orgCounterparty,
@@ -63,7 +67,6 @@ export default ({
 	orgs,
 	equipment
 }) => {
-	// const [orgCounterparty, setOrgCounterparty] = useState(false)
 	let schema = formikSchema(new Date())
 	let initialValues = payment ? projectEntity(payment, schema) : schema
 	const formLabelWidth = '110px'
@@ -150,18 +153,10 @@ export default ({
 											enableReinitialize={true}
 											validationSchema={validationSchema}
 											onSubmit={async (values, { resetForm }) => {
-												// console.log('values > ', values)
-												// console.log('initialValues > ', initialValues)
 												const input = preparePayload(values, initialValues, schema)
 												if (!payment && !input.dateLocal) 
 													input.dateLocal = initialValues.dateLocal
-												// if (input.personId && input.orgId) orgCounterparty
-												// 	? delete input.personId
-												// 	: delete input.orgId
-												// console.log('input > ', input)
 												await upsertPayment({ variables: { input } })
-												// const upserted = await upsertPayment({ variables: { input } })
-												// console.log('upserted > ', upserted)
 												return payment ? reset() : resetForm()
 											}}
 										>
@@ -189,7 +184,10 @@ export default ({
 														options={articleOptions}
 													/>
 													{!bankPayment && (
-														<FieldSwitch>
+														<CounterpartyFieldSwitch
+															key={payment}
+															payment={payment}
+														>
 															{({orgCounterparty, setOrgCounterparty}) =>
 															orgCounterparty
 															? <Mutation
@@ -271,7 +269,7 @@ export default ({
 																	</div>}
 																/>
 															}
-														</FieldSwitch>
+														</CounterpartyFieldSwitch>
 													)}
 													{values.articleId 
 														&& articles.find(a => a.id === values.articleId).relations
