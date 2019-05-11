@@ -15,7 +15,6 @@ import styled from 'styled-components'
 import { Button, A, Div } from '../styled/styled-semantic'
 import { persons } from '../../graphql/person'
 import produce from 'immer'
-import { fromLocalISOString } from '../../utils/dates'
 import { createOrg } from '../../graphql/org'
 
 const Container = styled.div`
