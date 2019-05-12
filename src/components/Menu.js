@@ -10,6 +10,7 @@ import { Query } from 'react-apollo'
 import { meLocal } from '../graphql/user'
 
 const Container = styled.div`
+  height: 36px;
 	display: flex;
 	align-items: center;
 	border-bottom: 1px solid #7e7e81;

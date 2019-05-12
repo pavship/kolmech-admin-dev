@@ -15,7 +15,7 @@ import { Route, Link, matchPath } from 'react-router-dom'
 import Menu from '../Menu';
 
 const Container = styled.div`
-  height: calc(100% - 52px);
+  height: calc(100% - 36px);
   display: flex;
   flex-direction: column;
   padding: 1rem;

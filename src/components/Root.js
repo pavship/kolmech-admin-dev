@@ -10,6 +10,7 @@ import { me } from '../graphql/user'
 import LoginPage from './LoginPage'
 import EnquiriesPage from './EnquiriesPage'
 import PaymentsPage from './Payments/Page'
+import DealsPage from './Deals/Page'
 
 class Root extends Component {
 	state = {
@@ -73,7 +74,14 @@ class Root extends Component {
 										render={() => (
 											<PaymentsPage
 												refreshToken={this.refreshToken}
-												me={data.me}
+											/>
+										)}
+									/>
+									<Route
+										path="/deals"
+										render={() => (
+											<DealsPage
+												refreshToken={this.refreshToken}
 											/>
 										)}
 									/>
