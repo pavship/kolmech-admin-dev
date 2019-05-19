@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 
-import { Query, Mutation } from 'react-apollo'
-import { paymentsPage } from '../../graphql/payment'
+import { Query } from 'react-apollo'
+import { deals } from '../../graphql/deal'
 
 import { NotificationsConsumer } from '../notifications/NotificationsContext'
 
 import styled from 'styled-components'
-// import PaymentTable from './Table'
-import { Button, Icon } from '../styled/styled-semantic'
+import DealsTable from './Table'
+// import { Button, Icon } from '../styled/styled-semantic'
 import Menu from '../Menu'
 import { Dimmer, Loader } from 'semantic-ui-react'
 
@@ -24,23 +24,17 @@ export default ({
     <NotificationsConsumer>
 			{({ notify }) =>
         <Query
-          query={paymentsPage}
+          query={deals}
           onError={err => notify({
             type: 'error',
-            title: 'Ошибка загрузки платежей',
+            title: 'Ошибка загрузки сделок',
             content: err.message,
           })}
         >
-          {({ loading: paymentsLoading,
+          {({ loading,
               error,
-              data: {
-                payments,
-                articles,
-                orgs,
-                accounts,
-                equipments: equipment
-              },
-              refetch: refetchPayments
+              data,
+              refetch
             }) => <>
               <Menu
                 title='Сделки'
@@ -48,53 +42,20 @@ export default ({
                 refreshToken={refreshToken}
               />
               <Container>
-                <Dimmer
-                  active
-                >
-                  <Loader>
-                    Загрузка..
-                  </Loader>
-                </Dimmer>
-                {/* { paymentsLoading ? 'Загрузка...' :
-                  error ? `Ошибка ${error.message}` : <>
-                    <TopSection>
-                      <Route
-                        exact
-                        path="/pay"
-                        render={() => (<>
-                          <PaymentForm
-                            payment={activePayment}
-                            reset={() => setActivePayment(null)}
-                            articles={articles}
-                            orgs={orgs}
-                            equipment={equipment}
-                          />
-                          <PaymentStats
-                            payments={payments}
-                            accounts={accounts}
-                            orgs={orgs}
-                          />
-                        </>)}
+                {!loading
+                  ? !error
+                    ? data && <DealsTable
+                        deals={data.deals}
                       />
-                      <Route
-                        exact
-                        path="/pay/chart"
-                        render={() => (
-                          <PaymentChart
-                            payments={payments}
-                          />
-                        )}
-                      />
-                    </TopSection>
-                    <BottomSection>
-                      <PaymentTable
-                        payments={payments}
-                        activePayment={activePayment}
-                        onClickRow={id => setActivePayment(payments.find(p => p.id === id))}
-                      />
-                    </BottomSection>
-                  </>
-                } */}
+                    : `Ошибка ${error.message}`
+                  : <Dimmer
+                      active
+                    >
+                      <Loader>
+                        Загрузка..
+                      </Loader>
+                    </Dimmer>
+                }
               </Container>
             </>
           }
