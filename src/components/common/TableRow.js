@@ -46,7 +46,7 @@ const Td = styled.td`
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	${props => !!props.onClick && `cursor: pointer;`}
-	${props => !props.truncated && `overflow: hidden;`}
+	/* ${props => !props.truncated && `overflow: hidden;`} */
 	${props => props.service && `padding-left: 3px;`}
 	${Row}:not(:hover) & {
 		${props => props.hoverable
@@ -108,6 +108,7 @@ const TableRow = props => {
 		select,
 		...rest 
 	} = props
+	// const [isRowHovered, setIsRowHovered] = useState(false)
 	// rowFields are merged into tableFields
 	const fields = tableFields.map(f => {
 		const rowField = rowFields.find(rf => rf.name === f.name)
@@ -117,6 +118,8 @@ const TableRow = props => {
 	return (
 		<Row
 			{...rest}
+			// onMouseEnter={() => setIsRowHovered(true)}
+			// onMouseLeave={() => setIsRowHovered(false)}
 		>
 			{fields.map(f => {
 				if (
@@ -171,23 +174,26 @@ const TableRow = props => {
 					onClick,
 					...rest
 				} = f
-				if (component || content) return (
-					<Td
-						key={name}
-						{...rest}
-						onClick={
-							!!onClick
-							? e => {
-									e.stopPropagation()
-									onClick()
-								}
-							: undefined
-						}
-					>
-						{component ? props[component] : null}
-						{content ? content : null}
-					</Td>
-				)
+				if (component || content) {
+					return (
+						<Td
+							key={name}
+							{...rest}
+							onClick={
+								!!onClick
+								? e => {
+										e.stopPropagation()
+										onClick()
+									}
+								: undefined
+							}
+						>
+							{/* {component && React.cloneElement(component, { isRowHovered })} */}
+							{component && component}
+							{content ? content : null}
+						</Td>
+					)
+				}
 				let val = value || (path ? getObjProp(entity, path) : null)
 				if (val && name === 'amount') val = currency(val)
 				return (

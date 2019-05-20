@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { Query } from 'react-apollo'
-import { deals } from '../../graphql/deal'
+import { dealsPage } from '../../graphql/deal'
 
 import { NotificationsConsumer } from '../notifications/NotificationsContext'
 
@@ -24,7 +24,7 @@ export default ({
     <NotificationsConsumer>
 			{({ notify }) =>
         <Query
-          query={deals}
+          query={dealsPage}
           onError={err => notify({
             type: 'error',
             title: 'Ошибка загрузки сделок',
@@ -46,6 +46,8 @@ export default ({
                   ? !error
                     ? data && <DealsTable
                         deals={data.deals}
+                        orgs={data.orgs}
+                        models={data.models}
                       />
                     : `Ошибка ${error.message}`
                   : <Dimmer

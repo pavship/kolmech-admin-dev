@@ -91,7 +91,24 @@ const EnquiriesTable = ({ enquiries }) => {
 												&& bottomPanel.orgId === org.id
 										},{
 											name: 'model',
-											component: 'modelComponent',
+											content: <Div
+													d='flex'
+												>
+													<Div
+														minw='215px'
+													>
+														{model.name}
+													</Div>
+													{!!model.drawings.length &&
+														<Icon
+															mr='5px'
+															o='.6'
+															name='image outline'
+															color='grey'
+															size='large'
+														/>
+													}
+												</Div>,
 											hoverable: true,
 											onClick: () => {
 												setDetails({
@@ -125,26 +142,6 @@ const EnquiriesTable = ({ enquiries }) => {
 												value: !active ? true : !isExpanded
 											})
 										}}
-										modelComponent={
-											<Div
-												d='flex'
-											>
-												<Div
-													minw='215px'
-												>
-													{model.name}
-												</Div>
-												{!!model.drawings.length &&
-													<Icon
-														mr='5px'
-														o='.6'
-														name='image outline'
-														color='grey'
-														size='large'
-													/>
-												}
-											</Div>
-										}
 									>
 									</TableRow>
 									{	isExpanded && orders.map((order, i) => {
