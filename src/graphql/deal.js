@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { dealStatusFragmentBasic, dealStatusFragmentFull } from './dealStatus'
 import { orgFragmentBasic } from './org'
-import { modelFragmentBasic } from './model'
+import { batchFragmentBasic } from './batch'
 
 export const dealFragmentBasic = gql`
 	fragment DealFragmentBasic on Deal {
@@ -17,11 +17,11 @@ export const dealFragmentMiddle = gql`
 	fragment DealFragmentMiddle on Deal {
 		...DealFragmentBasic
 		org { ...OrgFragmentBasic}
-		models { ...ModelFragmentBasic}
+		batches { ...BatchFragmentBasic}
   }
   ${dealFragmentBasic}
   ${orgFragmentBasic}
-  ${modelFragmentBasic}
+  ${batchFragmentBasic}
 `
 
 export const dealFragmentFull = gql`
@@ -37,11 +37,9 @@ export const dealsPage = gql`
 	query Deals {
 		deals { ...DealFragmentMiddle }
 		orgs { ...OrgFragmentBasic }
-		models { ...ModelFragmentBasic }
 	}
 	${dealFragmentMiddle}
 	${orgFragmentBasic}
-	${modelFragmentBasic}
 `
 
 export const connectDealToOrg = gql`
@@ -53,9 +51,9 @@ export const connectDealToOrg = gql`
 	${dealFragmentMiddle}
 `
 
-export const upsertModelToDeal = gql`
-	mutation upsertModelToDeal($name: String! $modelId: ID $dealId: ID!) {
-		upsertModelToDeal(name: $name modelId: $modelId dealId: $dealId) {
+export const upsertDeal = gql`
+	mutation upsertDeal($input: DealInput!) {
+		upsertDeal(input: $input) {
 			...DealFragmentMiddle
 		}
 	}

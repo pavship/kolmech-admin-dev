@@ -2,30 +2,33 @@ import React from 'react'
 
 import styled from 'styled-components'
 
-import Model from'./Model'
+import Proc from'./Proc'
 
 const Container = styled.div`
-  /* ${props => props.isRowHovered && 'background: red;'} */
   :not(:last-child) {
 		border-bottom: 1px solid rgba(34,36,38,0.15);
 	}
 `
 
 export default ({
-  isRowHovered,
   notify,
   deal,
-  models: allModels
+  batch,
+  upsertDeal
 }) => {
-  return [...deal.models, { id: 0 }].map(model =>
+  return [
+    ...batch.procs,
+    { id: 0 }
+  ].map(proc =>
     <Container
-      key={model.id}
-      isRowHovered={isRowHovered}
+      key={proc.id}
     >
-      <Model
+      <Proc
         notify={notify}
         deal={deal}
-        model={model}
+        batch={batch}
+        proc={proc}
+        upsertDeal={upsertDeal}
       />
     </Container>
   )

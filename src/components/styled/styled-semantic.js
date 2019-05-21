@@ -31,11 +31,12 @@ export const theme = {
 	}
 }
 const getThemeColor = (color) => theme.colors[color] || color
-const baseSet = ({ theme, bt, bb, bc, bs, c, d, fs, fw, h, lh, mw, minw, m, mb, mt, ml, mr, o, ox, oy, p, pe, pl, pr, pt, ta, va, w, ws }) => {
+const baseSet = ({ theme, bt, bb, bc, br, bs, c, d, fs, fw, h, lh, mw, minw, m, mb, mt, ml, mr, o, ov, ox, oy, p, pe, pl, pr, pt, ta, to, va, w, ws, z }) => {
 	return `
 		${bt 	? `border-top: ${bt};`														: ''}
 		${bb 	? `border-bottom: ${bb};`													: ''}
 		${bc 	? `background-color: ${bc};`											: ''}
+		${br 	? `border-right: ${br};`													: ''}
 		${bs 	? `box-sizing: ${bs};`														: ''}
 		${c 	? `color: ${c};`																	: ''}
 		${d 	? `display: ${d};`																: ''}
@@ -51,6 +52,7 @@ const baseSet = ({ theme, bt, bb, bc, bs, c, d, fs, fw, h, lh, mw, minw, m, mb, 
 		${ml 	? `margin-left: ${ml};`														: ''}
 		${mr 	? `margin-right: ${mr};`													: ''}
 		${o  	? `opacity: ${o};`																: ''}
+		${ov  ? `overflow: ${ov};`															: ''}
 		${ox  ? `overflow-x: ${ox};`														: ''}
 		${oy  ? `overflow-y: ${oy};`														: ''}
 		${p 	? `padding: ${p};`																: ''}
@@ -59,9 +61,11 @@ const baseSet = ({ theme, bt, bb, bc, bs, c, d, fs, fw, h, lh, mw, minw, m, mb, 
 		${pr 	? `padding-right: ${pr};`													: ''}
 		${pt 	? `padding-top: ${pt};`														: ''}
 		${ta 	? `text-align: ${ta};`														: ''}
+		${to 	? `text-overflow: ${to};`														: ''}
 		${va 	? `vertical-align: ${va};`												: ''}
 		${w 	? `width: ${(theme.widths && theme.widths[w]) || w};`		: ''}
 		${ws 	? `word-spacing: ${ws};`													: ''}
+		${z 	? `z-index: ${z};`																: ''}
 	`
 }
 

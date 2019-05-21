@@ -47,7 +47,6 @@ export default ({
                     ? data && <DealsTable
                         deals={data.deals}
                         orgs={data.orgs}
-                        models={data.models}
                       />
                     : `Ошибка ${error.message}`
                   : <Dimmer

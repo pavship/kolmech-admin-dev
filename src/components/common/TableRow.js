@@ -8,6 +8,7 @@ import { getObjProp } from '../../utils/object'
 import { currency } from '../../utils/format'
 
 const Row = styled.tr`
+	vertical-align: unset;
 	font-size: 1rem;
 	border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 	:hover {

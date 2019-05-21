@@ -5,49 +5,55 @@ import styled from 'styled-components'
 import { Div } from '../../styled/styled-semantic';
 
 const Input = styled.input`
-  width: 129px;
+  width: 170px;
 `
 
 export default ({
+  notify,
   deal,
   batch,
-  upsertDeal
+  proc,
+  upsertDeal,
 }) => {
-  const { id: batchId, qty, model = {} } = batch
+  const { id: procId} = proc
+  const { id: batchId, model: { id: modelId } } = batch
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   useEffect(() => (editMode &&
     inputRef.current &&
     inputRef.current.focus()) || undefined)
-  const iniModelName = model.name || ''
-  const [ modelName, setModelName ] = useState(iniModelName)
+  const iniName = proc.name || ''
+  const [ name, setName ] = useState(iniName)
   if (editMode)
     return <Input
       ref={inputRef}
-      placeholder='Новое Изделие'
-      value={modelName}
-      onChange={({ target: { value }}) => setModelName(value)}
+      placeholder='Новый техпроцесс'
+      value={name}
+      onChange={({ target: { value }}) => setName(value)}
       onBlur={async () => {
-        if (modelName !== iniModelName && modelName !== '')
+        if (name !== iniName && name !== '')
           await upsertDeal({ variables: { input: {
             id: deal.id,
             batches: [
               ...deal.batches.map(({ id }) => ({ id })).filter(b => b.id !== batchId),
               {
                 id: batchId,
-                qty: qty || 0,
-                model: {
-                  ...(model.id !== 0) && { id: model.id },
-                  name: modelName,
-                }
+                procs: [
+                  ...batch.procs.map(({ id }) => ({ id })).filter(p => p.id !== procId),
+                  {
+                    ...(procId !== 0)
+                      ? { id: procId }
+                      : { modelId },
+                    name
+                  }
+                ]
               }
             ]
           }}})
-        // else setEditMode(false)
         setEditMode(false)
       }}
     />
-  else if (batchId === 0)
+  else if (procId === 0)
     return <Icon
       link
       name='plus'
@@ -57,9 +63,9 @@ export default ({
     return <Div
       ov='hidden'
       to='ellipsis'
-      br='1px solid rgba(34,36,38,0.15);'
+      // br='1px solid rgba(34,36,38,0.15);'
       onClick={() => setEditMode(true)}
     >
-      {model.name}
+      {proc.name}
     </Div>
 }

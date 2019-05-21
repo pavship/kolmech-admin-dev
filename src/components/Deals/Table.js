@@ -4,10 +4,16 @@ import { NotificationsConsumer } from '../notifications/NotificationsContext'
 
 import Table from '../common/Table'
 import TableRow from '../common/TableRow'
-import ModelsCell from './TableCells/Models'
+import Batches from './TableCells/Batches'
 import OrgCell from './TableCells/Org'
 
 // import styled from 'styled-components'
+
+// const Table = styled(STable)`
+//   tr {
+    
+//   }
+// `
 
 // const Container = styled.div`
 //   margin-top: 1rem;
@@ -21,17 +27,17 @@ import OrgCell from './TableCells/Org'
 
 const fields = [{
   name: 'edit',
-	width: '35px'
+	width: '5px'
 },{
   name: '#',
   path: 'amoId',
 	title: '#',
-	width: '145px'
+	width: '90px'
 },{
   name: 'date',
   path: 'date',
 	title: 'Дата',
-	width: '145px'
+	width: '80px'
 },{
   name: 'name',
   path: 'name',
@@ -69,7 +75,6 @@ const fields = [{
 export default ({
   deals,
   orgs,
-  models,
 }) => {
   //  TODO add CollectionUtils to support sorting
   return (
@@ -120,10 +125,9 @@ export default ({
                     },
                     {
                       name: 'models',
-                      content: <ModelsCell
+                      content: <Batches
                         notify={notify}
                         deal={deal}
-                        models={models}
                       />,
                     },
                     // {

@@ -20,7 +20,8 @@ const fields = [{
 	name: 'org',
 	path: 'org.name',
 	title: 'Организация',
-	width: '225px'
+	width: '225px',
+  truncated: true
 },{
 	name: 'emps',
 	path: 'org.name',
