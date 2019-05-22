@@ -10,6 +10,7 @@ import DealsTable from './Table'
 // import { Button, Icon } from '../styled/styled-semantic'
 import Menu from '../Menu'
 import { Dimmer, Loader } from 'semantic-ui-react'
+import { ContextProvider } from './contexts/DealsContext';
 
 const Container = styled.div`
   height: calc(100% - 36px);
@@ -44,10 +45,15 @@ export default ({
               <Container>
                 {!loading
                   ? !error
-                    ? data && <DealsTable
-                        deals={data.deals}
-                        orgs={data.orgs}
-                      />
+                    ? data && 
+                      <ContextProvider
+                        opTypes={data.opTypes}
+                      >
+                        <DealsTable
+                          deals={data.deals}
+                          orgs={data.orgs}
+                        />
+                      </ContextProvider>
                     : `Ошибка ${error.message}`
                   : <Dimmer
                       active

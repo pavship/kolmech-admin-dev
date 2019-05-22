@@ -2,46 +2,39 @@ import React from 'react'
 
 import styled from 'styled-components'
 
-import Proc from'./Proc'
-import Ops from './Op/Ops';
+import Op from'./Op'
 
 const Container = styled.div`
   :not(:last-child) {
 		border-bottom: 1px solid rgba(34,36,38,0.15);
 	}
+  background: rgba(0,0,0,.05);
 `
 
 export default ({
   notify,
   deal,
   batch,
+  proc,
   opTypes,
   upsertDeal
 }) => {
   return [
-    ...batch.procs,
+    ...proc.ops,
     { id: 0 }
-  ].map(proc =>
+  ].map(op =>
     <Container
-      key={proc.id}
+      key={op.id}
     >
-      <Proc
+      <Op
         notify={notify}
         deal={deal}
         batch={batch}
         proc={proc}
+        op={op}
+        opTypes={opTypes}
         upsertDeal={upsertDeal}
       />
-      {proc.id !== 0 &&
-        <Ops
-          notify={notify}
-          deal={deal}
-          batch={batch}
-          proc={proc}
-          opTypes={opTypes}
-          upsertDeal={upsertDeal}
-        />
-      }
     </Container>
   )
 }

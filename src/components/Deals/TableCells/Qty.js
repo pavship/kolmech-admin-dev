@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Div } from '../../styled/styled-semantic';
 
 const Input = styled.input`
-  width: 34px;
+  width: 40px;
 `
 
 export default ({

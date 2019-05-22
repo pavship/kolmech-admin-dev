@@ -35,7 +35,7 @@ export default ({
               ...deal.batches.map(({ id }) => ({ id })).filter(b => b.id !== batchId),
               {
                 id: batchId,
-                qty: qty || 0,
+                ...(batchId === 0) && { qty: 0 },
                 model: {
                   ...(model.id !== 0) && { id: model.id },
                   name: modelName,
@@ -57,7 +57,6 @@ export default ({
     return <Div
       ov='hidden'
       to='ellipsis'
-      br='1px solid rgba(34,36,38,0.15);'
       onClick={() => setEditMode(true)}
     >
       {model.name}

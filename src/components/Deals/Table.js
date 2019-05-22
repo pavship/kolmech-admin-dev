@@ -91,6 +91,7 @@ export default ({
               return (
                 <TableRow
                   key={id}
+                  lightRowHower
                   entity={deal}
                   tableFields={tableFields}
                   rowFields={[

@@ -11,7 +11,6 @@ import Procs from './Procs'
 
 const BatchContainer = styled.div`
   display: flex;
-  width: calc(170px + 170px);
 `
 
 export default ({
@@ -37,7 +36,8 @@ export default ({
     >
       {(upsertDeal, { loading: upserting }) => <BatchContainer>
         <Div
-          w='130px;'
+          w='130px'
+          br={batch.id !== 0 ? '1px solid rgba(34,36,38,0.15);' : undefined}
         >
           <Model
             deal={deal}
@@ -45,19 +45,19 @@ export default ({
             upsertDeal={upsertDeal}
           />
         </Div>
-        <Div
-          w='40px;'
-        >
-          <Qty
-            deal={deal}
-            batchId={batch.id}
-            qty={batch.qty || 0}
-            upsertDeal={upsertDeal}
-          />
-        </Div>
-        {batch.id !== 0 &&
+        {batch.id !== 0 && <>
           <Div
-            w='170px;'
+            w='40px;'
+          >
+            <Qty
+              deal={deal}
+              batchId={batch.id}
+              qty={batch.qty}
+              upsertDeal={upsertDeal}
+            />
+          </Div>
+          <Div
+            w='170px'
             z='100'
           >
             <Procs
@@ -67,7 +67,7 @@ export default ({
               upsertDeal={upsertDeal}
             />
           </Div>
-        }
+        </>}
       </BatchContainer>}
     </Mutation>
   </>

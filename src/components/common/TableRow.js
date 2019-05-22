@@ -11,10 +11,14 @@ const Row = styled.tr`
 	vertical-align: unset;
 	font-size: 1rem;
 	border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-	:hover {
-		background: rgb(242, 242, 242);
-		color: rgba(0,0,0,.95);
-	}
+	${props => !props.noRowHover && `
+		:hover {
+			background: ${props.lightRowHower
+				? 'rgb(250, 250, 250);'
+				: 'rgb(242, 242, 242)'};
+			color: rgba(0,0,0,.95);
+		}
+	`}
 	${props => !!props.onClick && `cursor: pointer;`}
 	${props => props.lineHeight && `
 		line-height: ${props.lineHeight};

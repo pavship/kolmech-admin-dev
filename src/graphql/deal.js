@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 import { dealStatusFragmentBasic, dealStatusFragmentFull } from './dealStatus'
 import { orgFragmentBasic } from './org'
 import { batchFragmentBasic } from './batch'
+import { opTypeFragmentBasic } from './opType';
 
 export const dealFragmentBasic = gql`
 	fragment DealFragmentBasic on Deal {
@@ -37,9 +38,11 @@ export const dealsPage = gql`
 	query Deals {
 		deals { ...DealFragmentMiddle }
 		orgs { ...OrgFragmentBasic }
+		opTypes { ...OpTypeFragmentBasic }
 	}
 	${dealFragmentMiddle}
 	${orgFragmentBasic}
+	${opTypeFragmentBasic}
 `
 
 export const connectDealToOrg = gql`
