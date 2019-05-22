@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { Query } from 'react-apollo'
-import { dealsPage } from '../../graphql/deal'
+import { Query, Mutation } from 'react-apollo'
+import { dealsPage, upsertDeal } from '../../graphql/deal'
 
 import { NotificationsConsumer } from '../notifications/NotificationsContext'
 
@@ -23,50 +23,71 @@ export default ({
   // const [activePayment, setActivePayment] = useState(null)
   return (
     <NotificationsConsumer>
-			{({ notify }) =>
-        <Query
-          query={dealsPage}
+      {({ notify }) =>
+        <Mutation
+          mutation={upsertDeal}
+          onCompleted={res => {
+            // console.log('res > ', res)
+            notify({
+              type: 'success',
+              title: 'Информация сохранена'
+            })
+          }}
           onError={err => notify({
             type: 'error',
-            title: 'Ошибка загрузки сделок',
+            title: 'Ошибка сохранения сделки',
             content: err.message,
           })}
         >
-          {({ loading,
-              error,
-              data,
-              refetch
-            }) => <>
-              <Menu
-                title='Сделки'
-                titleLinkTo='/deals'
-                refreshToken={refreshToken}
-              />
-              <Container>
-                {!loading
-                  ? !error
-                    ? data && 
-                      <ContextProvider
-                        opTypes={data.opTypes}
-                      >
-                        <DealsTable
-                          deals={data.deals}
-                          orgs={data.orgs}
-                        />
-                      </ContextProvider>
-                    : `Ошибка ${error.message}`
-                  : <Dimmer
-                      active
-                    >
-                      <Loader>
-                        Загрузка..
-                      </Loader>
-                    </Dimmer>
-                }
-              </Container>
-            </>
+          {(upsertDeal, { loading: upsertingDeal }) => 
+            <Query
+              query={dealsPage}
+              onError={err => notify({
+                type: 'error',
+                title: 'Ошибка загрузки сделок',
+                content: err.message,
+              })}
+            >
+              {({ loading,
+                  error,
+                  data,
+                  refetch
+                }) => <>
+                  <Menu
+                    title='Сделки'
+                    titleLinkTo='/deals'
+                    refreshToken={refreshToken}
+                  />
+                  <Container>
+                    {!loading
+                      ? !error
+                        ? data && 
+                          <ContextProvider
+                            opTypes={data.opTypes}
+                          >
+                            <DealsTable
+                              notify={notify}
+                              deals={data.deals}
+                              orgs={data.orgs}
+                              upsertDeal={upsertDeal}
+                              upsertingDeal={upsertingDeal}
+                            />
+                          </ContextProvider>
+                        : `Ошибка ${error.message}`
+                      : <Dimmer
+                          active
+                        >
+                          <Loader>
+                            Загрузка..
+                          </Loader>
+                        </Dimmer>
+                    }
+                  </Container>
+                </>
+              }
+            </Query>
           }
-        </Query>
+        </Mutation>
       }
     </NotificationsConsumer>
   )

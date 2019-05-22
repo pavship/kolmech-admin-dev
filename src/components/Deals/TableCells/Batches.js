@@ -14,7 +14,8 @@ const Container = styled.div`
 export default ({
   // isRowHovered,
   notify,
-  deal
+  deal,
+  upsertDeal
 }) => {
   return [
     // ...deal.batches.map(b => ({ ...b.model, batchId: b.id, qty: b.qty })),
@@ -28,6 +29,7 @@ export default ({
         notify={notify}
         deal={deal}
         batch={batch}
+        upsertDeal={upsertDeal}
       />
     </Container>
   )

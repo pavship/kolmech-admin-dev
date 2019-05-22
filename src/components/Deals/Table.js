@@ -1,29 +1,9 @@
 import React from 'react'
 
-import { NotificationsConsumer } from '../notifications/NotificationsContext'
-
 import Table from '../common/Table'
 import TableRow from '../common/TableRow'
 import Batches from './TableCells/Batches'
-import OrgCell from './TableCells/Org'
-
-// import styled from 'styled-components'
-
-// const Table = styled(STable)`
-//   tr {
-    
-//   }
-// `
-
-// const Container = styled.div`
-//   margin-top: 1rem;
-//   max-height: 100%;
-//   border: 1px solid rgba(34,36,38,.15);
-//   border-radius: 0.285714rem;
-//   .fz-tableHeaderRow {
-//     border-top: none !important;
-//   }
-// `
+import Org from './TableCells/Org'
 
 const fields = [{
   name: 'edit',
@@ -73,78 +53,49 @@ const fields = [{
 }]
 
 export default ({
+  notify,
   deals,
   orgs,
+  upsertDeal,
+  upsertingDeal
 }) => {
-  //  TODO add CollectionUtils to support sorting
   return (
-    // <Container>
-    <NotificationsConsumer>
-      {({ notify }) =>
-        <Table
-          fields={fields}
-        >
-          {({ tableFields }) => 
-            deals.map(deal => {
-              const { id } = deal
-              // const { id, amoId, name, status } = deal
-              return (
-                <TableRow
-                  key={id}
-                  lightRowHower
-                  entity={deal}
-                  tableFields={tableFields}
-                  rowFields={[
-                    // {
-                    //   name: 'edit',
-                    //   icon: 'edit',
-                    //   iconColor: 'grey',
-                    //   hoverable: true,
-                    //   hideUnhovered: true,
-                    //   hasEntries: false,
-                    //   value: ' ',
-                    //   onClick: () => onClickRow(id),
-                    //   active: activePayment
-                    //     && activePayment.id === id
-                    // },
-                    // {
-                    //   name: 'dateLocal',
-                    //   value: dateLocal.slice(0,16).replace('T', ' '),
-                    // },
-                    // {
-                    //   name: 'counterparty',
-                    //   path: person ? 'person.amoName' : 'org.name',
-                    // },
-                    {
-                      name: 'counterparty',
-                      content: <OrgCell
-                        notify={notify}
-                        deal={deal}
-                        orgs={orgs}
-                      />,
-                      truncated: true
-                    },
-                    {
-                      name: 'models',
-                      content: <Batches
-                        notify={notify}
-                        deal={deal}
-                      />,
-                    },
-                    // {
-                    //   name: 'amount',
-                    //   value: isIncome ? amount : -amount,
-                    //   color: isIncome ? '#016936' : '#9f3a38'
-                    // }
-                  ]}
-                  // onClick={() => onClickRow(id)}
-                />
-              )
-            }
-          )}
-        </Table>
-      }
-    </NotificationsConsumer>
-    // </Container>
+    <Table
+      fields={fields}
+    >
+      {({ tableFields }) => 
+        deals.map(deal => {
+          const { id } = deal
+          return (
+            <TableRow
+              key={id}
+              lightRowHower
+              entity={deal}
+              tableFields={tableFields}
+              rowFields={[
+                {
+                  name: 'counterparty',
+                  content: <Org
+                    deal={deal}
+                    orgs={orgs}
+                    upsertDeal={upsertDeal}
+                    upsertingDeal={upsertingDeal}
+                  />,
+                  truncated: true
+                },
+                {
+                  name: 'models',
+                  content: <Batches
+                    notify={notify}
+                    deal={deal}
+                    upsertDeal={upsertDeal}
+                  />,
+                }
+              ]}
+            />
+          )
+        }
+      )}
+    </Table>
   )
 }

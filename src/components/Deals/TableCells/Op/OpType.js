@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import { Icon } from 'semantic-ui-react'
 
 import styled from 'styled-components'
-import { Div } from '../../../styled/styled-semantic';
+import { Div, Icon } from '../../../styled/styled-semantic';
 import DealsContext from '../../contexts/DealsContext';
 
 const Select = styled.select`
@@ -25,7 +24,7 @@ export default ({
   useEffect(() => (editMode &&
     inputRef.current &&
     inputRef.current.focus()) || undefined)
-  const iniTypeId = (opType && opType.id) || undefined
+  const iniTypeId = (opType && opType.id) || 0
   const [ opTypeId, setTypeId ] = useState(iniTypeId)
   if (editMode)
     return <Select
@@ -33,7 +32,7 @@ export default ({
         value={opTypeId}
         onChange={({ target: { value }}) => setTypeId(value)}
         onBlur={async () => {
-          if (opTypeId !== iniTypeId && opTypeId !== undefined)
+          if (opTypeId !== iniTypeId && opTypeId !== 0)
             await upsertDeal({ variables: { input: {
               id: deal.id,
               batches: [
@@ -60,12 +59,13 @@ export default ({
           setEditMode(false)
         }}
       >
-        {opTypes.map(({ id, name }) =>
+        {[{ id: 0, name: '' }, ...opTypes].map(({ id, name }) =>
           <option key={id} value={id}>{name}</option>
         )}
       </Select>
   else if (opId === 0)
     return <Icon
+      ml='6px'
       color='grey'
       link
       name='plus'
@@ -75,8 +75,8 @@ export default ({
     return <Div
       ov='hidden'
 			to='ellipsis'
-			pl='4px'
-      // br='1px solid rgba(34,36,38,0.15);'
+			pl='6px'
+      br='1px solid rgba(34,36,38,0.15);'
       // onClick={() => setEditMode(true)} //block editing
     >
       {op.opType.name}
