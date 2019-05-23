@@ -12,7 +12,7 @@ import { syncWithTochkaPayments } from '../../graphql/tochka'
 import { NotificationsConsumer } from '../notifications/NotificationsContext'
 import { Button, Icon } from '../styled/styled-semantic'
 import { Route, Link, matchPath } from 'react-router-dom'
-import Menu from '../Menu';
+import Menu from '../Menu'
 
 const Container = styled.div`
   height: calc(100% - 36px);

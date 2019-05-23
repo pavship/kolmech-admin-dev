@@ -14,8 +14,8 @@ import { Icon, Button, Span } from '../../styled/styled-semantic'
 import CollapsableSection from '../../CollapsableSection'
 import SortableDrawingsList from './Drawings/Sortable'
 import SortedCollectionProvider from './Drawings/SortedCollectionProvider'
-import StatefulList from '../../special/StatefulList'
-import StatefulBool from '../../special/StatefulBool'
+import StatefulList from '../../context/StatefulList'
+import StatefulBool from '../../context/StatefulBool'
 
 const DropzoneArea = styled.div`
   position: relative;

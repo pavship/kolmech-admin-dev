@@ -54,6 +54,14 @@ export const connectDealToOrg = gql`
 	${dealFragmentMiddle}
 `
 
+export const syncDeals = gql`
+	mutation syncDeals {
+		syncDeals {
+			count
+		}
+	}
+`
+
 export const upsertDeal = gql`
 	mutation upsertDeal($input: DealInput!) {
 		upsertDeal(input: $input) {

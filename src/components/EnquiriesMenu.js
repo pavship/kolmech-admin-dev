@@ -6,7 +6,7 @@ import { Button } from './styled/styled-semantic'
 import Menu from './Menu'
 import EnquiriesSubmenu from './EnquiriesSubmenu'
 
-import GlobalContext from './special/GlobalContext'
+import GlobalContext from './context/GlobalContext'
 
 const EnquiriesMenu = ({
 	refetchEnquiries,

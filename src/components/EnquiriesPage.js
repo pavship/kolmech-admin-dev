@@ -12,7 +12,7 @@ import EnquiriesTable from './EnquiriesTable'
 import DetailsSidebar from './DetailsSidebar'
 import PanelPusher from './common/PanelPusher';
 import EnquiriesBottomPanel from './EnquiriesBottomPanel';
-import GlobalContext from './special/GlobalContext';
+import GlobalContext from './context/GlobalContext';
 
 const Pushable = styled(Sidebar.Pushable)`
 	min-height: calc(100vh - 36px) !important;

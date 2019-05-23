@@ -7,10 +7,9 @@ import { NotificationsConsumer } from '../notifications/NotificationsContext'
 
 import styled from 'styled-components'
 import DealsTable from './Table'
-// import { Button, Icon } from '../styled/styled-semantic'
-import Menu from '../Menu'
+import Menu from './Menu'
 import { Dimmer, Loader } from 'semantic-ui-react'
-import { ContextProvider } from './contexts/DealsContext';
+import { ContextProvider } from './context/DealsContext';
 
 const Container = styled.div`
   height: calc(100% - 36px);
@@ -54,9 +53,11 @@ export default ({
                   refetch
                 }) => <>
                   <Menu
+                    notify={notify}
                     title='Сделки'
                     titleLinkTo='/deals'
                     refreshToken={refreshToken}
+                    refetchDeals={refetch}
                   />
                   <Container>
                     {!loading

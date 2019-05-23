@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Icon } from 'semantic-ui-react'
 
 import styled from 'styled-components'
-import { Div } from '../../styled/styled-semantic';
+import { Div, Icon } from '../../styled/styled-semantic';
 
 const Input = styled.input`
   width: 129px;
@@ -43,7 +42,6 @@ export default ({
               }
             ]
           }}})
-        // else setEditMode(false)
         setEditMode(false)
       }}
     />
@@ -51,6 +49,7 @@ export default ({
     return <Icon
       link
       name='plus'
+      // c='rgba(50,50,50,.87)'
       onClick={() => setEditMode(true)}
     />
   else

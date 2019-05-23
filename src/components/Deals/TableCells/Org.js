@@ -1,22 +1,45 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 
 import { Icon, Dropdown } from 'semantic-ui-react'
 import { Div } from '../../styled/styled-semantic';
+
+import styled from 'styled-components'
+import DiskContext from '../../context/DiskContext';
+
+const MenuButton = styled.div`
+  .dropdown {
+    width: 30px;
+    text-align: center;
+  }
+  .icon {
+    margin: 0;
+    color: rgba(50,50,50,.87);
+  }
+  transition: background .3s ease;
+  :hover {
+    background: rgba(0,0,0,.12);
+    .icon {
+      opacity: 1 !important;
+    }
+  }
+`
 
 export default ({
   // isRowHovered,
   deal,
   orgs,
   upsertDeal,
-  upsertingDeal
+  upsertingDeal,
+  // highlightFolder
 }) => {
   const { id: dealId, org } = deal
   const orgId = (org && org.id) || 0
+  const { highlightFolder } = useContext(DiskContext)
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   useEffect(() => (editMode && inputRef.current &&
     inputRef.current.toggle()) || undefined)
-    // const [isHovered, setIsHovered] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
   const options = orgs
     .map(o => ({key:o.id, value: o.id, text: o.name}))
   if (editMode)
@@ -28,7 +51,6 @@ export default ({
       value={orgId}
       onBlur={() => setEditMode(false)}
       onChange={async (e, { value: orgId }) => {
-        // if (orgId !== iniOrgId && orgId !== 0)
           await upsertDeal({ variables: { input: {
             id: dealId,
             orgId
@@ -48,14 +70,38 @@ export default ({
       onClick={() => setEditMode(true)}
     />
   else
-    return <>
+    return <Div
+      d='flex'
+      onMouseEnter={() => setIsHovered(true)}
+			onMouseLeave={() => setIsHovered(false)}
+    >
       <Div
         ov='hidden'
         to='ellipsis'
+        w={isHovered ? '170px' : undefined}
+        fw={isHovered ? 'bold' : undefined}
         onClick={() => setEditMode(true)} //block editing
       >
         {org && org.name}
       </Div>
-
-    </>
+      {isHovered &&
+        <MenuButton>
+          <Dropdown
+            icon={{
+              name: 'bars',
+              link: true
+            }}
+            direction='left'
+          >
+            <Dropdown.Menu>
+              <Dropdown.Item
+                icon='folder'
+                text='Move to folder'
+                onClick={() => highlightFolder({ orgId })}
+              />
+            </Dropdown.Menu>
+          </Dropdown>
+        </MenuButton>
+      }
+    </Div>
 }

@@ -2,7 +2,7 @@ import React from 'react'
 
 import styled from 'styled-components'
 
-import GlobalContext from './special/GlobalContext'
+import GlobalContext from './context/GlobalContext'
 import DetailsDataProvider from './DetailsDataProvider'
 import DetailsMainHeader from './DetailsMainHeader'
 import EnquiryDetails from './EnquiryDetails'

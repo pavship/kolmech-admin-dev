@@ -11,7 +11,7 @@ import { graphql, compose } from 'react-apollo'
 import { enquiryDetails, newEnquiry, createEnquiryEvent, 
 	enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
 
-import GlobalContext from './special/GlobalContext'
+import GlobalContext from './context/GlobalContext'
 
 import WrappedDraftEditor from './common/WrappedDraftEditor'
 import { sanitize } from 'dompurify'

@@ -8,13 +8,13 @@ import { Query } from 'react-apollo'
 import { modelLocal } from '../graphql/model'
 import { modelProds } from '../graphql/prod'
 
-import GlobalContext from './special/GlobalContext'
+import GlobalContext from './context/GlobalContext'
 import DetailsHeader from './DetailsHeader'
 import ProdsByDept from './ProdsByDept'
 import ProdTableUtils from './ProdTableUtils'
 import DeptProdTable from './DeptProdTable'
-import ListProvider from './special/ListProvider';
-import OrderContext from './special/OrderContext';
+import ListProvider from './context/ListProvider';
+import OrderContext from './context/OrderContext';
 
 const Container = styled.div`
 	width: 40%;

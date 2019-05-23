@@ -5,13 +5,13 @@ import { reserveProds } from '../graphql/order'
 
 import { Section, Button, Message } from './styled/styled-semantic'
 
-import GlobalContext from './special/GlobalContext'
+import GlobalContext from './context/GlobalContext'
 import CollapsableSection from './CollapsableSection'
 import ProdsByDept from './ProdsByDept';
 import DeptProdTable from './DeptProdTable';
 import ReserveProdsButton from './ReserveProdsButton'
 // import ListProvider from './special/ListProvider'
-import ProdContext from './special/ProdContext'
+import ProdContext from './context/ProdContext'
 
 const ModelProdsSection = ({
   order: { id, model, qty, prods }

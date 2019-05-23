@@ -9,7 +9,7 @@ import { graphql, compose } from 'react-apollo'
 import { getLayout, getLayoutOptions, setLayout } from '../graphql/layout'
 import { enquiryLocal } from '../graphql/enquiry'
 
-import GlobalContext from './special/GlobalContext'
+import GlobalContext from './context/GlobalContext'
 
 const SubmenuDiv = styled.div`
 	align-self: stretch;

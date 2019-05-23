@@ -6,7 +6,7 @@ import { orgEmployees } from '../graphql/employee'
 import styled from 'styled-components'
 
 import { Message } from './styled/styled-semantic';
-import GlobalContext from './special/GlobalContext'
+import GlobalContext from './context/GlobalContext'
 import EmployeesPanelHeader from './Employee/PanelHeader'
 import EmployeeDetails from './Employee/Details'
 import EmployeeEdit from './Employee/Edit'

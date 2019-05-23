@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 
 import styled from 'styled-components'
-import { Div, Icon } from '../../../styled/styled-semantic';
-import DealsContext from '../../contexts/DealsContext';
+import { Div, Icon } from '../../../styled/styled-semantic'
+import DealsContext from '../../context/DealsContext'
 
 const Select = styled.select`
   width: 130px;
@@ -66,7 +66,8 @@ export default ({
   else if (opId === 0)
     return <Icon
       ml='6px'
-      color='grey'
+			// color='grey'
+			c='rgba(50,50,50,.87)'
       link
       name='plus'
       onClick={() => setEditMode(true)}

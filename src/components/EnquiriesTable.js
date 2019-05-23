@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import GlobalContext from './special/GlobalContext'
+import GlobalContext from './context/GlobalContext'
 
 import Table from './common/Table'
 import TableRow from './common/TableRow'

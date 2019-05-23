@@ -57,7 +57,8 @@ export default ({
   deals,
   orgs,
   upsertDeal,
-  upsertingDeal
+  upsertingDeal,
+  // highlightFolder
 }) => {
   return (
     <Table
@@ -80,6 +81,7 @@ export default ({
                     orgs={orgs}
                     upsertDeal={upsertDeal}
                     upsertingDeal={upsertingDeal}
+                    // highlightFolder={highlightFolder}
                   />,
                   truncated: true
                 },
