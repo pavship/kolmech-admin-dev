@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import { Button } from './styled/styled-semantic'
 
@@ -42,7 +42,7 @@ const DetailsMainHeader = ({
 				/>
 			}
 			{ id && // existing entity
-				<Fragment>
+				<>
 					<DetailsHeaderTitle
 						title={type === 'Model'
 							? name
@@ -69,7 +69,7 @@ const DetailsMainHeader = ({
 							})}
 						/> 
 					</DetailsHeaderButtons>
-				</Fragment>
+				</>
 			}
 		</DetailsHeaderContainer>
 	)

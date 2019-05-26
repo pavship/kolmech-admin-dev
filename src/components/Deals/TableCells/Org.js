@@ -30,7 +30,9 @@ export default ({
   orgs,
   upsertDeal,
   upsertingDeal,
-  // highlightFolder
+  // highlightFolder,
+  details,
+  setDetails
 }) => {
   const { id: dealId, org } = deal
   const orgId = (org && org.id) || 0
@@ -64,11 +66,12 @@ export default ({
       noResultsMessage='Если не найдено, добавьте организацию на странице Платежи'
     />
   else if (orgId === 0)
-    return <Icon
-      link
-      name='plus'
-      onClick={() => setEditMode(true)}
-    />
+    return null
+    // return <Icon
+    //   link
+    //   name='plus'
+    //   onClick={() => setEditMode(true)}
+    // />
   else
     return <Div
       d='flex'
@@ -80,7 +83,7 @@ export default ({
         to='ellipsis'
         w={isHovered ? '170px' : undefined}
         fw={isHovered ? 'bold' : undefined}
-        onClick={() => setEditMode(true)} //block editing
+        // onClick={() => setEditMode(true)} //block editing
       >
         {org && org.name}
       </Div>
@@ -96,8 +99,14 @@ export default ({
             <Dropdown.Menu>
               <Dropdown.Item
                 icon='folder'
-                text='Move to folder'
+                text='Обнаружить папку'
                 onClick={() => highlightFolder({ orgId })}
+              />
+              <Dropdown.Item
+                icon='newspaper outline'
+                text='Реквизиты'
+                // onClick={() => highlightFolder({ orgId })}
+                onClick={() => setDetails({ id: orgId, type: 'Org' })}
               />
             </Dropdown.Menu>
           </Dropdown>

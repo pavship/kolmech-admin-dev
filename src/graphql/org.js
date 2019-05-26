@@ -8,6 +8,13 @@ export const orgFragmentBasic = gql`
 	}
 `
 
+export const orgFragmentFull = gql`
+	fragment OrgFragmentFull on Org {
+		...OrgFragmentBasic
+	}
+	${orgFragmentBasic}
+`
+
 export const org = gql`
 	query org ($id: ID!) {
 		org (id: $id) {
@@ -38,8 +45,17 @@ export const createOrg = gql`
 export const orgLocal = gql`
 	query OrgLocal ($id: ID!) {
 		orgLocal (id: $id) {
-			id
-			name
+			...OrgFragmentBasic
 		}
 	}
+	${orgFragmentBasic}
+`
+
+export const orgDetails = gql`
+	query org ($id: ID!) {
+		model (id: $id) {
+			...OrgFragmentFull
+		}
+	}
+	${orgFragmentFull}
 `

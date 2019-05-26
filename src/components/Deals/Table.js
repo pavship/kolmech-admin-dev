@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import Table from '../common/Table'
 import TableRow from '../common/TableRow'
 import Batches from './TableCells/Batches'
 import Org from './TableCells/Org'
+import DetailsContext from '../Details/Provider'
 
 const fields = [{
   name: 'edit',
@@ -60,6 +61,7 @@ export default ({
   upsertingDeal,
   // highlightFolder
 }) => {
+  const { details, setDetails } = useContext(DetailsContext)
   return (
     <Table
       fields={fields}
@@ -81,6 +83,8 @@ export default ({
                     orgs={orgs}
                     upsertDeal={upsertDeal}
                     upsertingDeal={upsertingDeal}
+                    details={details}
+                    setDetails={setDetails}
                     // highlightFolder={highlightFolder}
                   />,
                   truncated: true

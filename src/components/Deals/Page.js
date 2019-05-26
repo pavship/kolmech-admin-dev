@@ -10,6 +10,7 @@ import DealsTable from './Table'
 import Menu from './Menu'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import { ContextProvider } from './context/DealsContext';
+import { DetailsProvider } from '../Details/Provider';
 
 const Container = styled.div`
   height: calc(100% - 36px);
@@ -59,31 +60,35 @@ export default ({
                     refreshToken={refreshToken}
                     refetchDeals={refetch}
                   />
-                  <Container>
-                    {!loading
-                      ? !error
-                        ? data && 
-                          <ContextProvider
-                            opTypes={data.opTypes}
+                  <DetailsProvider>
+                    {/* {({ details, setDetails }) => <> */}
+                      {!loading
+                        ? !error
+                          ? data && 
+                            <ContextProvider
+                              opTypes={data.opTypes}
+                            >
+                              <DealsTable
+                                notify={notify}
+                                deals={data.deals}
+                                orgs={data.orgs}
+                                upsertDeal={upsertDeal}
+                                upsertingDeal={upsertingDeal}
+                              />
+                            </ContextProvider>
+                          : `Ошибка ${error.message}`
+                        : <Dimmer
+                            active
                           >
-                            <DealsTable
-                              notify={notify}
-                              deals={data.deals}
-                              orgs={data.orgs}
-                              upsertDeal={upsertDeal}
-                              upsertingDeal={upsertingDeal}
-                            />
-                          </ContextProvider>
-                        : `Ошибка ${error.message}`
-                      : <Dimmer
-                          active
-                        >
-                          <Loader>
-                            Загрузка..
-                          </Loader>
-                        </Dimmer>
-                    }
-                  </Container>
+                            <Loader>
+                              Загрузка..
+                            </Loader>
+                          </Dimmer>
+                      }
+                    {/* </>} */}
+                  </DetailsProvider>
+                  {/* <Container>
+                  </Container> */}
                 </>
               }
             </Query>
