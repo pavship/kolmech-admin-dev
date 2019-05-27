@@ -42,6 +42,15 @@ export const createOrg = gql`
 	${orgFragmentBasic}
 `
 
+export const mergeOrg = gql`
+	mutation mergeOrg($id: ID!, $inn: String!) {
+		mergeOrg(id: $id, inn: $inn) {
+			...OrgFragmentFull
+		}
+	}
+	${orgFragmentFull}
+`
+
 export const orgLocal = gql`
 	query OrgLocal ($id: ID!) {
 		orgLocal (id: $id) {

@@ -5,22 +5,21 @@ import { dealsPage, upsertDeal } from '../../graphql/deal'
 
 import { NotificationsConsumer } from '../notifications/NotificationsContext'
 
-import styled from 'styled-components'
+// import styled from 'styled-components'
 import DealsTable from './Table'
 import Menu from './Menu'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import { ContextProvider } from './context/DealsContext';
 import { DetailsProvider } from '../Details/Provider';
 
-const Container = styled.div`
-  height: calc(100% - 36px);
-  position: relative;
-`
+// const Container = styled.div`
+//   height: calc(100% - 36px);
+//   position: relative;
+// `
 
 export default ({
   refreshToken
 }) => {
-  // const [activePayment, setActivePayment] = useState(null)
   return (
     <NotificationsConsumer>
       {({ notify }) =>
@@ -61,7 +60,6 @@ export default ({
                     refetchDeals={refetch}
                   />
                   <DetailsProvider>
-                    {/* {({ details, setDetails }) => <> */}
                       {!loading
                         ? !error
                           ? data && 
@@ -85,10 +83,7 @@ export default ({
                             </Loader>
                           </Dimmer>
                       }
-                    {/* </>} */}
                   </DetailsProvider>
-                  {/* <Container>
-                  </Container> */}
                 </>
               }
             </Query>

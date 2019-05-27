@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import styled from 'styled-components'
 import posed, { PoseGroup } from 'react-pose'
-import OrgDetails from './Org/Details';
+import OrgDetails from '../Org/Details/Details';
 
 const Container = styled.div`
   height: calc(100% - 36px);
@@ -39,6 +39,7 @@ export const DetailsProvider = ({
   children
 }) => {
   const [ details, setDetails ] = useState(null)
+  // const [ details, setDetails ] = useState({ type: 'Org', id: 'cjvzvp08a01470752jlibcg6j' })
   return (
     <DetailsContext.Provider
       value={{ details, setDetails }}

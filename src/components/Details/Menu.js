@@ -8,7 +8,7 @@ const Container = styled.div`
 	display: flex;
 	align-items: center;
 	width: 100%;
-  height: 35px;
+  height: 46px;
 	padding-right: 1em;
 	/* border-bottom: 1px solid #7e7e81; */
 	/* border-bottom: 1px solid rgba(34,36,38,.15); */
@@ -41,7 +41,7 @@ export default ({
 			{title &&
 				<Div
 					ml='10px'
-					fs='1rem'
+					fs='1.28571429rem'
 					fw='bold'
 					// c='rgba(0,0,0,.6)'
 					// ws='0.5em'

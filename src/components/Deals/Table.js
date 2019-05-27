@@ -83,9 +83,7 @@ export default ({
                     orgs={orgs}
                     upsertDeal={upsertDeal}
                     upsertingDeal={upsertingDeal}
-                    details={details}
                     setDetails={setDetails}
-                    // highlightFolder={highlightFolder}
                   />,
                   truncated: true
                 },

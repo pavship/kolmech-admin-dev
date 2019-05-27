@@ -30,8 +30,6 @@ export default ({
   orgs,
   upsertDeal,
   upsertingDeal,
-  // highlightFolder,
-  details,
   setDetails
 }) => {
   const { id: dealId, org } = deal
