@@ -8,7 +8,7 @@ import { Query } from 'react-apollo'
 import { me } from '../graphql/user'
 
 import LoginPage from './LoginPage'
-import EnquiriesPage from './EnquiriesPage'
+import EnquiriesPage from './Enquiry/EnquiriesPage'
 import PaymentsPage from './Payments/Page'
 import DealsPage from './Deals/Page'
 

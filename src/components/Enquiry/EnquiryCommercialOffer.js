@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react'
 
 import { Header, Form, Message, Button, Divider } from 'semantic-ui-react'
-import { Div, A, Label, Section } from './styled/styled-semantic'
+import { Div, A, Label, Section } from '../styled/styled-semantic'
 
-import LocalDatePicker from './common/LocalDatePicker'
-import CurrencyInput from './common/CurrencyInput'
-import SmartForm from './common/SmartForm'
+import LocalDatePicker from '../common/LocalDatePicker'
+import CurrencyInput from '../common/CurrencyInput'
+import SmartForm from '../common/SmartForm'
 
-import { toLocalISOString } from '../utils/dates'
+import { toLocalISOString } from '../../utils/dates'
 
 class EnquiryCommercialOffer extends Component {
 	render() {

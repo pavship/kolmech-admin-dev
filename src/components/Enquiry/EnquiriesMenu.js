@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { Icon } from 'semantic-ui-react'
-import { Button } from './styled/styled-semantic'
+import { Button } from '../styled/styled-semantic'
 
-import Menu from './Menu'
+import Menu from '../Menu'
 import EnquiriesSubmenu from './EnquiriesSubmenu'
 
-import GlobalContext from './context/GlobalContext'
+import GlobalContext from '../context/GlobalContext'
 
 const EnquiriesMenu = ({
 	refetchEnquiries,

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Div } from './styled/styled-semantic'
+import { Div } from '../styled/styled-semantic'
 
 const DetailsHeaderButtons = ({ children }) => {
 	return (

@@ -1,15 +1,15 @@
 import React from 'react'
 
 import { Icon, Popup as SPopup } from 'semantic-ui-react'
-import { Div, Header, Button, Popup } from './styled/styled-semantic'
+import { Div, Header, Button, Popup } from '../styled/styled-semantic'
 import styled from 'styled-components'
 
 import { Query } from 'react-apollo'
 import { graphql, compose } from 'react-apollo'
-import { getLayout, getLayoutOptions, setLayout } from '../graphql/layout'
-import { enquiryLocal } from '../graphql/enquiry'
+import { getLayout, getLayoutOptions, setLayout } from '../../graphql/layout'
+import { enquiryLocal } from '../../graphql/enquiry'
 
-import GlobalContext from './context/GlobalContext'
+import GlobalContext from '../context/GlobalContext'
 
 const SubmenuDiv = styled.div`
 	align-self: stretch;

@@ -2,22 +2,22 @@ import React, { Component, Fragment } from 'react'
 
 import styled from 'styled-components'
 // TODO use List instead of entity-table
-import { Table, Tr, Td, InputTd, EditorTd } from './styled/entity-table'
+import { Table, Tr, Td, InputTd, EditorTd } from '../styled/entity-table'
 import { Header as SHeader, Icon, Label, Form, Comment, 
 	Message, Dropdown } from 'semantic-ui-react'
-import { P, Div, Button, Section } from './styled/styled-semantic'
+import { P, Div, Button, Section } from '../styled/styled-semantic'
 
 import { graphql, compose } from 'react-apollo'
 import { enquiryDetails, newEnquiry, createEnquiryEvent, 
-	enquiryFragment, allEnquiries, updateEnquiry } from '../graphql/enquiry'
+	enquiryFragment, allEnquiries, updateEnquiry } from '../../graphql/enquiry'
 
-import GlobalContext from './context/GlobalContext'
+import GlobalContext from '../context/GlobalContext'
 
-import WrappedDraftEditor from './common/WrappedDraftEditor'
+import WrappedDraftEditor from '../common/WrappedDraftEditor'
 import { sanitize } from 'dompurify'
-import { currency } from '../utils/format'
+import { currency } from '../../utils/format'
 
-import EnquiryEdit from './Enquiry/Edit'
+import EnquiryEdit from './Edit'
 import EnquiryCommercialOffer from './EnquiryCommercialOffer'
 
 const SDropdown = styled(Dropdown)`

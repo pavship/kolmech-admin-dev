@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react'
 
-import GlobalContext from './context/GlobalContext'
+import GlobalContext from '../context/GlobalContext'
 
-import Table from './common/Table'
-import TableRow from './common/TableRow'
-import { Div, Icon } from './styled/styled-semantic'
+import Table from '../common/Table'
+import TableRow from '../common/TableRow'
+import { Div, Icon } from '../styled/styled-semantic'
 
 const fields = [{
 	name: 'num',

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 
 import styled from 'styled-components'
-import { Section, Div } from './styled/styled-semantic';
+import { Section, Div } from '../styled/styled-semantic';
 
-import DetailsHeader from './DetailsHeader'
+import DetailsHeader from '../DetailsOld/DetailsHeader'
 import posed, { PoseGroup } from 'react-pose'
 
 const OuterSection = styled(Section)`

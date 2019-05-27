@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Span } from './styled/styled-semantic'
+import { Span } from '../styled/styled-semantic'
 
 const DetailsHeaderSubitle = ({ content }) => {
 	return (

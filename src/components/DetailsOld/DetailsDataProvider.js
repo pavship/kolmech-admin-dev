@@ -1,8 +1,8 @@
 import { compose, graphql } from 'react-apollo'
 
-import { enquiryDetails, enquiryLocal } from '../graphql/enquiry'
-import { orderDetails, orderLocal } from '../graphql/order'
-import { modelDetails, modelLocal } from '../graphql/model'
+import { enquiryDetails, enquiryLocal } from '../../graphql/enquiry'
+import { orderDetails, orderLocal } from '../../graphql/order'
+import { modelDetails, modelLocal } from '../../graphql/model'
 
 const DetailsDataProvider = ({
   children,

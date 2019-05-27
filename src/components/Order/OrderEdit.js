@@ -1,18 +1,18 @@
 import React, { Component, Fragment } from 'react'
 
 import { Form, Button, Message } from 'semantic-ui-react'
-import { Div, Span, A, Label, Section } from './styled/styled-semantic.js'
+import { Div, Span, A, Label, Section } from '../styled/styled-semantic.js'
 
 import { graphql, compose } from 'react-apollo'
-import { orderLocal, upsertOrder } from '../graphql/order'
-import { allEnquiries } from '../graphql/enquiry'
+import { orderLocal, upsertOrder } from '../../graphql/order'
+import { allEnquiries } from '../../graphql/enquiry'
 
-import { toLocalISOString } from '../utils/dates'
+import { toLocalISOString } from '../../utils/dates'
 
-import LocalDatePicker from './common/LocalDatePicker'
-import CurrencyInput from './common/CurrencyInput'
-import SmartForm from './common/SmartForm'
-import SmartInput from './common/SmartInput'
+import LocalDatePicker from '../common/LocalDatePicker'
+import CurrencyInput from '../common/CurrencyInput'
+import SmartForm from '../common/SmartForm'
+import SmartInput from '../common/SmartInput'
 
 class OrderEdit extends Component {
 	componentIsMounted = true

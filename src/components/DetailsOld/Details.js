@@ -2,13 +2,13 @@ import React from 'react'
 
 import styled from 'styled-components'
 
-import GlobalContext from './context/GlobalContext'
+import GlobalContext from '../context/GlobalContext'
 import DetailsDataProvider from './DetailsDataProvider'
 import DetailsMainHeader from './DetailsMainHeader'
-import EnquiryDetails from './EnquiryDetails'
-import OrderEdit from './OrderEdit'
-import OrderDetails from './OrderDetails'
-import ModelDetails from './Model/Details'
+import EnquiryDetails from '../Enquiry/EnquiryDetails'
+import OrderEdit from '../Order/OrderEdit'
+import OrderDetails from '../Order/OrderDetails'
+import ModelDetails from '../Model/Details'
 
 const Container = styled.div`
 	/* flex-grow: 1; */

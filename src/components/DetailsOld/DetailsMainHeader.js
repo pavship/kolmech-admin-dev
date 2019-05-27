@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { Button } from './styled/styled-semantic'
+import { Button } from '../styled/styled-semantic'
 
 import DetailsHeaderContainer from './DetailsHeaderContainer'
 import DetailsHeaderTitle from './DetailsHeaderTitle'
 import DetailsHeaderButtons from './DetailsHeaderButtons'
-import RefreshButton from './common/RefreshButton'
+import RefreshButton from '../common/RefreshButton'
 
 const settings = {
 	Enquiry: {

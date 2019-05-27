@@ -2,9 +2,9 @@ import React from 'react'
 
 import styled from 'styled-components'
 import { Icon } from 'semantic-ui-react'
-import { Button } from './styled/styled-semantic'
+import { Button } from '../styled/styled-semantic'
 
-import GlobalContext from './context/GlobalContext'
+import GlobalContext from '../context/GlobalContext'
 
 const IconRight = styled(Icon)`
   &&&& { margin: 0 -.42857143em 0 .42857143em; }

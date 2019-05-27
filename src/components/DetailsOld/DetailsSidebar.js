@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
 import { graphql, compose } from 'react-apollo'
-import { getLayout, getLayoutOptions, setLayout } from '../graphql/layout'
+import { getLayout, getLayoutOptions, setLayout } from '../../graphql/layout'
 
 import styled from 'styled-components'
 import { Sidebar, Ref } from 'semantic-ui-react';

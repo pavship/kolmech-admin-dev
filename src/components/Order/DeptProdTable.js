@@ -2,8 +2,8 @@ import React, { Fragment } from 'react'
 
 import cloneDeep from 'lodash/cloneDeep'
 
-import Table from './common/Table'
-import TableRow from './common/TableRow'
+import Table from '../common/Table'
+import TableRow from '../common/TableRow'
 
 const defaultFields = [{
 	name: 'name',

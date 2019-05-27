@@ -2,19 +2,19 @@ import React, { Fragment } from 'react'
 
 import styled from 'styled-components'
 import { Icon } from 'semantic-ui-react'
-import { Section } from '../components/styled/styled-semantic'
+import { Section } from '../styled/styled-semantic'
 
 import { Query } from 'react-apollo'
-import { modelLocal } from '../graphql/model'
-import { modelProds } from '../graphql/prod'
+import { modelLocal } from '../../graphql/model'
+import { modelProds } from '../../graphql/prod'
 
-import GlobalContext from './context/GlobalContext'
+import GlobalContext from '../context/GlobalContext'
 import DetailsHeader from './DetailsHeader'
-import ProdsByDept from './ProdsByDept'
-import ProdTableUtils from './ProdTableUtils'
-import DeptProdTable from './DeptProdTable'
-import ListProvider from './context/ListProvider';
-import OrderContext from './context/OrderContext';
+import ProdsByDept from '../Order/ProdsByDept'
+import ProdTableUtils from '../Order/ProdTableUtils'
+import DeptProdTable from '../Order/DeptProdTable'
+import ListProvider from '../context/ListProvider';
+import OrderContext from '../context/OrderContext';
 
 const Container = styled.div`
 	width: 40%;
