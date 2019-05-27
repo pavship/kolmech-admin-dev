@@ -1,8 +1,8 @@
 import React from 'react'
 
 import styled from 'styled-components'
-import { Div } from '../styled/styled-semantic';
-import { Icon } from 'semantic-ui-react';
+import { Div } from '../../styled/styled-semantic'
+import LeftIcon from './LeftIcon'
 
 const Container = styled.div`
 	display: flex;
@@ -22,39 +22,26 @@ export default ({
 }) => {
   return (
 		<Container>
-			<Div
-				w='55px'
-				ta='center'
-			>
-				<Icon 
-					link
-					size='big'
-					name='cancel'
-					onClick={() => setDetails(null)}
-				/>
-				{/* <SCaret
-					size='large'
-					active={expanded ? 1 : 0}
-					disabled={disabled}
-				/> : null */}
-			</Div>
+			<LeftIcon
+				size='big'
+				name='cancel'
+				onClick={() => setDetails(null)}
+			/>
 			{title &&
 				<Div
-					ml='10px'
 					fs='1.28571429rem'
 					fw='bold'
-					// c='rgba(0,0,0,.6)'
-					// ws='0.5em'
 				>
 					{title}
 				</Div>
 			}
 			{subtitle &&
 				<Div
+					mt='4px'
 					ml='10px'
 					fs='1rem'
 					c='rgba(0,0,0,.6)'
-					ws='0.5em'
+					ws='0.1em'
 				>
 					{subtitle}
 				</Div>

@@ -9,6 +9,7 @@ import posed, { PoseGroup } from 'react-pose'
 const OuterSection = styled(Section)`
   & {
     width: 100%;
+    position: relative;
     padding: 0;
     ${props => props.expanded && `{
       margin-top: -1px;
@@ -36,7 +37,6 @@ class CollapsableSection extends Component {
   expand = () => this.setState({ expanded: true })
   render() {
     const {
-
       children,
       disabled,
       forceExpanded,

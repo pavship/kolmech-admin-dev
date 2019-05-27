@@ -1,14 +1,16 @@
 import React from 'react'
-import Menu from '../../Details/Menu'
+import Menu from '../../Details/Menu/Menu'
 import { Query } from 'react-apollo'
 import { orgLocal, orgDetails } from '../../../graphql/org'
 import { NotificationsConsumer } from '../../notifications/NotificationsContext'
 import InnForm from './InnForm'
-import Requisites from './Requisites';
+import Requisites from './Requisites'
+import Contract from './Contract'
 
 export default ({
   details: {
-    id
+		id,
+		section
   },
   setDetails
 }) => {
@@ -23,7 +25,8 @@ export default ({
             ? <>
                 <Menu
                   setDetails={setDetails}
-                  title={orgLocal.name}
+									title={orgLocal.name}
+									subtitle={orgLocal.inn && `ИНН: ${orgLocal.inn}`}
                 />
                 {orgLocal.inn
                   ? <Query
@@ -38,9 +41,16 @@ export default ({
 											{({ data: { orgDetails }, loading }) =>
 												loading ? 'Загрузка..' :
 												orgDetails
-													?	<Requisites
-															org={orgDetails}
-														/>
+													?	<>
+															<Requisites
+																org={orgDetails}
+															/>
+															<Contract
+																notify={notify}
+																org={orgDetails}
+																initiallyExpanded={section === 'contract'}
+															/>
+														</>
 													: null
                       }
                     </Query>

@@ -61,8 +61,8 @@ export const orgLocal = gql`
 `
 
 export const orgDetails = gql`
-	query org ($id: ID!) {
-		model (id: $id) {
+	query orgDetails ($id: ID!) {
+		orgDetails (id: $id) {
 			...OrgFragmentFull
 		}
 	}

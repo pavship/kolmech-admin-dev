@@ -103,8 +103,13 @@ export default ({
               <Dropdown.Item
                 icon='newspaper outline'
                 text='Реквизиты'
-                // onClick={() => highlightFolder({ orgId })}
                 onClick={() => setDetails({ id: orgId, type: 'Org' })}
+              />
+              <Dropdown.Item
+                icon='file alternate outline'
+                text='Создать договор'
+                onClick={() => setDetails({ id: orgId, type: 'Org', section: 'contract' })}
+                disabled={!org.inn}
               />
             </Dropdown.Menu>
           </Dropdown>
