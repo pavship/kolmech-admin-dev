@@ -18,11 +18,6 @@ const OuterSection = styled(Section)`
   }
 `
 
-const PosedDetailsHeader = posed(DetailsHeader)({
-  visible: { opacity: 1 },
-  invisible: { opacity: 0 }
-})
-
 const InnerSection = styled(posed(Section)({
   enter: { y: 0 },
   exit: { y: '-100%' },
@@ -39,24 +34,24 @@ export default ({
   children,
   initiallyExpanded,
   disabled,
-  headerInvisible,
   forceExpanded,
-  overflowVisible,
+  headerModes,
   mode,
   ...headerProps,
 }) => {
-  const [ expanded, expand ] = useState(false)
-  useEffect(() => expand(
-    !!initiallyExpanded
-    || (!disabled && (forceExpanded || this.state.expanded))
-  ), [initiallyExpanded, disabled, forceExpanded])
+  const [ expanded, expand ] = useState(!!initiallyExpanded
+    || (!disabled && (forceExpanded || this.state.expanded)))
+  useEffect(() => expand(!!initiallyExpanded
+    || (!disabled && (forceExpanded || this.state.expanded))),
+  [initiallyExpanded, disabled, forceExpanded])
   return (
     <OuterSection
       expanded={expanded ? 1 : 0}
       topBorder={expanded}
       bottomBorder={expanded}
     >
-      <PosedDetailsHeader
+
+      <DetailsHeader
         {...headerProps}
         expanded={expanded}
         bottomBorder={expanded && 'dark'}
@@ -66,10 +61,9 @@ export default ({
           !forceExpanded
           && (() => expand(!expanded))
         }
-        pose={headerInvisible ? 'invisible' : 'visible'}
       />
       <Div
-        oy={overflowVisible ? undefined : 'hidden'}
+        oy='hidden'
       >
         <PoseGroup>
           {expanded &&

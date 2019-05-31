@@ -5,6 +5,7 @@ import { Section, Div } from '../styled/styled-semantic';
 
 import DetailsHeader from '../DetailsOld/DetailsHeader'
 import posed, { PoseGroup } from 'react-pose'
+import { animated, useTransition } from 'react-spring'
 
 const OuterSection = styled(Section)`
   & {
@@ -17,11 +18,6 @@ const OuterSection = styled(Section)`
     }`}
   }
 `
-
-const PosedDetailsHeader = posed(DetailsHeader)({
-  visible: { opacity: 1 },
-  invisible: { opacity: 0 }
-})
 
 const InnerSection = styled(posed(Section)({
   enter: { y: 0 },
@@ -39,37 +35,45 @@ export default ({
   children,
   initiallyExpanded,
   disabled,
-  headerInvisible,
   forceExpanded,
-  overflowVisible,
-  mode,
+  headerModes,
+  mode: modeProp,
   ...headerProps,
 }) => {
-  const [ expanded, expand ] = useState(false)
-  useEffect(() => expand(
-    !!initiallyExpanded
-    || (!disabled && (forceExpanded || this.state.expanded))
-  ), [initiallyExpanded, disabled, forceExpanded])
+  const [ expanded, expand ] = useState(!!initiallyExpanded
+    || (!disabled && (forceExpanded || this.state.expanded)))
+  useEffect(() => expand(!!initiallyExpanded
+    || (!disabled && (forceExpanded || this.state.expanded))),
+  [initiallyExpanded, disabled, forceExpanded])
+  const [ mode, setMode ] = useState(modeProp)
+  useEffect(() => setMode(modeProp), [modeProp])
+  const transitions = useTransition(mode, null, {
+    from: { opacity: 0 }, enter: { opacity: 1 }, leave: { opacity: 0 },
+  })
+  console.log('mode > ', mode)
   return (
     <OuterSection
       expanded={expanded ? 1 : 0}
       topBorder={expanded}
       bottomBorder={expanded}
     >
-      <PosedDetailsHeader
-        {...headerProps}
-        expanded={expanded}
-        bottomBorder={expanded && 'dark'}
-        disabled={forceExpanded}
-        titleSize='small'
-        onClick={
-          !forceExpanded
-          && (() => expand(!expanded))
-        }
-        pose={headerInvisible ? 'invisible' : 'visible'}
-      />
+      {transitions.map(({ mode, key, props }) => 
+        mode === null ? <DetailsHeader
+          key={key}
+          style={props}
+          {...headerProps}
+          expanded={expanded}
+          bottomBorder={expanded && 'dark'}
+          disabled={forceExpanded}
+          titleSize='small'
+          onClick={
+            !forceExpanded
+            && (() => expand(!expanded))
+          }
+        /> : headerModes[mode](key, props)
+      )}
       <Div
-        oy={overflowVisible ? undefined : 'hidden'}
+        oy='hidden'
       >
         <PoseGroup>
           {expanded &&

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
-// import { Mutation } from 'react-apollo'
-// import { mergeOrg } from '../../../graphql/org'
-// import { Input } from 'semantic-ui-react'
-// import { Div } from '../../styled/styled-semantic'
+import { Mutation } from 'react-apollo'
+import { createContract } from '../../../graphql/org'
 import styled from 'styled-components'
-import posed, { PoseGroup } from 'react-pose'
-import { useSpring, animated, useTransition } from 'react-spring'
+import { animated, useTransition } from 'react-spring'
 import CollapsableSection from '../../presentational/CollapsableSection'
 import { Icon, Div } from '../../styled/styled-semantic'
-import LeftIcon from '../../Details/Menu/LeftIcon';
+import LeftIcon from '../../Details/Menu/LeftIcon'
+import Field from '../../form/Field'
+import { toLocalDateString } from '../../../utils/dates'
 
 const MenuOverlay = styled(animated.div)`
   position: absolute;
@@ -17,6 +16,7 @@ const MenuOverlay = styled(animated.div)`
   right: 0;
   left: 0;
   height: 48px;
+  padding-right: 0.7em;
   display: flex;
   align-items: center;
   background-color: rgba(255,255,255,1);
@@ -32,86 +32,85 @@ export default ({
   const transitions = useTransition(createMode, null, {
     from: { opacity: 0 }, enter: { opacity: 1 }, leave: { opacity: 0 },
   })
+  const [ date, setDate ] = useState(toLocalDateString(new Date()))
   return <>
-    <CollapsableSection
-      initiallyExpanded={initiallyExpanded}
-      // title='Договор'
-      title={'Договор ' + createMode}
-      buttons={<>
-        <Icon link 
-          // circular
-          activeColor='green'
-          name='plus'
-          onClick={e => {
-            e.stopPropagation()
-            console.log('setCreateMode > ', setCreateMode) ||setCreateMode(true)
-            notify({
-              type: 'warning',
-              content: 'Чтобы загрузить файлы, перетащите их в раздел',
-            })
-          }}
-          // loading={creating}
-        />
-      </>}
-    >
-      {transitions.map(({ item, key, props }) => 
-        item && 
-          <MenuOverlay
-            key={key}
-            style={props}
-          >
-            <LeftIcon
-              size='large'
-              name='cancel'
-              onClick={() => setCreateMode(false)}
-            />
-            <Div
-              fs='1.1em'
-              c='rgba(0,0,0,.75)'
-              fw='700'
-            >
-              Создание договора
-            </Div>
-            {/* <Icon
-              name='download'
-              size='large'
-              c='black'
-              onClick={() => setCreateMode(false)}
-            /> */}
-          </MenuOverlay>
-      )}
-        
-      <div>ldskfjlkj</div>
-    </CollapsableSection>
-    {/* <Mutation
-      mutation={mergeOrg}
-      variables={{ id }}
-      onCompleted={() => {
-        // refetchPersons()
+    <Mutation
+      mutation={createContract}
+      onCompleted={res => {
+        // console.log('res > ', res)
         notify({
           type: 'success',
-          title: 'ИНН присвоен'
+          title: 'Договор добавлен'
         })
       }}
-      onError={err => notify({
-        type: 'error',
-        title: 'Ошибка присвоения ИНН',
-        content: err.message,
-      })}
     >
-      {( mergeOrg, { loading } ) =>
-        <Div
-          p='1em 1em 1em 55px'
+      {( createContract, { loading } ) =>
+        <CollapsableSection
+          initiallyExpanded={initiallyExpanded}
+          // title='Договор'
+          title='Договор'
+          overflowVisible
+          buttons={<>
+            <Icon link
+              // circular
+              activeColor='green'
+              name='plus'
+              onClick={e => {
+                e.stopPropagation()
+                setCreateMode(true)
+                // notify({
+                //   type: 'warning',
+                //   content: 'Чтобы загрузить файлы, перетащите их в раздел',
+                // })
+              }}
+              // loading={creating}
+            />
+          </>}
         >
-          <Input
-            value={val}
-            onChange={(e, { value }) => setVal(value)}
-            placeholder='ИНН'
-            onBlur={() => mergeOrg({ variables: { id, inn: val } })}
-            loading={loading}
-          />
-        </Div>
+          {transitions.map(({ item, key, props }) => 
+            item && 
+              <MenuOverlay
+                key={key}
+                style={props}
+              >
+                <LeftIcon
+                  size='large'
+                  name='check'
+                  color='green'
+                  onClick={async () =>
+                    await createContract({ variables: { id: org.id, date } })
+                    && setCreateMode(false)
+                  }
+                />
+                <Div
+                  fs='1.1em'
+                  c='rgba(0,0,0,.75)'
+                  fw='700'
+                >
+                  Создание договора
+                </Div>
+                <Icon link
+                  name='cancel'
+                  ml='auto'
+                  size='large'
+                  onClick={() => setCreateMode(false)}
+                />
+            </MenuOverlay>
+          )}
+            
+          <Div
+            p='1em 1em 1em 55px'
+          >
+            <Field
+              label='Дата договора'
+              type='date'
+              value={date}
+              onChange={date => setDate(date)}
+            />
+          </Div>
+        </CollapsableSection>
+
       }
-    </Mutation> */}
+    </Mutation>
   </>
 }

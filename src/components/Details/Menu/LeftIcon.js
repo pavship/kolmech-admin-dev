@@ -1,20 +1,14 @@
 import React from 'react'
-import { Div } from '../../styled/styled-semantic'
-import { Icon } from 'semantic-ui-react'
+import { Div, Icon } from '../../styled/styled-semantic'
+// import { Icon } from 'semantic-ui-react'
 
-export default ({
-  name,
-  size,
-  onClick
-}) =>
+export default props =>
   <Div
     w='55px'
     ta='center'
   >
     <Icon
       link
-      size={size}
-      name={name}
-      onClick={onClick}
+      {...props}
     />
   </Div>

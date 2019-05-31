@@ -7,7 +7,7 @@ import { syncWithAmoContacts } from '../../graphql/amo'
 import { Formik } from 'formik'
 import { projectEntity, preparePayload } from '../form/utils'
 import { formikSchema, validationSchema } from '../../schema/payment'
-import Field from '../form/Field'
+import Field from '../form/FormikField'
 
 import { NotificationsConsumer } from '../notifications/NotificationsContext'
 

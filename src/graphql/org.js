@@ -33,6 +33,14 @@ export const allOrgs = gql`
 	${orgFragmentBasic}
 `
 
+export const createContract = gql`
+	mutation createContract($id: ID!, $date: String) {
+		createContract(id: $id, date: $date) {
+			statusText
+		}
+	}
+`
+
 export const createOrg = gql`
 	mutation createOrg($inn: String!) {
 		createOrg(inn: $inn) {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 
 import styled from 'styled-components'
 import { Icon } from 'semantic-ui-react'
@@ -19,7 +19,7 @@ const SCaret = styled(Caret)`
 	}
 `
 
-const DetailsHeaderContainer = ({
+export default forwardRef(({
 	children,
 	// style
 	size,
@@ -29,13 +29,14 @@ const DetailsHeaderContainer = ({
 	disabled,
 	onClick,
 	noIndent,
-}) => {
+}, ref) => {
 	const modes = {
 		...close && { close: true },
 		...(typeof expanded !== 'undefined') && { expand: true },
 	}
 	return (
 		<Section
+			ref={ref}
 			bc='white'
 			head
 			noLP
@@ -61,6 +62,4 @@ const DetailsHeaderContainer = ({
 			{children}
 		</Section>
 	)
-}
-
-export default DetailsHeaderContainer
+})
