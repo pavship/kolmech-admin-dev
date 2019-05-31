@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect, useContext } from 'react'
 
 import { Icon, Dropdown } from 'semantic-ui-react'
-import { Div } from '../../styled/styled-semantic';
+import { Div } from '../../styled/styled-semantic'
 
 import styled from 'styled-components'
-import DiskContext from '../../context/DiskContext';
+import DiskContext from '../../context/DiskContext'
 
 const MenuButton = styled.div`
   .dropdown {

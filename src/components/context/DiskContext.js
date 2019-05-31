@@ -15,8 +15,8 @@ export const DiskProvider = ({
       {(highlightFolder) =>
         <DiskContext.Provider
           value={{
-            highlightFolder: ({ orgId }) => highlightFolder({
-              variables: { orgId }
+            highlightFolder: ({ orgId, dealId }) => highlightFolder({
+              variables: { orgId, dealId }
             })
           }}
         >

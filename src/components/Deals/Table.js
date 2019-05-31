@@ -5,6 +5,7 @@ import TableRow from '../common/TableRow'
 import Batches from './TableCells/Batches'
 import Org from './TableCells/Org'
 import DetailsContext from '../Details/Provider'
+import Deal from './TableCells/Deal'
 
 const fields = [{
   name: 'edit',
@@ -20,8 +21,7 @@ const fields = [{
 	title: 'Дата',
 	width: '80px'
 },{
-  name: 'name',
-  path: 'name',
+  name: 'deal',
 	title: 'Наименование',
   width: '180px',
   truncated: true
@@ -76,6 +76,13 @@ export default ({
               entity={deal}
               tableFields={tableFields}
               rowFields={[
+                {
+                  name: 'deal',
+                  content: <Deal
+                    deal={deal}
+                  />,
+                  truncated: true
+                },
                 {
                   name: 'counterparty',
                   content: <Org
