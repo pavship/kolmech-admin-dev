@@ -33,10 +33,11 @@ export default ({
             batches: [
               ...deal.batches.map(({ id }) => ({ id })).filter(b => b.id !== batchId),
               {
-                id: batchId,
-                ...(batchId === 0) && { qty: 0 },
+                ...(batchId === 0)
+                  ? { qty: 0 }
+                  : { id: batchId },
                 model: {
-                  ...(model.id !== 0) && { id: model.id },
+                  ...(model.id !== undefined) && { id: model.id },
                   name: modelName,
                 }
               }

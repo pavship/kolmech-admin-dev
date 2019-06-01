@@ -32,7 +32,7 @@ export class NotificationsProvider extends Component {
       <NotificationsContext.Provider
         value={{
           state: this.state,
-          create: this.create,
+          notify: this.create,
           dismiss: this.dismiss,
           cancelAutoDismiss: this.cancelAutoDismiss
         }}
@@ -45,7 +45,7 @@ export class NotificationsProvider extends Component {
 
 export const NotificationsConsumer = ({ children }) => (
   <NotificationsContext.Consumer>
-    {({ create: notify }) =>
+    {({ notify }) =>
       <PureChild notify={notify} >
         {children}
       </PureChild>

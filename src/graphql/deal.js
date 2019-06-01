@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { dealStatusFragmentBasic, dealStatusFragmentFull } from './dealStatus'
 import { orgFragmentBasic } from './org'
-import { batchFragmentBasic } from './batch'
+import { batchFragmentBasic, batchFragmentMiddle } from './batch'
 import { opTypeFragmentBasic } from './opType';
 
 export const dealFragmentBasic = gql`
@@ -27,12 +27,48 @@ export const dealFragmentMiddle = gql`
 
 export const dealFragmentFull = gql`
 	fragment DealFragmentFull on Deal {
-		...DealFragmentBasic
-    status { ...DealStatusFragmentFull } 
+		...DealFragmentMiddle
+    status { ...DealStatusFragmentFull }
 	}
-	${dealFragmentBasic}
+	${dealFragmentMiddle}
 	${dealStatusFragmentFull}
 `
+
+export const CODetails = gql`
+	query deal ($id: ID!) {
+		deal (id: $id) {
+			id
+			batches { ...BatchFragmentMiddle}
+		}
+	}
+	${batchFragmentMiddle}
+`
+
+export const createCO = gql`
+	mutation createCO($id: ID!, $date: String) {
+		createCO(id: $id, date: $date) {
+			statusText
+		}
+	}
+`
+
+// export const orgLocal = gql`
+// 	query OrgLocal ($id: ID!) {
+// 		orgLocal (id: $id) {
+// 			...OrgFragmentBasic
+// 		}
+// 	}
+// 	${orgFragmentBasic}
+// `
+
+// export const orgDetails = gql`
+// 	query orgDetails ($id: ID!) {
+// 		orgDetails (id: $id) {
+// 			...OrgFragmentFull
+// 		}
+// 	}
+// 	${orgFragmentFull}
+// `
 
 export const dealsPage = gql`
 	query Deals {

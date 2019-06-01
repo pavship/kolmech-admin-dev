@@ -27,7 +27,7 @@ const MenuButton = styled.div`
 export default ({
   deal
 }) => {
-  const { id: dealId } = deal
+  const { id: dealId, amoId } = deal
   const { highlightFolder } = useContext(DiskContext)
   const [isHovered, setIsHovered] = useState(false)
   return <Div
@@ -53,6 +53,13 @@ export default ({
           direction='left'
         >
           <Dropdown.Menu>
+            <Dropdown.Header>
+              <a
+                target="_blank" rel="noopener noreferrer" 
+                href={`https://kolomnatutamailcom.amocrm.ru/leads/detail/${amoId}`}
+              >AmoCRM</a>
+            </Dropdown.Header>
+            <Dropdown.Divider />
             <Dropdown.Item
               icon='folder'
               text='Обнаружить папку'

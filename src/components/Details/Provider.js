@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 
 import styled from 'styled-components'
 import posed, { PoseGroup } from 'react-pose'
-import OrgDetails from '../Org/Details/Details';
+import OrgDetails from '../Org/Details/Details'
+import CODetails from '../CO/Detail/Detail'
 
 const Container = styled.div`
   height: calc(100% - 36px);
@@ -23,7 +24,7 @@ const Sidebar = styled(posed.div({
   }
 }))`
   position: absolute;
-  z-index: 1;
+  z-index: 100;
   top: 1px;
   right: 0;
   width: 600px;
@@ -53,11 +54,14 @@ export const DetailsProvider = ({
             <Sidebar key='1'
               // pose={isOpen ? 'open' : 'closed'}
             >
-							{details.type === 'Org'
-								?	<OrgDetails
-										details={details}
-										setDetails={setDetails}
-									/>
+							{ details.type === 'Org' ?	<OrgDetails
+                  details={details}
+                  setDetails={setDetails}
+                /> :
+                details.type === 'CO' ?	<CODetails
+                  details={details}
+                  setDetails={setDetails}
+                />
 								: null
 							}
             </Sidebar>

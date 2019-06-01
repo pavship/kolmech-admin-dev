@@ -1,7 +1,7 @@
 import React from 'react'
 
 import styled from 'styled-components'
-import { Div } from '../../styled/styled-semantic'
+import { Div, Icon } from '../../styled/styled-semantic'
 import LeftIcon from './LeftIcon'
 
 const Container = styled.div`
@@ -19,6 +19,7 @@ export default ({
 	title,
 	subtitle,
 	setDetails,
+	onSubmit
 }) => {
   return (
 		<Container>
@@ -45,6 +46,15 @@ export default ({
 				>
 					{subtitle}
 				</Div>
+			}
+			{onSubmit &&
+				<Icon link
+					name='check'
+					ml='auto'
+					color='green'
+					size='big'
+					onClick={onSubmit}
+				/>
 			}
 		</Container>
 	)

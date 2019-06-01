@@ -106,6 +106,11 @@ export default ({
                 onClick={() => setDetails({ id: orgId, type: 'Org' })}
               />
               <Dropdown.Item
+                icon='file alternate'
+                text='Создать КП'
+                onClick={() => setDetails({ id: dealId, type: 'CO' })}
+              />
+              <Dropdown.Item
                 icon='file alternate outline'
                 text='Создать договор'
                 onClick={() => setDetails({ id: orgId, type: 'Org', section: 'contract' })}
