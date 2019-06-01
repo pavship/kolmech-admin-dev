@@ -2,18 +2,6 @@ import { useState, useContext, useEffect } from 'react'
 import { useQuery as useQueryProto, useMutation as useHookMutation } from 'react-apollo-hooks'
 import NotificationsContext from '../notifications/NotificationsContext'
 
-// export const useQuery = (query, errMessage) => {
-//   const { notify } = useContext(NotificationsContext)
-//   const { client } = useContext(ApolloConsumer)
-//   const { data, loading, error } = useQueryProto(query)
-//   if (error) notify({
-//     type: 'error',
-//     title: errMessage || 'Ошибка загрузки данных',
-//     content: error.message,
-//   })
-//   return { data, loading }
-// }
-
 export function useQuery(
   query,
   {
@@ -56,7 +44,6 @@ export function useMutation(
   const [called, setCalled] = useState(false)
   const [error, setError] = useState(null)
   const [data, setData] = useState(null)
-
   const mutate = useHookMutation(mutation, options)
   const handler = async (...args) => {
     setLoading(true)
@@ -86,7 +73,6 @@ export function useMutation(
       })
     }
   }
-
   return [
     handler,
     {
