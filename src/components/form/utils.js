@@ -1,4 +1,4 @@
-import { cloneDeep } from "apollo-utilities";
+import produce from 'immer'
 
 export const projectEntity = (entity, schema) => {
 	let result = {}
@@ -72,7 +72,6 @@ const handlePayloadArr = (arrSchema, initialArr, arr, resultArr) => {
 
 export const getStructure = obj => {
 	const result = {}
-	// getSkeleton(cloneDeep(obj), result)
 	getSkeleton(obj, result)
 	return result
 }
@@ -100,3 +99,51 @@ const getArrSkeleton = arr => arr
 		getSkeleton(obj, result)
 		return result
 	})
+
+const analysePath = (path, acc = []) => {
+	console.log('path, acc > ', path, acc)
+	const dotPos = path.indexOf('.')
+	const braketPos = path.indexOf('[')
+	if (dotPos*braketPos === 1) return [
+		...acc, {
+		key: path,
+		last: true
+	}]
+	if (braketPos === -1 || dotPos < braketPos) return analysePath(
+		path.slice(dotPos + 1), [
+			...acc, {
+				key: path.slice(0, dotPos)
+			}
+	])
+	if (dotPos === -1 || braketPos < dotPos) {
+		const closingBraketPos = path.indexOf(']')
+		return analysePath(
+			path.slice(closingBraketPos + 2), [
+				...acc, {
+					key: path.slice(0, braketPos),
+					array: true
+				}, {
+					key: path.slice(braketPos + 1, closingBraketPos),
+					arrayItem: true
+				}
+		])
+	}
+}
+
+export const produceNested = (obj, path, val) => {
+	const keys = analysePath(path)
+	return produce(obj, draft => {
+		keys.reduce((draft, { key, last, array, arrayItem }) => {
+			if (!arrayItem) Object.keys(draft).forEach(k => {
+				if (k === 'id' || k === key) return
+				delete draft[k]
+			})
+			if (last) return draft[key] = val
+			if (!draft[key]) {
+				if (array) draft[key] = []
+				else draft[key] = {}
+			}
+			return draft[key]
+		}, draft)
+	})
+}

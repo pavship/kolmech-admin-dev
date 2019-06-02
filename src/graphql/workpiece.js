@@ -3,9 +3,10 @@ import { drawingFragmentBasic } from './drawing';
 
 export const workpieceFragmentBasic = gql`
 	fragment WorkpieceFragmentBasic on Workpiece {
-		id
-    name
+    id
+    hardness
     material
+    name
 	}
 `
 

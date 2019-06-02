@@ -9,13 +9,13 @@ const Input = styled.input`
 `
 
 export default ({
-  value: propValue = '',
+  value: propValue,
 	onChange,
 	...rest
 }) => {
   const input = useRef(null)
   const [ value, setValue ] = useState('')
-  useEffect(() => setValue(propValue), [propValue])
+  useEffect(() => setValue(propValue || ''), [propValue])
 	return (
 		<Input
       {...rest}

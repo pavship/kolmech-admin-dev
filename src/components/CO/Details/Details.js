@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import Menu from '../../Details/Menu/Menu'
+import { Menu } from '../../Details/Menu/Menu'
 import { useMutation, useQuery } from '../../hooks/apolloHooks'
 import {
-  CODetails,
+  CODetails as CODq,
   createCO as cCOq
 } from '../../../graphql/deal'
 import { toLocalDateString } from '../../../utils/dates'
@@ -10,17 +10,14 @@ import { Dimmer, Loader } from 'semantic-ui-react'
 import { Div } from '../../styled/styled-semantic'
 import Field from '../../form/Field'
 import { upsertBatch as uBq } from '../../../graphql/batch'
-import { getStructure } from '../../form/utils'
-import produce from 'immer';
+import { getStructure, produceNested } from '../../form/utils'
+import produce from 'immer'
 
-export default ({
+export const CODetails = ({
   details: { id },
   setDetails
 }) => {
-  const { loading, data } = useQuery(CODetails, { 
-    variables: { id },
-    errMsg: 'query error!'
-  })
+  const { loading, data } = useQuery(CODq, { variables: { id } })
   const [ createCO ] = useMutation(cCOq, { variables: { id } })
   const [ upsertBatch ] = useMutation(uBq)
   const [ date, setDate ] = useState(toLocalDateString(new Date()))
@@ -58,7 +55,12 @@ export default ({
           const {
             name: wpName,
             material,
+            hardness,
+            drawing: wpDrw
           } = wp || {}
+          const {
+            name: wpDrwName
+          } = wpDrw || {}
           const batchStructure = getStructure(b)
           console.log('batchStructure > ', batchStructure)
           return <div key={id}>
@@ -66,39 +68,38 @@ export default ({
             <Field
               label='Чертеж'
               value={drwName}
-              onChange={value => value !== drwName &&
-                upsertBatch({ variables: {
-                  input: produce(batchStructure, draft => {
-                    const drw = draft.model.drawings[0]
-                    if (drw) drw.name = value
-                      else draft.model.drawings = [{ name: value }]
-                  })
-              }})}
+              onChange={value => upsertBatch({ input:
+                produceNested(batchStructure, 'model.drawings[0].name', value)
+              })}
             />
             <Field
               label='Заготовка'
               value={wpName}
-              onChange={value => value !== wpName &&
-                upsertBatch({ variables: {
-                  input: produce(batchStructure, draft => {
-                    const wp = draft.workpiece
-                    if (wp) wp.name = value
-                      else draft.workpiece = { name: value }
-                  })
-              }})}
+              onChange={value => upsertBatch({ input:
+                produceNested(batchStructure, 'workpiece.name', value)
+              })}
             />
             <Field
               label='Чертеж'
               indent
+              value={wpDrwName}
+              onChange={value => upsertBatch({ input:
+                produceNested(batchStructure, 'workpiece.drawing.name', value)
+              })}
+            />
+            <Field
+              label='Материал'
               value={material}
-              onChange={value => value !== material &&
-                upsertBatch({ variables: {
-                  input: produce(batchStructure, draft => {
-                    const wp = draft.workpiece
-                    if (wp) wp.material = value
-                      else draft.workpiece = { material: value }
-                  })
-              }})}
+              onChange={value => upsertBatch({ input:
+                produceNested(batchStructure, 'workpiece.material', value)
+              })}
+            />
+            <Field
+              label='Твердость'
+              value={hardness}
+              onChange={value => upsertBatch({ input:
+                produceNested(batchStructure, 'workpiece.hardness', value)
+              })}
             />
           </div>
         })}

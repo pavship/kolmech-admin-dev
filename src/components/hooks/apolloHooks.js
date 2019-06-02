@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { useQuery as useQueryProto, useMutation as useHookMutation } from 'react-apollo-hooks'
-import NotificationsContext from '../notifications/NotificationsContext'
+import NotificationsContext, { useNotifications } from '../notifications/NotificationsContext'
 
 export function useQuery(
   query,
@@ -12,7 +12,8 @@ export function useQuery(
     ...options
   } = {},
 ) {
-  const { notify } = useContext(NotificationsContext)
+  // const { notify } = useContext(NotificationsContext)
+  const { notify } = useNotifications()
   const { data, loading, error } = useQueryProto(query, options)
   useEffect(() => {
     if (onCompleted && !loading && !error) {
@@ -39,24 +40,25 @@ export function useMutation(
     ...options
   } = {}
 ) {
-  const { notify } = useContext(NotificationsContext)
+  // const { notify } = useContext(NotificationsContext)
+  const { notify } = useNotifications()
   const [loading, setLoading] = useState(false)
   const [called, setCalled] = useState(false)
   const [error, setError] = useState(null)
   const [data, setData] = useState(null)
   const mutate = useHookMutation(mutation, options)
-  const handler = async (...args) => {
+  const handler = async (variables, rest) => {
     setLoading(true)
     setCalled(true)
     setError(null)
     setData(null)
     try {
-      const { data } = await mutate(...args)
+      const { data } = await mutate({ variables, ...rest })
       setData(data)
       setLoading(false)
       if (onCompleted) {
         onCompleted(data)
-      } else notify({
+      } else console.log('should notify with > ', notify) || notify({
         type: 'success',
         title: successMsg || 'Данные сохранены',
       })

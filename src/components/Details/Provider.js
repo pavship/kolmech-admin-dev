@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 
 import styled from 'styled-components'
 import posed, { PoseGroup } from 'react-pose'
-import OrgDetails from '../Org/Details/Details'
-import CODetails from '../CO/Detail/Detail'
+import { OrgDetails } from '../Org/Details/Details'
+import { CODetails } from '../CO/Details/Details'
 
 const Container = styled.div`
   height: calc(100% - 36px);

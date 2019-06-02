@@ -15,7 +15,7 @@ const Container = styled.div`
 	border-bottom: 1px solid rgba(152, 153, 154, 1);
 `
 
-export default ({
+export const Menu = ({
 	title,
 	subtitle,
 	setDetails,

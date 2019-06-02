@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useContext, useMemom, useCallback } from 'react'
 import produce from 'immer'
 import cuid from 'cuid'
 
@@ -55,4 +55,11 @@ export const NotificationsConsumer = ({ children }) => (
 
 const PureChild = React.memo(({ notify, children }) => children({ notify }))
 
+export const useNotifications = () => {
+  const { notify } = useContext(NotificationsContext)
+  return {
+    // notify: useMemo(notify, [])
+    notify: useCallback((msg) => notify(msg), [])
+  }
+}
 
