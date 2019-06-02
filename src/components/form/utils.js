@@ -1,3 +1,5 @@
+import { cloneDeep } from "apollo-utilities";
+
 export const projectEntity = (entity, schema) => {
 	let result = {}
 	handleObj(schema, entity, result)
@@ -67,3 +69,34 @@ const handlePayloadArr = (arrSchema, initialArr, arr, resultArr) => {
 		)
 	}
 }
+
+export const getStructure = obj => {
+	const result = {}
+	// getSkeleton(cloneDeep(obj), result)
+	getSkeleton(obj, result)
+	return result
+}
+
+const getSkeleton = (obj, result) => {
+	// preserve ids of entity objects
+	Object.keys(obj).forEach(k => {
+		if (k === 'id')
+			return result.id = obj.id
+		if (obj[k] === null)
+			// return result[k] = {}
+			return
+		const type = typeof obj[k]
+		if (type === 'object' && Array.isArray(obj[k]))
+			return result[k] = getArrSkeleton(obj[k])
+		if (type === 'object')
+			return getSkeleton(obj[k], result[k] = {})
+	})
+}
+
+const getArrSkeleton = arr => arr
+	.filter(item => typeof item === 'object')
+	.map(obj => {
+		const result = {}
+		getSkeleton(obj, result)
+		return result
+	})

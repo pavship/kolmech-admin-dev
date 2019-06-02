@@ -38,7 +38,7 @@ export const CODetails = gql`
 	query deal ($id: ID!) {
 		deal (id: $id) {
 			id
-			batches { ...BatchFragmentMiddle}
+			batches { ...batchFragmentMiddle}
 		}
 	}
 	${batchFragmentMiddle}

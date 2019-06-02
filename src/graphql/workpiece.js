@@ -14,5 +14,6 @@ export const workpieceFragmentWithDrawings = gql`
 		...WorkpieceFragmentBasic
 		drawing { ...DrawingFragmentBasic }
 	}
+	${workpieceFragmentBasic}
 	${drawingFragmentBasic}
 `

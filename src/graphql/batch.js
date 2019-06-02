@@ -15,7 +15,7 @@ export const batchFragmentBasic = gql`
 `
 
 export const batchFragmentMiddle = gql`
-	fragment BatchFragmentMiddle on Batch {
+	fragment batchFragmentMiddle on Batch {
 		...BatchFragmentBasic
 		model { ...ModelFragmentWithDrawings }
 		workpiece { ...WorkpieceFragmentWithDrawings }
@@ -29,8 +29,8 @@ export const batchFragmentMiddle = gql`
 export const upsertBatch = gql`
 	mutation upsertBatch($input: BatchInput!) {
 		upsertBatch(input: $input) {
-			...BatchFragmentBasic
+			...batchFragmentMiddle
 		}
 	}
-	${batchFragmentBasic}
+	${batchFragmentMiddle}
 `

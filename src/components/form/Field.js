@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import HtmlDatePicker from '../common/HtmlDatePicker'
+import HtmlInput from '../common/HtmlInput';
 
 const Container = styled.div`
 	display: flex;
@@ -25,6 +26,9 @@ const Label = styled.div`
 			color: #db2828;
 		}
 	`}
+	${props => props.indent && `
+		padding-left: 10px;
+	`}
 `
 
 const Content = styled.div`
@@ -33,7 +37,7 @@ const Content = styled.div`
 `
 
 const InputContainer = styled.div`
-	max-width: 240px;
+	width: 215px;
 `
 
 const Error = styled.div`
@@ -43,6 +47,7 @@ const Error = styled.div`
 export default ({
 	label,
 	required,
+	indent,
 	type,
 	contentBeforeField,
 	error,
@@ -53,6 +58,7 @@ export default ({
 			<Label
 				className='fz-formFieldLabel'
 				required={required}
+				indent={indent}
 			>
 				{label}
 			</Label>
@@ -63,7 +69,9 @@ export default ({
 						? <HtmlDatePicker
 								{...rest}
 							/>
-						: <input />
+						: <HtmlInput
+								{...rest}
+							/>
 					}
 				</InputContainer>
 				{error &&

@@ -61,15 +61,15 @@ export function useMutation(
         title: successMsg || 'Данные сохранены',
       })
       return { data }
-    } catch (e) {
+    } catch (err) {
       setLoading(false)
-      setError(e)
+      setError(err)
       if (onError) {
-        onError(e)
+        onError(err)
       } else notify({
         type: 'error',
         title: errMsg || 'Ошибка сохранения',
-        content: error.message,
+        content: err.message,
       })
     }
   }
