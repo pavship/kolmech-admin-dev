@@ -1,11 +1,20 @@
 import gql from 'graphql-tag'
-import { opFragmentBasic } from './op';
+import { opFragmentBasic, opFragmentMiddle } from './op';
 
 export const procFragmentBasic = gql`
-	fragment ProcFragmentBasic on Proc {
+	fragment procFragmentBasic on Proc {
 		id
 		name
-		ops { ...OpFragmentBasic }
+		ops { ...opFragmentBasic }
 	}
 	${opFragmentBasic}
+`
+
+export const procFragmentMiddle = gql`
+	fragment procFragmentMiddle on Proc {
+		...procFragmentBasic
+		ops { ...opFragmentMiddle }
+	}
+	${procFragmentBasic}
+	${opFragmentMiddle}
 `

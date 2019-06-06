@@ -2,7 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 import HtmlDatePicker from '../common/HtmlDatePicker'
-import HtmlInput from '../common/HtmlInput';
+import HtmlInput from '../common/HtmlInput'
+import { HtmlTextArea } from '../common/HtmlTextArea'
 
 const Container = styled.div`
 	display: flex;
@@ -15,7 +16,7 @@ const Label = styled.div`
 	flex: 0 0 122px;
 	/* padding-top: calc(10.5rem/14); */
 	font-size: calc(13rem/14);
-	font-weight: bold;
+	/* font-weight: bold; */
 	line-height: 1.21428571rem;
 	${props => props.required && `
 		::after {
@@ -65,8 +66,12 @@ export default ({
 			<Content>
 				<InputContainer>
 					{contentBeforeField}
-					{type === 'date'
+					{	type === 'date'
 						? <HtmlDatePicker
+								{...rest}
+							/> :
+						type === 'textarea'
+						? <HtmlTextArea
 								{...rest}
 							/>
 						: <HtmlInput

@@ -11,7 +11,6 @@ import { Div } from '../../styled/styled-semantic'
 import Field from '../../form/Field'
 import { upsertBatch as uBq } from '../../../graphql/batch'
 import { getStructure, produceNested } from '../../form/utils'
-import produce from 'immer'
 
 export const CODetails = ({
   details: { id },
@@ -23,19 +22,19 @@ export const CODetails = ({
   const [ date, setDate ] = useState(toLocalDateString(new Date()))
   const [ batches, setBatches ] = useState([])
   useEffect(() => data && data.deal && setBatches(data.deal.batches), [ data ])
-  // const { batches = [] } = (data && data.deal) || {}
-  // const { batches = [] } = deal || {}
   console.log('data > ', data)
   console.log('batches > ', batches)
   return <>
     <Menu
       setDetails={setDetails}
       title='Создать КП'
-      onSubmit={() => createCO()}
+      onSubmit={() => createCO({})}
     />
     { loading ? <Dimmer active ><Loader>Загрузка..</Loader></Dimmer> :
       data && <Div
+        h='calc(100% - 47px)'
         p='1em 1em 1em 55px'
+        // oy=
       >
         <Field
           label='Дата'
@@ -43,14 +42,15 @@ export const CODetails = ({
           value={date}
           onChange={date => setDate(date)}
         />
-        {batches.map((b, i) => {
+        {batches.map((b, bIndex) => {
           const {
             id,
             model: {
               name,
               drawings: [{ name: drwName } = {}]
             },
-            workpiece: wp
+            workpiece: wp,
+            procs: [{ ops = [] } = {}]
           } = b
           const {
             name: wpName,
@@ -64,43 +64,82 @@ export const CODetails = ({
           const batchStructure = getStructure(b)
           console.log('batchStructure > ', batchStructure)
           return <div key={id}>
-            <p><b>{`${i + 1}. ${name}`}</b></p>
+            <p><b>{`${bIndex + 1}. ${name}`}</b></p>
             <Field
               label='Чертеж'
               value={drwName}
-              onChange={value => upsertBatch({ input:
+              onChange={value => upsertBatch({ variables: { input:
                 produceNested(batchStructure, 'model.drawings[0].name', value)
-              })}
+              }})}
             />
             <Field
               label='Заготовка'
               value={wpName}
-              onChange={value => upsertBatch({ input:
+              onChange={value => upsertBatch({ variables: { input:
                 produceNested(batchStructure, 'workpiece.name', value)
-              })}
+              }})}
             />
             <Field
               label='Чертеж'
               indent
               value={wpDrwName}
-              onChange={value => upsertBatch({ input:
+              onChange={value => upsertBatch({ variables: { input:
                 produceNested(batchStructure, 'workpiece.drawing.name', value)
-              })}
+              }})}
             />
             <Field
               label='Материал'
               value={material}
-              onChange={value => upsertBatch({ input:
+              onChange={value => upsertBatch({ variables: { input:
                 produceNested(batchStructure, 'workpiece.material', value)
-              })}
+              }})}
             />
             <Field
               label='Твердость'
               value={hardness}
-              onChange={value => upsertBatch({ input:
+              onChange={value => upsertBatch({ variables: { input:
                 produceNested(batchStructure, 'workpiece.hardness', value)
-              })}
+              }})}
             />
+            {ops.map(({
+              id,
+              opType,
+              description,
+              info,
+              warning
+            } = {}, opIndex) => {
+              const { name } = opType || {}
+              return <div key={id}>
+                <p><b>{`${bIndex + 1}.${opIndex + 1}. ${name}`}</b></p>
+                <Field
+                  label='Описание'
+                  type='textarea'
+                  indent
+                  value={description}
+                  onChange={value => upsertBatch({ variables: { input:
+                    produceNested(batchStructure, `procs[0].ops[${opIndex}].description`, value)
+                  }})}
+                />
+                <Field
+                  label='Замечание'
+                  type='textarea'
+                  indent
+                  value={info}
+                  onChange={value => upsertBatch({ variables: { input:
+                    produceNested(batchStructure, `procs[0].ops[${opIndex}].info`, value)
+                  }})}
+                />
+                <Field
+                  label='Предупреждение'
+                  type='textarea'
+                  indent
+                  value={warning}
+                  onChange={value => upsertBatch({ variables: { input:
+                    produceNested(batchStructure, `procs[0].ops[${opIndex}].warning`, value)
+                  }})}
+                />
+              </div>
+            })}
           </div>
         })}
       </Div>

@@ -15,7 +15,7 @@ export default ({
   return <Mutation
 		mutation={syncDeals}
 		onCompleted={async ({ syncDeals: { count } }) => {
-			await refetchDeals()
+			// await refetchDeals()
 			notify({
 				type: 'success',
 				title: 'Сделки синхронизированы с AmoCRM'
