@@ -1,28 +1,9 @@
 import React, { useState, useRef, useEffect, useContext } from 'react'
-
-import { Icon, Dropdown } from 'semantic-ui-react'
-import { Div } from '../../styled/styled-semantic'
-
-import styled from 'styled-components'
 import DiskContext from '../../context/DiskContext'
 
-const MenuButton = styled.div`
-  .dropdown {
-    width: 30px;
-    text-align: center;
-  }
-  .icon {
-    margin: 0;
-    color: rgba(50,50,50,.87);
-  }
-  transition: background .3s ease;
-  :hover {
-    background: rgba(0,0,0,.12);
-    .icon {
-      opacity: 1 !important;
-    }
-  }
-`
+import { Dropdown } from 'semantic-ui-react'
+import { Div } from '../../styled/styled-semantic'
+import { DropdownMenu } from './DropdownMenu'
 
 export default ({
   // isRowHovered,
@@ -86,39 +67,29 @@ export default ({
         {org && org.name}
       </Div>
       {isHovered &&
-        <MenuButton>
-          <Dropdown
-            icon={{
-              name: 'bars',
-              link: true
-            }}
-            direction='left'
-          >
-            <Dropdown.Menu>
-              <Dropdown.Item
-                icon='folder'
-                text='Обнаружить папку'
-                onClick={() => highlightFolder({ orgId })}
-              />
-              <Dropdown.Item
-                icon='newspaper outline'
-                text='Реквизиты'
-                onClick={() => setDetails({ id: orgId, type: 'Org' })}
-              />
-              <Dropdown.Item
-                icon='file alternate'
-                text='Создать КП'
-                onClick={() => setDetails({ id: dealId, type: 'CO' })}
-              />
-              <Dropdown.Item
-                icon='file alternate outline'
-                text='Создать договор'
-                onClick={() => setDetails({ id: orgId, type: 'Org', section: 'contract' })}
-                disabled={!org.inn}
-              />
-            </Dropdown.Menu>
-          </Dropdown>
-        </MenuButton>
+        <DropdownMenu>
+          <Dropdown.Item
+            icon='folder'
+            text='Обнаружить папку'
+            onClick={() => highlightFolder({ orgId })}
+          />
+          <Dropdown.Item
+            icon='newspaper outline'
+            text='Реквизиты'
+            onClick={() => setDetails({ id: orgId, type: 'Org' })}
+          />
+          <Dropdown.Item
+            icon='file alternate'
+            text='Создать КП'
+            onClick={() => setDetails({ id: dealId, type: 'CO' })}
+          />
+          <Dropdown.Item
+            icon='file alternate outline'
+            text='Создать договор'
+            onClick={() => setDetails({ id: orgId, type: 'Org', section: 'contract' })}
+            disabled={!org.inn}
+          />
+        </DropdownMenu>
       }
     </Div>
 }

@@ -1,19 +1,31 @@
-import React from 'react'
-// import { Mutation } from 'react-apollo'
-// import { upsertDeal } from '../../../graphql/deal'
-// import { dealFragmentMiddle } from '../../../graphql/deal'
+import React, { useState } from 'react'
+import { useMutation } from '../../../hooks/apolloHooks'
+import { upsertBatch as uBq } from '../../../../graphql/batch'
+import produce from 'immer'
+import { getStructure } from '../../../form/utils'
 
 import styled from 'styled-components'
 import { Div } from '../../../styled/styled-semantic'
 import Type from './OpType'
-import DealLabour from './DealLabour';
+import DealLabour from './DealLabour'
+import { DropdownMenu } from '../DropdownMenu'
+import { Dropdown } from 'semantic-ui-react'
+import { isValidDate } from '../../../../utils/dates';
 
 const FlexContainer = styled.div`
   display: flex;
 `
 
+const WarningItem = styled(Dropdown.Item)`
+  :hover {
+    color: #9f3a38 !important;
+    .icon {
+      color: #9f3a38 !important;
+    }
+  }
+`
+
 export default ({
-  notify,
   deal,
   batch,
   proc,
@@ -21,65 +33,75 @@ export default ({
   opTypes,
   upsertDeal,
 }) => {
+  const { id, isNew } = op
+  const [ upsertBatch ] = useMutation(uBq)
+  const [isHovered, setIsHovered] = useState(false)
+  const batchStructure = getStructure(batch)
+  console.log('batchStructure > ', batchStructure)
   return <>
-    {/* <Mutation
-      mutation={upsertDeal}
-      onCompleted={(res) => {
-        // console.log('res > ', res)
-        notify({
-          type: 'success',
-          title: 'Модель изделия сохранена'
-        })
-      }}
-      onError={err => notify({
-        type: 'error',
-        title: 'Ошибка. Модель изделия не сохранена',
-        content: err.message,
-      })}
-    >
-      {(upsertDeal, { loading: upserting }) =>  */}
-        <FlexContainer>
-          <Div
-            w='130px'
-            // br={batch.id !== 0 ? '1px solid rgba(34,36,38,0.15);' : undefined}
-          >
-            <Type
-              deal={deal}
-              batch={batch}
-              proc={proc}
-              op={op}
-              opTypes={opTypes}
-              upsertDeal={upsertDeal}
+    <FlexContainer>
+      <Div
+        d='flex'
+        w='130px'
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <Div
+          w={isHovered ? '100px' : '100%'}
+        >
+          <Type
+            deal={deal}
+            batch={batch}
+            proc={proc}
+            op={op}
+            opTypes={opTypes}
+            upsertDeal={upsertDeal}
+          />
+        </Div>
+        {!isNew && isHovered &&
+          <DropdownMenu>
+            <WarningItem
+              icon='trash'
+              text='Удалить'
+              onClick={() => upsertBatch({ variables: { input:
+                produce(batchStructure, draft => {
+
+                  const ops = draft.procs[0].ops
+                  ops.splice(ops.findIndex(o => o.id === id), 1)
+                  console.log('draft > ', draft)
+                })
+              }})}
             />
-          </Div>
-          {op.id !== 0 &&
-            <Div
-              w='40px'
-            >
-              <DealLabour
-                deal={deal}
-                batch={batch}
-                proc={proc}
-                op={op}
-                upsertDeal={upsertDeal}
-              />
-            </Div>
-          }
-          {/* {batch.id !== 0 &&
-            <Div
-              w='170px;'
-              z='100'
-            >
-              <Prods
-                notify={notify}
-                deal={deal}
-                batch={batch}
-                upsertDeal={upsertDeal}
-              />
-            </Div>
-          } */}
-        </FlexContainer>
-      {/* }
-    </Mutation> */}
+          </DropdownMenu>
+        }
+      </Div>
+      {!isNew &&
+        <Div
+          w='40px'
+          bl='1px solid rgba(34,36,38,0.15);'
+        >
+          <DealLabour
+            deal={deal}
+            batch={batch}
+            proc={proc}
+            op={op}
+            upsertDeal={upsertDeal}
+          />
+        </Div>
+      }
+      {/* {batch.id !== 0 &&
+        <Div
+          w='170px;'
+          z='12'
+        >
+          <Prods
+            notify={notify}
+            deal={deal}
+            batch={batch}
+            upsertDeal={upsertDeal}
+          />
+        </Div>
+      } */}
+    </FlexContainer>
   </>
 }

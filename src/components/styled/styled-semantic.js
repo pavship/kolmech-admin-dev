@@ -31,11 +31,12 @@ export const theme = {
 	}
 }
 const getThemeColor = (color) => theme.colors[color] || color
-const baseSet = ({ theme, bt, bb, bc, br, bs, c, d, fs, fw, h, lh, mw, minw, m, mb, mt, ml, mr, o, ov, ox, oy, p, pe, pl, pr, pt, ta, to, va, w, ws, z }) => {
+const baseSet = ({ theme, bt, bb, bc, bl, br, bs, c, d, fs, fw, h, lh, mw, minw, m, mb, mt, ml, mr, o, ov, ox, oy, p, pe, pl, pr, pt, ta, to, va, w, ws, z }) => {
 	return `
 		${bt 	? `border-top: ${bt};`														: ''}
 		${bb 	? `border-bottom: ${bb};`													: ''}
 		${bc 	? `background-color: ${bc};`											: ''}
+		${bl 	? `border-left: ${bl};`														: ''}
 		${br 	? `border-right: ${br};`													: ''}
 		${bs 	? `box-sizing: ${bs};`														: ''}
 		${c 	? `color: ${c};`																	: ''}

@@ -1,4 +1,5 @@
 import React from 'react'
+import cuid from 'cuid'
 
 import styled from 'styled-components'
 
@@ -21,7 +22,7 @@ export default ({
 }) => {
   return [
     ...proc.ops,
-    { id: 0 }
+    { id: cuid(), isNew: true }
   ].map(op =>
     <Container
       key={op.id}

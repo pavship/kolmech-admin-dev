@@ -1,11 +1,23 @@
 import React, { useContext } from 'react'
 
+import styled from 'styled-components'
 import Table from '../common/Table'
 import TableRow from '../common/TableRow'
 import Batches from './TableCells/Batches'
 import Org from './TableCells/Org'
 import DetailsContext from '../Details/Provider'
 import Deal from './TableCells/Deal'
+import { Div } from '../styled/styled-semantic';
+
+const TableHeader = styled.div`
+  position: absolute;
+  top: 0;
+  left: calc(32px + 650px);
+  margin-top: 1px;
+  display: flex;
+  line-height: 1.5em;
+  font-weight: bold;
+`
 
 const fields = [{
   name: 'edit',
@@ -35,30 +47,30 @@ const fields = [{
   path: 'models',
   title: 'Изделие',
   width: '130px'
-},{
-  name: 'qty',
-  title: 'Кол.',
-  width: '40px'
-},{
-  name: 'ops',
-  path: 'ops',
-  title: 'Техпроцесс',
-  width: '140px',
-  truncated: true
-},{
-  name: 'labor',
-  title: 'Н/ч',
-  width: '30px'
-},{
-  name: 'employees',
-  path: 'employees',
-  title: 'Спецы',
-  width: '140px'
-},{
-  name: 'prods',
-  path: 'prods',
-  title: 'Заготовки',
-  width: '200px'
+// },{
+//   name: 'qty',
+//   title: 'Кол.',
+//   width: '40px'
+// },{
+//   name: 'ops',
+//   path: 'ops',
+//   title: 'Техпроцесс',
+//   width: '140px',
+//   truncated: true
+// },{
+//   name: 'labor',
+//   title: 'Н/ч',
+//   width: '30px'
+// },{
+//   name: 'employees',
+//   path: 'employees',
+//   title: 'Спецы',
+//   width: '140px'
+// },{
+//   name: 'prods',
+//   path: 'prods',
+//   title: 'Заготовки',
+//   width: '200px'
 }]
 
 export default ({
@@ -70,11 +82,18 @@ export default ({
   // highlightFolder
 }) => {
   const { details, setDetails } = useContext(DetailsContext)
-  return (
+  return <>
+    <TableHeader>
+      <Div w='40px'>Кол.</Div>
+      <Div w='140px'>Техпроцесс</Div>
+      <Div w='30px'>Н/ч</Div>
+      <Div w='140px'>Исп.</Div>
+      <Div w='200px'>Заготовки</Div>
+    </TableHeader>
     <Table
       fields={fields}
     >
-      {({ tableFields }) => 
+      {({ tableFields }) =>
         deals.map(deal => {
           const { id } = deal
           return (
@@ -116,5 +135,5 @@ export default ({
         }
       )}
     </Table>
-  )
+  </>
 }

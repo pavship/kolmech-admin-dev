@@ -24,7 +24,7 @@ const Sidebar = styled(posed.div({
   }
 }))`
   position: absolute;
-  z-index: 100;
+  z-index: 12;
   top: 1px;
   right: 0;
   width: 600px;

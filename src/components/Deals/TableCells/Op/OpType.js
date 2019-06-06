@@ -6,6 +6,7 @@ import DealsContext from '../../context/DealsContext'
 
 const Select = styled.select`
   width: 130px;
+  /* width: 100%; */
 `
 
 export default ({
@@ -17,7 +18,7 @@ export default ({
 }) => {
   const { id: batchId } = batch
   const { id: procId} = proc
-  const { id: opId, opType } = op
+  const { id: opId, isNew: isNewOp, opType } = op
   const { opTypes } = useContext(DealsContext)
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
@@ -46,7 +47,7 @@ export default ({
                       ops: [
                         ...proc.ops.map(({ id }) => ({ id })).filter(o => o.id !== opId),
                         {
-                          ...(opId === 0)
+                          ...isNewOp
                             ? { opTypeId: opTypeId, dealLabor: 0 }
                             : { id: opId }
                         }
@@ -56,14 +57,14 @@ export default ({
                 }
               ]
             }}})
-          setEditMode(false)
+          // setEditMode(false)
         }}
       >
         {[{ id: 0, name: '' }, ...opTypes].map(({ id, name }) =>
           <option key={id} value={id}>{name}</option>
         )}
       </Select>
-  else if (opId === 0)
+  else if (isNewOp)
     return <Icon
       ml='6px'
 			// color='grey'
@@ -77,7 +78,6 @@ export default ({
       ov='hidden'
 			to='ellipsis'
 			pl='6px'
-      br='1px solid rgba(34,36,38,0.15);'
       // onClick={() => setEditMode(true)} //block editing
     >
       {op.opType.name}

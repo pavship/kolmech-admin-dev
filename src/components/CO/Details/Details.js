@@ -22,8 +22,6 @@ export const CODetails = ({
   const [ date, setDate ] = useState(toLocalDateString(new Date()))
   const [ batches, setBatches ] = useState([])
   useEffect(() => data && data.deal && setBatches(data.deal.batches), [ data ])
-  console.log('data > ', data)
-  console.log('batches > ', batches)
   return <>
     <Menu
       setDetails={setDetails}
