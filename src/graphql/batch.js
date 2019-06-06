@@ -17,6 +17,8 @@ export const batchFragmentBasic = gql`
 export const batchFragmentMiddle = gql`
 	fragment batchFragmentMiddle on Batch {
 		...BatchFragmentBasic
+		info
+		warning
 		model { ...ModelFragmentWithDrawings }
 		procs { ...procFragmentMiddle }
 		workpiece { ...WorkpieceFragmentWithDrawings }

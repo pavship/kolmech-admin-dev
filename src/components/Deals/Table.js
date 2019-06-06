@@ -28,19 +28,27 @@ const fields = [{
 },{
   name: 'counterparty',
   title: 'Контрагент',
-  width: '200px',
+  width: '170px',
   truncated: true
 },{
   name: 'models',
   path: 'models',
   title: 'Изделие',
-  width: '170px'
+  width: '130px'
+},{
+  name: 'qty',
+  title: 'Кол.',
+  width: '40px'
 },{
   name: 'ops',
   path: 'ops',
   title: 'Техпроцесс',
-  width: '170px',
+  width: '140px',
   truncated: true
+},{
+  name: 'labor',
+  title: 'Н/ч',
+  width: '30px'
 },{
   name: 'employees',
   path: 'employees',

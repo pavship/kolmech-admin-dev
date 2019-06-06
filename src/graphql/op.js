@@ -14,8 +14,6 @@ export const opFragmentMiddle = gql`
 	fragment opFragmentMiddle on Op {
 		...opFragmentBasic
 		description
-		info
-		warning
 	}
 	${opFragmentBasic}
 	${opTypeFragmentBasic}

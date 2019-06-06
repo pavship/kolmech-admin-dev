@@ -79,7 +79,7 @@ export default ({
       <Div
         ov='hidden'
         to='ellipsis'
-        w={isHovered ? '170px' : undefined}
+        w={isHovered ? '140px' : undefined}
         fw={isHovered ? 'bold' : undefined}
         // onClick={() => setEditMode(true)} //block editing
       >

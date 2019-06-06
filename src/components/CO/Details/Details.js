@@ -34,7 +34,7 @@ export const CODetails = ({
       data && <Div
         h='calc(100% - 47px)'
         p='1em 1em 1em 55px'
-        // oy=
+        oy='scroll'
       >
         <Field
           label='Дата'
@@ -45,6 +45,8 @@ export const CODetails = ({
         {batches.map((b, bIndex) => {
           const {
             id,
+            info,
+            warning,
             model: {
               name,
               drawings: [{ name: drwName } = {}]
@@ -67,14 +69,14 @@ export const CODetails = ({
             <p><b>{`${bIndex + 1}. ${name}`}</b></p>
             <Field
               label='Чертеж'
-              value={drwName}
+              value={drwName || ''}
               onChange={value => upsertBatch({ variables: { input:
                 produceNested(batchStructure, 'model.drawings[0].name', value)
               }})}
             />
             <Field
               label='Заготовка'
-              value={wpName}
+              value={wpName || ''}
               onChange={value => upsertBatch({ variables: { input:
                 produceNested(batchStructure, 'workpiece.name', value)
               }})}
@@ -82,31 +84,45 @@ export const CODetails = ({
             <Field
               label='Чертеж'
               indent
-              value={wpDrwName}
+              value={wpDrwName || ''}
               onChange={value => upsertBatch({ variables: { input:
                 produceNested(batchStructure, 'workpiece.drawing.name', value)
               }})}
             />
             <Field
               label='Материал'
-              value={material}
+              value={material || ''}
               onChange={value => upsertBatch({ variables: { input:
                 produceNested(batchStructure, 'workpiece.material', value)
               }})}
             />
             <Field
               label='Твердость'
-              value={hardness}
+              value={hardness || ''}
               onChange={value => upsertBatch({ variables: { input:
                 produceNested(batchStructure, 'workpiece.hardness', value)
+              }})}
+            />
+            <Field
+              label='Замечание'
+              type='textarea'
+              value={info || ''}
+              onChange={value => upsertBatch({ variables: { input:
+                produceNested(batchStructure, `info`, value)
+              }})}
+            />
+            <Field
+              label='Предупреждение'
+              type='textarea'
+              value={warning || ''}
+              onChange={value => upsertBatch({ variables: { input:
+                produceNested(batchStructure, `warning`, value)
               }})}
             />
             {ops.map(({
               id,
               opType,
-              description,
-              info,
-              warning
+              description
             } = {}, opIndex) => {
               const { name } = opType || {}
               return <div key={id}>
@@ -115,27 +131,9 @@ export const CODetails = ({
                   label='Описание'
                   type='textarea'
                   indent
-                  value={description}
+                  value={description || ''}
                   onChange={value => upsertBatch({ variables: { input:
                     produceNested(batchStructure, `procs[0].ops[${opIndex}].description`, value)
-                  }})}
-                />
-                <Field
-                  label='Замечание'
-                  type='textarea'
-                  indent
-                  value={info}
-                  onChange={value => upsertBatch({ variables: { input:
-                    produceNested(batchStructure, `procs[0].ops[${opIndex}].info`, value)
-                  }})}
-                />
-                <Field
-                  label='Предупреждение'
-                  type='textarea'
-                  indent
-                  value={warning}
-                  onChange={value => upsertBatch({ variables: { input:
-                    produceNested(batchStructure, `procs[0].ops[${opIndex}].warning`, value)
                   }})}
                 />
               </div>
