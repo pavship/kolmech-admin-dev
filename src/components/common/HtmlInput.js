@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, forwardRef } from 'react'
 
 import styled from 'styled-components'
 
@@ -8,21 +8,22 @@ const Input = styled.input`
   padding-left: 4px;
 `
 
-export default ({
+export default forwardRef(({
   value: propValue,
 	onChange,
 	...rest
-}) => {
-  const input = useRef(null)
+}, ref) => {
   const [ value, setValue ] = useState('')
   useEffect(() => setValue(propValue || ''), [propValue])
+  const submit = () => propValue !== value && onChange(value)
 	return (
 		<Input
       {...rest}
-      ref={input}
+      ref={ref}
 			value={value}
       onChange={({ target: { value }}) => setValue(value)}
-      onBlur={() => propValue !== value && onChange(value)}
+      onBlur={submit}
+      onKeyDown={e => e.key === 'Enter' && submit()}
 		/>
 	)
-}
+})

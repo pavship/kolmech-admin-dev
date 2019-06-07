@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import { dealStatusFragmentBasic, dealStatusFragmentFull } from './dealStatus'
 import { orgFragmentBasic } from './org'
 import { batchFragmentBasic, batchFragmentMiddle } from './batch'
-import { opTypeFragmentBasic } from './opType';
+import { opTypeFragmentBasic } from './opType'
 
 export const dealFragmentBasic = gql`
 	fragment DealFragmentBasic on Deal {
@@ -17,6 +17,7 @@ export const dealFragmentBasic = gql`
 export const dealFragmentMiddle = gql`
 	fragment DealFragmentMiddle on Deal {
 		...DealFragmentBasic
+		date
 		org { ...OrgFragmentBasic}
 		batches { ...BatchFragmentBasic}
   }

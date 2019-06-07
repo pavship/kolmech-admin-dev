@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Proc from'./Proc'
-import Ops from './Op/Ops';
+import { Ops } from './Op/Ops'
 
 const Container = styled.div`
   :not(:last-child) {
@@ -16,8 +16,11 @@ export default ({
   deal,
   batch,
   opTypes,
-  upsertDeal
+  upsertDeal,
+  upsertBatch
 }) => {
+  // TODO change id = 0 to cuid() with isNew = true
+  // TODO temporarily restrict adding more than 1 techprocess
   return [
     ...batch.procs,
     { id: 0 }
@@ -26,11 +29,11 @@ export default ({
       key={proc.id}
     >
       <Proc
-        notify={notify}
         deal={deal}
         batch={batch}
         proc={proc}
         upsertDeal={upsertDeal}
+        upsertBatch={upsertBatch}
       />
       {proc.id !== 0 &&
         <Ops
@@ -40,6 +43,7 @@ export default ({
           proc={proc}
           opTypes={opTypes}
           upsertDeal={upsertDeal}
+          upsertBatch={upsertBatch}
         />
       }
     </Container>

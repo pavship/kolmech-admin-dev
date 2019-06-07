@@ -3,7 +3,7 @@ import cuid from 'cuid'
 
 import styled from 'styled-components'
 
-import Op from'./Op'
+import { Op } from'./Op'
 
 const Container = styled.div`
   :not(:last-child) {
@@ -12,13 +12,14 @@ const Container = styled.div`
   background: rgba(0,0,0,.05);
 `
 
-export default ({
+export const Ops = ({
   notify,
   deal,
   batch,
   proc,
   opTypes,
-  upsertDeal
+  upsertDeal,
+  upsertBatch
 }) => {
   return [
     ...proc.ops,
@@ -35,6 +36,7 @@ export default ({
         op={op}
         opTypes={opTypes}
         upsertDeal={upsertDeal}
+        upsertBatch={upsertBatch}
       />
     </Container>
   )

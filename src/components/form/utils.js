@@ -101,7 +101,6 @@ const getArrSkeleton = arr => arr
 	})
 
 const analysePath = (path, acc = []) => {
-	console.log('path, acc > ', path, acc)
 	const dotPos = path.indexOf('.')
 	const braketPos = path.indexOf('[')
 	if (dotPos*braketPos === 1) return [
@@ -128,6 +127,22 @@ const analysePath = (path, acc = []) => {
 				}
 		])
 	}
+}
+
+export const assignNested = (obj, path, val, preserveKeys=false) => {
+	const keys = analysePath(path)
+	keys.reduce((obj, { key, last, array, arrayItem }) => {
+		if (!arrayItem) Object.keys(obj).forEach(k => {
+			if (k === 'id' || k === key) return
+			if (!preserveKeys) delete obj[k]
+		})
+		if (last) return obj[key] = val
+		if (!obj[key]) {
+			if (array) obj[key] = []
+			else obj[key] = {}
+		}
+		return obj[key]
+	}, obj)
 }
 
 export const produceNested = (obj, path, val) => {

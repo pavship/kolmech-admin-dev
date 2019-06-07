@@ -1,10 +1,14 @@
 import React from 'react'
+import { useMutation } from '../../hooks/apolloHooks'
+import { upsertBatch as uBq } from '../../../graphql/batch'
+import { getStructure } from '../../form/utils'
 
 import styled from 'styled-components'
 import { Div } from '../../styled/styled-semantic'
 import Model from './Model'
 import Qty from './Qty'
 import Procs from './Procs'
+import produce from 'immer';
 
 const BatchContainer = styled.div`
   display: flex;
@@ -16,6 +20,10 @@ export default ({
   batch,
   upsertDeal
 }) => {
+  const [ upsertBatchProto ] = useMutation(uBq)
+  const upsertBatch = draftHandler => upsertBatchProto({ variables: { input:
+    produce(getStructure(batch), draftHandler)
+  }})
   return <>
     <BatchContainer>
       <Div
@@ -41,13 +49,13 @@ export default ({
         </Div>
         <Div
           w='170px'
-          // z='1'
         >
           <Procs
             notify={notify}
             deal={deal}
             batch={batch}
             upsertDeal={upsertDeal}
+            upsertBatch={upsertBatch}
           />
         </Div>
       </>}

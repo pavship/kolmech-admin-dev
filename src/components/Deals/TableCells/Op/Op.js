@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import { useMutation } from '../../../hooks/apolloHooks'
-import { upsertBatch as uBq } from '../../../../graphql/batch'
 import produce from 'immer'
 import { getStructure } from '../../../form/utils'
 
@@ -10,7 +8,6 @@ import Type from './OpType'
 import DealLabour from './DealLabour'
 import { DropdownMenu } from '../DropdownMenu'
 import { Dropdown } from 'semantic-ui-react'
-import { isValidDate } from '../../../../utils/dates';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -25,19 +22,18 @@ const WarningItem = styled(Dropdown.Item)`
   }
 `
 
-export default ({
+export const Op = ({
   deal,
   batch,
   proc,
   op,
   opTypes,
   upsertDeal,
+  upsertBatch
 }) => {
   const { id, isNew } = op
-  const [ upsertBatch ] = useMutation(uBq)
   const [isHovered, setIsHovered] = useState(false)
-  const batchStructure = getStructure(batch)
-  console.log('batchStructure > ', batchStructure)
+  // const batchStructure = getStructure(batch)
   return <>
     <FlexContainer>
       <Div
@@ -63,14 +59,10 @@ export default ({
             <WarningItem
               icon='trash'
               text='Удалить'
-              onClick={() => upsertBatch({ variables: { input:
-                produce(batchStructure, draft => {
-
-                  const ops = draft.procs[0].ops
-                  ops.splice(ops.findIndex(o => o.id === id), 1)
-                  console.log('draft > ', draft)
-                })
-              }})}
+              onClick={() => upsertBatch(draft => {
+                const ops = draft.procs[0].ops
+                ops.splice(ops.findIndex(o => o.id === id), 1)
+              })}
             />
           </DropdownMenu>
         }

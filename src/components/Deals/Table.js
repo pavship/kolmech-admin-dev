@@ -26,12 +26,12 @@ const fields = [{
   name: '#',
   path: 'amoId',
 	title: '#',
-	width: '90px'
+	width: '80px'
 },{
   name: 'date',
   path: 'date',
 	title: 'Дата',
-	width: '80px'
+	width: '90px'
 },{
   name: 'deal',
 	title: 'Наименование',

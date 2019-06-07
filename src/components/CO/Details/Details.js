@@ -62,7 +62,6 @@ export const CODetails = ({
             name: wpDrwName
           } = wpDrw || {}
           const batchStructure = getStructure(b)
-          console.log('batchStructure > ', batchStructure)
           return <div key={id}>
             <p><b>{`${bIndex + 1}. ${name}`}</b></p>
             <Field
