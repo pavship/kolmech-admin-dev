@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 
 import styled from 'styled-components'
-import { Div } from '../../../styled/styled-semantic'
-import Type from './OpType'
-import DealLabour from './DealLabour'
-import { DropdownMenu } from '../DropdownMenu'
+// import { Div } from '../../../styled/styled-semantic'
+// import Type from './OpType'
+// import DealLabour from './DealLabour'
+// import { DropdownMenu } from '../DropdownMenu'
 import { Dropdown } from 'semantic-ui-react'
-import { Exec } from '../Exec/Exec';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -21,14 +20,7 @@ const WarningItem = styled(Dropdown.Item)`
   }
 `
 
-const ExecContainer = styled.div`
-  :not(:last-child) {
-		border-bottom: 1px solid rgba(34,36,38,0.15);
-	}
-  background: rgba(0,0,0,.05);
-`
-
-export const Op = ({
+export const Exec = ({
   deal,
   batch,
   proc,
@@ -40,7 +32,7 @@ export const Op = ({
   const { id, isNew, execs } = op
   const [isHovered, setIsHovered] = useState(false)
   return <>
-    <FlexContainer>
+    {/* <FlexContainer>
       <Div
         d='flex'
         w='130px'
@@ -72,7 +64,7 @@ export const Op = ({
           </DropdownMenu>
         }
       </Div>
-      {!isNew && <>
+      {!isNew &&
         <Div
           w='40px'
           bl='1px solid rgba(34,36,38,0.15);'
@@ -86,25 +78,9 @@ export const Op = ({
           />
         </Div>
         {execs.map(exec =>
-          <ExecContainer>
-            <Exec
-            />
-          </ExecContainer>
+          <
         )}
-      </>}
-      {/* {batch.id !== 0 &&
-        <Div
-          w='170px;'
-          z='12'
-        >
-          <Prods
-            notify={notify}
-            deal={deal}
-            batch={batch}
-            upsertDeal={upsertDeal}
-          />
-        </Div>
-      } */}
-    </FlexContainer>
+      }
+    </FlexContainer> */}
   </>
 }

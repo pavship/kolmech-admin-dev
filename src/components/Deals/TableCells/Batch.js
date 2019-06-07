@@ -48,7 +48,7 @@ export default ({
           />
         </Div>
         <Div
-          w='170px'
+          w='calc(170px+140px)'
         >
           <Procs
             notify={notify}

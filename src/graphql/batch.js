@@ -1,10 +1,10 @@
 import gql from 'graphql-tag'
 import { modelFragmentBasic, modelFragmentWithDrawings } from './model'
-import { procFragmentBasic, procFragmentMiddle } from './proc'
+import { procFragmentBasic, procFragmentMiddle, procFragmentDetails } from './proc'
 import { workpieceFragmentWithDrawings } from './workpiece'
 
 export const batchFragmentBasic = gql`
-	fragment BatchFragmentBasic on Batch {
+	fragment batchFragmentBasic on Batch {
 		id
 		qty
 		model { ...ModelFragmentBasic }
@@ -16,16 +16,27 @@ export const batchFragmentBasic = gql`
 
 export const batchFragmentMiddle = gql`
 	fragment batchFragmentMiddle on Batch {
-		...BatchFragmentBasic
+		...batchFragmentBasic
+		model { ...ModelFragmentBasic }
+		procs { ...procFragmentMiddle }
+	}
+	${batchFragmentBasic}
+	${modelFragmentBasic}
+	${procFragmentMiddle}
+`
+
+export const batchFragmentDetails = gql`
+	fragment batchFragmentDetails on Batch {
+		...batchFragmentBasic
 		info
 		warning
 		model { ...ModelFragmentWithDrawings }
-		procs { ...procFragmentMiddle }
+		procs { ...procFragmentDetails }
 		workpiece { ...WorkpieceFragmentWithDrawings }
 	}
 	${modelFragmentWithDrawings}
 	${batchFragmentBasic}
-	${procFragmentMiddle}
+	${procFragmentDetails}
 	${workpieceFragmentWithDrawings}
 `
 
