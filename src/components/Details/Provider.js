@@ -7,10 +7,12 @@ import { CODetails } from '../CO/Details/Details'
 
 const Container = styled.div`
   height: calc(100% - 36px);
-  position: relative;
+  overflow-y: scroll;
 `
 
 const MainContentContainer = styled.div`
+  position: relative;
+  height: 100%;
 `
 
 const Sidebar = styled(posed.div({
@@ -25,10 +27,10 @@ const Sidebar = styled(posed.div({
 }))`
   position: absolute;
   z-index: 12;
-  top: 1px;
+  top: 36px;
   right: 0;
   width: 600px;
-  height: calc(100% - 1px);
+  height: calc(100% - 36px);
 	background-color: rgba(255,255,255,1);
 	box-shadow: 0 0 20px rgba(34,36,38,.15);
 `
@@ -40,7 +42,6 @@ export const DetailsProvider = ({
   children
 }) => {
   const [ details, setDetails ] = useState(null)
-  // const [ details, setDetails ] = useState({ type: 'Org', id: 'cjvzvp08a01470752jlibcg6j' })
   return (
     <DetailsContext.Provider
       value={{ details, setDetails }}
@@ -51,9 +52,7 @@ export const DetailsProvider = ({
         </MainContentContainer>
         <PoseGroup>
           {details &&
-            <Sidebar key='1'
-              // pose={isOpen ? 'open' : 'closed'}
-            >
+            <Sidebar key='1'>
 							{ details.type === 'Org' ?	<OrgDetails
                   details={details}
                   setDetails={setDetails}

@@ -21,7 +21,7 @@ export const opFragmentMiddle = gql`
 `
 
 export const opFragmentDetails = gql`
-	fragment opFragmentMiddle on Op {
+	fragment opFragmentDetails on Op {
 		...opFragmentBasic
 		description
 	}

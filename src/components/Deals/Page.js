@@ -4,6 +4,7 @@ import { dealsPage, upsertDeal } from '../../graphql/deal'
 import { NotificationsConsumer } from '../notifications/NotificationsContext'
 import { ContextProvider } from './context/DealsContext'
 import { DetailsProvider } from '../Details/Provider'
+
 import DealsTable from './Table'
 import Menu from './Menu'
 import { Dimmer, Loader } from 'semantic-ui-react'
