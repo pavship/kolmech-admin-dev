@@ -3,29 +3,12 @@ import React, { useState, useContext } from 'react'
 import { Dropdown } from 'semantic-ui-react'
 import { Div } from '../../styled/styled-semantic'
 
-import styled from 'styled-components'
 import DiskContext from '../../context/DiskContext'
-
-const MenuButton = styled.div`
-  .dropdown {
-    width: 30px;
-    text-align: center;
-  }
-  .icon {
-    margin: 0;
-    color: rgba(50,50,50,.87);
-  }
-  transition: background .3s ease;
-  :hover {
-    background: rgba(0,0,0,.12);
-    .icon {
-      opacity: 1 !important;
-    }
-  }
-`
+import { DropdownMenu } from './DropdownMenu';
 
 export default ({
-  deal
+  deal,
+  setDetails
 }) => {
   const { id: dealId, amoId } = deal
   const { highlightFolder } = useContext(DiskContext)
@@ -44,30 +27,25 @@ export default ({
       {deal && deal.name}
     </Div>
     {isHovered &&
-      <MenuButton>
-        <Dropdown
-          icon={{
-            name: 'bars',
-            link: true
-          }}
-          direction='left'
-        >
-          <Dropdown.Menu>
-            <Dropdown.Header>
-              <a
-                target="_blank" rel="noopener noreferrer" 
-                href={`https://kolomnatutamailcom.amocrm.ru/leads/detail/${amoId}`}
-              >AmoCRM</a>
-            </Dropdown.Header>
-            <Dropdown.Divider />
-            <Dropdown.Item
-              icon='folder'
-              text='Обнаружить папку'
-              onClick={() => highlightFolder({ dealId })}
-            />
-          </Dropdown.Menu>
-        </Dropdown>
-      </MenuButton>
+      <DropdownMenu>
+        <Dropdown.Header>
+          <a
+            target="_blank" rel="noopener noreferrer" 
+            href={`https://kolomnatutamailcom.amocrm.ru/leads/detail/${amoId}`}
+          >AmoCRM</a>
+        </Dropdown.Header>
+        <Dropdown.Divider />
+        <Dropdown.Item
+          icon='folder'
+          text='Обнаружить папку'
+          onClick={() => highlightFolder({ dealId })}
+        />
+        <Dropdown.Item
+          icon='plus'
+          text='Задача в CRM'
+          onClick={() => setDetails({ id: dealId, type: 'createAmoTask' })}
+        />
+      </DropdownMenu>
     }
   </Div>
 }

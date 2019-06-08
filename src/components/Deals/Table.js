@@ -11,12 +11,16 @@ import { Div } from '../styled/styled-semantic';
 
 const TableHeader = styled.div`
   position: absolute;
-  top: 0;
+  top: -1px;
   left: calc(32px + 650px);
   margin-top: 1px;
+  padding: 1px;
   display: flex;
   line-height: 1.5em;
   font-weight: bold;
+  background: rgb(233, 234, 235);
+  border-top: 1px solid #d4d4d5;
+  border-bottom: 1px solid #d4d4d5;
 `
 
 const fields = [{
@@ -81,7 +85,7 @@ export default ({
   upsertingDeal,
   // highlightFolder
 }) => {
-  const { details, setDetails } = useContext(DetailsContext)
+  const { setDetails } = useContext(DetailsContext)
   return <>
     <TableHeader>
       <Div w='40px'>Кол.</Div>
@@ -107,6 +111,7 @@ export default ({
                   name: 'deal',
                   content: <Deal
                     deal={deal}
+                    setDetails={setDetails}
                   />,
                   truncated: true
                 },

@@ -46,7 +46,7 @@ export const dealsPage = gql`
 	${opTypeFragmentBasic}
 `
 
-export const CODetails = gql`
+export const dealDetails = gql`
 	query deal ($id: ID!) {
 		deal (id: $id) {
 			id
@@ -56,9 +56,9 @@ export const CODetails = gql`
 	${batchFragmentDetails}
 `
 
-export const createCO = gql`
-	mutation createCO($id: ID!, $date: String) {
-		createCO(id: $id, date: $date) {
+export const createComOffer = gql`
+	mutation createComOffer($dealId: ID!, $date: String) {
+		createComOffer(dealId: $dealId, date: $date) {
 			statusText
 		}
 	}

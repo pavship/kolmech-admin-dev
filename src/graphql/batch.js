@@ -43,8 +43,8 @@ export const batchFragmentDetails = gql`
 export const upsertBatch = gql`
 	mutation upsertBatch($input: BatchInput!) {
 		upsertBatch(input: $input) {
-			...batchFragmentMiddle
+			...batchFragmentDetails
 		}
 	}
-	${batchFragmentMiddle}
+	${batchFragmentDetails}
 `

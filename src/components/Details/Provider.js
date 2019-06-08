@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import posed, { PoseGroup } from 'react-pose'
 import { OrgDetails } from '../Org/Details/Details'
-import { CODetails } from '../CO/Details/Details'
+import CreateComOfferDetails from '../ComOffer/CreateComOfferDetails'
+import CreateTaskDetails from '../Amo/CreateTaskDetails'
 
 const Container = styled.div`
   height: calc(100% - 36px);
@@ -21,7 +22,7 @@ const Sidebar = styled(posed.div({
     transition: { ease: 'easeInOut' }
   },
   exit: {
-    x: 600,
+    x: '100%',
     transition: { ease: 'easeInOut' }
   }
 }))`
@@ -29,7 +30,11 @@ const Sidebar = styled(posed.div({
   z-index: 12;
   top: 36px;
   right: 0;
-  width: 600px;
+  // width: 600px;
+  width: ${props =>
+    props.type === 'CreateComOffer' ? '470px' :
+    '600px'
+  };
   height: calc(100% - 36px);
 	background-color: rgba(255,255,255,1);
 	box-shadow: 0 0 20px rgba(34,36,38,.15);
@@ -52,12 +57,18 @@ export const DetailsProvider = ({
         </MainContentContainer>
         <PoseGroup>
           {details &&
-            <Sidebar key='1'>
+            <Sidebar key='1'
+              type={details.type}
+            >
 							{ details.type === 'Org' ?	<OrgDetails
                   details={details}
                   setDetails={setDetails}
                 /> :
-                details.type === 'CO' ?	<CODetails
+                details.type === 'CreateComOffer' ?	<CreateComOfferDetails
+                  details={details}
+                  setDetails={setDetails}
+                /> :
+                details.type === 'createAmoTask' ?	<CreateTaskDetails
                   details={details}
                   setDetails={setDetails}
                 />

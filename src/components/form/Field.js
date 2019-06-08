@@ -10,6 +10,9 @@ const Container = styled.div`
 	flex-wrap: wrap;
 	align-items: center;
 	margin-bottom: .67857143rem;
+	${props => props.indent && `
+		border-left: 1px solid rgba(34, 36, 38, 0.15);
+	`}
 `
 
 const Label = styled.div`
@@ -55,7 +58,9 @@ export default ({
 	...rest
 }) => {
 	return (
-		<Container>
+		<Container
+			indent={indent}
+		>
 			<Label
 				className='fz-formFieldLabel'
 				required={required}

@@ -81,7 +81,7 @@ export default ({
           <Dropdown.Item
             icon='file alternate'
             text='Создать КП'
-            onClick={() => setDetails({ id: dealId, type: 'CO' })}
+            onClick={() => setDetails({ dealId, type: 'CreateComOffer' })}
           />
           <Dropdown.Item
             icon='file alternate outline'
