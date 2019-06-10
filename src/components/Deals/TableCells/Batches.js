@@ -1,5 +1,4 @@
 import React from 'react'
-
 import styled from 'styled-components'
 
 import Batch from'./Batch'
@@ -11,14 +10,11 @@ const Container = styled.div`
 	}
 `
 
-export default ({
-  // isRowHovered,
-  notify,
+export default function Batches ({
   deal,
   upsertDeal
-}) => {
+}) {
   return [
-    // ...deal.batches.map(b => ({ ...b.model, batchId: b.id, qty: b.qty })),
     ...deal.batches,
     { id: 0 }
   ].map(batch =>
@@ -26,7 +22,6 @@ export default ({
       key={batch.id}
     >
       <Batch
-        notify={notify}
         deal={deal}
         batch={batch}
         upsertDeal={upsertDeal}

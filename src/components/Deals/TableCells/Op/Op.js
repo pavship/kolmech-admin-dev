@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import styled from 'styled-components'
 import { Div } from '../../../styled/styled-semantic'
-import Type from './OpType'
+import OpType from './OpType'
 import DealLabour from './DealLabour'
 import { DropdownMenu } from '../DropdownMenu'
 import { Dropdown } from 'semantic-ui-react'
@@ -33,7 +33,6 @@ export const Op = ({
   batch,
   proc,
   op,
-  opTypes,
   upsertDeal,
   upsertBatch
 }) => {
@@ -50,13 +49,10 @@ export const Op = ({
         <Div
           w={isHovered ? '100px' : '100%'}
         >
-          <Type
-            deal={deal}
-            batch={batch}
+          <OpType
             proc={proc}
             op={op}
-            opTypes={opTypes}
-            upsertDeal={upsertDeal}
+            upsertBatch={upsertBatch}
           />
         </Div>
         {!isNew && isHovered &&
@@ -92,19 +88,6 @@ export const Op = ({
           </ExecContainer>
         )}
       </>}
-      {/* {batch.id !== 0 &&
-        <Div
-          w='170px;'
-          z='12'
-        >
-          <Prods
-            notify={notify}
-            deal={deal}
-            batch={batch}
-            upsertDeal={upsertDeal}
-          />
-        </Div>
-      } */}
     </FlexContainer>
   </>
 }

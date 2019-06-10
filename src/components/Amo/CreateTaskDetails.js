@@ -1,33 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Menu } from '../Details/Menu/Menu'
-import { useMutation, useQuery } from '../hooks/apolloHooks'
-import {
-  // dealDetails as dDq,
-  createComOffer as cCO
-} from '../../graphql/deal'
-import { toLocalDateString } from '../../utils/dates'
-import { Dimmer, Loader } from 'semantic-ui-react'
+import { useMutation } from '../hooks/apolloHooks'
+import { createAmoTask as cAT } from '../../graphql/deal'
+import { toLocalDatetimeString } from '../../utils/dates'
 import { Div } from '../styled/styled-semantic'
 import Field from '../form/Field'
-// import { upsertBatch as uBq } from '../../graphql/batch'
-// import { getStructure, produceNested } from '../form/utils'
-import DealDetails from '../Deals/Details/Details';
+import DealDetails from '../Deals/Details/Details'
 
 export default function CreateComOfferDetails ({
   details: { dealId },
   setDetails
 }) {
-  // const { loading, data } = useQuery(dDq, { variables: { id: dealId } })
-  const [ createCO ] = useMutation(cCO, { variables: { id: dealId } })
-  // const [ upsertBatch ] = useMutation(uBq)
-  const [ date, setDate ] = useState(toLocalDateString(new Date()))
-  // const [ batches, setBatches ] = useState([])
-  // useEffect(() => data && data.deal && setBatches(data.deal.batches), [ data ])
+  const [ date, setDate ] = useState(toLocalDatetimeString(new Date()))
+  const [ createAmoTask ] = useMutation(cAT, { variables: { dealId, date } })
   return <>
     <Menu
       setDetails={setDetails}
-      title='Создать КП'
-      onSubmit={() => createCO({})}
+      title='Добавить задачу в AmoCRM'
+      onSubmit={() => createAmoTask()}
     />
     <Div
 			h='calc(100% - 47px)'
@@ -38,7 +28,7 @@ export default function CreateComOfferDetails ({
 			>
 				<Field
 					label='Дата'
-					type='date'
+					type='datetime-local'
 					value={date}
 					onChange={date => setDate(date)}
 				/>

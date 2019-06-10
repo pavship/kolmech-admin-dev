@@ -43,7 +43,7 @@ export default ({
         <Dropdown.Item
           icon='plus'
           text='Задача в CRM'
-          onClick={() => setDetails({ id: dealId, type: 'createAmoTask' })}
+          onClick={() => setDetails({ dealId, type: 'createAmoTask' })}
         />
       </DropdownMenu>
     }

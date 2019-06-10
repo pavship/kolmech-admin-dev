@@ -77,14 +77,14 @@ const fields = [{
 //   width: '200px'
 }]
 
-export default ({
+export default function DealsTable ({
   notify,
   deals,
   orgs,
   upsertDeal,
   upsertingDeal,
   // highlightFolder
-}) => {
+}) {
   const { setDetails } = useContext(DetailsContext)
   return <>
     <TableHeader>
@@ -98,7 +98,7 @@ export default ({
       fields={fields}
     >
       {({ tableFields }) =>
-        deals.map(deal => {
+        deals && deals.map(deal => {
           const { id } = deal
           return (
             <TableRow
@@ -129,7 +129,6 @@ export default ({
                 {
                   name: 'models',
                   content: <Batches
-                    notify={notify}
                     deal={deal}
                     upsertDeal={upsertDeal}
                   />,

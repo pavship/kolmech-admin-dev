@@ -30,9 +30,9 @@ const Sidebar = styled(posed.div({
   z-index: 12;
   top: 36px;
   right: 0;
-  // width: 600px;
   width: ${props =>
     props.type === 'CreateComOffer' ? '470px' :
+    props.type === 'createAmoTask' ? '470px' :
     '600px'
   };
   height: calc(100% - 36px);
@@ -47,6 +47,7 @@ export const DetailsProvider = ({
   children
 }) => {
   const [ details, setDetails ] = useState(null)
+  const { type } = details || {}
   return (
     <DetailsContext.Provider
       value={{ details, setDetails }}
@@ -58,17 +59,17 @@ export const DetailsProvider = ({
         <PoseGroup>
           {details &&
             <Sidebar key='1'
-              type={details.type}
+              type={type}
             >
-							{ details.type === 'Org' ?	<OrgDetails
+							{ type === 'Org' ?	<OrgDetails
                   details={details}
                   setDetails={setDetails}
                 /> :
-                details.type === 'CreateComOffer' ?	<CreateComOfferDetails
+                type === 'CreateComOffer' ?	<CreateComOfferDetails
                   details={details}
                   setDetails={setDetails}
                 /> :
-                details.type === 'createAmoTask' ?	<CreateTaskDetails
+                type === 'createAmoTask' ?	<CreateTaskDetails
                   details={details}
                   setDetails={setDetails}
                 />

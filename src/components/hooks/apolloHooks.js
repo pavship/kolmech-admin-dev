@@ -1,6 +1,7 @@
-import { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useQuery as useQueryProto, useMutation as useHookMutation } from 'react-apollo-hooks'
 import { useNotifications } from '../notifications/NotificationsContext'
+// import useRefMounted from './useRefMounted'
 
 export function useQuery(
   query,
@@ -29,7 +30,7 @@ export function useQuery(
   return { data, loading, error }
 }
 
-export function useMutation(
+export const useMutation = (
   mutation,
   {
     onCompleted,
@@ -38,7 +39,9 @@ export function useMutation(
     errMsg,
     ...options
   } = {}
-) {
+) => {
+  // const refMounted = useRefMounted()
+  // console.log('refMounted.current1 > ', refMounted.current)
   const { notify } = useNotifications()
   const [loading, setLoading] = useState(false)
   const [called, setCalled] = useState(false)
@@ -54,11 +57,15 @@ export function useMutation(
     try {
       // const { data } = await mutate({ variables, ...rest })
       const { data } = await mutate(...args)
-      setData(data)
-      setLoading(false)
+      // console.log('refMounted.current2 > ', refMounted.current)
+      // if (refMounted.current) {
+        setData(data)
+        setLoading(false)
+      // }
       if (onCompleted) {
         onCompleted(data)
-      } else console.log('should notify with > ', notify) || notify({
+      } 
+      else notify({
         type: 'success',
         title: successMsg || 'Данные сохранены',
       })
@@ -68,7 +75,8 @@ export function useMutation(
       setError(err)
       if (onError) {
         onError(err)
-      } else notify({
+      } 
+      else notify({
         type: 'error',
         title: errMsg || 'Ошибка сохранения',
         content: err.message,

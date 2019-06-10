@@ -1,4 +1,5 @@
 import React from 'react'
+import cuid from 'cuid'
 
 import styled from 'styled-components'
 
@@ -12,10 +13,8 @@ const Container = styled.div`
 `
 
 export default ({
-  notify,
   deal,
   batch,
-  opTypes,
   upsertDeal,
   upsertBatch
 }) => {
@@ -23,25 +22,21 @@ export default ({
   // TODO temporarily restrict adding more than 1 techprocess
   return [
     ...batch.procs,
-    { id: 0 }
+    { id: cuid(), isNew: true }
   ].map(proc =>
     <Container
       key={proc.id}
     >
       <Proc
-        deal={deal}
         batch={batch}
         proc={proc}
-        upsertDeal={upsertDeal}
         upsertBatch={upsertBatch}
       />
-      {proc.id !== 0 &&
+      {!proc.isNew &&
         <Ops
-          notify={notify}
           deal={deal}
           batch={batch}
           proc={proc}
-          opTypes={opTypes}
           upsertDeal={upsertDeal}
           upsertBatch={upsertBatch}
         />

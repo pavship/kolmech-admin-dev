@@ -1,50 +1,28 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 
-import styled from 'styled-components'
 import { Div, Icon } from '../../../styled/styled-semantic'
 import DealsContext from '../../context/DealsContext'
+import HtmlSelect from '../../../common/HtmlSelect'
+import { assignNested } from '../../../form/utils'
 
-const Select = styled.select`
-  width: 130px;
-  /* width: 100%; */
-`
-
-export default ({
-  deal,
-  batch,
+export default function OpType ({
   proc,
   op,
-  upsertDeal,
-}) => {
-  const { id: batchId } = batch
-  const { id: procId} = proc
+  upsertBatch
+}) {
   const { id: opId, isNew: isNewOp, opType } = op
+  const { id: opTypeId, name } = opType || {}
+  // const { name } = opType || {}
   const { opTypes } = useContext(DealsContext)
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   useEffect(() => (editMode &&
     inputRef.current &&
     inputRef.current.focus()) || undefined)
-  const iniTypeId = (opType && opType.id) || 0
-  const [ opTypeId, setTypeId ] = useState(iniTypeId)
+  // const iniTypeId = (opType && opType.id) || 0
+  // const [ opTypeId, setTypeId ] = useState(iniTypeId)
+  const opsLength = proc.ops.length
   if (editMode)
-    return <Select
-        ref={inputRef}
-        value={opTypeId}
-        onChange={({ target: { value }}) => setTypeId(value)}
-        onBlur={async () => {
-          if (opTypeId !== iniTypeId && opTypeId !== 0)
-            await upsertDeal({ variables: { input: {
-              id: deal.id,
-              batches: [
-                ...deal.batches.map(({ id }) => ({ id })).filter(b => b.id !== batchId),
-                {
-                  id: batchId,
-                  procs: [
-                    ...batch.procs.map(({ id }) => ({ id })).filter(p => p.id !== procId),
-                    {
-                      id: procId,
-                      ops: [
                         ...proc.ops.map(({ id }) => ({ id })).filter(o => o.id !== opId),
                         {
                           ...isNewOp
@@ -54,16 +32,26 @@ export default ({
                       ]
                     }
                   ]
-                }
-              ]
-            }}})
-          // setEditMode(false)
-        }}
-      >
-        {[{ id: 0, name: '' }, ...opTypes].map(({ id, name }) =>
-          <option key={id} value={id}>{name}</option>
-        )}
-      </Select>
+    return <HtmlSelect
+      ref={inputRef}
+      value={opTypeId}
+      onChange={opTypeId => upsertBatch(draft => {
+        assignNested(draft, `procs[0].ops[${opsLength}]`, { opTypeId })
+      })}
+      options={opTypes}
+    />
+    // return <select
+    //   ref={inputRef}
+    //   value={opTypeId}
+    //   onChange={({ target: { value }}) => setTypeId(value)}
+    //   onBlur={() => upsertBatch(draft => {
+    //     assignNested(draft, `procs[0].ops[${opsLength}]`, { opTypeId })
+    //   })}
+    // >
+    //   {[{ id: 0, name: '' }, ...opTypes].map(({ id, name }) =>
+    //     <option key={id} value={id}>{name}</option>
+    //   )}
+    // </select>
   else if (isNewOp)
     return <Icon
       ml='6px'
@@ -78,8 +66,7 @@ export default ({
       ov='hidden'
 			to='ellipsis'
 			pl='6px'
-      // onClick={() => setEditMode(true)} //block editing
     >
-      {op.opType.name}
+      {name}
     </Div>
 }

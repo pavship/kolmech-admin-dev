@@ -3,6 +3,7 @@ export const isValidDateString = dateString => isValidDate(new Date(Date.parse(d
 export const tz = new Date().getTimezoneOffset() * 60000
 export const toLocalISOString = date => new Date(date.getTime() - tz).toISOString()
 export const toLocalDateString = date => toLocalISOString(date).slice(0,10)
+export const toLocalDatetimeString = date => toLocalISOString(date).slice(0,16)
 export const fromLocalISOString = (string) => new Date(Date.parse(string) + tz)
 // util to split array into chunks
 export const toChunks = (arr, size) => {

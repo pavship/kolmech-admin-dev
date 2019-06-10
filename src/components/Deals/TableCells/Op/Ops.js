@@ -13,11 +13,9 @@ const Container = styled.div`
 `
 
 export const Ops = ({
-  notify,
   deal,
   batch,
   proc,
-  opTypes,
   upsertDeal,
   upsertBatch
 }) => {
@@ -29,12 +27,10 @@ export const Ops = ({
       key={op.id}
     >
       <Op
-        notify={notify}
         deal={deal}
         batch={batch}
         proc={proc}
         op={op}
-        opTypes={opTypes}
         upsertDeal={upsertDeal}
         upsertBatch={upsertBatch}
       />

@@ -15,7 +15,7 @@ export default ({
 	return (
 		<Input
 			{...rest}
-			type="date"
+			// type="date"
 			onChange={({ target: { value }}) => onChange(value)}
 		/>
 	)

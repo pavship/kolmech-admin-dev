@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import HtmlDatePicker from '../common/HtmlDatePicker'
 import HtmlInput from '../common/HtmlInput'
 import { HtmlTextArea } from '../common/HtmlTextArea'
+import HtmlSelect from '../common/HtmlSelect';
 
 const Container = styled.div`
 	display: flex;
@@ -71,12 +72,17 @@ export default ({
 			<Content>
 				<InputContainer>
 					{contentBeforeField}
-					{	type === 'date'
+					{	type === 'date' || type === 'datetime-local'
 						? <HtmlDatePicker
+								type={type}
 								{...rest}
 							/> :
 						type === 'textarea'
 						? <HtmlTextArea
+								{...rest}
+							/> :
+						type === 'select'
+						? <HtmlSelect
 								{...rest}
 							/>
 						: <HtmlInput

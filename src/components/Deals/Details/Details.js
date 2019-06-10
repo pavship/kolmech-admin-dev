@@ -97,25 +97,27 @@ export default function DealDetails ({
                   produceNested(batchStructure, `warning`, value)
                 }})}
               />
-              {ops.map(({
-                id,
-                opType,
-                description
-              } = {}, opIndex) => {
-                const { name } = opType || {}
-                return <div key={id}>
-                  <p><b>{`${bIndex + 1}.${opIndex + 1}. ${name}`}</b></p>
-                  <Field
-                    label='Описание'
-                    type='textarea'
-                    indent
-                    value={description || ''}
-                    onChange={value => upsertBatch({ variables: { input:
-                      produceNested(batchStructure, `procs[0].ops[${opIndex}].description`, value)
-                    }})}
-                  />
-                </div>
-              })}
+              {ops
+                .filter(op => op.opType.opClass === 'MACHINING')
+                .map(({
+                  id,
+                  opType,
+                  description
+                } = {}, opIndex) => {
+                  const { name } = opType || {}
+                  return <div key={id}>
+                    <p><b>{`${bIndex + 1}.${opIndex + 1}. ${name}`}</b></p>
+                    <Field
+                      label='Описание'
+                      type='textarea'
+                      indent
+                      value={description || ''}
+                      onChange={value => upsertBatch({ variables: { input:
+                        produceNested(batchStructure, `procs[0].ops[${opIndex}].description`, value)
+                      }})}
+                    />
+                  </div>
+                })}
             </Div>
           </div>
         })}

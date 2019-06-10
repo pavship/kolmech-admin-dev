@@ -5,12 +5,12 @@ import { Div } from '../../styled/styled-semantic'
 import HtmlInput from '../../common/HtmlInput'
 import { assignNested } from '../../form/utils'
 
-export default ({
+export default function Proc ({
   batch,
   proc,
   upsertBatch
-}) => {
-  const { id: procId} = proc
+}) {
+  const { isNew: isNewProc} = proc
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   useEffect(() => (editMode &&
@@ -21,12 +21,15 @@ export default ({
       ref={inputRef}
       placeholder='Новый техпроцесс'
       value={proc.name || ''}
-      onChange={value => upsertBatch(draft => {
-        assignNested(draft, 'procs[0].name', value)
-        assignNested(draft, 'procs[0].modelId', batch.model.id, true)
-      })}
+      onChange={value => {
+        upsertBatch(draft => {
+          assignNested(draft, 'procs[0].name', value)
+          if (isNewProc) assignNested(draft, 'procs[0].modelId', batch.model.id, true)
+        })
+      }}
+      onBlur={() => setEditMode(false)}
     />
-  else if (procId === 0)
+  else if (isNewProc)
     return <Icon
       link
       name='plus'

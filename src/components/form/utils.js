@@ -103,18 +103,22 @@ const getArrSkeleton = arr => arr
 const analysePath = (path, acc = []) => {
 	const dotPos = path.indexOf('.')
 	const braketPos = path.indexOf('[')
+	if (path === '') {
+		acc[acc.length - 1].last = true
+		return acc
+	}
 	if (dotPos*braketPos === 1) return [
 		...acc, {
 		key: path,
 		last: true
 	}]
-	if (braketPos === -1 || dotPos < braketPos) return analysePath(
+	if (braketPos === -1 || dotPos + 1 && dotPos < braketPos) return analysePath(
 		path.slice(dotPos + 1), [
 			...acc, {
 				key: path.slice(0, dotPos)
 			}
 	])
-	if (dotPos === -1 || braketPos < dotPos) {
+	if (dotPos === -1 || braketPos + 1 && braketPos < dotPos) {
 		const closingBraketPos = path.indexOf(']')
 		return analysePath(
 			path.slice(closingBraketPos + 2), [
@@ -132,9 +136,12 @@ const analysePath = (path, acc = []) => {
 export const assignNested = (obj, path, val, preserveKeys=false) => {
 	const keys = analysePath(path)
 	keys.reduce((obj, { key, last, array, arrayItem }) => {
-		if (!arrayItem) Object.keys(obj).forEach(k => {
+		Object.keys(obj).forEach(k => {
 			if (k === 'id' || k === key) return
-			if (!preserveKeys) delete obj[k]
+			if (!preserveKeys) {
+				if (arrayItem) obj[k] = { id: obj[k].id }
+				else delete obj[k]
+			}
 		})
 		if (last) return obj[key] = val
 		if (!obj[key]) {
@@ -145,13 +152,16 @@ export const assignNested = (obj, path, val, preserveKeys=false) => {
 	}, obj)
 }
 
-export const produceNested = (obj, path, val) => {
+export const produceNested = (obj, path, val, preserveKeys=false) => {
 	const keys = analysePath(path)
 	return produce(obj, draft => {
 		keys.reduce((draft, { key, last, array, arrayItem }) => {
 			if (!arrayItem) Object.keys(draft).forEach(k => {
 				if (k === 'id' || k === key) return
-				delete draft[k]
+				if (!preserveKeys) {
+					if (arrayItem) obj[k] = { id: obj[k].id }
+					else delete obj[k]
+				}
 			})
 			if (last) return draft[key] = val
 			if (!draft[key]) {

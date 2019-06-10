@@ -10,7 +10,8 @@ const Input = styled.input`
 
 export default forwardRef(({
   value: propValue,
-	onChange,
+  onChange,
+  onBlur,
 	...rest
 }, ref) => {
   const [ value, setValue ] = useState('')
@@ -22,7 +23,10 @@ export default forwardRef(({
       ref={ref}
 			value={value}
       onChange={({ target: { value }}) => setValue(value)}
-      onBlur={submit}
+      onBlur={() => {
+        submit()
+        if (onBlur) onBlur()
+      }}
       onKeyDown={e => e.key === 'Enter' && submit()}
 		/>
 	)
