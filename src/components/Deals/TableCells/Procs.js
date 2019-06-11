@@ -18,7 +18,6 @@ export default ({
   upsertDeal,
   upsertBatch
 }) => {
-  // TODO change id = 0 to cuid() with isNew = true
   // TODO temporarily restrict adding more than 1 techprocess
   return [
     ...batch.procs,

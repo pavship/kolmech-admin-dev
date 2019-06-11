@@ -8,10 +8,14 @@ import { Div } from '../../styled/styled-semantic'
 import Model from './Model'
 import Qty from './Qty'
 import Procs from './Procs'
-import produce from 'immer';
+import produce from 'immer'
 
 const BatchContainer = styled.div`
   display: flex;
+  width: calc(170px + 170px + 140px);
+  :not(:last-child) {
+		border-bottom: 1px solid rgba(34,36,38,0.15);
+	}
 `
 
 export default function Batch ({

@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import { telFragment } from './tel'
+import { opTypeFragmentBasic } from './opType'
 
 // TODO switch to using only amoName in the app
 export const personFragmentBasic = gql`
@@ -11,6 +12,18 @@ export const personFragmentBasic = gql`
 		mName
 		amoName
 	}
+`
+
+export const personExecFragment = gql`
+	fragment personExecFragment on Person {
+		id
+		amoName
+		exec {
+			id
+			opTypes { ...opTypeFragmentBasic }
+		}
+	}
+	${opTypeFragmentBasic}
 `
 
 export const personContactsFragment = gql`
@@ -32,4 +45,20 @@ export const persons = gql`
 		persons { ...PersonFragmentBasic }
 	}
 	${personFragmentBasic}
+`
+
+export const personExecs = gql`
+	query Persons {
+		persons { ...personExecFragment }
+	}
+	${personExecFragment}
+`
+
+export const upsertPerson2 = gql`
+	mutation upsertPerson2($input: PersonInput!) {
+		upsertPerson2(input: $input) {
+			...personExecFragment
+		}
+	}
+	${personExecFragment}
 `

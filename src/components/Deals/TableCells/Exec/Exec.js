@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 
 import styled from 'styled-components'
-// import { Div } from '../../../styled/styled-semantic'
-// import Type from './OpType'
-// import DealLabour from './DealLabour'
-// import { DropdownMenu } from '../DropdownMenu'
+import { Div } from '../../../styled/styled-semantic'
+import { DropdownMenu } from '../DropdownMenu'
 import { Dropdown } from 'semantic-ui-react'
+import ExecName from './Name'
 
-const FlexContainer = styled.div`
+const ExecContainer = styled.div`
   display: flex;
+  :not(:last-child) {
+		border-bottom: 1px solid rgba(34,36,38,0.15);
+	}
+  background: rgba(0,0,0,.05);
 `
 
 const WarningItem = styled(Dropdown.Item)`
@@ -21,66 +24,40 @@ const WarningItem = styled(Dropdown.Item)`
 `
 
 export const Exec = ({
-  deal,
-  batch,
-  proc,
-  op,
-  opTypes,
-  upsertDeal,
-  upsertBatch
+  exec,
+  opIndex,
+  upsertBatch,
 }) => {
-  const { id, isNew, execs } = op
+  const { isNew } = exec
   const [isHovered, setIsHovered] = useState(false)
-  return <>
-    {/* <FlexContainer>
+  return <ExecContainer>
+    <Div
+      d='flex'
+      w='140px'
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <Div
-        d='flex'
-        w='130px'
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        w={isHovered ? '110px' : '100%'}
       >
-        <Div
-          w={isHovered ? '100px' : '100%'}
-        >
-          <Type
-            deal={deal}
-            batch={batch}
-            proc={proc}
-            op={op}
-            opTypes={opTypes}
-            upsertDeal={upsertDeal}
-          />
-        </Div>
-        {!isNew && isHovered &&
-          <DropdownMenu>
-            <WarningItem
-              icon='trash'
-              text='Удалить'
-              onClick={() => upsertBatch(draft => {
-                const ops = draft.procs[0].ops
-                ops.splice(ops.findIndex(o => o.id === id), 1)
-              })}
-            />
-          </DropdownMenu>
-        }
+        <ExecName
+          exec={exec}
+          opIndex={opIndex}
+          upsertBatch={upsertBatch}
+        />
       </Div>
-      {!isNew &&
-        <Div
-          w='40px'
-          bl='1px solid rgba(34,36,38,0.15);'
-        >
-          <DealLabour
-            deal={deal}
-            batch={batch}
-            proc={proc}
-            op={op}
-            upsertDeal={upsertDeal}
+      {!isNew && isHovered &&
+        <DropdownMenu>
+          <WarningItem
+            icon='trash'
+            text='Удалить'
+            onClick={() => upsertBatch(draft => {
+              // const ops = draft.procs[0].ops
+              // ops.splice(ops.findIndex(o => o.id === id), 1)
+            })}
           />
-        </Div>
-        {execs.map(exec =>
-          <
-        )}
+        </DropdownMenu>
       }
-    </FlexContainer> */}
-  </>
+    </Div>
+  </ExecContainer>
 }

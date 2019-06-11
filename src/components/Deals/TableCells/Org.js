@@ -5,14 +5,13 @@ import { Dropdown } from 'semantic-ui-react'
 import { Div } from '../../styled/styled-semantic'
 import { DropdownMenu } from './DropdownMenu'
 
-export default ({
-  // isRowHovered,
+export default function Org ({
   deal,
   orgs,
   upsertDeal,
   upsertingDeal,
   setDetails
-}) => {
+}) {
   const { id: dealId, org } = deal
   const orgId = (org && org.id) || 0
   const { highlightFolder } = useContext(DiskContext)

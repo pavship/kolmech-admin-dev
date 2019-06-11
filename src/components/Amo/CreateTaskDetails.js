@@ -11,8 +11,10 @@ export default function CreateComOfferDetails ({
   details: { dealId },
   setDetails
 }) {
+  const [ amoUserId, setAmoUserId ] = useState(0)
   const [ date, setDate ] = useState(toLocalDatetimeString(new Date()))
-  const [ createAmoTask ] = useMutation(cAT, { variables: { dealId, date } })
+  const [ description, setDescription ] = useState()
+  const [ createAmoTask ] = useMutation(cAT, { variables: { dealId, amoUserId, date, description } })
   return <>
     <Menu
       setDetails={setDetails}
@@ -26,11 +28,23 @@ export default function CreateComOfferDetails ({
 			<Div
 				p='1em 1em 1em 55px'
 			>
+        <Field
+					label='Кому'
+					type='select'
+					value={date}
+					onChange={date => setDate(date)}
+				/>
 				<Field
-					label='Дата'
+					label='Срок'
 					type='datetime-local'
 					value={date}
 					onChange={date => setDate(date)}
+				/>
+				<Field
+					label='Описание'
+					type='textarea'
+					value={description}
+					onChange={text => setDescription(text)}
 				/>
 			</Div>
 			<DealDetails

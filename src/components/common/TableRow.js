@@ -14,7 +14,7 @@ const Row = styled.tr`
 	${props => !props.noRowHover && `
 		:hover {
 			background: ${props.lightRowHower
-				? 'rgb(250, 250, 250);'
+				? 'rgb(250, 250, 250)'
 				: 'rgb(242, 242, 242)'};
 			color: rgba(0,0,0,.95);
 		}

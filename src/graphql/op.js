@@ -6,7 +6,7 @@ export const opFragmentBasic = gql`
 	fragment opFragmentBasic on Op {
 		id
 		dealLabor
-		opType { ...OpTypeFragmentBasic }
+		opType { ...opTypeFragmentBasic }
 	}
 	${opTypeFragmentBasic}
 `
@@ -26,5 +26,4 @@ export const opFragmentDetails = gql`
 		description
 	}
 	${opFragmentBasic}
-	${opTypeFragmentBasic}
 `

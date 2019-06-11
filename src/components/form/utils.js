@@ -143,7 +143,10 @@ export const assignNested = (obj, path, val, preserveKeys=false) => {
 				else delete obj[k]
 			}
 		})
-		if (last) return obj[key] = val
+		if (last) {
+			if (arrayItem && key === 'length') return obj[obj.length] = val
+			return obj[key] = val
+		}
 		if (!obj[key]) {
 			if (array) obj[key] = []
 			else obj[key] = {}
@@ -163,7 +166,10 @@ export const produceNested = (obj, path, val, preserveKeys=false) => {
 					else delete obj[k]
 				}
 			})
-			if (last) return draft[key] = val
+			if (last) {
+				if (arrayItem && key === 'length') return obj[obj.length] = val
+				return obj[key] = val
+			}
 			if (!draft[key]) {
 				if (array) draft[key] = []
 				else draft[key] = {}

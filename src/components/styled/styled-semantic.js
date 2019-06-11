@@ -39,7 +39,7 @@ const baseSet = ({ theme, bt, bb, bc, bl, br, bs, c, d, fs, fw, h, lh, mw, minw,
 		${bl 	? `border-left: ${bl};`														: ''}
 		${br 	? `border-right: ${br};`													: ''}
 		${bs 	? `box-sizing: ${bs};`														: ''}
-		${c 	? `color: ${c};`																	: ''}
+		${c 	? `color: ${theme.colors && theme.colors[c] || w};`	: ''}
 		${d 	? `display: ${d};`																: ''}
 		${fs 	? `font-size: ${fs};`															: ''}
 		${fw 	? `font-weight: ${fw};`														: ''}

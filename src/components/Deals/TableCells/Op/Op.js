@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import cuid from 'cuid'
 
 import styled from 'styled-components'
 import { Div } from '../../../styled/styled-semantic'
@@ -6,7 +7,7 @@ import OpType from './OpType'
 import DealLabour from './DealLabour'
 import { DropdownMenu } from '../DropdownMenu'
 import { Dropdown } from 'semantic-ui-react'
-import { Exec } from '../Exec/Exec';
+import { Exec } from '../Exec/Exec'
 
 const FlexContainer = styled.div`
   display: flex;
@@ -21,13 +22,6 @@ const WarningItem = styled(Dropdown.Item)`
   }
 `
 
-const ExecContainer = styled.div`
-  :not(:last-child) {
-		border-bottom: 1px solid rgba(34,36,38,0.15);
-	}
-  background: rgba(0,0,0,.05);
-`
-
 export const Op = ({
   deal,
   batch,
@@ -38,6 +32,7 @@ export const Op = ({
 }) => {
   const { id, isNew, execs } = op
   const [isHovered, setIsHovered] = useState(false)
+  const opIndex = !isNew && proc.ops.findIndex(o => o.id === id)
   return <>
     <FlexContainer>
       <Div
@@ -61,8 +56,7 @@ export const Op = ({
               icon='trash'
               text='Удалить'
               onClick={() => upsertBatch(draft => {
-                const ops = draft.procs[0].ops
-                ops.splice(ops.findIndex(o => o.id === id), 1)
+                draft.procs[0].ops.splice(opIndex, 1)
               })}
             />
           </DropdownMenu>
@@ -81,11 +75,16 @@ export const Op = ({
             upsertDeal={upsertDeal}
           />
         </Div>
-        {execs.map(exec =>
-          <ExecContainer>
-            <Exec
-            />
-          </ExecContainer>
+        {[
+          ...execs,
+          { id: cuid(), isNew: true }
+        ].map(exec =>
+          <Exec
+            key={exec.id}
+            exec={exec}
+            opIndex={opIndex}
+            upsertBatch={upsertBatch}
+          />
         )}
       </>}
     </FlexContainer>

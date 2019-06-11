@@ -8,3 +8,11 @@ export const execFragmentBasic = gql`
 	}
 	${personFragmentBasic}
 `
+
+export const upsertExec = gql`
+	mutation upsertExec($input: ExecInput!) {
+		upsertExec(input: $input) {
+			id
+		}
+	}
+`

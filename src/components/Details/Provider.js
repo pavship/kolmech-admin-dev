@@ -5,6 +5,7 @@ import posed, { PoseGroup } from 'react-pose'
 import { OrgDetails } from '../Org/Details/Details'
 import CreateComOfferDetails from '../ComOffer/CreateComOfferDetails'
 import CreateTaskDetails from '../Amo/CreateTaskDetails'
+import SelectExecDetails from '../Exec/SelectExecDetails'
 
 const Container = styled.div`
   height: calc(100% - 36px);
@@ -70,6 +71,10 @@ export const DetailsProvider = ({
                   setDetails={setDetails}
                 /> :
                 type === 'createAmoTask' ?	<CreateTaskDetails
+                  details={details}
+                  setDetails={setDetails}
+                  /> :
+                type === 'SelectExec' ?	<SelectExecDetails
                   details={details}
                   setDetails={setDetails}
                 />

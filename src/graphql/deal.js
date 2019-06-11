@@ -39,7 +39,7 @@ export const dealsPage = gql`
 	query Deals {
 		deals { ...DealFragmentMiddle }
 		orgs { ...OrgFragmentBasic }
-		opTypes { ...OpTypeFragmentBasic }
+		opTypes { ...opTypeFragmentBasic }
 	}
 	${dealFragmentMiddle}
 	${orgFragmentBasic}
