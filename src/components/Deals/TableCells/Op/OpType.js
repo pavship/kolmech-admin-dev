@@ -6,7 +6,9 @@ import HtmlSelect from '../../../common/HtmlSelect'
 import { assignNested } from '../../../form/utils'
 
 export default function OpType ({
+  basePath,
   isNewOp,
+  opClass,
   opType = {},
   upsertBatch
 }) {
@@ -21,9 +23,9 @@ export default function OpType ({
     return <HtmlSelect
       ref={inputRef}
       value={opTypeId}
-      options={opTypes.filter(ot => ot.opClass === 'MACHINING')}
+      options={opTypes.filter(ot => ot.opClass === opClass)}
       onChange={opTypeId => upsertBatch(draft => {
-        assignNested(draft, `procs[0].ops[length]`, { opTypeId })
+        assignNested(draft, basePath + 'ops[length]', { opTypeId })
       })}
       onBlur={() => setEditMode(false)}
     />

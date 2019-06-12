@@ -1,50 +1,39 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-import styled from 'styled-components'
-import { Div, Icon } from '../../styled/styled-semantic';
-
-const Input = styled.input`
-  width: 129px;
-`
+import { Div, Icon } from '../../styled/styled-semantic'
+import HtmlInput from '../../common/HtmlInput'
 
 export default ({
-  deal,
-  batch,
+  batch: { id: batchId, isNew: isNewBatch},
+  deal: { id: dealId, batches },
+  model: { id, name } = {},
   upsertDeal
 }) => {
-  const { id: batchId, isNew: isNewBatch, model = {} } = batch
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   useEffect(() => (editMode &&
     inputRef.current &&
     inputRef.current.focus()) || undefined)
-  const iniModelName = model.name || ''
-  const [ modelName, setModelName ] = useState(iniModelName)
   if (editMode)
-    return <Input
+    return <HtmlInput
       ref={inputRef}
       placeholder='Новое Изделие'
-      value={modelName}
-      onChange={({ target: { value }}) => setModelName(value)}
-      onBlur={async () => {
-        if (modelName !== iniModelName && modelName !== '')
-          await upsertDeal({ variables: { input: {
-            id: deal.id,
-            batches: [
-              ...deal.batches.map(({ id }) => ({ id })).filter(b => b.id !== batchId),
-              {
-                ...(batchId === 0)
-                  ? { qty: 0 }
-                  : { id: batchId },
-                model: {
-                  ...(model.id !== undefined) && { id: model.id },
-                  name: modelName,
-                }
-              }
-            ]
-          }}})
-        setEditMode(false)
-      }}
+      value={name || ''}
+      onChange={value => upsertDeal({ variables: { input: {
+        id: dealId,
+        batches: [
+          ...batches.map(({ id }) => ({ id })).filter(b => b.id !== batchId),
+          {
+            ...isNewBatch
+              ? { qty: 0 }
+              : { id: batchId },
+            model: {
+              ...!isNewBatch && { id },
+              name: value,
+            }
+          }
+        ]
+      }}})}
     />
   else if (isNewBatch)
     return <Icon
@@ -59,6 +48,6 @@ export default ({
       to='ellipsis'
       onClick={() => setEditMode(true)}
     >
-      {model.name}
+      {name}
     </Div>
 }

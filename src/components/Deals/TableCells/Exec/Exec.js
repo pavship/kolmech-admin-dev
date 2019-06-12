@@ -26,6 +26,7 @@ const WarningItem = styled(Dropdown.Item)`
 `
 
 export const Exec = ({
+  basePath,
   exec,
   execIndex,
   opIndex,
@@ -45,6 +46,7 @@ export const Exec = ({
         w={isHovered ? '140px' : '100%'}
       >
         <ExecName
+          basePath={basePath}
           exec={exec}
           opIndex={opIndex}
           opTypeId={opTypeId}
@@ -57,7 +59,7 @@ export const Exec = ({
             icon='trash'
             text='Удалить'
             onClick={() => upsertBatch(draft => {
-              assignNested(draft, `procs[0].ops[${opIndex}].execs[${execIndex}].disconnect`, true)
+              assignNested(draft, basePath + `ops[${opIndex}].execs[${execIndex}].disconnect`, true)
             }, { refetchQueries: [{ query: personExec, variables: { id: person.id } }] })}
           />
         </DropdownMenu>

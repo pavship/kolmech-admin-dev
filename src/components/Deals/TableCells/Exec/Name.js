@@ -5,6 +5,7 @@ import { assignNested } from '../../../form/utils'
 import DetailsContext from '../../../Details/Provider'
 
 export default function ExecName ({
+  basePath,
   exec,
   opIndex,
   opTypeId,
@@ -30,7 +31,7 @@ export default function ExecName ({
           onSubmit: execId => {
             upsertBatch(draft => {
               assignNested( draft,
-                `procs[0].ops[${opIndex}].execs[length]`,
+                basePath + `ops[${opIndex}].execs[length]`,
                 { execId }
               )
             })

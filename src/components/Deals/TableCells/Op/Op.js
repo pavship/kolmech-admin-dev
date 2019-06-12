@@ -24,25 +24,33 @@ const WarningItem = styled(Dropdown.Item)`
 `
 
 export const Op = ({
+  basePath = '',
   op,
+  opClass,
   opIndex,
   upsertBatch
 }) => {
   const { isNew, execs, opType, dealLabor } = op
+  const isMachiningClass = basePath.startsWith('procs')
   const [isHovered, setIsHovered] = useState(false)
   return <>
     <FlexContainer>
       <Div
         d='flex'
-        w='130px'
+        w={isMachiningClass ? '130px' : '170px'}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <Div
-          w={!isNew && isHovered ? '100px' : '100%'}
+          w={!isNew && isHovered ? (isMachiningClass ? '100px' : '140px') : '100%'}
+          whs='nowrap'
+          to='ellipsis'
+          pos='relative'
         >
           <OpType
+            basePath={basePath}
             opType={opType}
+            opClass={opClass}
             isNewOp={isNew}
             upsertBatch={upsertBatch}
           />
@@ -53,14 +61,13 @@ export const Op = ({
               icon='trash'
               text='Удалить'
               onClick={() => upsertBatch(draft => {
-                // draft.procs[0].ops.splice(opIndex, 1)
-                assignNested(draft, `procs[0].ops[${opIndex}]`, {})
+                assignNested(draft, basePath + `ops[${opIndex}]`, {})
               })}
             />
           </DropdownMenu>
         }
       </Div>
-      {!isNew && <>
+      {!isNew && isMachiningClass &&
         <Div
           w='40px'
           bl='1px solid rgba(34,36,38,0.15);'
@@ -71,6 +78,8 @@ export const Op = ({
             upsertBatch={upsertBatch}
           />
         </Div>
+      }
+      {!isNew && 
         <Div
           w='170px'
         >
@@ -80,6 +89,7 @@ export const Op = ({
           ].map((exec, i) =>
             <Exec
               key={exec.id}
+              basePath={basePath}
               exec={exec}
               execIndex={i}
               opIndex={opIndex}
@@ -88,7 +98,7 @@ export const Op = ({
             />
           )}
         </Div>
-      </>}
+      }
     </FlexContainer>
   </>
 }

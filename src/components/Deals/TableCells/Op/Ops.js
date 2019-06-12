@@ -24,7 +24,9 @@ export const Ops = ({
       key={op.id}
     >
       <Op
+        basePath='procs[0].'
         op={op}
+        opClass='MACHINING'
         opIndex={i}
         upsertBatch={upsertBatch}
       />

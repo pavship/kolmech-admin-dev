@@ -34,8 +34,9 @@ export default function Batch ({
       br={isNew ? undefined : '1px solid rgba(34,36,38,0.15);'}
     >
       <Model
-        deal={deal}
         batch={batch}
+        deal={deal}
+        model={model}
         upsertDeal={upsertDeal}
       />
     </Div>
