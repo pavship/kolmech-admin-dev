@@ -77,7 +77,7 @@ export const Op = ({
           />
         </Div>
         <Div
-          w='140px'
+          w='170px'
         >
           {[
             ...execs,

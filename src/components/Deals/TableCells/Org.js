@@ -61,6 +61,7 @@ export default function Org ({
         to='ellipsis'
         w={isHovered ? '140px' : undefined}
         fw={isHovered ? 'bold' : undefined}
+        pl='6px'
         // onClick={() => setEditMode(true)} //block editing
       >
         {org && org.name}

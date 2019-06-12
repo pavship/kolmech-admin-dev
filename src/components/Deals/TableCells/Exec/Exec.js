@@ -34,12 +34,12 @@ export const Exec = ({
   return <ExecContainer>
     <Div
       d='flex'
-      w='140px'
+      w='170px'
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <Div
-        w={isHovered ? '110px' : '100%'}
+        w={isHovered ? '140px' : '100%'}
       >
         <ExecName
           exec={exec}
