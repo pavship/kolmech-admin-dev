@@ -9,10 +9,10 @@ const Input = styled.input`
 
 export default ({
   deal,
-  batchId,
-  qty: iniQty,
+  batch,
   upsertDeal
 }) => {
+  const { id: batchId, isNew: isNewBatch, qty: iniQty } = batch
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   useEffect(() => (editMode &&
@@ -42,6 +42,6 @@ export default ({
       pl='4px'
       onClick={() => setEditMode(true)}
     >
-      {batchId ? qty : ''}
+      {!isNewBatch ? qty : ''}
     </Div>
 }

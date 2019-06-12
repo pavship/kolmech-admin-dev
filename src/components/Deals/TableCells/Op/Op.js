@@ -8,6 +8,7 @@ import DealLabour from './DealLabour'
 import { DropdownMenu } from '../DropdownMenu'
 import { Dropdown } from 'semantic-ui-react'
 import { Exec } from '../Exec/Exec'
+import { assignNested } from '../../../form/utils';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -23,17 +24,12 @@ const WarningItem = styled(Dropdown.Item)`
 `
 
 export const Op = ({
-  deal,
-  batch,
-  proc,
   op,
-  upsertDeal,
+  opIndex,
   upsertBatch
 }) => {
-  const { id, isNew, execs, opType } = op
-  console.log('op > ', op)
+  const { isNew, execs, opType, dealLabor } = op
   const [isHovered, setIsHovered] = useState(false)
-  const opIndex = !isNew && proc.ops.findIndex(o => o.id === id)
   return <>
     <FlexContainer>
       <Div
@@ -43,11 +39,11 @@ export const Op = ({
         onMouseLeave={() => setIsHovered(false)}
       >
         <Div
-          w={isHovered ? '100px' : '100%'}
+          w={!isNew && isHovered ? '100px' : '100%'}
         >
           <OpType
-            proc={proc}
-            op={op}
+            opType={opType}
+            isNewOp={isNew}
             upsertBatch={upsertBatch}
           />
         </Div>
@@ -57,7 +53,8 @@ export const Op = ({
               icon='trash'
               text='Удалить'
               onClick={() => upsertBatch(draft => {
-                draft.procs[0].ops.splice(opIndex, 1)
+                // draft.procs[0].ops.splice(opIndex, 1)
+                assignNested(draft, `procs[0].ops[${opIndex}]`, {})
               })}
             />
           </DropdownMenu>
@@ -69,11 +66,9 @@ export const Op = ({
           bl='1px solid rgba(34,36,38,0.15);'
         >
           <DealLabour
-            deal={deal}
-            batch={batch}
-            proc={proc}
-            op={op}
-            upsertDeal={upsertDeal}
+            dealLabor={dealLabor}
+            opIndex={opIndex}
+            upsertBatch={upsertBatch}
           />
         </Div>
         <Div
@@ -82,10 +77,11 @@ export const Op = ({
           {[
             ...execs,
             { id: cuid(), isNew: true }
-          ].map(exec =>
+          ].map((exec, i) =>
             <Exec
               key={exec.id}
               exec={exec}
+              execIndex={i}
               opIndex={opIndex}
               opTypeId={opType.id}
               upsertBatch={upsertBatch}

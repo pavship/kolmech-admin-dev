@@ -13,25 +13,19 @@ const Container = styled.div`
 `
 
 export const Ops = ({
-  deal,
-  batch,
-  proc,
-  upsertDeal,
+  ops,
   upsertBatch
 }) => {
   return [
-    ...proc.ops,
+    ...ops,
     { id: cuid(), isNew: true }
-  ].map(op =>
+  ].map((op, i) =>
     <Container
       key={op.id}
     >
       <Op
-        deal={deal}
-        batch={batch}
-        proc={proc}
         op={op}
-        upsertDeal={upsertDeal}
+        opIndex={i}
         upsertBatch={upsertBatch}
       />
     </Container>

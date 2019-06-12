@@ -5,6 +5,8 @@ import { Div } from '../../../styled/styled-semantic'
 import { DropdownMenu } from '../DropdownMenu'
 import { Dropdown } from 'semantic-ui-react'
 import ExecName from './Name'
+import { assignNested } from '../../../form/utils'
+import { personExec } from '../../../../graphql/person'
 
 const ExecContainer = styled.div`
   display: flex;
@@ -25,11 +27,12 @@ const WarningItem = styled(Dropdown.Item)`
 
 export const Exec = ({
   exec,
+  execIndex,
   opIndex,
   opTypeId,
   upsertBatch,
 }) => {
-  const { isNew } = exec
+  const { isNew, person } = exec
   const [isHovered, setIsHovered] = useState(false)
   return <ExecContainer>
     <Div
@@ -54,9 +57,8 @@ export const Exec = ({
             icon='trash'
             text='Удалить'
             onClick={() => upsertBatch(draft => {
-              // const ops = draft.procs[0].ops
-              // ops.splice(ops.findIndex(o => o.id === id), 1)
-            })}
+              assignNested(draft, `procs[0].ops[${opIndex}].execs[${execIndex}].disconnect`, true)
+            }, { refetchQueries: [{ query: personExec, variables: { id: person.id } }] })}
           />
         </DropdownMenu>
       }

@@ -12,31 +12,28 @@ const Container = styled.div`
 	}
 `
 
-export default ({
-  deal,
-  batch,
-  upsertDeal,
+export default function ProcOps ({
+  modelId,
+  ops,
+  procs,
   upsertBatch
-}) => {
+}) {
   // TODO temporarily restrict adding more than 1 techprocess
   return [
-    ...batch.procs,
+    ...procs,
     { id: cuid(), isNew: true }
   ].map(proc =>
     <Container
       key={proc.id}
     >
       <Proc
-        batch={batch}
+        modelId={modelId}
         proc={proc}
         upsertBatch={upsertBatch}
       />
       {!proc.isNew &&
         <Ops
-          deal={deal}
-          batch={batch}
-          proc={proc}
-          upsertDeal={upsertDeal}
+          ops={proc.ops}
           upsertBatch={upsertBatch}
         />
       }

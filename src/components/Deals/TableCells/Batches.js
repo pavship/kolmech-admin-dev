@@ -1,4 +1,5 @@
 import React from 'react'
+import cuid from 'cuid'
 
 import Batch from'./Batch'
 
@@ -8,7 +9,7 @@ export default function Batches ({
 }) {
   return [
     ...deal.batches,
-    { id: 0 }
+    { id: cuid(), isNew: true }
   ].map(batch =>
     <Batch
       key={batch.id}

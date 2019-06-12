@@ -11,29 +11,29 @@ export default function ExecName ({
   upsertBatch
 }) {
   const { setDetails } = useContext(DetailsContext)
-  const { isNew: isNewExec, person } = exec
-  const { amoName } = person || {}
+  const { isNew: isNewExec, person: { amoName } = {} } = exec
   const [ addMode, setAddMode ] = useState(false)
   if (isNewExec)
     return <Icon
       ml='6px'
+      // TODO fix addMode not recognized as truthy
 			c={addMode ? 'green' : 'rgba(50,50,50,.87)'}
       link
       name='plus'
+      activeColor='green'
+      // active={addMode}
       onClick={() => {
         setAddMode(true)
         setDetails({
           type: 'SelectExec',
           opTypeId,
           onSubmit: execId => {
-            console.log('execId > ', execId)
             upsertBatch(draft => {
               assignNested( draft,
                 `procs[0].ops[${opIndex}].execs[length]`,
                 { execId }
               )
             })
-            // setAddMode(false)
           }
         })
       }}

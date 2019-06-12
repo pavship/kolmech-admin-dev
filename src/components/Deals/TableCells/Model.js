@@ -12,7 +12,7 @@ export default ({
   batch,
   upsertDeal
 }) => {
-  const { id: batchId, qty, model = {} } = batch
+  const { id: batchId, isNew: isNewBatch, model = {} } = batch
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   useEffect(() => (editMode &&
@@ -46,7 +46,7 @@ export default ({
         setEditMode(false)
       }}
     />
-  else if (batchId === 0)
+  else if (isNewBatch)
     return <Icon
       link
       name='plus'

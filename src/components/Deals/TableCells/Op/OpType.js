@@ -6,27 +6,26 @@ import HtmlSelect from '../../../common/HtmlSelect'
 import { assignNested } from '../../../form/utils'
 
 export default function OpType ({
-  proc,
-  op,
+  isNewOp,
+  opType = {},
   upsertBatch
 }) {
-  const { isNew: isNewOp, opType } = op
-  const { id: opTypeId, name } = opType || {}
+  const { id: opTypeId, name } = opType
   const { opTypes } = useContext(DealsContext)
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   useEffect(() => (editMode &&
     inputRef.current &&
     inputRef.current.focus()) || undefined)
-  const opsLength = proc.ops.length
   if (editMode)
     return <HtmlSelect
       ref={inputRef}
       value={opTypeId}
+      options={opTypes.filter(ot => ot.opClass === 'MACHINING')}
       onChange={opTypeId => upsertBatch(draft => {
-        assignNested(draft, `procs[0].ops[${opsLength}]`, { opTypeId })
+        assignNested(draft, `procs[0].ops[length]`, { opTypeId })
       })}
-      options={opTypes}
+      onBlur={() => setEditMode(false)}
     />
   else if (isNewOp)
     return <Icon

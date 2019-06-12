@@ -70,12 +70,13 @@ export default function SelectExecDetails ({
 		successMsg: 'Контакты синхронизированы',
 		errMsg: 'Ошибка синхронизации с Амо'
 	})
-	const [ upsertPersonProto ] = useMutation(uP)
+	const [ upsertPersonProto ] = useMutation(uP, {
+		successMsg: 'Обновлены данные исполнителя',
+		errMsg: 'Ошибка. Данные исполнителя не обновлены'
+	})
 	const upsertPerson = () => upsertPersonProto({ variables: { input:
 		produce(getStructure(persons.find(p => p.id === personId)), draft => {
 			assignNested(draft, `exec.opTypes[length]`, { opTypeId } )
-			// if (!personExecs.exec) assignNested(draft, `exec.opTypes[0]`, { opTypeId } )
-			// else assignNested(draft, `exec.opTypes[length]`, { opTypeId })
 		})
 	}})
   return <>

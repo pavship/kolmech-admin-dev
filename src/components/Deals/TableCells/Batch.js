@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { Div } from '../../styled/styled-semantic'
 import Model from './Model'
 import Qty from './Qty'
-import Procs from './Procs'
+import ProcOps from './ProcOps'
 import produce from 'immer'
 
 const BatchContainer = styled.div`
@@ -23,14 +23,15 @@ export default function Batch ({
   batch,
   upsertDeal,
 }) {
+  const { isNew, ops, procs, model } = batch
   const [ upsertBatchProto ] = useMutation(uBq)
-  const upsertBatch = draftHandler => upsertBatchProto({ variables: { input:
+  const upsertBatch = (draftHandler, options = {}) => upsertBatchProto({ variables: { input:
     produce(getStructure(batch), draftHandler)
-  }})
+  }, ...options})
   return <BatchContainer>
     <Div
       w='130px'
-      br={batch.id !== 0 ? '1px solid rgba(34,36,38,0.15);' : undefined}
+      br={isNew ? undefined : '1px solid rgba(34,36,38,0.15);'}
     >
       <Model
         deal={deal}
@@ -38,24 +39,23 @@ export default function Batch ({
         upsertDeal={upsertDeal}
       />
     </Div>
-    {batch.id !== 0 && <>
+    {!isNew && <>
       <Div
         w='40px;'
       >
         <Qty
           deal={deal}
-          batchId={batch.id}
-          qty={batch.qty}
+          batch={batch}
           upsertDeal={upsertDeal}
         />
       </Div>
       <Div
         w='calc(170px+140px)'
       >
-        <Procs
-          deal={deal}
-          batch={batch}
-          upsertDeal={upsertDeal}
+        <ProcOps
+          modelId={model.id}
+          ops={ops}
+          procs={procs}
           upsertBatch={upsertBatch}
         />
       </Div>

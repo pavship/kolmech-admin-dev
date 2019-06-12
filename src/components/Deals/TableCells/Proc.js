@@ -6,11 +6,11 @@ import HtmlInput from '../../common/HtmlInput'
 import { assignNested } from '../../form/utils'
 
 export default function Proc ({
-  batch,
+  modelId,
   proc,
   upsertBatch
 }) {
-  const { isNew: isNewProc} = proc
+  const { isNew: isNewProc, name} = proc
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   useEffect(() => (editMode &&
@@ -20,11 +20,10 @@ export default function Proc ({
     return <HtmlInput
       ref={inputRef}
       placeholder='Новый техпроцесс'
-      value={proc.name || ''}
+      value={name || ''}
       onChange={value => {
         upsertBatch(draft => {
-          assignNested(draft, 'procs[0].name', value)
-          if (isNewProc) assignNested(draft, 'procs[0].modelId', batch.model.id, true)
+          assignNested(draft, 'procs[0]', { name: value, modelId })
         })
       }}
       onBlur={() => setEditMode(false)}
@@ -41,6 +40,6 @@ export default function Proc ({
       to='ellipsis'
       onClick={() => setEditMode(true)}
     >
-      {proc.name}
+      {name}
     </Div>
 }

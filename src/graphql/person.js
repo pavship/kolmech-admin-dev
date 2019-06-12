@@ -48,8 +48,15 @@ export const persons = gql`
 `
 
 export const personExecs = gql`
-	query Persons {
+	query personExecs {
 		persons { ...personExecFragment }
+	}
+	${personExecFragment}
+`
+
+export const personExec = gql`
+	query personExec ($id: ID!) {
+		person (id: $id) { ...personExecFragment }
 	}
 	${personExecFragment}
 `
