@@ -30,7 +30,8 @@ export const Op = ({
   upsertDeal,
   upsertBatch
 }) => {
-  const { id, isNew, execs } = op
+  const { id, isNew, execs, opType } = op
+  console.log('op > ', op)
   const [isHovered, setIsHovered] = useState(false)
   const opIndex = !isNew && proc.ops.findIndex(o => o.id === id)
   return <>
@@ -75,17 +76,22 @@ export const Op = ({
             upsertDeal={upsertDeal}
           />
         </Div>
-        {[
-          ...execs,
-          { id: cuid(), isNew: true }
-        ].map(exec =>
-          <Exec
-            key={exec.id}
-            exec={exec}
-            opIndex={opIndex}
-            upsertBatch={upsertBatch}
-          />
-        )}
+        <Div
+          w='140px'
+        >
+          {[
+            ...execs,
+            { id: cuid(), isNew: true }
+          ].map(exec =>
+            <Exec
+              key={exec.id}
+              exec={exec}
+              opIndex={opIndex}
+              opTypeId={opType.id}
+              upsertBatch={upsertBatch}
+            />
+          )}
+        </Div>
       </>}
     </FlexContainer>
   </>

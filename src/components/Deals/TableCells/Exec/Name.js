@@ -7,11 +7,12 @@ import DetailsContext from '../../../Details/Provider'
 export default function ExecName ({
   exec,
   opIndex,
+  opTypeId,
   upsertBatch
 }) {
   const { setDetails } = useContext(DetailsContext)
   const { isNew: isNewExec, person } = exec
-  const { name } = person || {}
+  const { amoName } = person || {}
   const [ addMode, setAddMode ] = useState(false)
   if (isNewExec)
     return <Icon
@@ -23,14 +24,15 @@ export default function ExecName ({
         setAddMode(true)
         setDetails({
           type: 'SelectExec',
+          opTypeId,
           onSubmit: execId => {
             console.log('execId > ', execId)
-            // upsertBatch(draft => {
-            //   assignNested( draft,
-            //     `draft.procs[0].ops[${opIndex}].execs[length]`,
-            //     { id: execId }
-            //   )
-            // })
+            upsertBatch(draft => {
+              assignNested( draft,
+                `procs[0].ops[${opIndex}].execs[length]`,
+                { execId }
+              )
+            })
             // setAddMode(false)
           }
         })
@@ -42,6 +44,6 @@ export default function ExecName ({
 			to='ellipsis'
 			pl='6px'
     >
-      {name}
+      {amoName}
     </Div>
 }

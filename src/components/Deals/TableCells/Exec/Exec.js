@@ -26,6 +26,7 @@ const WarningItem = styled(Dropdown.Item)`
 export const Exec = ({
   exec,
   opIndex,
+  opTypeId,
   upsertBatch,
 }) => {
   const { isNew } = exec
@@ -43,6 +44,7 @@ export const Exec = ({
         <ExecName
           exec={exec}
           opIndex={opIndex}
+          opTypeId={opTypeId}
           upsertBatch={upsertBatch}
         />
       </Div>

@@ -4,16 +4,18 @@ import { personExecs } from '../../graphql/person'
 import { upsertPerson2 as uP } from '../../graphql/person'
 
 import styled from 'styled-components'
-import { Div } from '../styled/styled-semantic'
+import { Div, Button, Icon } from '../styled/styled-semantic'
 import { Menu } from '../Details/Menu/Menu'
 import LeftIcon from '../Details/Menu/LeftIcon'
-import { Dimmer, Loader } from 'semantic-ui-react';
-import produce from 'immer';
-import { assignNested, getStructure } from '../form/utils';
+import { Dimmer, Loader } from 'semantic-ui-react'
+import produce from 'immer'
+import { assignNested, getStructure } from '../form/utils'
+import { syncWithAmoContacts as sWAC } from '../../graphql/amo'
 
 const ListTitle = styled.h4`
 	margin: 0;
 	padding: 1em 1em 1em 55px;
+	display: flex;
 `
 
 const ListItemContainer = styled.div`
@@ -64,10 +66,16 @@ export default function SelectExecDetails ({
 	const [ search, setSearch ] = useState('')
 	const persons = data && data.persons && data.persons
 		.filter(p => !search || p.amoName.indexOf(search) !== -1) || []
-	const [ upsertPerson ] = useMutation(uP, { variables: { input:
+	const [ syncWithAmoContacts, { loading: syncingContacts } ] = useMutation(sWAC, {
+		successMsg: 'Контакты синхронизированы',
+		errMsg: 'Ошибка синхронизации с Амо'
+	})
+	const [ upsertPersonProto ] = useMutation(uP)
+	const upsertPerson = () => upsertPersonProto({ variables: { input:
 		produce(getStructure(persons.find(p => p.id === personId)), draft => {
-			if (!personExecs.exec) assignNested(draft, `exec`, { opTypes: [{ opTypeId }] })
-			else assignNested(draft, `exec.opTypes[length]`, { opTypeId })
+			assignNested(draft, `exec.opTypes[length]`, { opTypeId } )
+			// if (!personExecs.exec) assignNested(draft, `exec.opTypes[0]`, { opTypeId } )
+			// else assignNested(draft, `exec.opTypes[length]`, { opTypeId })
 		})
 	}})
   return <>
@@ -77,12 +85,11 @@ export default function SelectExecDetails ({
       onSubmit={async () => {
 				if (personId) {
 					const { data } = await upsertPerson()
-					console.log('data > ', data)
-
+					const execId = data && data.upsertPerson2.exec.id
+					if (execId) onSubmit(execId)
 				}
-
-				// let createdExec = null
-				// onSubmit(execId)
+				if (execId) onSubmit(execId)
+				setDetails(null)
 			}}
     />
     <Div
@@ -107,16 +114,32 @@ export default function SelectExecDetails ({
 						key={p.id}
 						active={p.exec.id === execId}
 						text={p.amoName}
+						onClick={() => setPersonId(p.id) || setExecId('')}
 					/>)
 				}
-				<ListTitle>Все контакты</ListTitle>
+				<ListTitle>Все контакты
+					<Button compact circular menu
+						w='180px'
+						ml='auto'
+						ta='left'
+						activeColor='blue' 
+						onClick={syncWithAmoContacts}
+					>
+						<Icon
+							name='refresh'
+							color={syncingContacts ? 'blue' : undefined} 
+							loading={syncingContacts}
+						/>
+						{syncingContacts ? 'Загрузка..' : 'Контакты AmoCRM'}
+					</Button>
+				</ListTitle>
 				{persons
 					.filter(p => !p.exec)
 					.map(p => <ListItem
 						key={p.id}
 						active={p.id === personId}
 						text={p.amoName}
-						onClick={() => console.log('p.id > ', p.id) || setPersonId(p.id) || setExecId('')}
+						onClick={() => setPersonId(p.id) || setExecId('')}
 					/>)
 				}
 			</>}
