@@ -92,8 +92,8 @@ export const Op = ({
               basePath={basePath}
               exec={exec}
               execIndex={i}
+              op={op}
               opIndex={opIndex}
-              opTypeId={opType.id}
               upsertBatch={upsertBatch}
             />
           )}

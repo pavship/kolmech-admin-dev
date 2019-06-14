@@ -2,7 +2,7 @@ import React from 'react'
 import { Query, Mutation } from 'react-apollo'
 import { dealsPage, upsertDeal } from '../../graphql/deal'
 import { NotificationsConsumer } from '../notifications/NotificationsContext'
-import { ContextProvider } from './context/DealsContext'
+import { DealsContextProvider } from './context/Context'
 import { DetailsProvider } from '../Details/Provider'
 
 import DealsTable from './Table'
@@ -55,7 +55,7 @@ export default ({
                       {!loading
                         ? !error
                           ? data && 
-                            <ContextProvider
+                            <DealsContextProvider
                               opTypes={data.opTypes}
                             >
                               <DealsTable
@@ -65,7 +65,7 @@ export default ({
                                 upsertDeal={upsertDeal}
                                 upsertingDeal={upsertingDeal}
                               />
-                            </ContextProvider>
+                            </DealsContextProvider>
                           : `Ошибка ${error.message}`
                         : <Dimmer
                             active

@@ -4,11 +4,10 @@ import { Dropdown } from 'semantic-ui-react'
 import { Div } from '../../styled/styled-semantic'
 
 import DiskContext from '../../context/DiskContext'
-import { DropdownMenu } from './DropdownMenu';
+import { DropdownMenu } from './DropdownMenu'
 
 export default ({
-  deal,
-  setDetails
+  deal
 }) => {
   const { id: dealId, amoId } = deal
   const { highlightFolder } = useContext(DiskContext)
@@ -39,11 +38,6 @@ export default ({
           icon='folder'
           text='Обнаружить папку'
           onClick={() => highlightFolder({ dealId })}
-        />
-        <Dropdown.Item
-          icon='plus'
-          text='Задача в CRM'
-          onClick={() => setDetails({ dealId, type: 'createAmoTask' })}
         />
       </DropdownMenu>
     }

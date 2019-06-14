@@ -64,14 +64,6 @@ export const createComOffer = gql`
 	}
 `
 
-export const createAmoTask = gql`
-	mutation createAmoTask($dealId: ID!, $date: String) {
-		createAmoTask(dealId: $dealId, date: $date) {
-			statusText
-		}
-	}
-`
-
 export const connectDealToOrg = gql`
 	mutation ConnectDealToOrg($orgId: ID! $dealId: ID!) {
 		connectDealToOrg(orgId: $orgId dealId: $dealId) {

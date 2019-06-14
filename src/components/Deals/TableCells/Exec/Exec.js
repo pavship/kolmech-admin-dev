@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 import styled from 'styled-components'
 import { Div } from '../../../styled/styled-semantic'
@@ -7,6 +7,7 @@ import { Dropdown } from 'semantic-ui-react'
 import ExecName from './Name'
 import { assignNested } from '../../../form/utils'
 import { personExec } from '../../../../graphql/person'
+import DetailsContext from '../../../Details/Provider'
 
 const ExecContainer = styled.div`
   display: flex;
@@ -29,11 +30,13 @@ export const Exec = ({
   basePath,
   exec,
   execIndex,
+  op,
   opIndex,
-  opTypeId,
   upsertBatch,
 }) => {
+  const { id: opId, opType: { id: opTypeId } } = op
   const { isNew, person } = exec
+  const { setDetails } = useContext(DetailsContext)
   const [isHovered, setIsHovered] = useState(false)
   return <ExecContainer>
     <Div
@@ -56,11 +59,30 @@ export const Exec = ({
       {!isNew && isHovered &&
         <DropdownMenu>
           <WarningItem
-            icon='trash'
-            text='Удалить'
+            icon='remove'
+            text='Открепить'
             onClick={() => upsertBatch(draft => {
               assignNested(draft, basePath + `ops[${opIndex}].execs[${execIndex}].disconnect`, true)
             }, { refetchQueries: [{ query: personExec, variables: { id: person.id } }] })}
+          />
+          <Dropdown.Item
+            icon='plus'
+            text='Задача'
+            onClick={() => setDetails({ opId, type: 'createTask' })}
+            // onClick={() => {
+            //   setDetails({
+            //     type: 'createTask',
+            //     opId,
+            //     onSubmit: execId => {
+            //       upsertBatch(draft => {
+            //         assignNested( draft,
+            //           basePath + `ops[${opIndex}].execs[length]`,
+            //           { execId }
+            //         )
+            //       })
+            //     }
+            //   })
+            // }}
           />
         </DropdownMenu>
       }

@@ -157,9 +157,9 @@ export const assignNested = (obj, path, val, preserveKeys=false) => {
 
 export const produceNested = (obj, path, val, preserveKeys=false) => {
 	const keys = analysePath(path)
-	return produce(obj, draft => {
-		keys.reduce((draft, { key, last, array, arrayItem }) => {
-			if (!arrayItem) Object.keys(draft).forEach(k => {
+	return produce(obj, obj => {
+		keys.reduce((obj, { key, last, array, arrayItem }) => {
+			Object.keys(obj).forEach(k => {
 				if (k === 'id' || k === key) return
 				if (!preserveKeys) {
 					if (arrayItem) obj[k] = { id: obj[k].id }
@@ -170,11 +170,11 @@ export const produceNested = (obj, path, val, preserveKeys=false) => {
 				if (arrayItem && key === 'length') return obj[obj.length] = val
 				return obj[key] = val
 			}
-			if (!draft[key]) {
-				if (array) draft[key] = []
-				else draft[key] = {}
+			if (!obj[key]) {
+				if (array) obj[key] = []
+				else obj[key] = {}
 			}
-			return draft[key]
-		}, draft)
+			return obj[key]
+		}, obj)
 	})
 }

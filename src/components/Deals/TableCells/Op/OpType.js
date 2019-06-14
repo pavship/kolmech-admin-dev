@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 
 import { Div, Icon } from '../../../styled/styled-semantic'
-import DealsContext from '../../context/DealsContext'
+import { DealsContext } from '../../context/Context'
 import HtmlSelect from '../../../common/HtmlSelect'
 import { assignNested } from '../../../form/utils'
 

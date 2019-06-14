@@ -43,6 +43,15 @@ export const batchFragmentDetails = gql`
 	${workpieceFragmentWithDrawings}
 `
 
+export const batchDetails = gql`
+	query batch ($id: ID!) {
+		batch (id: $id) {
+			...batchFragmentDetails
+		}
+	}
+	${batchFragmentDetails}
+`
+
 export const upsertBatch = gql`
 	mutation upsertBatch($input: BatchInput!) {
 		upsertBatch(input: $input) {

@@ -27,3 +27,12 @@ export const opFragmentDetails = gql`
 	}
 	${opFragmentBasic}
 `
+
+export const upsertOp = gql`
+	mutation upsertOp($input: OpInput!) {
+		upsertOp(input: $input) {
+			...opFragmentMiddle
+		}
+	}
+	${opFragmentMiddle}
+`
