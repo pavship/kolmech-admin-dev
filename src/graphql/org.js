@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { opTypeFragmentBasic } from './opType'
 
 export const orgFragmentBasic = gql`
 	fragment OrgFragmentBasic on Org {
@@ -13,6 +14,19 @@ export const orgFragmentFull = gql`
 		...OrgFragmentBasic
 	}
 	${orgFragmentBasic}
+`
+
+
+export const orgExecFragment = gql`
+	fragment orgExecFragment on Org {
+		id
+		name
+		exec {
+			id
+			opTypes { ...opTypeFragmentBasic }
+		}
+	}
+	${opTypeFragmentBasic}
 `
 
 export const org = gql`
@@ -75,4 +89,13 @@ export const orgDetails = gql`
 		}
 	}
 	${orgFragmentFull}
+`
+
+export const upsertOrgExec = gql`
+	mutation upsertOrg($input: OrgInput!) {
+		upsertOrg(input: $input) {
+			...orgExecFragment
+		}
+	}
+	${orgExecFragment}
 `

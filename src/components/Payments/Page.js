@@ -56,7 +56,7 @@ export default ({
                 orgs,
                 accounts,
                 equipments: equipment
-              },
+              } = {},
               refetch: refetchPayments
             }) => <>
               <Mutation

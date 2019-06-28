@@ -14,6 +14,20 @@ export const personFragmentBasic = gql`
 	}
 `
 
+export const personContactsFragment = gql`
+fragment PersonContactsFragment on Person {
+	...PersonFragmentBasic
+	htmlNote
+	tels { ...TelFragment }
+	user {
+		email
+		confirmed
+	}
+}
+${telFragment}
+${personFragmentBasic}
+`
+
 export const personExecFragment = gql`
 	fragment personExecFragment on Person {
 		id
@@ -24,20 +38,6 @@ export const personExecFragment = gql`
 		}
 	}
 	${opTypeFragmentBasic}
-`
-
-export const personContactsFragment = gql`
-	fragment PersonContactsFragment on Person {
-		...PersonFragmentBasic
-		htmlNote
-		tels { ...TelFragment }
-		user {
-			email
-			confirmed
-		}
-	}
-	${telFragment}
-	${personFragmentBasic}
 `
 
 export const persons = gql`

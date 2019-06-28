@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useMutation, useQuery } from '../hooks/apolloHooks'
 import { personExecs } from '../../graphql/person'
+import { orgsAndPersonsExecs } from '../../graphql/exec'
 import { upsertPerson2 as uP } from '../../graphql/person'
 
 import styled from 'styled-components'
@@ -32,8 +33,6 @@ const ListItemContainer = styled.div`
 		background: rgba(0,0,0,.05);
 		font-weight: bold;
 		border-color: rgba(34, 36, 38, 0.15);
-		// border-top: 1px solid rgba(34, 36, 38, 0.15);
-		// border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 	`}
 `
 
@@ -60,10 +59,12 @@ export default function SelectExecDetails ({
 	},
   setDetails,
 }) {
-  const { data, loading } = useQuery(personExecs)
+  const { data, loading } = useQuery(orgsAndPersonsExecs)
 	const [ execId, setExecId ] = useState('')
 	const [ personId, setPersonId ] = useState('')
 	const [ search, setSearch ] = useState('')
+	const orgs = data && data.orgs && data.orgs
+		.filter(o => !search || o.name.indexOf(search) !== -1) || []
 	const persons = data && data.persons && data.persons
 		.filter(p => !search || p.amoName.indexOf(search) !== -1) || []
 	const [ syncWithAmoContacts, { loading: syncingContacts } ] = useMutation(sWAC, {
@@ -143,6 +144,8 @@ export default function SelectExecDetails ({
 						onClick={() => setPersonId(p.id) || setExecId('')}
 					/>)
 				}
+				<ListTitle>Все компании</ListTitle>
+
 			</>}
 		</Div>
   </>
