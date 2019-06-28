@@ -34,8 +34,8 @@ export const Exec = ({
   opIndex,
   upsertBatch,
 }) => {
-  const { id: opId, opType: { id: opTypeId } } = op
-  const { isNew, person } = exec
+  const { opType: { id: opTypeId } } = op
+  const { id: execId, isNew, person } = exec
   const { setDetails } = useContext(DetailsContext)
   const [isHovered, setIsHovered] = useState(false)
   return <ExecContainer>
@@ -68,21 +68,7 @@ export const Exec = ({
           <Dropdown.Item
             icon='plus'
             text='Задача'
-            onClick={() => setDetails({ opId, type: 'createTask' })}
-            // onClick={() => {
-            //   setDetails({
-            //     type: 'createTask',
-            //     opId,
-            //     onSubmit: execId => {
-            //       upsertBatch(draft => {
-            //         assignNested( draft,
-            //           basePath + `ops[${opIndex}].execs[length]`,
-            //           { execId }
-            //         )
-            //       })
-            //     }
-            //   })
-            // }}
+            onClick={() => setDetails({ op, execId, type: 'createTask' })}
           />
         </DropdownMenu>
       }

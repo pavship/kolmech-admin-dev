@@ -6,15 +6,15 @@ import DetailsContext from '../../../Details/Provider'
 
 export default function ExecName ({
   basePath,
-  exec,
+  appoint,
   opIndex,
   opTypeId,
   upsertBatch
 }) {
   const { setDetails } = useContext(DetailsContext)
-  const { isNew: isNewExec, person: { amoName } = {} } = exec
+  const { isNew: isNewAppoint, exec: { person: { amoName } = {} } = {} } = appoint
   const [ addMode, setAddMode ] = useState(false)
-  if (isNewExec)
+  if (isNewAppoint)
     return <Icon
       ml='6px'
       // TODO fix addMode not recognized as truthy
@@ -31,7 +31,7 @@ export default function ExecName ({
           onSubmit: execId => {
             upsertBatch(draft => {
               assignNested( draft,
-                basePath + `ops[${opIndex}].execs[length]`,
+                basePath + `ops[${opIndex}].appoints[length]`,
                 { execId }
               )
             })

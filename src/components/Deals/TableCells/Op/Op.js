@@ -7,8 +7,8 @@ import OpType from './OpType'
 import DealLabour from './DealLabour'
 import { DropdownMenu } from '../DropdownMenu'
 import { Dropdown } from 'semantic-ui-react'
-import { Exec } from '../Exec/Exec'
-import { assignNested } from '../../../form/utils';
+import Appoint from '../Appoint/Appoint'
+import { assignNested } from '../../../form/utils'
 
 const FlexContainer = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ export const Op = ({
   opIndex,
   upsertBatch
 }) => {
-  const { isNew, execs, opType, dealLabor } = op
+  const { isNew, appoints, opType, dealLabor } = op
   const isMachiningClass = basePath.startsWith('procs')
   const [isHovered, setIsHovered] = useState(false)
   return <>
@@ -84,14 +84,14 @@ export const Op = ({
           w='170px'
         >
           {[
-            ...execs,
+            ...appoints,
             { id: cuid(), isNew: true }
-          ].map((exec, i) =>
-            <Exec
-              key={exec.id}
+          ].map((appoint, i) =>
+            <Appoint
+              key={appoint.id}
               basePath={basePath}
-              exec={exec}
-              execIndex={i}
+              appoint={appoint}
+              appointIndex={i}
               op={op}
               opIndex={opIndex}
               upsertBatch={upsertBatch}

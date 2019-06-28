@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import { opTypeFragmentBasic } from './opType'
-import { execFragmentBasic } from './exec'
+import { appointFragmentMiddle } from './appoint'
 
 export const opFragmentBasic = gql`
 	fragment opFragmentBasic on Op {
@@ -14,10 +14,10 @@ export const opFragmentBasic = gql`
 export const opFragmentMiddle = gql`
 	fragment opFragmentMiddle on Op {
 		...opFragmentBasic
-		execs { ...execFragmentBasic }
+		appoints { ...appointFragmentMiddle }
 	}
 	${opFragmentBasic}
-	${execFragmentBasic}
+	${appointFragmentMiddle}
 `
 
 export const opFragmentDetails = gql`

@@ -1,25 +1,30 @@
 import React, { useState } from 'react'
 import { Menu } from '../Details/Menu/Menu'
-import { useMutation } from '../hooks/apolloHooks'
-import { upsertOp as uO } from '../../graphql/op'
+import { useMutation, useQuery } from '../hooks/apolloHooks'
+import { upsertTask as uT } from '../../graphql/task'
 import { toLocalDatetimeString } from '../../utils/dates'
 import { Div } from '../styled/styled-semantic'
 import Field from '../form/Field'
-import DealDetails from '../Deals/Details/Details'
+import BatchDetails from '../Batch/Details'
 
 export default function CreateComOfferDetails ({
-  details: { opId },
+  details: { op, execId },
   setDetails
 }) {
-  const [ amoUserId, setAmoUserId ] = useState(0)
-  const [ date, setDate ] = useState(toLocalDatetimeString(new Date()))
-  const [ description, setDescription ] = useState()
-  const [ upsertOp ] = useMutation(uO, { variables: { opId, amoUserId, date, description } })
+	const [ from, setFrom ] = useState(toLocalDatetimeString(new Date()))
+	const [ text, setText ] = useState()
+	const [ upsertTask ] = useMutation(uT, { variables: { input: {
+		from,
+		text,
+		status: 'ACTIVE',
+		opId: op.id,
+		execId
+	}}})
   return <>
     <Menu
       setDetails={setDetails}
-      title='Добавить задачу в AmoCRM'
-      onSubmit={() => upsertOp()}
+      title='Добавить задачу'
+      onSubmit={() => console.log('{ from, text, status: ACTIV, opId: op.id, execId } > ', { from, text, status: 'ACTIVE', opId: op.id, execId }) && upsertTask()}
     />
     <Div
 			h='calc(100% - 47px)'
@@ -28,26 +33,26 @@ export default function CreateComOfferDetails ({
 			<Div
 				p='1em 1em 1em 55px'
 			>
-        <Field
+        {/* <Field
 					label='Кому'
 					type='select'
 					value={date}
 					onChange={date => setDate(date)}
-				/>
+				/> */}
 				<Field
-					label='Срок'
+					label='Дата и время'
 					type='datetime-local'
-					value={date}
-					onChange={date => setDate(date)}
+					value={from}
+					onChange={date => setFrom(date)}
 				/>
 				<Field
-					label='Описание'
+					label='Задача'
 					type='textarea'
-					value={description}
-					onChange={text => setDescription(text)}
+					value={text}
+					onChange={text => setText(text)}
 				/>
 			</Div>
-			{/* <DealDetails
+			{/* <BatchDetails
 				dealId={dealId}
 			/> */}
 		</Div>
