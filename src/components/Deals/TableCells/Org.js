@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react'
+import { useMutation } from '../../hooks/apolloHooks'
+import { createPostEnvelopeAddressInsert as cPEAI } from '../../../graphql/org'
 import DiskContext from '../../context/DiskContext'
 
 import { Dropdown } from 'semantic-ui-react'
@@ -20,6 +22,11 @@ export default function Org ({
   useEffect(() => (editMode && inputRef.current &&
     inputRef.current.toggle()) || undefined)
   const [isHovered, setIsHovered] = useState(false)
+  const [ createPostEnvelopeAddressInsert ] = useMutation(cPEAI, {
+    variables: { orgId },
+    successMsg: 'Почтовое адресное вложение создано',
+		errMsg: 'Ошибка создания почтового адресного вложения'
+  })
   const options = orgs
     .map(o => ({key:o.id, value: o.id, text: o.name}))
   if (editMode)
@@ -88,6 +95,12 @@ export default function Org ({
             text='Создать договор'
             onClick={() => setDetails({ id: orgId, type: 'Org', section: 'contract' })}
             disabled={!org.inn}
+          />
+          <Dropdown.Item
+            icon='mail'
+            text='Создать почт. адр. вложение'
+            onClick={() => createPostEnvelopeAddressInsert()}
+            // disabled={!org.inn}
           />
         </DropdownMenu>
       }
