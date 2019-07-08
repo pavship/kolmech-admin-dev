@@ -14,6 +14,7 @@ const Container = styled.div`
 	display: flex;
 	align-items: center;
 	border-bottom: 1px solid #7e7e81;
+  background: white;
 `
 
 export default ({

@@ -47,6 +47,7 @@ export default function CreateComOfferDetails ({
 				/>
 				<Field
 					label='Задача'
+					inputWidth='257px'
 					type='textarea'
 					value={text}
 					onChange={text => setText(text)}

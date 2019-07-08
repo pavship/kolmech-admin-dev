@@ -8,6 +8,7 @@ import { DetailsProvider } from '../Details/Provider'
 import DealsTable from './Table'
 import Menu from './Menu'
 import { Dimmer, Loader } from 'semantic-ui-react'
+import Timeline from './Timeline/Timeline';
 
 export default ({
   refreshToken
@@ -51,6 +52,7 @@ export default ({
                     refreshToken={refreshToken}
                     refetchDeals={refetch}
                   />
+                  <Timeline />
                   <DetailsProvider>
                       {!loading
                         ? !error

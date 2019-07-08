@@ -9,7 +9,7 @@ import SelectExecDetails from '../Exec/SelectExecDetails'
 
 const Container = styled.div`
   height: calc(100% - 36px);
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 `
 
 const MainContentContainer = styled.div`
@@ -33,7 +33,7 @@ const Sidebar = styled(posed.div({
   right: 0;
   width: ${props =>
     props.type === 'CreateComOffer' ? '470px' :
-    props.type === 'createAmoTask' ? '470px' :
+    props.type === 'createTask' ? '470px' :
     '600px'
   };
   height: calc(100% - 36px);

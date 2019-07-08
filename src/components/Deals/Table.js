@@ -1,19 +1,15 @@
 import React, { useContext } from 'react'
 
-import styled from 'styled-components'
-import Batches from './TableCells/Batches'
-import Org from './TableCells/Org'
 import DetailsContext from '../Details/Provider'
-import Deal from './TableCells/Deal'
 import { Div } from '../styled/styled-semantic'
+import styled from 'styled-components'
+import Org from './TableCells/Org'
+import Batches from './TableCells/Batches'
+import Deal from './TableCells/Deal'
 
 const TableHeader = styled.div`
-  /* position: absolute;
-  top: -1px;
-  left: 32px;
-  margin-top: 1px; */
   display: flex;
-  width: 100%;
+  width: 542px;
   padding: 0 0 0 32px;
   line-height: 1.5em;
   font-weight: bold;
@@ -26,9 +22,9 @@ const Row = styled.div`
   display: flex;
   width: 100%;
   line-height: 1.5em;
-  border-bottom: 1px solid rgba(34,36,38,0.20);
+  border-bottom: 1px solid rgb(211,211,212);
   :hover {
-    background: rgb(250,250,250);
+    background: rgba(0,0,0,.025);
     color: rgba(0,0,0,.95);
   }
 `
@@ -40,85 +36,94 @@ export default function DealsTable ({
   upsertingDeal,
 }) {
   const { setDetails } = useContext(DetailsContext)
-  return <>
+  return <Div
+    h='100%'
+  >
     <TableHeader>
       <Div w='80px'>#</Div>
       <Div w='90px'>Дата</Div>
       <Div w='170px'>Наименование</Div>
       <Div w='170px'>Контрагент</Div>
     </TableHeader>
-    {deals && deals.map(deal => {
-      const { id, amoId, date, batches, status } = deal
-      return <Row
-        key={id}
-      >
-        <Div
-          w='max-content'
-          pos='relative'
+    <Div
+      h='calc(100% - 23px)'
+      oy='scroll'
+    >
+      {deals && deals.map(deal => {
+        const { id, amoId, date, batches, status } = deal
+        return <Row
+          key={id}
         >
           <Div
-            d='flex'
-            // ml='32px'
-            bb={batches.length ? '1px solid rgba(34,36,38,0.15);' : undefined}
+            w='max-content'
+            pos='relative'
+            bc='white'
           >
             <Div
-              w='22px'
-              m='5px'
-              bs='border-box'
-              bc={status.color}
-            />
-            <Div
-              w='80px'
+              d='flex'
+              bb={batches.length ? '1px solid rgba(34,36,38,0.15);' : undefined}
             >
-              {amoId}
-            </Div>
-            <Div
-              w='90px'
-            >
-              {date}
-            </Div>
-            <Div
-              w='170px'
-              whs='nowrap'
-              to='ellipsis'
-              pos='relative'
-            >
-              <Deal
-                deal={deal}
-                setDetails={setDetails}
+              <Div
+                w='22px'
+                m='5px'
+                bs='border-box'
+                bc={status.color}
               />
+              <Div
+                w='80px'
+              >
+                {amoId}
+              </Div>
+              <Div
+                w='90px'
+              >
+                {date}
+              </Div>
+              <Div
+                w='170px'
+                whs='nowrap'
+                to='ellipsis'
+                pos='relative'
+              >
+                <Deal
+                  deal={deal}
+                  setDetails={setDetails}
+                />
+              </Div>
+              <Div
+                w='170px'
+                whs='nowrap'
+                to='ellipsis'
+                pos='relative'
+              >
+                <Org
+                  deal={deal}
+                  orgs={orgs}
+                  upsertDeal={upsertDeal}
+                  upsertingDeal={upsertingDeal}
+                  setDetails={setDetails}
+                />
+              </Div>
             </Div>
             <Div
-              w='170px'
-              whs='nowrap'
-              to='ellipsis'
-              pos='relative'
+              pos={!batches.length ? 'absolute' : undefined}
+              t={!batches.length ? '0' : undefined}
+              l={!batches.length ? '552px' : undefined}
+              pl={!batches.length ? '5px' : '32px'}
             >
-              <Org
+              <Batches
                 deal={deal}
-                orgs={orgs}
                 upsertDeal={upsertDeal}
-                upsertingDeal={upsertingDeal}
-                setDetails={setDetails}
               />
             </Div>
           </Div>
-          <Div
-            pos={!batches.length ? 'absolute' : undefined}
-            t={!batches.length ? '0' : undefined}
-            l={!batches.length ? '552px' : undefined}
-            pl={!batches.length ? '5px' : '32px'}
-          >
-            <Batches
-              deal={deal}
-              upsertDeal={upsertDeal}
-            />
-          </Div>
-        </Div>
-      </Row>
-    })}
-    <Div
-      h='400px'
-    />
-  </>
+        </Row>
+      })}
+      <Div
+        h='400px'
+        w='542px'
+        bc='white'
+      />
+    </Div>
+  </Div>
 }
