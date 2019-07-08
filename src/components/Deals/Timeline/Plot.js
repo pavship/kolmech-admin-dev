@@ -6,18 +6,21 @@ import Header from './Header'
 
 const Container = styled.div`
   position: absolute;
-  top: 36px;
+  top: 0;
+  /* top: 36px; */
   left: -700px;
   width: 2100px;
-  height: calc(100% - 36px);
+  /* height: calc(100% - 36px); */
+  height: 100%;
   /* background: purple; */
-  z-index: -20;
 `
 
 export default function Plot ({
 
 }) {
-  return <Container>
+  return <Container
+    onClick={()=>console.log('plot here!')}
+  >
     <Header />
     {/* <Div
       w='130px'

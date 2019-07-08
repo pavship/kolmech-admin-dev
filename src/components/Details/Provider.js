@@ -8,8 +8,8 @@ import CreateTaskDetails from '../Task/CreateTaskDetails'
 import SelectExecDetails from '../Exec/SelectExecDetails'
 
 const Container = styled.div`
+
   height: calc(100% - 36px);
-  /* overflow-y: scroll; */
 `
 
 const MainContentContainer = styled.div`
@@ -54,7 +54,9 @@ export const DetailsProvider = ({
       value={{ details, setDetails }}
     >
       <Container>
-        <MainContentContainer>
+        <MainContentContainer
+          onClick={()=>console.log('MainContentContainer!')}
+        >
           {children}
         </MainContentContainer>
         <PoseGroup>

@@ -12,13 +12,15 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg,rgba(240,241,242,1) 0%,rgba(200,201,202,1) 100%);
-  z-index: -10;
+  z-index: -1;
 `
 
 export default function Timeline ({
 
 }) {
-  return <Container>
+  return <Container
+    onClick={()=>console.log('container here!')}
+  >
     <Plot />
     {/* <Div
       w='130px'

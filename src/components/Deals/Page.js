@@ -52,7 +52,7 @@ export default ({
                     refreshToken={refreshToken}
                     refetchDeals={refetch}
                   />
-                  <Timeline />
+                  
                   <DetailsProvider>
                       {!loading
                         ? !error
@@ -60,6 +60,7 @@ export default ({
                             <DealsContextProvider
                               opTypes={data.opTypes}
                             >
+                              <Timeline />
                               <DealsTable
                                 notify={notify}
                                 deals={data.deals}
@@ -78,6 +79,7 @@ export default ({
                           </Dimmer>
                       }
                   </DetailsProvider>
+                  
                 </>
               }
             </Query>

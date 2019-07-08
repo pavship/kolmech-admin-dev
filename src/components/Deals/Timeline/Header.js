@@ -23,7 +23,9 @@ export default function Header ({
   ) {
     days.push({key: i, day: d.getDate()})
   }
-  return <Container>
+  return <Container
+  onClick={()=>console.log('plotHeader here!')}
+  >
     {days.map(({ key, day }) =>
       <Div
         key={key}
