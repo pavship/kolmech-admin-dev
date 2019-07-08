@@ -26,7 +26,7 @@ const Row = styled.div`
   display: flex;
   width: 100%;
   line-height: 1.5em;
-  border-bottom: 1px solid rgba(34,36,38,0.15);
+  border-bottom: 1px solid rgba(34,36,38,0.20);
   :hover {
     background: rgb(250,250,250);
     color: rgba(0,0,0,.95);
@@ -48,7 +48,7 @@ export default function DealsTable ({
       <Div w='170px'>Контрагент</Div>
     </TableHeader>
     {deals && deals.map(deal => {
-      const { id, amoId, date, batches } = deal
+      const { id, amoId, date, batches, status } = deal
       return <Row
         key={id}
       >
@@ -58,9 +58,15 @@ export default function DealsTable ({
         >
           <Div
             d='flex'
-            ml='32px'
+            // ml='32px'
             bb={batches.length ? '1px solid rgba(34,36,38,0.15);' : undefined}
           >
+            <Div
+              w='22px'
+              m='5px'
+              bs='border-box'
+              bc={status.color}
+            />
             <Div
               w='80px'
             >
@@ -111,5 +117,8 @@ export default function DealsTable ({
         </Div>
       </Row>
     })}
+    <Div
+      h='400px'
+    />
   </>
 }

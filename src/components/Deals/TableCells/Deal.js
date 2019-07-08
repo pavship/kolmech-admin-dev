@@ -21,7 +21,8 @@ export default ({
       ov='hidden'
       to='ellipsis'
       w={isHovered ? '150px' : undefined}
-      fw={isHovered ? 'bold' : undefined}
+      // fw={isHovered ? 'bold' : undefined}
+      fw='bold'
     >
       {deal && deal.name}
     </Div>
