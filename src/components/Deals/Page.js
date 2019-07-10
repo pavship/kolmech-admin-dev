@@ -8,7 +8,22 @@ import { DetailsProvider } from '../Details/Provider'
 import DealsTable from './Table'
 import Menu from './Menu'
 import { Dimmer, Loader } from 'semantic-ui-react'
-import Timeline from './Timeline/Timeline';
+import Timeline from './Timeline/Timeline'
+import TimelinePlot from './Timeline/Plot/Plot'
+
+import styled from 'styled-components'
+
+const Container = styled.div`
+  position: relative;
+  /* top: calc(36px); */
+  /* top: calc(36px + 23px); */
+  width: 100%;
+  height: calc(100% - 36px);
+  /* height: calc(100% - 36px - 23px); */
+  overflow-x: hidden;
+  overflow-y: scroll;
+  /* z-index: 1; */
+`
 
 export default ({
   refreshToken
@@ -52,7 +67,6 @@ export default ({
                     refreshToken={refreshToken}
                     refetchDeals={refetch}
                   />
-                  
                   <DetailsProvider>
                       {!loading
                         ? !error
@@ -60,14 +74,17 @@ export default ({
                             <DealsContextProvider
                               opTypes={data.opTypes}
                             >
-                              <Timeline />
-                              <DealsTable
-                                notify={notify}
-                                deals={data.deals}
-                                orgs={data.orgs}
-                                upsertDeal={upsertDeal}
-                                upsertingDeal={upsertingDeal}
-                              />
+                              <Container>
+                                <Timeline />
+                                <TimelinePlot />
+                                <DealsTable
+                                  notify={notify}
+                                  deals={data.deals}
+                                  orgs={data.orgs}
+                                  upsertDeal={upsertDeal}
+                                  upsertingDeal={upsertingDeal}
+                                />
+                              </Container>
                             </DealsContextProvider>
                           : `Ошибка ${error.message}`
                         : <Dimmer

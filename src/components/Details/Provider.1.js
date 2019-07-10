@@ -7,6 +7,16 @@ import CreateComOfferDetails from '../ComOffer/CreateComOfferDetails'
 import CreateTaskDetails from '../Task/CreateTaskDetails'
 import SelectExecDetails from '../Exec/SelectExecDetails'
 
+const Container = styled.div`
+
+  height: calc(100% - 36px);
+`
+
+const MainContentContainer = styled.div`
+  position: relative;
+  height: 100%;
+`
+
 const Sidebar = styled(posed.div({
   enter: { 
     x: 0,
@@ -43,33 +53,39 @@ export const DetailsProvider = ({
     <DetailsContext.Provider
       value={{ details, setDetails }}
     >
-      <PoseGroup>
-        {details &&
-          <Sidebar key='1'
-            type={type}
-          >
-            { type === 'Org' ?	<OrgDetails
-                details={details}
-                setDetails={setDetails}
-              /> :
-              type === 'CreateComOffer' ?	<CreateComOfferDetails
-                details={details}
-                setDetails={setDetails}
-              /> :
-              type === 'createTask' ?	<CreateTaskDetails
-                details={details}
-                setDetails={setDetails}
+      <Container>
+        <MainContentContainer
+          onClick={()=>console.log('MainContentContainer!')}
+        >
+          {children}
+        </MainContentContainer>
+        <PoseGroup>
+          {details &&
+            <Sidebar key='1'
+              type={type}
+            >
+							{ type === 'Org' ?	<OrgDetails
+                  details={details}
+                  setDetails={setDetails}
                 /> :
-              type === 'SelectExec' ?	<SelectExecDetails
-                details={details}
-                setDetails={setDetails}
-              />
-              : null
-            }
-          </Sidebar>
-        }
-      </PoseGroup>
-      {children}
+                type === 'CreateComOffer' ?	<CreateComOfferDetails
+                  details={details}
+                  setDetails={setDetails}
+                /> :
+                type === 'createTask' ?	<CreateTaskDetails
+                  details={details}
+                  setDetails={setDetails}
+                  /> :
+                type === 'SelectExec' ?	<SelectExecDetails
+                  details={details}
+                  setDetails={setDetails}
+                />
+								: null
+							}
+            </Sidebar>
+          }
+        </PoseGroup>
+      </Container>
     </DetailsContext.Provider>
   )
 }

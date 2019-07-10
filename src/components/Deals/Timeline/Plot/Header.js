@@ -1,11 +1,14 @@
 import React from 'react'
 
 import styled from 'styled-components'
-import { Div } from '../../styled/styled-semantic'
+import { Div } from '../../../styled/styled-semantic'
 
 const Container = styled.div`
+  position: fixed;
+  left: calc(542px - 700px);
   display: flex;
-  width: 100%;
+  /* width: 100%; */
+  width: 2100px;
   height: 23px;
   background: rgb(233, 234, 235);
   border-top: 1px solid #d4d4d5;

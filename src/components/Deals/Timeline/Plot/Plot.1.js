@@ -1,7 +1,7 @@
 import React from 'react'
 
 import styled from 'styled-components'
-import { Div } from '../../styled/styled-semantic'
+import { Div } from '../../../styled/styled-semantic'
 import Header from './Header'
 
 const Container = styled.div`
@@ -15,7 +15,7 @@ const Container = styled.div`
   /* background: purple; */
 `
 
-export default function Plot ({
+export default function TimelinePlot ({
 
 }) {
   return <Container

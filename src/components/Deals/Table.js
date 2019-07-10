@@ -8,6 +8,7 @@ import Batches from './TableCells/Batches'
 import Deal from './TableCells/Deal'
 
 const TableHeader = styled.div`
+  position: fixed;
   display: flex;
   width: 542px;
   padding: 0 0 0 32px;
@@ -16,6 +17,8 @@ const TableHeader = styled.div`
   background: rgb(233, 234, 235);
   border-top: 1px solid #d4d4d5;
   border-bottom: 1px solid #d4d4d5;
+  pointer-events: auto;
+  z-index: 15;
 `
 
 const Row = styled.div`
@@ -37,7 +40,13 @@ export default function DealsTable ({
 }) {
   const { setDetails } = useContext(DetailsContext)
   return <Div
-    h='100%'
+    h='calc(100% - 36px)'
+    // pe='none'
+    pos='absolute'
+    // top='-23px'
+    // top='36px'
+    // w='100%'
+    z='10'
   >
     <TableHeader>
       <Div w='80px'>#</Div>
@@ -47,7 +56,8 @@ export default function DealsTable ({
     </TableHeader>
     <Div
       h='calc(100% - 23px)'
-      oy='scroll'
+      mt='23px'
+      // oy='scroll'
     >
       {deals && deals.map(deal => {
         const { id, amoId, date, batches, status } = deal
@@ -58,6 +68,7 @@ export default function DealsTable ({
             w='max-content'
             pos='relative'
             bc='white'
+            pe='auto'
           >
             <Div
               d='flex'

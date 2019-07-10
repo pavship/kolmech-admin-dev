@@ -1,26 +1,25 @@
 import React from 'react'
 
 import styled from 'styled-components'
-import { Div } from '../../styled/styled-semantic'
+import { Div } from '../../../styled/styled-semantic'
+import Header from './Header'
 
 const Container = styled.div`
-  position: fixed;
+  position: absolute;
   /* top: 36px; */
-  left: 542px;
-  /* width: calc(700px); */
-  width: 100%;
-  height: 100%;
-  /* height: calc(100% - 36px); */
-  background: linear-gradient(135deg,rgba(240,241,242,1) 0%,rgba(200,201,202,1) 100%);
-  z-index: -1;
+  left: calc(542px - 700px);
+  width: 2100px;
+  height: calc(100% - 36px);
+  z-index: 5;
 `
 
-export default function Timeline ({
+export default function TimelinePlot ({
 
 }) {
   return <Container
-    onClick={()=>console.log('container here!')}
+    onClick={()=>console.log('plot here!')}
   >
+    <Header />
     {/* <Div
       w='130px'
       br={isNew ? undefined : '1px solid rgba(34,36,38,0.15);'}
