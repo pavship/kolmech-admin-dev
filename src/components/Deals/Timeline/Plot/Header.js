@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { Div } from '../../../styled/styled-semantic'
 
 const Container = styled.div`
-  position: fixed;
-  left: calc(542px - 700px);
+  /* position: fixed;
+  left: calc(542px - 700px); */
   display: flex;
   /* width: 100%; */
   width: 2100px;
@@ -16,25 +16,19 @@ const Container = styled.div`
 `
 
 export default function Header ({
-
+  days
 }) {
-  let days = []
-  for (
-    let d = new Date(new Date().setDate(new Date().getDate() - 18)), i = 0;
-    i < 42;
-    d.setDate(d.getDate() + 1), i++
-  ) {
-    days.push({key: i, day: d.getDate()})
-  }
+  
   return <Container
-  onClick={()=>console.log('plotHeader here!')}
+    onClick={()=>console.log('plotHeader here!')}
   >
-    {days.map(({ key, day }) =>
+    {days.map(({ key, day, isWeekend }) =>
       <Div
         key={key}
         w='50px'
         c='rgba(0,0,0,.6)'
         ta='center'
+        bc={isWeekend ? 'rgba(0,0,0,.07)' : undefined}
       >
         {day}
       </Div>
