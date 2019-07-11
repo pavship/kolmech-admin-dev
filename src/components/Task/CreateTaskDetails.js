@@ -8,23 +8,22 @@ import Field from '../form/Field'
 import BatchDetails from '../Batch/Details'
 
 export default function CreateComOfferDetails ({
-  details: { op, execId },
+  details: { appointId },
   setDetails
 }) {
 	const [ from, setFrom ] = useState(toLocalDatetimeString(new Date()))
 	const [ text, setText ] = useState()
 	const [ upsertTask ] = useMutation(uT, { variables: { input: {
-		from,
+		from: new Date(from).toISOString(),
 		text,
 		status: 'ACTIVE',
-		opId: op.id,
-		execId
+		appointId
 	}}})
   return <>
     <Menu
       setDetails={setDetails}
       title='Добавить задачу'
-      onSubmit={() => console.log('{ from, text, status: ACTIV, opId: op.id, execId } > ', { from, text, status: 'ACTIVE', opId: op.id, execId }) && upsertTask()}
+      onSubmit={() => console.log('{ from, text, status: ACTIV, appointId } > ', { from, text, status: 'ACTIVE', appointId }) && upsertTask()}
     />
     <Div
 			h='calc(100% - 47px)'

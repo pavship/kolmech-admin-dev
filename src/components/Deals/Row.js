@@ -11,7 +11,7 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   line-height: 1.5em;
-  border-bottom: 1px solid rgb(211,211,212);
+  /* border-bottom: 1px solid rgb(211,211,212); */
   :hover {
     background: rgba(0,0,0,.025);
     color: rgba(0,0,0,.95);
@@ -19,6 +19,7 @@ const Container = styled.div`
 `
 
 export default function Row ({
+  isFirstRow,
   deal,
   orgs,
   upsertDeal,
@@ -32,14 +33,19 @@ export default function Row ({
     // onMouseLeave={() => setIsHovered(false)}
   >
     <Div
+      // w='100%'
       w='max-content'
       pos='relative'
       // bc={isHovered ? 'rgb(250,250,250)' : 'white'}
       pe='auto'
+      // bb='1px solid rgb(211,211,212)'
     >
       <Div
         d='flex'
-        bb={batches.length ? '1px solid rgba(34,36,38,0.15);' : undefined}
+        bt={isFirstRow ? undefined : '1px solid rgb(211,211,212)'}
+        // bb={batches.length ? '1px solid rgba(34,36,38,0.15);' : undefined}
+        w='max-content'
+        pe='auto'
       >
         <Div
           w='22px'
@@ -48,39 +54,44 @@ export default function Row ({
           bc={status.color}
         />
         <Div
-          w='80px'
+          d='flex'
+          bb={batches.length ? '1px solid rgba(34,36,38,0.15);' : undefined}
         >
-          {amoId}
-        </Div>
-        <Div
-          w='90px'
-        >
-          {date}
-        </Div>
-        <Div
-          w='170px'
-          whs='nowrap'
-          to='ellipsis'
-          pos='relative'
-        >
-          <Deal
-            deal={deal}
-            setDetails={setDetails}
-          />
-        </Div>
-        <Div
-          w='170px'
-          whs='nowrap'
-          to='ellipsis'
-          pos='relative'
-        >
-          <Org
-            deal={deal}
-            orgs={orgs}
-            upsertDeal={upsertDeal}
-            upsertingDeal={upsertingDeal}
-            setDetails={setDetails}
-          />
+          <Div
+            w='80px'
+          >
+            {amoId}
+          </Div>
+          <Div
+            w='90px'
+          >
+            {date}
+          </Div>
+          <Div
+            w='170px'
+            whs='nowrap'
+            to='ellipsis'
+            pos='relative'
+          >
+            <Deal
+              deal={deal}
+              setDetails={setDetails}
+            />
+          </Div>
+          <Div
+            w='170px'
+            whs='nowrap'
+            to='ellipsis'
+            pos='relative'
+          >
+            <Org
+              deal={deal}
+              orgs={orgs}
+              upsertDeal={upsertDeal}
+              upsertingDeal={upsertingDeal}
+              setDetails={setDetails}
+            />
+          </Div>
         </Div>
       </Div>
       <Div

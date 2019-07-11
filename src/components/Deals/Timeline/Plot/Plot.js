@@ -8,11 +8,9 @@ import Header from './Header'
 const Container = styled(posed.div({
   draggable: 'x'
 }))`
-  // position: absolute;
   position: fixed;
-  /* top: 36px; */
-  left: calc(542px - 700px);
-  width: 2100px;
+  left: calc(542px - 672px);
+  width: 2016px;
   height: calc(100% - 36px);
   z-index: 5;
 `
@@ -20,9 +18,12 @@ const Container = styled(posed.div({
 export default function TimelinePlot ({
 
 }) {
+  const startDate = new Date(new Date().setDate(new Date().getDate() - 18))
+  const currentHalfHour = Math.floor((Date.now() - startDate.setHours(0,0,0,0))/(30*60000))
+  console.log('currentHalfHour > ', Date.now() - startDate.setHours(0,0,0,0), currentHalfHour)
   let days = []
   for (
-    let d = new Date(new Date().setDate(new Date().getDate() - 18)), i = 0;
+    let d = new Date(startDate), i = 0;
     i < 42;
     d.setDate(d.getDate() + 1), i++
   ) {
@@ -45,12 +46,20 @@ export default function TimelinePlot ({
         <Div
           key={key}
           pos='absolute'
-          t='23px'
-          l={`${key*50}px`}
-          w='50px'
-          h='calc(100% - 23px)'
+          t='0'
+          l={`${key*48}px`}
+          w='48px'
+          h='100%'
           bc='rgba(0,0,0,.07)'
         />
     )}
+    <Div
+      pos='absolute'
+      t='0'
+      l={`${currentHalfHour}px`}
+      w='1px'
+      h='100%'
+      bc='teal'
+    />
   </Container>
 }

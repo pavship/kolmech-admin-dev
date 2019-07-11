@@ -13,7 +13,6 @@ export const taskFragmentMiddle = gql`
     from
     status
     to
-    exec { id }
   }
   ${taskFragmentBasic}
 `

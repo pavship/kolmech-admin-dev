@@ -33,7 +33,8 @@ export default function DealsTable ({
   upsertingDeal,
 }) {
   return <Div
-    h='calc(100% - 36px)'
+    // h='calc(100% - 36px)'
+    h='100%'
     pe='none'
     pos='absolute'
     // top='-23px'
@@ -53,9 +54,10 @@ export default function DealsTable ({
       mt='23px'
       // oy='scroll'
     >
-      {deals && deals.map(deal => 
+      {deals && deals.map((deal, i) => 
         <Row
           key={deal.id}
+          isFirstRow={i === 0}
           deal={deal}
           orgs={orgs}
           upsertDeal={upsertDeal}
