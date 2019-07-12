@@ -8,6 +8,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg,rgba(0,0,0,.01) 0%,rgba(200,201,202,1) 100%);
+  box-shadow: inset 0 0 20px rgba(34,36,38,.15);
   z-index: -1;
 `
 

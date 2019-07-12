@@ -31,7 +31,7 @@ export const theme = {
 	}
 }
 const getThemeColor = (color) => theme.colors[color] || color
-const baseSet = ({ theme, bt, bb, bc, bl, br, bs, c, d, fs, fw, h, l, lh, mw, minw, m, mb, mt, ml, mr, o, ov, ox, oy, p, pb, pe, pos, pl, pr, pt, t, ta, to, va, w, whs, ws, z }) => {
+const baseSet = ({ theme, bt, bb, bc, bl, br, bs, bsh, c, d, fs, fw, h, l, lh, mw, minw, m, mb, mt, ml, mr, o, ov, ox, oy, p, pb, pe, pos, pl, pr, pt, t, ta, to, va, w, whs, ws, z }) => {
 	return `
 		${bt 	? `border-top: ${bt};`														: ''}
 		${bb 	? `border-bottom: ${bb};`													: ''}
@@ -39,6 +39,7 @@ const baseSet = ({ theme, bt, bb, bc, bl, br, bs, c, d, fs, fw, h, l, lh, mw, mi
 		${bl 	? `border-left: ${bl};`														: ''}
 		${br 	? `border-right: ${br};`													: ''}
 		${bs 	? `box-sizing: ${bs};`														: ''}
+		${bsh ? `box-shadow: ${bsh};`														: ''}
 		${c 	? `color: ${theme.colors && theme.colors[c] || c};`	: ''}
 		${d 	? `display: ${d};`																: ''}
 		${fs 	? `font-size: ${fs};`															: ''}

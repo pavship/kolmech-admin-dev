@@ -33,13 +33,11 @@ export default function DealsTable ({
   upsertingDeal,
 }) {
   return <Div
+    w='100%'
     // h='calc(100% - 36px)'
     h='100%'
     pe='none'
     pos='absolute'
-    // top='-23px'
-    // top='36px'
-    w='100%'
     z='10'
   >
     <TableHeader>
