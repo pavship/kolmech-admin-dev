@@ -18,6 +18,7 @@ export const batchFragmentBasic = gql`
 export const batchFragmentMiddle = gql`
 	fragment batchFragmentMiddle on Batch {
 		...batchFragmentBasic
+		sort
 		model { ...ModelFragmentBasic }
 		ops { ...opFragmentMiddle }
 		procs { ...procFragmentMiddle }

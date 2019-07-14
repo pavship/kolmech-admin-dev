@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 
 import DetailsContext from '../Details/Provider'
 import { Div } from '../styled/styled-semantic'
@@ -11,7 +11,6 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   line-height: 1.5em;
-  /* border-bottom: 1px solid rgb(211,211,212); */
   :hover {
     background: rgba(0,0,0,.025);
     color: rgba(0,0,0,.95);
@@ -25,25 +24,18 @@ export default function Row ({
   upsertDeal,
   upsertingDeal,
 }) {
-  // const [ isHovered, setIsHovered ] = useState(false)
   const { amoId, date, batches, status } = deal
   const { setDetails } = useContext(DetailsContext)
-  return <Container
-    // onMouseEnter={() => setIsHovered(true)}
-    // onMouseLeave={() => setIsHovered(false)}
-  >
+  return <Container>
     <Div
       // w='100%'
       w='max-content'
       pos='relative'
-      // bc={isHovered ? 'rgb(250,250,250)' : 'white'}
       pe='auto'
-      // bb='1px solid rgb(211,211,212)'
     >
       <Div
         d='flex'
         bt={isFirstRow ? undefined : '1px solid rgb(211,211,212)'}
-        // bb={batches.length ? '1px solid rgba(34,36,38,0.15);' : undefined}
         w='max-content'
         pe='auto'
       >
@@ -98,6 +90,7 @@ export default function Row ({
         pos={!batches.length ? 'absolute' : undefined}
         t={!batches.length ? '0' : undefined}
         l={!batches.length ? '552px' : undefined}
+        w={!batches.length ? '260px' : undefined}
         pl={!batches.length ? '5px' : '32px'}
       >
         <Batches

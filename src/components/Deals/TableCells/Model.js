@@ -34,6 +34,7 @@ export default ({
           }
         ]
       }}})}
+      onBlur={() => setEditMode(false)}
     />
   else if (isNewBatch)
     return <Icon

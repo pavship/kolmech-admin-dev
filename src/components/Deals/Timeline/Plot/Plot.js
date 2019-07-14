@@ -20,7 +20,6 @@ export default function TimelinePlot ({
 }) {
   const startDate = new Date(new Date().setDate(new Date().getDate() - 18))
   const currentHalfHour = Math.floor((Date.now() - startDate.setHours(0,0,0,0))/(30*60000))
-  console.log('currentHalfHour > ', Date.now() - startDate.setHours(0,0,0,0), currentHalfHour)
   let days = []
   for (
     let d = new Date(startDate), i = 0;

@@ -21,11 +21,13 @@ const BatchContainer = styled.div`
 `
 
 export default function Batch ({
+  batchIndex,
   deal,
   batch,
   upsertDeal,
 }) {
-  const { isNew, ops, procs, model } = batch
+  const { isNew, ops, procs, model, sort } = batch
+  console.log('deal.amoId, batchIndex, sort > ', deal.amoId, batchIndex, sort)
   const [ upsertBatchProto ] = useMutation(uBq)
   const upsertBatch = (draftHandler, options = {}) => upsertBatchProto({ variables: { input:
     produce(getStructure(batch), draftHandler)
@@ -33,7 +35,7 @@ export default function Batch ({
   return <BatchContainer>
     <Div
       w='130px'
-      pe='auto'
+      // pe='auto'
       br={isNew ? undefined : '1px solid rgba(34,36,38,0.15);'}
     >
       <Model
@@ -45,7 +47,7 @@ export default function Batch ({
     </Div>
     {!isNew && <>
       <Div
-        w='40px;'
+        w='40px'
         pe='auto'
       >
         <Qty
