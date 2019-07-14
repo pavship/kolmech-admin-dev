@@ -5,14 +5,22 @@ import posed from 'react-pose'
 import { Div } from '../../../styled/styled-semantic'
 import Header from './Header'
 
+const Window = styled.div`
+  position: fixed;
+  left: 542px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 5;
+`
+
 const Container = styled(posed.div({
   draggable: 'x'
 }))`
-  position: fixed;
-  left: calc(542px - 672px);
+  position: absolute;
+  left: -672px;
   width: 2016px;
   height: calc(100% - 36px);
-  z-index: 5;
 `
 
 export default function TimelinePlot ({
@@ -33,32 +41,34 @@ export default function TimelinePlot ({
       // isWeekend: d.getDay()
     })
   }
-  return <Container
-    onClick={()=>console.log('plot here!')}
-  >
-    <Header
-      days={days}
-    />
-    {days
-      .filter(d => d.isWeekend)
-      .map(({ key }) =>
-        <Div
-          key={key}
-          pos='absolute'
-          t='0'
-          l={`${key*48}px`}
-          w='48px'
-          h='100%'
-          bc='rgba(0,0,0,.07)'
-        />
-    )}
-    <Div
-      pos='absolute'
-      t='0'
-      l={`${currentHalfHour}px`}
-      w='1px'
-      h='100%'
-      bc='teal'
-    />
-  </Container>
+  return <Window>
+    <Container
+      onClick={()=>console.log('plot here!')}
+    >
+      <Header
+        days={days}
+      />
+      {days
+        .filter(d => d.isWeekend)
+        .map(({ key }) =>
+          <Div
+            key={key}
+            pos='absolute'
+            t='0'
+            l={`${key*48}px`}
+            w='48px'
+            h='100%'
+            bc='rgba(0,0,0,.07)'
+          />
+      )}
+      <Div
+        pos='absolute'
+        t='0'
+        l={`${currentHalfHour}px`}
+        w='1px'
+        h='100%'
+        bc='teal'
+      />
+    </Container>
+  </Window>
 }

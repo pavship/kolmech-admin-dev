@@ -8,6 +8,7 @@ import { Ops } from './Op/Ops'
 import { Op } from './Op/Op';
 
 const Container = styled.div`
+  width: calc(170px + 170px);
   :not(:last-child) {
 		border-bottom: 1px solid rgba(34,36,38,0.15);
 	}

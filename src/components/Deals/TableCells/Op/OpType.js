@@ -9,13 +9,14 @@ export default function OpType ({
   basePath,
   isNewOp,
   opClass,
-  opType = {},
+  opType: { id: opTypeId, name } = {},
   upsertBatch
 }) {
-  const { id: opTypeId, name } = opType
   const { opTypes } = useContext(DealsContext)
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
+  console.log('opClass > ', opClass)
+  const isMachiningClass = opClass === 'MACHINING'
   useEffect(() => (editMode &&
     inputRef.current &&
     inputRef.current.focus()) || undefined)
@@ -31,7 +32,7 @@ export default function OpType ({
     />
   else if (isNewOp)
     return <Icon
-      ml='6px'
+      ml={isMachiningClass ? '6px' : undefined}
 			// color='grey'
 			c='rgba(50,50,50,.87)'
       link

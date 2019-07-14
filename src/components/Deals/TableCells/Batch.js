@@ -58,7 +58,7 @@ export default function Batch ({
       </Div>
       <Div
         // w='100%'
-        w='calc(170px+140px)'
+        // w='calc(170px + 140px)'
       >
         <ProcOps
           modelId={model.id}
