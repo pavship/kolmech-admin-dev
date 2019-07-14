@@ -23,8 +23,8 @@ export default ({
       upsertBatch(draft => {
         assignNested(draft, `procs[0].ops[${opIndex}].dealLabor`, value)
       })
-      setEditMode(false)
     }}
+    onBlur={() => setEditMode(false)}
   />
   : <Div
       pl='4px'

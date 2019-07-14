@@ -15,7 +15,6 @@ export default function OpType ({
   const { opTypes } = useContext(DealsContext)
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
-  console.log('opClass > ', opClass)
   const isMachiningClass = opClass === 'MACHINING'
   useEffect(() => (editMode &&
     inputRef.current &&

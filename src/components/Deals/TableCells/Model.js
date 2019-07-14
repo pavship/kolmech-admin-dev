@@ -19,13 +19,13 @@ export default ({
       ref={inputRef}
       placeholder='Новое Изделие'
       value={name || ''}
-      onChange={value => upsertDeal({ variables: { input: {
+      onChange={value => value !== '' && upsertDeal({ variables: { input: {
         id: dealId,
         batches: [
           ...batches.map(({ id }) => ({ id })).filter(b => b.id !== batchId),
           {
             ...isNewBatch
-              ? { qty: 0 }
+              ? { qty: 0, sort: batches.length }
               : { id: batchId },
             model: {
               ...!isNewBatch && { id },

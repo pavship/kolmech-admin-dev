@@ -13,11 +13,7 @@ import produce from 'immer'
 const BatchContainer = styled.div`
   display: flex;
   width: 100%;
-  /* width: calc(170px + 170px + 170px); */
-  /* width: calc(170px + 170px + 170px); */
-  :not(:last-child) {
-		border-bottom: 1px solid rgba(34,36,38,0.15);
-	}
+  border-bottom: 1px solid rgba(34,36,38,0.15);
 `
 
 export default function Batch ({
@@ -35,7 +31,6 @@ export default function Batch ({
   return <BatchContainer>
     <Div
       w='130px'
-      // pe='auto'
       br={isNew ? undefined : '1px solid rgba(34,36,38,0.15);'}
     >
       <Model
@@ -56,10 +51,7 @@ export default function Batch ({
           upsertDeal={upsertDeal}
         />
       </Div>
-      <Div
-        // w='100%'
-        // w='calc(170px + 140px)'
-      >
+      <Div>
         <ProcOps
           modelId={model.id}
           ops={ops}

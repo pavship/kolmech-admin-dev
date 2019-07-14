@@ -31,7 +31,7 @@ export const theme = {
 	}
 }
 const getThemeColor = (color) => theme.colors[color] || color
-const baseSet = ({ theme, bt, bb, bc, bl, br, bs, bsh, c, d, fs, fw, h, l, lh, mw, minw, m, mb, mt, ml, mr, o, ov, ox, oy, p, pb, pe, pos, pl, pr, pt, t, ta, to, va, w, whs, ws, z }) => {
+const baseSet = ({ theme, bt, bb, bc, bl, br, bs, bsh, c, cur, d, fs, fw, h, l, lh, mw, minw, m, mb, mt, ml, mr, o, ov, ox, oy, p, pb, pe, pos, pl, pr, pt, t, tr, ta, to, v, va, w, whs, ws, z }) => {
 	return `
 		${bt 	? `border-top: ${bt};`														: ''}
 		${bb 	? `border-bottom: ${bb};`													: ''}
@@ -41,6 +41,7 @@ const baseSet = ({ theme, bt, bb, bc, bl, br, bs, bsh, c, d, fs, fw, h, l, lh, m
 		${bs 	? `box-sizing: ${bs};`														: ''}
 		${bsh ? `box-shadow: ${bsh};`														: ''}
 		${c 	? `color: ${theme.colors && theme.colors[c] || c};`	: ''}
+		${cur 	? `cursor: ${cur};`															: ''}
 		${d 	? `display: ${d};`																: ''}
 		${fs 	? `font-size: ${fs};`															: ''}
 		${fw 	? `font-weight: ${fw};`														: ''}
@@ -66,8 +67,10 @@ const baseSet = ({ theme, bt, bb, bc, bl, br, bs, bsh, c, d, fs, fw, h, l, lh, m
 		${pr 	? `padding-right: ${pr};`													: ''}
 		${pt 	? `padding-top: ${pt};`														: ''}
 		${t 	? `top: ${t};`																		: ''}
+		${tr 	? `transition: ${tr};`														: ''}
 		${ta 	? `text-align: ${ta};`														: ''}
 		${to 	? `text-overflow: ${to};`													: ''}
+		${v 	? `visibility: ${v};`															: ''}
 		${va 	? `vertical-align: ${va};`												: ''}
 		${w 	? `width: ${(theme.widths && theme.widths[w]) || w};`		: ''}
 		${whs ? `white-space: ${whs};`													: ''}
