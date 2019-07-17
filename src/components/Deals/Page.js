@@ -68,23 +68,22 @@ export default ({
                     refetchDeals={refetch}
                   />
                   <DetailsProvider>
+                    <Container>
                       {!loading
                         ? !error
                           ? data && 
                             <DealsContextProvider
                               opTypes={data.opTypes}
                             >
-                              <Container>
-                                <Timeline />
-                                <TimelinePlot />
-                                <DealsTable
-                                  notify={notify}
-                                  deals={data.deals}
-                                  orgs={data.orgs}
-                                  upsertDeal={upsertDeal}
-                                  upsertingDeal={upsertingDeal}
-                                />
-                              </Container>
+                              <Timeline />
+                              <TimelinePlot />
+                              <DealsTable
+                                notify={notify}
+                                deals={data.deals}
+                                orgs={data.orgs}
+                                upsertDeal={upsertDeal}
+                                upsertingDeal={upsertingDeal}
+                              />
                             </DealsContextProvider>
                           : `Ошибка ${error.message}`
                         : <Dimmer
@@ -95,6 +94,7 @@ export default ({
                             </Loader>
                           </Dimmer>
                       }
+                    </Container>
                   </DetailsProvider>
                   
                 </>
