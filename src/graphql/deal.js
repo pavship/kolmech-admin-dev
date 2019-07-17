@@ -18,7 +18,7 @@ export const dealFragmentMiddle = gql`
 	fragment DealFragmentMiddle on Deal {
 		...DealFragmentBasic
 		date
-		batches { ...batchFragmentMiddle}
+		batches (orderBy: sort_ASC) { ...batchFragmentMiddle}
 		org { ...OrgFragmentBasic}
   }
   ${dealFragmentBasic}
@@ -50,7 +50,7 @@ export const dealDetails = gql`
 	query deal ($id: ID!) {
 		deal (id: $id) {
 			id
-			batches { ...batchFragmentDetails}
+			batches (orderBy: sort_ASC) { ...batchFragmentDetails}
 		}
 	}
 	${batchFragmentDetails}

@@ -18,6 +18,7 @@ export default function BatchDetails ({
   if (!batchProp && loading)
     return <Dimmer active ><Loader>Загрузка..</Loader></Dimmer>
   const {
+    descript,
     info,
     warning,
     model: {
@@ -79,6 +80,14 @@ export default function BatchDetails ({
         value={hardness || ''}
         onChange={value => upsertBatch({ variables: { input:
           produceNested(batchStructure, 'workpiece.hardness', value)
+        }})}
+      />
+      <Field
+        label='Описание'
+        type='textarea'
+        value={descript || ''}
+        onChange={value => upsertBatch({ variables: { input:
+          produceNested(batchStructure, `descript`, value)
         }})}
       />
       <Field

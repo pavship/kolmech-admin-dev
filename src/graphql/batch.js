@@ -32,6 +32,7 @@ export const batchFragmentMiddle = gql`
 export const batchFragmentDetails = gql`
 	fragment batchFragmentDetails on Batch {
 		...batchFragmentBasic
+		descript
 		info
 		warning
 		model { ...ModelFragmentWithDrawings }

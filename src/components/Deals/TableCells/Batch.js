@@ -17,13 +17,11 @@ const BatchContainer = styled.div`
 `
 
 export default function Batch ({
-  batchIndex,
   deal,
   batch,
   upsertDeal,
 }) {
-  const { isNew, ops, procs, model, sort } = batch
-  console.log('deal.amoId, batchIndex, sort > ', deal.amoId, batchIndex, sort)
+  const { isNew, ops, procs, model } = batch
   const [ upsertBatchProto ] = useMutation(uBq)
   const upsertBatch = (draftHandler, options = {}) => upsertBatchProto({ variables: { input:
     produce(getStructure(batch), draftHandler)

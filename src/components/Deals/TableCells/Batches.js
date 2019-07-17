@@ -53,8 +53,6 @@ export default function Batches ({
     <SortableContainer
       onSortEnd={({oldIndex, newIndex}) => {
         if (oldIndex === newIndex) return
-        console.log('deal.amoId, oldIndex, newIndex > ', deal.amoId, oldIndex, newIndex)
-        console.log('batches > ', batches)
         upsertDeal({ variables: { input: {
           id: dealId,
           batches: [
@@ -75,12 +73,10 @@ export default function Batches ({
       useDragHandle
     >
       {deal.batches
-        .sort((a, b) => a.sort - b.sort)
-        .map((batch, batchIndex) =>
+        .map((batch, index) =>
           <SortableItem
             key={batch.id}
-            index={batchIndex}
-            batchIndex={batchIndex}
+            index={index}
             deal={deal}
             batch={batch}
             upsertDeal={upsertDeal}
