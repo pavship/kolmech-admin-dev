@@ -71,7 +71,7 @@ export default function Row ({
             />
           </Div>
           <Div
-            w='170px'
+            w='100px'
             whs='nowrap'
             to='ellipsis'
             pos='relative'
@@ -89,7 +89,7 @@ export default function Row ({
       <Div
         pos={!batches.length ? 'absolute' : undefined}
         t={!batches.length ? '0' : undefined}
-        l={!batches.length ? '552px' : undefined}
+        l={!batches.length ? '482px' : undefined}
         w={!batches.length ? '260px' : undefined}
         pl={!batches.length ? '5px' : '32px'}
       >

@@ -16,7 +16,7 @@ export default function Timeline ({
   budgetMode
 }) {
   return <Container
-    l={budgetMode ? '542px' : '542px'}
+    l={budgetMode ? '472px' : '472px'}
     onClick={()=>console.log('container here!')}
   >
   </Container>

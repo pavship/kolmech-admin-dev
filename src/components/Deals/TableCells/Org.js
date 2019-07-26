@@ -66,7 +66,7 @@ export default function Org ({
       <Div
         ov='hidden'
         to='ellipsis'
-        w={isHovered ? '140px' : undefined}
+        w={isHovered ? '70px' : undefined}
         fw={isHovered ? 'bold' : undefined}
         pl='6px'
         // onClick={() => setEditMode(true)} //block editing

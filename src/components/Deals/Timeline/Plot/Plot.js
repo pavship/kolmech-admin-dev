@@ -7,7 +7,7 @@ import Header from './Header'
 
 const Window = styled(Div)`
   position: fixed;
-  left: 542px;
+  left: 472px;
   width: 100%;
   height: 100%;
   overflow: hidden;

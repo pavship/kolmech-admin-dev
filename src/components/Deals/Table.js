@@ -45,8 +45,8 @@ export default function DealsTable ({
     z='10'
   >
     <TableHeader
-      w={budgetMode ? '1142px' : '542px'}
-      // w={budgetMode ? '1142px' : '472px'}
+      // w={budgetMode ? '1142px' : '542px'}
+      w={budgetMode ? '1142px' : '472px'}
     >
       <Div w='80px'>#</Div>
       <Div w='90px'>Дата</Div>
@@ -54,7 +54,7 @@ export default function DealsTable ({
       <Div w='170px'>Контрагент</Div>
     </TableHeader>
     <Background
-      w={budgetMode ? '1142px' : '472px'}
+      w={budgetMode ? '1142px' : '372px'}
     />
     <Div
       h='calc(100% - 23px)'
@@ -74,7 +74,7 @@ export default function DealsTable ({
       )}
       <Div
         h='400px'
-        w='542px'
+        w='472px'
         bc='white'
       />
     </Div>
