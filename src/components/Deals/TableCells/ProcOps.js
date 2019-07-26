@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import cuid from 'cuid'
 
 import styled from 'styled-components'
@@ -7,7 +7,6 @@ import Proc from'./Proc'
 import { Ops } from './Op/Ops'
 import { Op } from './Op/Op';
 import { Div } from '../../styled/styled-semantic'
-import { DealsContext } from '../context/Context'
 
 const Container = styled(Div)`
   /* width: calc(170px + 170px + 260px); */
@@ -21,8 +20,8 @@ export default function ProcOps ({
   ops,
   procs,
   upsertBatch,
+  budgetMode
 }) {
-  const { budgetMode } = useContext(DealsContext)
   // temporarily limited to only 1 technical process per batch
   return <>
     {[ops[0] || { id: cuid(), isNew: true }]
