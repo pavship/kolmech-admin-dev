@@ -13,14 +13,29 @@ const FlexContainer = styled.div`
 `
 
 export default function BpStat ({
+  bpStat,
   budgetMode
 }) {
+  const {
+    id,
+    factCost,
+		factLabor,
+		factRevenue,
+		planCost,
+		planLabor,
+		planRevenue,
+  } = bpStat || {}
+  console.log('bpStat > ', bpStat)
   return <FlexContainer>
     <Div
       w='90px'
+      pl='2px'
       bl='1px solid rgba(34,36,38,0.15)'
     >
-      122.4/130.8 ч
+      {bpStat === null
+        ? '122.4/130.8 ч'
+        : `${factLabor || '- '}/${planLabor || ' -'} ч`
+      }
     </Div>
     {budgetMode && <>
       <Div

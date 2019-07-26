@@ -51,7 +51,7 @@ export default function DealsTable ({
       <Div w='80px'>#</Div>
       <Div w='90px'>Дата</Div>
       <Div w='170px'>Наименование</Div>
-      <Div w='170px'>Контрагент</Div>
+      <Div w='100px'>Контрагент</Div>
     </TableHeader>
     <Background
       w={budgetMode ? '1142px' : '372px'}
@@ -70,6 +70,7 @@ export default function DealsTable ({
           orgs={orgs}
           upsertDeal={upsertDeal}
           upsertingDeal={upsertingDeal}
+          budgetMode={budgetMode}
         />
       )}
       <Div

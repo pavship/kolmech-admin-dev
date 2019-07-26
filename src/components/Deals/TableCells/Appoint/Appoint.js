@@ -12,6 +12,9 @@ import BpStat from '../BpStat/BpStat';
 const FlexContainer = styled.div`
   display: flex;
   position: relative;
+  :not(:last-child) {
+		border-bottom: 1px solid rgba(34,36,38,0.15);
+	}
 `
 
 const WarningItem = styled(Dropdown.Item)`
@@ -33,7 +36,7 @@ export default function Appoint ({
   budgetMode
 }) {
   const { opType: { id: opTypeId } } = op
-  const { id: appointId, isNew, tasks } = appoint
+  const { id: appointId, isNew, tasks, bpStat } = appoint
   const { setDetails } = useContext(DetailsContext)
   const [isHovered, setIsHovered] = useState(false)
   return <>
@@ -76,9 +79,10 @@ export default function Appoint ({
         }
       </Div>
       <BpStat
+        bpStat={bpStat}
         budgetMode={budgetMode}
       />
-      <Div
+      {/* <Div
         pos='absolute'
         l='170px'
         w='2000px'
@@ -91,7 +95,7 @@ export default function Appoint ({
             task={task}
           />
         )}
-      </Div>
+      </Div> */}
     </FlexContainer>
   </>
 }

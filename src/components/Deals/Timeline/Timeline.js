@@ -10,13 +10,14 @@ const Container = styled(Div)`
   background: linear-gradient(135deg,rgba(0,0,0,.01) 0%,rgba(200,201,202,1) 100%);
   box-shadow: inset 0 0 20px rgba(34,36,38,.15);
   z-index: -1;
+  transition: all 0.5s ease;
 `
 
 export default function Timeline ({
   budgetMode
 }) {
   return <Container
-    l={budgetMode ? '472px' : '472px'}
+    l={budgetMode ? '1142px' : '472px'}
     onClick={()=>console.log('container here!')}
   >
   </Container>

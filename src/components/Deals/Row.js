@@ -23,6 +23,7 @@ export default function Row ({
   orgs,
   upsertDeal,
   upsertingDeal,
+  budgetMode,
 }) {
   const { amoId, date, batches, status } = deal
   const { setDetails } = useContext(DetailsContext)
@@ -84,6 +85,11 @@ export default function Row ({
               setDetails={setDetails}
             />
           </Div>
+          {budgetMode &&
+            <Div
+              w='670px'
+            />
+          }
         </Div>
       </Div>
       <Div
