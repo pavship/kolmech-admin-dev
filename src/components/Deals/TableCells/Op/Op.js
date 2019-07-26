@@ -28,77 +28,78 @@ export const Op = ({
   op,
   opClass,
   opIndex,
-  upsertBatch
+  upsertBatch,
+  budgetMode
 }) => {
   const { isNew, appoints, opType, dealLabor } = op
   const isMachiningClass = basePath.startsWith('procs')
   const [isHovered, setIsHovered] = useState(false)
-  return <>
-    <FlexContainer>
+  return <FlexContainer>
+    <Div
+      d='flex'
+      w={isMachiningClass ? '130px' : '170px'}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <Div
-        d='flex'
-        w={isMachiningClass ? '130px' : '170px'}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        w={!isNew && isHovered ? (isMachiningClass ? '100px' : '140px') : '100%'}
+        whs='nowrap'
+        to='ellipsis'
+        pos='relative'
       >
-        <Div
-          w={!isNew && isHovered ? (isMachiningClass ? '100px' : '140px') : '100%'}
-          whs='nowrap'
-          to='ellipsis'
-          pos='relative'
-        >
-          <OpType
-            basePath={basePath}
-            opType={opType}
-            opClass={opClass}
-            isNewOp={isNew}
-            upsertBatch={upsertBatch}
-          />
-        </Div>
-        {!isNew && isHovered &&
-          <DropdownMenu>
-            <WarningItem
-              icon='trash'
-              text='Удалить'
-              onClick={() => upsertBatch(draft => {
-                assignNested(draft, basePath + `ops[${opIndex}]`, {})
-              })}
-            />
-          </DropdownMenu>
-        }
+        <OpType
+          basePath={basePath}
+          opType={opType}
+          opClass={opClass}
+          isNewOp={isNew}
+          upsertBatch={upsertBatch}
+        />
       </Div>
-      {!isNew && isMachiningClass &&
-        <Div
-          w='40px'
-          bl='1px solid rgba(34,36,38,0.15);'
-        >
-          <DealLabour
-            dealLabor={dealLabor}
+      {!isNew && isHovered &&
+        <DropdownMenu>
+          <WarningItem
+            icon='trash'
+            text='Удалить'
+            onClick={() => upsertBatch(draft => {
+              assignNested(draft, basePath + `ops[${opIndex}]`, {})
+            })}
+          />
+        </DropdownMenu>
+      }
+    </Div>
+    {!isNew && isMachiningClass &&
+      <Div
+        w='40px'
+        bl='1px solid rgba(34,36,38,0.15)'
+      >
+        <DealLabour
+          dealLabor={dealLabor}
+          opIndex={opIndex}
+          upsertBatch={upsertBatch}
+        />
+      </Div>
+    }
+    {!isNew &&
+      <Div
+        // w={`calc(170px + 90px${budgetMode ? ' + 670px' : ''})`}
+        w={budgetMode ? '930px' : '260px'}
+      >
+        {[
+          ...appoints,
+          { id: cuid(), isNew: true }
+        ].map((appoint, i) =>
+          <Appoint
+            key={appoint.id}
+            basePath={basePath}
+            appoint={appoint}
+            appointIndex={i}
+            op={op}
             opIndex={opIndex}
             upsertBatch={upsertBatch}
+            budgetMode={budgetMode}
           />
-        </Div>
-      }
-      {!isNew && 
-        <Div
-          w='170px'
-        >
-          {[
-            ...appoints,
-            { id: cuid(), isNew: true }
-          ].map((appoint, i) =>
-            <Appoint
-              key={appoint.id}
-              basePath={basePath}
-              appoint={appoint}
-              appointIndex={i}
-              op={op}
-              opIndex={opIndex}
-              upsertBatch={upsertBatch}
-            />
-          )}
-        </Div>
-      }
-    </FlexContainer>
-  </>
+        )}
+      </Div>
+    }
+  </FlexContainer>
 }

@@ -1,13 +1,12 @@
 import React, { useState, useContext } from 'react'
-import cuid from 'cuid'
 import { assignNested } from '../../../form/utils'
 import DetailsContext from '../../../Details/Provider'
 import styled from 'styled-components'
-import { Div } from '../../../styled/styled-semantic'
+import { Div, Icon } from '../../../styled/styled-semantic'
 import { DropdownMenu } from '../DropdownMenu'
 import { Dropdown } from 'semantic-ui-react'
 import ExecName from '../Exec/Name'
-import Task from '../../Task/Task';
+import Task from '../../Task/Task'
 
 const FlexContainer = styled.div`
   display: flex;
@@ -30,6 +29,7 @@ export default function Appoint ({
   op,
   opIndex,
   upsertBatch,
+  budgetMode
 }) {
   const { opType: { id: opTypeId } } = op
   const { id: appointId, isNew, tasks } = appoint
@@ -65,7 +65,6 @@ export default function Appoint ({
               onClick={() => upsertBatch(draft => {
                 assignNested(draft, basePath + `ops[${opIndex}].appoints[${appointIndex}]`, {})
               })}
-              // }, { refetchQueries: [{ query: personExec, variables: { id: person.id } }] })}
             />
             <Dropdown.Item
               icon='plus'
@@ -75,6 +74,43 @@ export default function Appoint ({
           </DropdownMenu>
         }
       </Div>
+      <Div
+        w='90px'
+        bl='1px solid rgba(34,36,38,0.15)'
+      >
+        122.4/130.8 ч
+      </Div>
+      {budgetMode && <>
+        <Div
+          w='90px'
+          bl='1px solid rgba(34,36,38,0.15)'
+          ta='right'
+          pr='2px'
+        >
+          <Icon
+            name='hand paper'
+            size='small'
+            fl='left'
+            m='2px auto 0 1px'
+            color='grey'
+          />
+          1 000 000 ₽
+        </Div>
+        <Div
+          w='80px'
+          bl='1px solid rgba(34,36,38,0.15)'
+          ta='right'
+          pr='2px'
+        >
+          1 000 000 ₽
+        </Div>
+        <Div
+          w='500px'
+          bl='1px solid rgba(34,36,38,0.15)'
+        >
+          ..
+        </Div>
+      </>}
       <Div
         pos='absolute'
         l='170px'

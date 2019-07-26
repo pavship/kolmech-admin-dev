@@ -31,7 +31,7 @@ export const theme = {
 	}
 }
 const getThemeColor = (color) => theme.colors[color] || color
-const baseSet = ({ theme, bt, bb, bc, bl, br, bs, bsh, c, cur, d, fs, fw, h, l, lh, mw, minw, m, mb, mt, ml, mr, o, ov, ox, oy, p, pb, pe, pos, pl, pr, pt, t, tr, ta, to, v, va, w, whs, ws, z }) => {
+const baseSet = ({ theme, bt, bb, bc, bl, br, bs, bsh, c, cur, d, f, fl, fs, fw, h, l, lh, mw, minw, m, mb, mt, ml, mr, o, ov, ox, oy, p, pb, pe, pos, pl, pr, pt, t, tr, ta, to, v, va, w, whs, ws, z }) => {
 	return `
 		${bt 	? `border-top: ${bt};`														: ''}
 		${bb 	? `border-bottom: ${bb};`													: ''}
@@ -43,6 +43,8 @@ const baseSet = ({ theme, bt, bb, bc, bl, br, bs, bsh, c, cur, d, fs, fw, h, l, 
 		${c 	? `color: ${theme.colors && theme.colors[c] || c};`	: ''}
 		${cur 	? `cursor: ${cur};`															: ''}
 		${d 	? `display: ${d};`																: ''}
+		${f 	? `flex: ${f};`																		: ''}
+		${fl 	? `float: ${fl};`																	: ''}
 		${fs 	? `font-size: ${fs};`															: ''}
 		${fw 	? `font-weight: ${fw};`														: ''}
 		${h 	? `height: ${h};`																	: ''}

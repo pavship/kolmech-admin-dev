@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { bpStatFragmentMiddle } from './bpStat'
 import { execFragmentBasic } from './exec'
 import { taskFragmentMiddle } from './task'
 
@@ -11,13 +12,11 @@ export const appointFragmentBasic = gql`
 export const appointFragmentMiddle = gql`
 	fragment appointFragmentMiddle on Appoint {
 		...appointFragmentBasic
-		factCost
-		factLabor
-		planCost
-		planLabor
+		bpStat { ...bpStatFragmentMiddle }
 		exec { ...execFragmentBasic }
 		tasks { ...taskFragmentMiddle }
 	}
+	${bpStatFragmentMiddle}
 	${appointFragmentBasic}
 	${execFragmentBasic}
 	${taskFragmentMiddle}

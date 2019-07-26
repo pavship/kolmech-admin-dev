@@ -5,7 +5,7 @@ import posed from 'react-pose'
 import { Div } from '../../../styled/styled-semantic'
 import Header from './Header'
 
-const Window = styled.div`
+const Window = styled(Div)`
   position: fixed;
   left: 542px;
   width: 100%;
@@ -24,7 +24,7 @@ const Container = styled(posed.div({
 `
 
 export default function TimelinePlot ({
-
+  budgetMode
 }) {
   const startDate = new Date(new Date().setDate(new Date().getDate() - 18))
   const currentHalfHour = Math.floor((Date.now() - startDate.setHours(0,0,0,0))/(30*60000))

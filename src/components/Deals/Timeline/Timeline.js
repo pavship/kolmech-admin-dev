@@ -1,10 +1,10 @@
 import React from 'react'
 
 import styled from 'styled-components'
+import { Div } from '../../styled/styled-semantic'
 
-const Container = styled.div`
+const Container = styled(Div)`
   position: fixed;
-  left: 542px;
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg,rgba(0,0,0,.01) 0%,rgba(200,201,202,1) 100%);
@@ -13,9 +13,10 @@ const Container = styled.div`
 `
 
 export default function Timeline ({
-
+  budgetMode
 }) {
   return <Container
+    l={budgetMode ? '542px' : '542px'}
     onClick={()=>console.log('container here!')}
   >
   </Container>

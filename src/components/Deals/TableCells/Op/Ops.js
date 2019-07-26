@@ -14,7 +14,8 @@ const Container = styled.div`
 
 export const Ops = ({
   ops,
-  upsertBatch
+  upsertBatch,
+  budgetMode
 }) => {
   return [
     ...ops,
@@ -29,6 +30,7 @@ export const Ops = ({
         opClass='MACHINING'
         opIndex={i}
         upsertBatch={upsertBatch}
+        budgetMode={budgetMode}
       />
     </Container>
   )

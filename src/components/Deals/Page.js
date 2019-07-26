@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Query, Mutation } from 'react-apollo'
 import { dealsPage, upsertDeal } from '../../graphql/deal'
 import { NotificationsConsumer } from '../notifications/NotificationsContext'
@@ -28,6 +28,7 @@ const Container = styled.div`
 export default ({
   refreshToken
 }) => {
+  const [ budgetMode, setBudgetMode ] = useState(true)
   return (
     <NotificationsConsumer>
       {({ notify }) =>
@@ -66,6 +67,8 @@ export default ({
                     titleLinkTo='/deals'
                     refreshToken={refreshToken}
                     refetchDeals={refetch}
+                    budgetMode={budgetMode}
+                    setBudgetMode={setBudgetMode}
                   />
                   <DetailsProvider>
                     <Container>
@@ -74,9 +77,14 @@ export default ({
                           ? data && 
                             <DealsContextProvider
                               opTypes={data.opTypes}
+                              budgetMode={budgetMode}
                             >
-                              <Timeline />
-                              <TimelinePlot />
+                              <Timeline
+                                budgetMode={budgetMode}
+                              />
+                              <TimelinePlot
+                                budgetMode={budgetMode}
+                              />
                               <DealsTable
                                 notify={notify}
                                 deals={data.deals}

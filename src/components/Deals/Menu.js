@@ -1,8 +1,7 @@
 import React from 'react'
 import { Mutation } from 'react-apollo'
 import { syncDeals } from '../../graphql/deal'
-import { Button } from '../styled/styled-semantic'
-import { Icon } from 'semantic-ui-react'
+import { Button, Icon } from '../styled/styled-semantic'
 import Menu from '../Menu'
 
 export default ({
@@ -10,7 +9,9 @@ export default ({
   title,
   titleLinkTo,
 	refreshToken,
-	refetchDeals
+	refetchDeals,
+	budgetMode,
+	setBudgetMode
 }) => {
   return <Mutation
 		mutation={syncDeals}
@@ -33,6 +34,15 @@ export default ({
         titleLinkTo={titleLinkTo}
         refreshToken={refreshToken}
       >
+				<Icon
+					link
+					name='ruble sign'
+					size='large'
+					mr='9px'
+					activeColor='green'
+					active={budgetMode}
+					onClick={() => setBudgetMode(!budgetMode)}
+				/>
         <Button compact circular menu
 					w='170px'
 					ml='0'

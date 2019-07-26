@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { Div } from '../styled/styled-semantic'
 import styled from 'styled-components'
 import Row from './Row'
+import { DealsContext } from './context/Context';
 
 const TableHeader = styled.div`
   position: fixed;
@@ -18,12 +19,12 @@ const TableHeader = styled.div`
   z-index: 15;
 `
 
-const Background = styled.div`
+const Background = styled(Div)`
   position: fixed;
-  width: 542px;
   height: 100%;
   background: white;
   z-index: -1;
+  transition: width .5s ease;
 `
 
 export default function DealsTable ({
@@ -32,6 +33,7 @@ export default function DealsTable ({
   upsertDeal,
   upsertingDeal,
 }) {
+  const { budgetMode } = useContext(DealsContext)
   return <Div
     w='100%'
     // h='calc(100% - 36px)'
@@ -46,7 +48,9 @@ export default function DealsTable ({
       <Div w='170px'>Наименование</Div>
       <Div w='170px'>Контрагент</Div>
     </TableHeader>
-    <Background />
+    <Background
+      w={budgetMode ? '1302px' : '632px'}
+    />
     <Div
       h='calc(100% - 23px)'
       mt='23px'
