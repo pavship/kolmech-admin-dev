@@ -12,6 +12,7 @@ import Timeline from './Timeline/Timeline'
 import TimelinePlot from './Timeline/Plot/Plot'
 
 import styled from 'styled-components'
+import { Div } from '../styled/styled-semantic';
 
 const Container = styled.div`
   position: relative;
@@ -23,6 +24,17 @@ const Container = styled.div`
   overflow-x: hidden;
   overflow-y: scroll;
   /* z-index: 1; */
+`
+
+const HeaderBlinder = styled(Div)`
+  position: fixed;
+  height: 23px;
+  overflow: hidden;
+  z-index: 20;
+  background: rgb(233,234,235);
+  border-top: 1px solid #d4d4d5;
+  border-bottom: 1px solid #d4d4d5;
+  transition: width .5s ease;
 `
 
 export default ({
@@ -85,6 +97,9 @@ export default ({
                               <TimelinePlot
                                 budgetMode={budgetMode}
                               />
+                              {/* <HeaderBlinder
+                                w={budgetMode ? '1142px' : '472px'}
+                              /> */}
                               <DealsTable
                                 notify={notify}
                                 deals={data.deals}

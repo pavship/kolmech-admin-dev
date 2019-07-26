@@ -5,10 +5,10 @@ import styled from 'styled-components'
 import Row from './Row'
 import { DealsContext } from './context/Context';
 
-const TableHeader = styled.div`
+const TableHeader = styled(Div)`
   position: fixed;
   display: flex;
-  width: 542px;
+  /* width: 542px; */
   padding: 0 0 0 32px;
   line-height: 1.5em;
   font-weight: bold;
@@ -17,6 +17,7 @@ const TableHeader = styled.div`
   border-bottom: 1px solid #d4d4d5;
   pointer-events: auto;
   z-index: 15;
+  transition: width .5s ease;
 `
 
 const Background = styled(Div)`
@@ -35,24 +36,29 @@ export default function DealsTable ({
 }) {
   const { budgetMode } = useContext(DealsContext)
   return <Div
+    pos='absolute'
+    // t='23px'
     w='100%'
-    // h='calc(100% - 36px)'
+    // h='calc(100% - 23px)'
     h='100%'
     pe='none'
-    pos='absolute'
     z='10'
   >
-    <TableHeader>
+    <TableHeader
+      w={budgetMode ? '1142px' : '542px'}
+      // w={budgetMode ? '1142px' : '472px'}
+    >
       <Div w='80px'>#</Div>
       <Div w='90px'>Дата</Div>
       <Div w='170px'>Наименование</Div>
       <Div w='170px'>Контрагент</Div>
     </TableHeader>
     <Background
-      w={budgetMode ? '1302px' : '632px'}
+      w={budgetMode ? '1142px' : '472px'}
     />
     <Div
       h='calc(100% - 23px)'
+      // h='100%'
       mt='23px'
       // oy='scroll'
     >
