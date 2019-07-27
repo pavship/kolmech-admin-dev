@@ -25,17 +25,17 @@ export default function BpStat ({
 		planLabor,
 		planRevenue,
   } = bpStat || {}
-  console.log('bpStat > ', bpStat)
   return <FlexContainer>
     <Div
       w='90px'
       pl='2px'
       bl='1px solid rgba(34,36,38,0.15)'
     >
-      {bpStat === null
+      {`${factLabor || '- '}/${planLabor || ' -'} ч`}
+      {/* {bpStat === null
         ? '122.4/130.8 ч'
         : `${factLabor || '- '}/${planLabor || ' -'} ч`
-      }
+      } */}
     </Div>
     {budgetMode && <>
       <Div

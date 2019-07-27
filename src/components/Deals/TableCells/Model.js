@@ -25,7 +25,7 @@ export default ({
           ...batches.map(({ id }) => ({ id })).filter(b => b.id !== batchId),
           {
             ...isNewBatch
-              ? { qty: 0, sort: batches.length }
+              ? { qty: 1, sort: batches.length }
               : { id: batchId },
             model: {
               ...!isNewBatch && { id },

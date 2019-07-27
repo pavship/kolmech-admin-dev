@@ -37,7 +37,7 @@ export const Op = ({
   return <FlexContainer>
     <Div
       d='flex'
-      w={isMachiningClass ? '130px' : '170px'}
+      w={isMachiningClass ? '125px' : '170px'}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -69,7 +69,7 @@ export const Op = ({
     </Div>
     {!isNew && isMachiningClass &&
       <Div
-        w='40px'
+        w='45px'
         bl='1px solid rgba(34,36,38,0.15)'
       >
         <DealLabour
@@ -83,6 +83,7 @@ export const Op = ({
       <Div
         // w={`calc(170px + 90px${budgetMode ? ' + 670px' : ''})`}
         w={budgetMode ? '930px' : '260px'}
+        bl='1px solid rgba(34,36,38,0.15)'
       >
         {[
           ...appoints,

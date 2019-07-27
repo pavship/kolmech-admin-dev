@@ -18,7 +18,7 @@ export default ({
   ? <HtmlInput
     ref={inputRef}
     placeholder='0'
-    value={dealLabor}
+    value={dealLabor || ''}
     onChange={value => {
       upsertBatch(draft => {
         assignNested(draft, `procs[0].ops[${opIndex}].dealLabor`, value)
@@ -27,9 +27,9 @@ export default ({
     onBlur={() => setEditMode(false)}
   />
   : <Div
-      pl='4px'
+      pl='2px'
       onClick={() => setEditMode(true)}
     >
-      {dealLabor}ч
+      {dealLabor} ч
     </Div>
 }

@@ -22,7 +22,7 @@ export default ({
   return editMode
   ? <Input
       ref={inputRef}
-      placeholder='0'
+      placeholder='1'
       value={qty}
       onChange={({ target: { value }}) => setQty(value)}
       onBlur={async () => {
@@ -42,6 +42,6 @@ export default ({
       pl='4px'
       onClick={() => setEditMode(true)}
     >
-      {!isNewBatch ? qty : ''}
+      {!isNewBatch ? qty : ''} шт
     </Div>
 }
