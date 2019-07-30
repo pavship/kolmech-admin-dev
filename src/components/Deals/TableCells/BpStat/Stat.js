@@ -12,7 +12,6 @@ export default function Stat ({
   onAutoEnable,
   // upsertBatch,
 }) {
-  console.log('value > ', value)
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   useEffect(() => (editMode &&

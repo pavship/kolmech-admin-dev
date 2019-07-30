@@ -8,11 +8,11 @@ export default function ExecName ({
   basePath,
   appoint,
   opIndex,
-  opTypeId,
+  opType: { id: opTypeId, laborCost },
   upsertBatch
 }) {
-  const { setDetails } = useContext(DetailsContext)
   const { isNew: isNewAppoint, exec: { person: { amoName } = {} } = {} } = appoint
+  const { setDetails } = useContext(DetailsContext)
   const [ addMode, setAddMode ] = useState(false)
   if (isNewAppoint)
     return <Icon
@@ -32,7 +32,7 @@ export default function ExecName ({
             upsertBatch(draft => {
               assignNested( draft,
                 basePath + `ops[${opIndex}].appoints[length]`,
-                { execId }
+                { execId, ...laborCost && { laborCost } }
               )
             })
           }

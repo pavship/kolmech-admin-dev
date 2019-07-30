@@ -39,7 +39,7 @@ export default function Appoint ({
   upsertBatch,
   budgetMode
 }) {
-  const { opType: { id: opTypeId } } = op
+  const { opType } = op
   const { id: appointId, isNew, tasks, bpStat } = appoint
   const { setDetails } = useContext(DetailsContext)
   const [isHovered, setIsHovered] = useState(false)
@@ -65,7 +65,7 @@ export default function Appoint ({
             basePath={basePath}
             appoint={appoint}
             opIndex={opIndex}
-            opTypeId={opTypeId}
+            opType={opType}
             upsertBatch={upsertBatch}
           />
         </Div>

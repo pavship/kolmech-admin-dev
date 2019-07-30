@@ -19,27 +19,29 @@ export default function BpStat ({
   budgetMode,
   upsertParent
 }) {
-  console.log('autoBpStat > ', autoBpStat)
+  console.log('bpStat > ', bpStat)
   const {
-    id,
 		autoPlanCost,
 		autoPlanLabor,
 		autoPlanRevenue,
     factCost,
 		factLabor,
-		factRevenue,
-  } = bpStat || {}
-  const stat = {
-    ...bpStat,
-    ...autoPlanCost !== false && { planCost: autoBpStat.planCost },
-    ...autoPlanLabor !== false && { planLabor: autoBpStat.planLabor },
-    ...autoPlanRevenue !== false && { planRevenue: autoBpStat.planRevenue },
-  }
-  const {
+    factRevenue,
     planCost,
 		planLabor,
     planRevenue
-  } = stat
+  } = bpStat || {}
+  // const stat = {
+  //   ...bpStat,
+  //   ...autoPlanCost !== false && { planCost: autoBpStat.planCost },
+  //   ...autoPlanLabor !== false && { planLabor: autoBpStat.planLabor },
+  //   ...autoPlanRevenue !== false && { planRevenue: autoBpStat.planRevenue },
+  // }
+  // const {
+  //   planCost,
+	// 	planLabor,
+  //   planRevenue
+  // } = stat
   return <FlexContainer>
     <Div
       w='90px'

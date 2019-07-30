@@ -12,6 +12,7 @@ export const appointFragmentBasic = gql`
 export const appointFragmentMiddle = gql`
 	fragment appointFragmentMiddle on Appoint {
 		...appointFragmentBasic
+		laborCost
 		bpStat { ...bpStatFragmentMiddle }
 		exec { ...execFragmentBasic }
 		tasks { ...taskFragmentMiddle }

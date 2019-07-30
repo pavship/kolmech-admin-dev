@@ -23,31 +23,61 @@ export default function Batch ({
   batch,
   upsertDeal,
 }) {
-  const { isNew, bpStat, ops, procs, model } = batch
   const { budgetMode } = useContext(DealsContext)
   const [ upsertBatchProto ] = useMutation(uBq)
-  const upsertBatch = (draftHandler, options = {}) => upsertBatchProto({ variables: { input:
-    produce(getStructure(batch), draftHandler)
-  }, ...options})
-  const bpStatFieldNames = [
-    ['autoPlanLabor', 'planLabor'],
-    ['autoPlanRevenue', 'planRevenue'],
-    ['autoPlanCost', 'planCost'],
-  ]
-  const autoBpStat = procs[0] && procs[0].ops &&
-    procs[0].ops.reduce((stat, op) => {
-      console.log('stat, op > ', stat, op)
-      if (op.appoints) op.appoints.forEach(ap => {
-        bpStatFieldNames.forEach(([ autoFName, fName ]) => {
-          if (ap.bpStat && ap.bpStat[autoFName] === false) stat[fName] += ap.bpStat[fName]
-        })
-      })
-      return stat
-    },{
+  const upsertBatch = (draftHandler, options = {}) =>
+    upsertBatchProto({ variables: { input:
+      produce(getStructure(batch), draftHandler)
+    }, ...options})
+  const { isNew, bpStat, ops, procs, model } = produce(batch, draft => {
+    if (!draft.procs[0]) return
+    // if (!draft.bpStat) draft.bpStat = {
+    // draft.bpStat = {
+    //   planCost: 0,
+    //   planLabor: 0,
+    //   planRevenue: 0,
+    // }
+    // const { bpStat } = draft
+    const batchAutoStat = {
       planCost: 0,
       planLabor: 0,
       planRevenue: 0,
+    }
+    draft.procs[0].ops.forEach(op => {
+      op.appoints.forEach(ap => {
+        if (!ap.bpStat) ap.bpStat = {}
+        const { bpStat, laborCost } = ap
+        const {
+          autoPlanCost,
+          autoPlanLabor,
+          autoPlanRevenue,
+        } = bpStat
+        if (autoPlanLabor !== false)
+          bpStat.planLabor = op.dealLabor
+        if (autoPlanCost !== false)
+          if (laborCost && bpStat.planLabor)
+            bpStat.planCost = laborCost*bpStat.planLabor
+          else bpStat.planCost = undefined
+        if (autoPlanRevenue !== false)
+          if (op.laborPrice && op.dealLabor)
+            bpStat.planRevenue = op.laborPrice*op.dealLabor
+          else bpStat.planRevenue = undefined
+        // console.log('draft > ', JSON.stringify(draft))
+        for (let key of ['planCost', 'planLabor', 'planRevenue']) {
+          if (bpStat[key]) batchAutoStat[key] += bpStat[key]
+        }
+        // ['planCost', 'planLabor', 'planRevenue'].forEach(key => {
+        //   if (bpStat[key]) draft.bpStat[key] += bpStat[key]
+        // })
+      })
     })
+    if (!draft.bpStat) draft.bpStat = batchAutoStat
+    else
+      for (let key of ['autoPlanCost', 'autoPlanLabor', 'autoPlanRevenue']) {
+        if (draft.bpStat[key])
+          draft.bpStat['p'+key.slice(5)] = batchAutoStat['p'+key.slice(5)]
+      }
+  })
   return <BatchContainer>
     <Div
       d='flex'
@@ -75,7 +105,7 @@ export default function Batch ({
       </Div>
       <BpStat
         bpStat={bpStat}
-        autoBpStat={autoBpStat}
+        // autoBpStat={autoBpStat}
         upsertParent={upsertBatch}
         budgetMode={budgetMode}
       />

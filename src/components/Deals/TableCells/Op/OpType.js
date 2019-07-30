@@ -25,6 +25,7 @@ export default function OpType ({
       value={opTypeId}
       options={opTypes.filter(ot => ot.opClass === opClass)}
       onChange={opTypeId => upsertBatch(draft => {
+        const laborPrice = opTypes.find(opt => opt.id === opTypeId).laborPrice
         assignNested(draft, basePath + 'ops[length]', {
           opTypeId,
           ...laborPrice && { laborPrice }
