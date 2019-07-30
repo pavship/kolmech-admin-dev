@@ -9,6 +9,9 @@ export const bpStatFragmentBasic = gql`
 export const bpStatFragmentMiddle = gql`
 	fragment bpStatFragmentMiddle on BpStat {
 		...bpStatFragmentBasic
+		autoPlanCost
+		autoPlanLabor
+		autoPlanRevenue
 		factCost
 		factLabor
 		factRevenue

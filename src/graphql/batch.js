@@ -3,6 +3,7 @@ import { modelFragmentBasic, modelFragmentWithDrawings } from './model'
 import { procFragmentBasic, procFragmentMiddle, procFragmentDetails } from './proc'
 import { workpieceFragmentWithDrawings } from './workpiece'
 import { opFragmentMiddle } from './op'
+import { bpStatFragmentMiddle } from './bpStat'
 
 export const batchFragmentBasic = gql`
 	fragment batchFragmentBasic on Batch {
@@ -19,10 +20,12 @@ export const batchFragmentMiddle = gql`
 	fragment batchFragmentMiddle on Batch {
 		...batchFragmentBasic
 		sort
+		bpStat { ...bpStatFragmentMiddle }
 		model { ...ModelFragmentBasic }
 		ops { ...opFragmentMiddle }
 		procs { ...procFragmentMiddle }
 	}
+	${bpStatFragmentMiddle}
 	${batchFragmentBasic}
 	${modelFragmentBasic}
 	${opFragmentMiddle}

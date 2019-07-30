@@ -9,7 +9,7 @@ export default function OpType ({
   basePath,
   isNewOp,
   opClass,
-  opType: { id: opTypeId, name } = {},
+  opType: { id: opTypeId, name, laborPrice } = {},
   upsertBatch
 }) {
   const { opTypes } = useContext(DealsContext)
@@ -25,7 +25,10 @@ export default function OpType ({
       value={opTypeId}
       options={opTypes.filter(ot => ot.opClass === opClass)}
       onChange={opTypeId => upsertBatch(draft => {
-        assignNested(draft, basePath + 'ops[length]', { opTypeId })
+        assignNested(draft, basePath + 'ops[length]', {
+          opTypeId,
+          ...laborPrice && { laborPrice }
+        })
       })}
       onBlur={() => setEditMode(false)}
     />

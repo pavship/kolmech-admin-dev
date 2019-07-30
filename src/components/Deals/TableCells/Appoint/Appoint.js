@@ -1,5 +1,9 @@
 import React, { useState, useContext } from 'react'
-import { assignNested } from '../../../form/utils'
+import { useMutation } from '../../../hooks/apolloHooks'
+import { upsertAppoint as uAq } from '../../../../graphql/appoint'
+import { getStructure, assignNested } from '../../../form/utils'
+import produce from 'immer'
+
 import DetailsContext from '../../../Details/Provider'
 import styled from 'styled-components'
 import { Div, Icon } from '../../../styled/styled-semantic'
@@ -7,7 +11,7 @@ import { DropdownMenu } from '../DropdownMenu'
 import { Dropdown } from 'semantic-ui-react'
 import ExecName from '../Exec/Name'
 import Task from '../../Task/Task'
-import BpStat from '../BpStat/BpStat';
+import BpStat from '../BpStat/BpStat'
 
 const FlexContainer = styled.div`
   display: flex;
@@ -39,6 +43,10 @@ export default function Appoint ({
   const { id: appointId, isNew, tasks, bpStat } = appoint
   const { setDetails } = useContext(DetailsContext)
   const [isHovered, setIsHovered] = useState(false)
+  const [ upsertAppointProto ] = useMutation(uAq)
+  const upsertAppoint = (draftHandler, options = {}) => upsertAppointProto({ variables: { input:
+    produce(getStructure(appoint), draftHandler)
+  }, ...options})
   return <>
     <FlexContainer>
       <Div
@@ -78,10 +86,13 @@ export default function Appoint ({
           </DropdownMenu>
         }
       </Div>
-      <BpStat
-        bpStat={bpStat}
-        budgetMode={budgetMode}
-      />
+      {!isNew &&
+        <BpStat
+          bpStat={bpStat}
+          budgetMode={budgetMode}
+          upsertParent={upsertAppoint}
+        />
+      }
       {/* <Div
         pos='absolute'
         l='170px'

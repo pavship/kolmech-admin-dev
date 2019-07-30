@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { useMutation } from '../../hooks/apolloHooks'
 import { upsertBatch as uBq } from '../../../graphql/batch'
 import { getStructure } from '../../form/utils'
+import produce from 'immer'
 
 import { DealsContext } from '../context/Context'
 
@@ -10,7 +11,6 @@ import { Div } from '../../styled/styled-semantic'
 import Model from './Model'
 import Qty from './Qty'
 import ProcOps from './ProcOps'
-import produce from 'immer'
 import BpStat from './BpStat/BpStat'
 
 const BatchContainer = styled.div`
@@ -23,12 +23,31 @@ export default function Batch ({
   batch,
   upsertDeal,
 }) {
-  const { isNew, ops, procs, model } = batch
+  const { isNew, bpStat, ops, procs, model } = batch
   const { budgetMode } = useContext(DealsContext)
   const [ upsertBatchProto ] = useMutation(uBq)
   const upsertBatch = (draftHandler, options = {}) => upsertBatchProto({ variables: { input:
     produce(getStructure(batch), draftHandler)
   }, ...options})
+  const bpStatFieldNames = [
+    ['autoPlanLabor', 'planLabor'],
+    ['autoPlanRevenue', 'planRevenue'],
+    ['autoPlanCost', 'planCost'],
+  ]
+  const autoBpStat = procs[0] && procs[0].ops &&
+    procs[0].ops.reduce((stat, op) => {
+      console.log('stat, op > ', stat, op)
+      if (op.appoints) op.appoints.forEach(ap => {
+        bpStatFieldNames.forEach(([ autoFName, fName ]) => {
+          if (ap.bpStat && ap.bpStat[autoFName] === false) stat[fName] += ap.bpStat[fName]
+        })
+      })
+      return stat
+    },{
+      planCost: 0,
+      planLabor: 0,
+      planRevenue: 0,
+    })
   return <BatchContainer>
     <Div
       d='flex'
@@ -45,20 +64,19 @@ export default function Batch ({
           upsertDeal={upsertDeal}
         />
       </Div>
-      {/* <Div
-        w='170px'
-      > */}
-        <Div
-          w='50px'
-        >
-          <Qty
-            deal={deal}
-            batch={batch}
-            upsertDeal={upsertDeal}
-          />
-        </Div>
-      {/* </Div> */}
+      <Div
+        w='50px'
+      >
+        <Qty
+          deal={deal}
+          batch={batch}
+          upsertDeal={upsertDeal}
+        />
+      </Div>
       <BpStat
+        bpStat={bpStat}
+        autoBpStat={autoBpStat}
+        upsertParent={upsertBatch}
         budgetMode={budgetMode}
       />
     </Div>

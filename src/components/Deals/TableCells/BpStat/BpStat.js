@@ -7,6 +7,7 @@ import { DropdownMenu } from '../DropdownMenu'
 import { Dropdown } from 'semantic-ui-react'
 import ExecName from '../Exec/Name'
 import Task from '../../Task/Task'
+import Stat from './Stat';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -14,21 +15,36 @@ const FlexContainer = styled.div`
 
 export default function BpStat ({
   bpStat,
-  budgetMode
+  autoBpStat = {},
+  budgetMode,
+  upsertParent
 }) {
+  console.log('autoBpStat > ', autoBpStat)
   const {
     id,
+		autoPlanCost,
+		autoPlanLabor,
+		autoPlanRevenue,
     factCost,
 		factLabor,
 		factRevenue,
-		planCost,
-		planLabor,
-		planRevenue,
   } = bpStat || {}
+  const stat = {
+    ...bpStat,
+    ...autoPlanCost !== false && { planCost: autoBpStat.planCost },
+    ...autoPlanLabor !== false && { planLabor: autoBpStat.planLabor },
+    ...autoPlanRevenue !== false && { planRevenue: autoBpStat.planRevenue },
+  }
+  const {
+    planCost,
+		planLabor,
+    planRevenue
+  } = stat
   return <FlexContainer>
     <Div
       w='90px'
       pl='2px'
+      c={factLabor || planLabor ? undefined : 'rgba(34,36,38,0.6)'}
       bl='1px solid rgba(34,36,38,0.15)'
     >
       {`${factLabor || '- '}/${planLabor || ' -'} ч`}
@@ -40,26 +56,53 @@ export default function BpStat ({
     {budgetMode && <>
       <Div
         w='90px'
-        bl='1px solid rgba(34,36,38,0.15)'
-        ta='right'
         pr='2px'
+        c={factRevenue || planRevenue ? undefined : 'rgba(34,36,38,0.6)'}
+        ta='right'
+        bl='1px solid rgba(34,36,38,0.15)'
       >
-        <Icon
-          name='hand paper'
-          size='small'
-          fl='left'
-          m='2px auto 0 1px'
-          color='grey'
+        <Stat
+          type='currency'
+          value={planRevenue}
+          // value={autoPlanRevenue !== false ? autoBpStat.planRevenue : planRevenue}
+          isAuto={autoPlanRevenue}
+          onChange={value => {
+            upsertParent(draft => {
+              assignNested(draft, `bpStat.planRevenue`, value)
+              assignNested(draft, `bpStat.autoPlanRevenue`, false, true)
+            })
+          }}
+          onAutoEnable={() => {
+            upsertParent(draft => {
+              assignNested(draft, `bpStat.autoPlanRevenue`, true)
+            })
+          }}
         />
-        1 000 000 ₽
       </Div>
       <Div
         w='80px'
-        bl='1px solid rgba(34,36,38,0.15)'
-        ta='right'
         pr='2px'
+        c={factCost || planCost ? undefined : 'rgba(34,36,38,0.6)'}
+        ta='right'
+        bl='1px solid rgba(34,36,38,0.15)'
       >
-        1 000 000 ₽
+        <Stat
+          type='currency'
+          value={planCost}
+          // value={autoPlanCost !== false ? autoBpStat.planCost : planCost}
+          isAuto={autoPlanCost}
+          onChange={value => {
+            upsertParent(draft => {
+              assignNested(draft, `bpStat.planCost`, value)
+              assignNested(draft, `bpStat.autoPlanCost`, false, true)
+            })
+          }}
+          onAutoEnable={() => {
+            upsertParent(draft => {
+              assignNested(draft, `bpStat.autoPlanCost`, true)
+            })
+          }}
+        />
       </Div>
       <Div
         w='500px'
