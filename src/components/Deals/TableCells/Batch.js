@@ -74,10 +74,11 @@ export default function Batch ({
     if (!draft.bpStat) draft.bpStat = batchAutoStat
     else
       for (let key of ['autoPlanCost', 'autoPlanLabor', 'autoPlanRevenue']) {
-        if (draft.bpStat[key])
+        if (draft.bpStat[key] !== false)
           draft.bpStat['p'+key.slice(5)] = batchAutoStat['p'+key.slice(5)]
       }
   })
+  console.log('bpStat > ', bpStat)
   return <BatchContainer>
     <Div
       d='flex'

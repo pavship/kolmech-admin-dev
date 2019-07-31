@@ -49,11 +49,22 @@ export default function BpStat ({
       c={factLabor || planLabor ? undefined : 'rgba(34,36,38,0.6)'}
       bl='1px solid rgba(34,36,38,0.15)'
     >
-      {`${factLabor || '- '}/${planLabor || ' -'} ч`}
-      {/* {bpStat === null
-        ? '122.4/130.8 ч'
-        : `${factLabor || '- '}/${planLabor || ' -'} ч`
-      } */}
+      <Stat
+        type='labor'
+        value={planLabor}
+        isAuto={autoPlanLabor}
+        onChange={value => {
+          upsertParent(draft => {
+            assignNested(draft, `bpStat.planLabor`, value)
+            assignNested(draft, `bpStat.autoPlanLabor`, false, true)
+          })
+        }}
+        onAutoEnable={() => {
+          upsertParent(draft => {
+            assignNested(draft, `bpStat.autoPlanLabor`, true)
+          })
+        }}
+      />
     </Div>
     {budgetMode && <>
       <Div
@@ -66,7 +77,6 @@ export default function BpStat ({
         <Stat
           type='currency'
           value={planRevenue}
-          // value={autoPlanRevenue !== false ? autoBpStat.planRevenue : planRevenue}
           isAuto={autoPlanRevenue}
           onChange={value => {
             upsertParent(draft => {
@@ -91,7 +101,6 @@ export default function BpStat ({
         <Stat
           type='currency'
           value={planCost}
-          // value={autoPlanCost !== false ? autoBpStat.planCost : planCost}
           isAuto={autoPlanCost}
           onChange={value => {
             upsertParent(draft => {

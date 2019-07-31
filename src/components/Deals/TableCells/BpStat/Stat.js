@@ -48,7 +48,13 @@ export default function Stat ({
         ? isAuto !== false && value === 0
           ? '- ₽'
           : currency(value)
-        : value
+        : (
+        type === 'labor'
+          ? isAuto !== false && !value
+            ? '- / - ч '
+            : '- /' + value + ' ч'
+          : value
+        )
       }
     </Div>
 }
