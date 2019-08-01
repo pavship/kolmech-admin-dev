@@ -31,13 +31,6 @@ export default function Batch ({
     }, ...options})
   const { isNew, bpStat, ops, procs, model } = produce(batch, draft => {
     if (!draft.procs[0]) return
-    // if (!draft.bpStat) draft.bpStat = {
-    // draft.bpStat = {
-    //   planCost: 0,
-    //   planLabor: 0,
-    //   planRevenue: 0,
-    // }
-    // const { bpStat } = draft
     const batchAutoStat = {
       planCost: 0,
       planLabor: 0,
@@ -62,13 +55,9 @@ export default function Batch ({
           if (op.laborPrice && op.dealLabor)
             bpStat.planRevenue = op.laborPrice*op.dealLabor
           else bpStat.planRevenue = undefined
-        // console.log('draft > ', JSON.stringify(draft))
         for (let key of ['planCost', 'planLabor', 'planRevenue']) {
           if (bpStat[key]) batchAutoStat[key] += bpStat[key]
         }
-        // ['planCost', 'planLabor', 'planRevenue'].forEach(key => {
-        //   if (bpStat[key]) draft.bpStat[key] += bpStat[key]
-        // })
       })
     })
     if (!draft.bpStat) draft.bpStat = batchAutoStat
@@ -78,7 +67,6 @@ export default function Batch ({
           draft.bpStat['p'+key.slice(5)] = batchAutoStat['p'+key.slice(5)]
       }
   })
-  console.log('bpStat > ', bpStat)
   return <BatchContainer>
     <Div
       d='flex'
@@ -106,7 +94,6 @@ export default function Batch ({
       </Div>
       <BpStat
         bpStat={bpStat}
-        // autoBpStat={autoBpStat}
         upsertParent={upsertBatch}
         budgetMode={budgetMode}
       />

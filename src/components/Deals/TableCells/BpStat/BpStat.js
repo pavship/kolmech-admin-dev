@@ -15,7 +15,6 @@ const FlexContainer = styled.div`
 
 export default function BpStat ({
   bpStat,
-  autoBpStat = {},
   budgetMode,
   upsertParent
 }) {
@@ -31,17 +30,6 @@ export default function BpStat ({
 		planLabor,
     planRevenue
   } = bpStat || {}
-  // const stat = {
-  //   ...bpStat,
-  //   ...autoPlanCost !== false && { planCost: autoBpStat.planCost },
-  //   ...autoPlanLabor !== false && { planLabor: autoBpStat.planLabor },
-  //   ...autoPlanRevenue !== false && { planRevenue: autoBpStat.planRevenue },
-  // }
-  // const {
-  //   planCost,
-	// 	planLabor,
-  //   planRevenue
-  // } = stat
   return <FlexContainer>
     <Div
       w='90px'

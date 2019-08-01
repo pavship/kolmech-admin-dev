@@ -10,7 +10,6 @@ export default function Stat ({
   type,
   onChange,
   onAutoEnable,
-  // upsertBatch,
 }) {
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
