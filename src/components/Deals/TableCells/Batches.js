@@ -34,7 +34,7 @@ const DragHandle = sortableHandle(() =>
   >::</Div>
 )
 
-const SortableItem = sortableElement(props => (
+const SortableBatch = sortableElement(props => (
   <SortableItemContainer
     d='flex'
     z='99'
@@ -74,7 +74,7 @@ export default function Batches ({
     >
       {deal.batches
         .map((batch, index) =>
-          <SortableItem
+          <SortableBatch
             key={batch.id}
             index={index}
             deal={deal}

@@ -29,6 +29,7 @@ export const Op = ({
   opClass,
   opIndex,
   upsertBatch,
+  deleteElement,
   budgetMode
 }) => {
   const { isNew, appoints, opType, dealLabor } = op
@@ -60,9 +61,10 @@ export const Op = ({
           <WarningItem
             icon='trash'
             text='Удалить'
-            onClick={() => upsertBatch(draft => {
-              assignNested(draft, basePath + `ops[${opIndex}]`, {})
-            })}
+            onClick={deleteElement}
+            // onClick={() => upsertBatch(draft => {
+            //   assignNested(draft, basePath + `ops[${opIndex}]`, {})
+            // })}
           />
         </DropdownMenu>
       }

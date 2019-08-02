@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { elementFragmentBasic, elementFragmentMiddle, elementFragmentDetails } from './element'
 import { modelFragmentBasic, modelFragmentWithDrawings } from './model'
 import { procFragmentBasic, procFragmentMiddle, procFragmentDetails } from './proc'
 import { workpieceFragmentWithDrawings } from './workpiece'
@@ -10,9 +11,11 @@ export const batchFragmentBasic = gql`
 		id
 		qty
 		model { ...ModelFragmentBasic }
+		elements { ...elementFragmentBasic }
 		procs { ...procFragmentBasic }
 	}
 	${modelFragmentBasic}
+	${elementFragmentBasic}
 	${procFragmentBasic}
 `
 
@@ -21,12 +24,14 @@ export const batchFragmentMiddle = gql`
 		...batchFragmentBasic
 		sort
 		bpStat { ...bpStatFragmentMiddle }
+		elements { ...elementFragmentMiddle }
 		model { ...ModelFragmentBasic }
 		ops { ...opFragmentMiddle }
 		procs { ...procFragmentMiddle }
 	}
 	${bpStatFragmentMiddle}
 	${batchFragmentBasic}
+	${elementFragmentMiddle}
 	${modelFragmentBasic}
 	${opFragmentMiddle}
 	${procFragmentMiddle}
@@ -38,12 +43,14 @@ export const batchFragmentDetails = gql`
 		descript
 		info
 		warning
+		elements { ...elementFragmentDetails }
 		model { ...ModelFragmentWithDrawings }
 		procs { ...procFragmentDetails }
 		workpiece { ...WorkpieceFragmentWithDrawings }
 	}
 	${modelFragmentWithDrawings}
 	${batchFragmentBasic}
+	${elementFragmentDetails}
 	${procFragmentDetails}
 	${workpieceFragmentWithDrawings}
 `

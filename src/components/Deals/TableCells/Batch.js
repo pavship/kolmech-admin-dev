@@ -1,8 +1,9 @@
 import React, { useContext } from 'react'
 import { useMutation } from '../../hooks/apolloHooks'
 import { upsertBatch as uBq } from '../../../graphql/batch'
-import { getStructure } from '../../form/utils'
+import { getStructure, assignNested } from '../../form/utils'
 import produce from 'immer'
+import cuid from 'cuid'
 
 import { DealsContext } from '../context/Context'
 
@@ -10,8 +11,9 @@ import styled from 'styled-components'
 import { Div } from '../../styled/styled-semantic'
 import Model from './Model'
 import Qty from './Qty'
-import ProcOps from './ProcOps'
 import BpStat from './BpStat/BpStat'
+import Element from './Element/Element'
+import NewElement from './Element/NewElement'
 
 const BatchContainer = styled.div`
   width: 100%;
@@ -29,7 +31,7 @@ export default function Batch ({
     upsertBatchProto({ variables: { input:
       produce(getStructure(batch), draftHandler)
     }, ...options})
-  const { isNew, bpStat, ops, procs, model } = produce(batch, draft => {
+  const { isNew, bpStat, elements, model } = produce(batch, draft => {
     if (!draft.procs[0]) return
     const batchAutoStat = {
       planCost: 0,
@@ -102,13 +104,34 @@ export default function Batch ({
       pl='9px'
       bl='1px solid rgba(34, 36, 38, 0.15)'
     >
-      <ProcOps
+      {elements.map(element =>
+        <Element
+          key={element.id}
+          element={element}
+          upsertBatch={upsertBatch}
+          deleteElement={() => upsertBatch(draft => {
+            assignNested(draft, `elements[id=${element.id}]`, {})
+          })}
+          budgetMode={budgetMode}
+        />
+      )}
+      <Div
+        w='170px'
+      >
+        <NewElement
+          key={cuid()}
+          modelId={model.id}
+          opClass='SURVEY'
+          upsertBatch={upsertBatch}
+        />
+      </Div>
+      {/* <ProcOps
         modelId={model.id}
         ops={ops}
         procs={procs}
         upsertBatch={upsertBatch}
         budgetMode={budgetMode}
-      />
+      /> */}
     </Div>
   </BatchContainer>
 }
