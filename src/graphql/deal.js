@@ -38,11 +38,9 @@ export const dealFragmentFull = gql`
 export const dealsPage = gql`
 	query Deals {
 		deals { ...DealFragmentMiddle }
-		orgs { ...OrgFragmentBasic }
 		opTypes { ...opTypeFragmentBasic }
 	}
 	${dealFragmentMiddle}
-	${orgFragmentBasic}
 	${opTypeFragmentBasic}
 `
 

@@ -103,7 +103,6 @@ export default ({
                               <DealsTable
                                 notify={notify}
                                 deals={data.deals}
-                                orgs={data.orgs}
                                 upsertDeal={upsertDeal}
                                 upsertingDeal={upsertingDeal}
                               />

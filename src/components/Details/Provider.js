@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import styled from 'styled-components'
 import posed, { PoseGroup } from 'react-pose'
-import { OrgDetails } from '../Org/Details/Details'
+import OrgDetails from '../Org/Details/Details'
 import CreateComOfferDetails from '../ComOffer/CreateComOfferDetails'
 import CreateTaskDetails from '../Task/CreateTaskDetails'
 import SelectExecDetails from '../Exec/SelectExecDetails'

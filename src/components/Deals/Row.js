@@ -20,7 +20,6 @@ const Container = styled.div`
 export default function Row ({
   isFirstRow,
   deal,
-  orgs,
   upsertDeal,
   upsertingDeal,
   budgetMode,
@@ -73,17 +72,14 @@ export default function Row ({
           </Div>
           <Div
             w='100px'
-            whs='nowrap'
-            to='ellipsis'
-            pos='relative'
           >
-            <Org
-              deal={deal}
-              orgs={orgs}
-              upsertDeal={upsertDeal}
-              upsertingDeal={upsertingDeal}
-              setDetails={setDetails}
-            />
+            {deal.org &&
+              <Org
+                dealId={deal.id}
+                org={deal.org}
+                setDetails={setDetails}
+              />
+            }
           </Div>
           {budgetMode &&
             <Div

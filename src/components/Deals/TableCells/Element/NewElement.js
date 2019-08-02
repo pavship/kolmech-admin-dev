@@ -16,7 +16,7 @@ export default function NewElement ({
   const inputRef3 = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   const [ elementType, setElementType ] = useState('')
-  console.log('editMode elementType > ', editMode, elementType)
+  // console.log('editMode elementType > ', editMode, elementType)
   useEffect(() => (editMode &&
     inputRef.current &&
     inputRef.current.focus()) || undefined)

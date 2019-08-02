@@ -30,7 +30,6 @@ const Background = styled(Div)`
 
 export default function DealsTable ({
   deals,
-  orgs,
   upsertDeal,
   upsertingDeal,
 }) {
@@ -67,7 +66,6 @@ export default function DealsTable ({
           key={deal.id}
           isFirstRow={i === 0}
           deal={deal}
-          orgs={orgs}
           upsertDeal={upsertDeal}
           upsertingDeal={upsertingDeal}
           budgetMode={budgetMode}

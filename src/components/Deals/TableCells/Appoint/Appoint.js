@@ -43,7 +43,7 @@ export default function Appoint ({
   const { id: appointId, isNew, tasks, bpStat } = appoint
   const { setDetails } = useContext(DetailsContext)
   const [isHovered, setIsHovered] = useState(false)
-  const [ upsertAppointProto ] = useMutation(uAq)
+  const [ upsertAppointProto ] = useMutation(uAq, {kin: 'sdf'})
   const upsertAppoint = (draftHandler, options = {}) => upsertAppointProto({ variables: { input:
     produce(getStructure(appoint), draftHandler)
   }, ...options})

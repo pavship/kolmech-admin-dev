@@ -20,11 +20,12 @@ const BatchContainer = styled.div`
   border-bottom: 1px solid rgba(34,36,38,0.15);
 `
 
-export default function Batch ({
+export default React.memo(function Batch ({
   deal,
   batch,
   upsertDeal,
 }) {
+  console.log('Batch > ')
   const { budgetMode } = useContext(DealsContext)
   const [ upsertBatchProto ] = useMutation(uBq)
   const upsertBatch = (draftHandler, options = {}) =>
@@ -134,4 +135,4 @@ export default function Batch ({
       /> */}
     </Div>
   </BatchContainer>
-}
+})
