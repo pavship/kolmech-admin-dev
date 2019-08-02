@@ -13,6 +13,7 @@ const Container = styled.div`
 `
 
 export const Ops = ({
+  basePath,
   ops,
   upsertBatch,
   budgetMode
@@ -25,7 +26,7 @@ export const Ops = ({
       key={op.id}
     >
       <Op
-        basePath='procs[0].'
+        basePath={basePath}
         op={op}
         opClass='MACHINING'
         opIndex={i}

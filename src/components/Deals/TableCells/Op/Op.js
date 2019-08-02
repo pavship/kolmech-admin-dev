@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import cuid from 'cuid'
 
 import styled from 'styled-components'
@@ -10,8 +10,24 @@ import { Dropdown } from 'semantic-ui-react'
 import Appoint from '../Appoint/Appoint'
 import { assignNested } from '../../../form/utils'
 
-const FlexContainer = styled.div`
+const Container = styled.div`
   display: flex;
+`
+
+const Title = styled(Div)`
+  width: 100%;
+  ${Container}:hover & {
+    ${props => !props.isNew && 'width: 140px;'}
+    ${props => !props.isNew && props.isMachiningClass && 'width: 140px;'}
+  }
+`
+
+const Menu = styled(Div)`
+  display: none;
+  margin-left: auto;
+  ${Container}:hover & {
+    display: unset;
+  }
 `
 
 const WarningItem = styled(Dropdown.Item)`
@@ -34,16 +50,15 @@ export const Op = ({
 }) => {
   const { isNew, appoints, opType, dealLabor } = op
   const isMachiningClass = basePath.startsWith('procs')
-  const [isHovered, setIsHovered] = useState(false)
-  return <FlexContainer>
+  return <Container>
     <Div
       d='flex'
       w={isMachiningClass ? '125px' : '170px'}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <Div
-        w={!isNew && isHovered ? (isMachiningClass ? '100px' : '140px') : '100%'}
+        isNew={isNew}
+        isMachiningClass={isMachiningClass}
+        // w={!isNew && isHovered ? (isMachiningClass ? '100px' : '140px') : '100%'}
         whs='nowrap'
         to='ellipsis'
         pos='relative'
@@ -56,17 +71,16 @@ export const Op = ({
           upsertBatch={upsertBatch}
         />
       </Div>
-      {!isNew && isHovered &&
-        <DropdownMenu>
-          <WarningItem
-            icon='trash'
-            text='Удалить'
-            onClick={deleteElement}
-            // onClick={() => upsertBatch(draft => {
-            //   assignNested(draft, basePath + `ops[${opIndex}]`, {})
-            // })}
-          />
-        </DropdownMenu>
+      {!isNew &&
+        <Menu>
+          <DropdownMenu>
+            <WarningItem
+              icon='trash'
+              text='Удалить'
+              onClick={deleteElement}
+            />
+          </DropdownMenu>
+        </Menu>
       }
     </Div>
     {!isNew && isMachiningClass &&
@@ -104,5 +118,5 @@ export const Op = ({
         )}
       </Div>
     }
-  </FlexContainer>
+  </Container>
 }
