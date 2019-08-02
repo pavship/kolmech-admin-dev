@@ -13,12 +13,27 @@ import ExecName from '../Exec/Name'
 import Task from '../../Task/Task'
 import BpStat from '../BpStat/BpStat'
 
-const FlexContainer = styled.div`
+const Container = styled.div`
   display: flex;
   position: relative;
   :not(:last-child) {
 		border-bottom: 1px solid rgba(34,36,38,0.15);
 	}
+`
+
+const Title = styled(Div)`
+  width: 100%;
+  ${Container}:hover & {
+    width: 140px;
+  }
+`
+
+const Menu = styled.div`
+  display: none;
+  margin-left: auto;
+  ${Container}:hover & {
+    display: unset;
+  }
 `
 
 const WarningItem = styled(Dropdown.Item)`
@@ -42,34 +57,30 @@ export default function Appoint ({
   const { opType } = op
   const { id: appointId, isNew, tasks, bpStat } = appoint
   const { setDetails } = useContext(DetailsContext)
-  const [isHovered, setIsHovered] = useState(false)
   const [ upsertAppointProto ] = useMutation(uAq, {kin: 'sdf'})
   const upsertAppoint = (draftHandler, options = {}) => upsertAppointProto({ variables: { input:
     produce(getStructure(appoint), draftHandler)
   }, ...options})
-  return <>
-    <FlexContainer>
-      <Div
-        d='flex'
-        w='170px'
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+  return <Container>
+    <Div
+      d='flex'
+      w='170px'
+    >
+      <Title
+        whs='nowrap'
+        to='ellipsis'
+        pos='relative'
       >
-        <Div
-          w={isHovered ? '140px' : '100%'}
-          whs='nowrap'
-          to='ellipsis'
-          pos='relative'
-        >
-          <ExecName
-            basePath={basePath}
-            appoint={appoint}
-            opIndex={opIndex}
-            opType={opType}
-            upsertBatch={upsertBatch}
-          />
-        </Div>
-        {!isNew && isHovered &&
+        <ExecName
+          basePath={basePath}
+          appoint={appoint}
+          opIndex={opIndex}
+          opType={opType}
+          upsertBatch={upsertBatch}
+        />
+      </Title>
+      {!isNew &&
+        <Menu>
           <DropdownMenu>
             <WarningItem
               icon='remove'
@@ -84,29 +95,29 @@ export default function Appoint ({
               onClick={() => setDetails({ appointId, type: 'createTask' })}
             />
           </DropdownMenu>
-        }
-      </Div>
-      {!isNew &&
-        <BpStat
-          bpStat={bpStat}
-          budgetMode={budgetMode}
-          upsertParent={upsertAppoint}
-        />
+        </Menu>
       }
-      {/* <Div
-        pos='absolute'
-        l='170px'
-        w='2000px'
-        h='100%'
-        pe='none'
-      >
-        {tasks && tasks.map(task =>
-          <Task
-            key={task.id}
-            task={task}
-          />
-        )}
-      </Div> */}
-    </FlexContainer>
-  </>
+    </Div>
+    {!isNew &&
+      <BpStat
+        bpStat={bpStat}
+        budgetMode={budgetMode}
+        upsertParent={upsertAppoint}
+      />
+    }
+    {/* <Div
+      pos='absolute'
+      l='170px'
+      w='2000px'
+      h='100%'
+      pe='none'
+    >
+      {tasks && tasks.map(task =>
+        <Task
+          key={task.id}
+          task={task}
+        />
+      )}
+    </Div> */}
+  </Container>
 }

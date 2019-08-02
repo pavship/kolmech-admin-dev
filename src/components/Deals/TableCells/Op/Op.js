@@ -22,7 +22,7 @@ const Title = styled(Div)`
   }
 `
 
-const Menu = styled(Div)`
+const Menu = styled.div`
   display: none;
   margin-left: auto;
   ${Container}:hover & {
@@ -49,16 +49,15 @@ export const Op = ({
   budgetMode
 }) => {
   const { isNew, appoints, opType, dealLabor } = op
-  const isMachiningClass = basePath.startsWith('procs')
+  const isMachiningClass = basePath.endsWith('proc.')
   return <Container>
     <Div
       d='flex'
       w={isMachiningClass ? '125px' : '170px'}
     >
-      <Div
+      <Title
         isNew={isNew}
         isMachiningClass={isMachiningClass}
-        // w={!isNew && isHovered ? (isMachiningClass ? '100px' : '140px') : '100%'}
         whs='nowrap'
         to='ellipsis'
         pos='relative'
@@ -70,7 +69,7 @@ export const Op = ({
           isNewOp={isNew}
           upsertBatch={upsertBatch}
         />
-      </Div>
+      </Title>
       {!isNew &&
         <Menu>
           <DropdownMenu>
