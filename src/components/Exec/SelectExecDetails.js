@@ -69,11 +69,13 @@ export default function SelectExecDetails ({
 		.filter(p => !search || p.amoName.indexOf(search) !== -1) || []
 	const [ syncWithAmoContacts, { loading: syncingContacts } ] = useMutation(sWAC, {
 		successMsg: 'Контакты синхронизированы',
-		errMsg: 'Ошибка синхронизации с Амо'
+		errMsg: 'Ошибка синхронизации с Амо',
+		mark: 'syncWithAmoContacts'
 	})
 	const [ upsertPersonProto ] = useMutation(uP, {
 		successMsg: 'Обновлены данные исполнителя',
-		errMsg: 'Ошибка. Данные исполнителя не обновлены'
+		errMsg: 'Ошибка. Данные исполнителя не обновлены',
+		mark: 'upsertPerson'
 	})
 	const upsertPerson = () => upsertPersonProto({ variables: { input:
 		produce(getStructure(persons.find(p => p.id === personId)), draft => {

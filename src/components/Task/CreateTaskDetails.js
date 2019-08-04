@@ -7,18 +7,21 @@ import { Div } from '../styled/styled-semantic'
 import Field from '../form/Field'
 import BatchDetails from '../Batch/Details'
 
-export default function CreateComOfferDetails ({
+export default function CreateTaskDetails ({
   details: { appointId },
   setDetails
 }) {
 	const [ from, setFrom ] = useState(toLocalDatetimeString(new Date()))
 	const [ text, setText ] = useState()
-	const [ upsertTask ] = useMutation(uT, { variables: { input: {
-		from: new Date(from).toISOString(),
-		text,
-		status: 'ACTIVE',
-		appointId
-	}}})
+	const [ upsertTask ] = useMutation(uT, {
+		variables: { input: {
+			from: new Date(from).toISOString(),
+			text,
+			status: 'ACTIVE',
+			appointId
+		}},
+		mark: 'CreateTaskDetails upsertTask'
+	})
   return <>
     <Menu
       setDetails={setDetails}

@@ -57,7 +57,7 @@ export default function Appoint ({
   const { opType } = op
   const { id: appointId, isNew, tasks, bpStat } = appoint
   const { setDetails } = useContext(DetailsContext)
-  const [ upsertAppointProto ] = useMutation(uAq, {kin: 'sdf'})
+  const [ upsertAppointProto ] = useMutation(uAq, {mark: 'Appoint upsertAppoint'})
   const upsertAppoint = (draftHandler, options = {}) => upsertAppointProto({ variables: { input:
     produce(getStructure(appoint), draftHandler)
   }, ...options})

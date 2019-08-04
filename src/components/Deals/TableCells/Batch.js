@@ -25,9 +25,8 @@ export default React.memo(function Batch ({
   batch,
   upsertDeal,
 }) {
-  console.log('Batch > ')
   const { budgetMode } = useContext(DealsContext)
-  const [ upsertBatchProto ] = useMutation(uBq)
+  const [ upsertBatchProto ] = useMutation(uBq, {mark: 'Batch'})
   const upsertBatch = (draftHandler, options = {}) =>
     upsertBatchProto({ variables: { input:
       produce(getStructure(batch), draftHandler)

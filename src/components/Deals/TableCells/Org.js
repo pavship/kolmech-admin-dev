@@ -28,7 +28,7 @@ const Menu = styled(Div)`
   }
 `
 
-export default function Org ({
+export default React.memo(function Org ({
   dealId,
   org: { id: orgId, name, inn },
   setDetails
@@ -37,7 +37,8 @@ export default function Org ({
   const [ createPostEnvelopeAddressInsert ] = useMutation(cPEAI, {
     variables: { orgId },
     successMsg: 'Почтовое адресное вложение создано',
-		errMsg: 'Ошибка создания почтового адресного вложения'
+    errMsg: 'Ошибка создания почтового адресного вложения',
+    mark: 'Org createPostEnvelopeAddressInsert'
   })
   return <Container>
     <Title
@@ -80,4 +81,4 @@ export default function Org ({
       </DropdownMenu>
     </Menu>
   </Container>
-}
+})

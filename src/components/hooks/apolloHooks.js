@@ -37,13 +37,13 @@ export const useMutation = (
     onError,
     successMsg,
     errMsg,
-    kin,
+    mark,
     ...options
   } = {}
 ) => {
   // const refMounted = useRefMounted()
   // console.log('refMounted.current1 > ', refMounted.current)
-  console.log('useMutation > ', kin)
+  // console.log('useMutation > ', mark)
   const { notify } = useNotifications()
   const [loading, setLoading] = useState(false)
   const [called, setCalled] = useState(false)

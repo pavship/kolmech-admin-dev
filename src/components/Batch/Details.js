@@ -11,7 +11,7 @@ export default function BatchDetails ({
   bIndex,
   batchId
 }) {
-  const [ upsertBatch ] = useMutation(uB)
+  const [ upsertBatch ] = useMutation(uB, {mark: 'uB Details'})
   let loading, data
   if (!batchProp) ({ loading, data } = useQuery(batchDetails, { variables: { id: batchId } }))
   const batch = batchProp || (data && data.batch) || {}
