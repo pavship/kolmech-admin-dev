@@ -25,7 +25,7 @@ export default function Element ({
       <Op
         op={op}
         opClass='SURVEY'
-        opIndex={0}
+        basePath={`elements[id=${id}].`}
         upsertBatch={upsertBatch}
         deleteElement={deleteElement}
         budgetMode={budgetMode}

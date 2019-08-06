@@ -137,6 +137,7 @@ export const assignNested = (obj, path, val, preserveKeys=false) => {
 	const keys = analysePath(path)
 	console.log('keys > ', keys)
 	keys.reduce((obj, { key, last, array, arrayItem }) => {
+		console.log('obj > ', JSON.stringify(obj, null, 2))
 		!preserveKeys &&
 			Object.keys(obj)
 				.filter(k => !(

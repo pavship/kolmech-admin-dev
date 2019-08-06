@@ -6,7 +6,7 @@ import HtmlSelect from '../../../common/HtmlSelect'
 import { assignNested } from '../../../form/utils'
 
 export default function OpType ({
-  basePath,
+  path,
   isNewOp,
   opClass,
   opType: { id: opTypeId, name, laborPrice } = {},
@@ -26,7 +26,7 @@ export default function OpType ({
       options={opTypes.filter(ot => ot.opClass === opClass)}
       onChange={opTypeId => upsertBatch(draft => {
         const laborPrice = opTypes.find(opt => opt.id === opTypeId).laborPrice
-        assignNested(draft, basePath + 'ops[length]', {
+        assignNested(draft, path, {
           opTypeId,
           ...laborPrice && { laborPrice }
         })

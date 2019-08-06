@@ -31,7 +31,7 @@ export default function ExecName ({
           onSubmit: execId => {
             upsertBatch(draft => {
               assignNested( draft,
-                basePath + `ops[${opIndex}].appoints[length]`,
+                basePath + `appoints[length]`,
                 { execId, ...laborCost && { laborCost } }
               )
             })

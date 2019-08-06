@@ -13,18 +13,23 @@ import ExecName from '../Exec/Name'
 import Task from '../../Task/Task'
 import BpStat from '../BpStat/BpStat'
 
-const Container = styled.div`
+const Wrapper = styled.div`
   display: flex;
   position: relative;
   :not(:last-child) {
-		border-bottom: 1px solid rgba(34,36,38,0.15);
-	}
+    border-bottom: 1px solid rgba(34,36,38,0.15);
+  }
+`
+
+const Container = styled.div`
+  display: flex;
+  width: 170px;
 `
 
 const Title = styled(Div)`
   width: 100%;
   ${Container}:hover & {
-    width: 140px;
+    width: 139px;
   }
 `
 
@@ -48,7 +53,6 @@ const WarningItem = styled(Dropdown.Item)`
 export default function Appoint ({
   basePath,
   appoint,
-  appointIndex,
   op,
   opIndex,
   upsertBatch,
@@ -61,8 +65,8 @@ export default function Appoint ({
   const upsertAppoint = (draftHandler, options = {}) => upsertAppointProto({ variables: { input:
     produce(getStructure(appoint), draftHandler)
   }, ...options})
-  return <Container>
-    <Div
+  return <Wrapper>
+    <Container
       d='flex'
       w='170px'
     >
@@ -86,7 +90,7 @@ export default function Appoint ({
               icon='remove'
               text='Открепить'
               onClick={() => upsertBatch(draft => {
-                assignNested(draft, basePath + `ops[${opIndex}].appoints[${appointIndex}]`, {})
+                assignNested(draft, `${basePath}appoints[id=${appointId}]`, {})
               })}
             />
             <Dropdown.Item
@@ -97,7 +101,7 @@ export default function Appoint ({
           </DropdownMenu>
         </Menu>
       }
-    </Div>
+    </Container>
     {!isNew &&
       <BpStat
         bpStat={bpStat}
@@ -119,5 +123,5 @@ export default function Appoint ({
         />
       )}
     </Div> */}
-  </Container>
+  </Wrapper>
 }

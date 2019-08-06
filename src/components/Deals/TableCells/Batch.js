@@ -38,7 +38,7 @@ export default React.memo(function Batch ({
       planLabor: 0,
       planRevenue: 0,
     }
-    draft.procs[0].ops.forEach(op => {
+    const evalOp = op => {
       op.appoints.forEach(ap => {
         if (!ap.bpStat) ap.bpStat = {}
         const { bpStat, laborCost } = ap
@@ -61,6 +61,10 @@ export default React.memo(function Batch ({
           if (bpStat[key]) batchAutoStat[key] += bpStat[key]
         }
       })
+    }
+    draft.elements.forEach(({ op, proc }) => {
+      if (op) evalOp(op)
+      if (proc) proc.ops.forEach(op => evalOp(op))
     })
     if (!draft.bpStat) draft.bpStat = batchAutoStat
     else
@@ -69,6 +73,7 @@ export default React.memo(function Batch ({
           draft.bpStat['p'+key.slice(5)] = batchAutoStat['p'+key.slice(5)]
       }
   })
+  console.log('elements > ', elements)
   return <BatchContainer>
     <Div
       d='flex'

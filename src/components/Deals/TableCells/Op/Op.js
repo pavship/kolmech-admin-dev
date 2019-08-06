@@ -10,7 +10,11 @@ import { Dropdown } from 'semantic-ui-react'
 import Appoint from '../Appoint/Appoint'
 import { assignNested } from '../../../form/utils'
 
-const Container = styled.div`
+const Wrapper = styled.div`
+  display: flex;
+`
+
+const Container = styled(Div)`
   display: flex;
 `
 
@@ -43,7 +47,7 @@ const WarningItem = styled(Dropdown.Item)`
 `
 
 export const Op = ({
-  basePath = '',
+  basePath,
   op,
   opClass,
   opIndex,
@@ -51,10 +55,10 @@ export const Op = ({
   deleteElement,
   budgetMode
 }) => {
-  const { isNew, appoints, opType, dealLabor } = op
+  const { id, isNew, appoints, opType, dealLabor } = op
   const isMachiningClass = basePath.endsWith('proc.')
-  return <Container>
-    <Div
+  return <Wrapper>
+    <Container
       d='flex'
       w={isMachiningClass ? '125px' : '170px'}
     >
@@ -63,7 +67,7 @@ export const Op = ({
         isMachiningClass={isMachiningClass}
       >
         <OpType
-          basePath={basePath}
+          path={basePath + (isMachiningClass ? `ops[length]` : 'op')}
           opType={opType}
           opClass={opClass}
           isNewOp={isNew}
@@ -81,13 +85,14 @@ export const Op = ({
           </DropdownMenu>
         </Menu>
       }
-    </Div>
+    </Container>
     {!isNew && isMachiningClass &&
       <Div
         w='45px'
         bl='1px solid rgba(34,36,38,0.15)'
       >
         <DealLabour
+          basePath={`${basePath}ops[id=${id}].`}
           dealLabor={dealLabor}
           opIndex={opIndex}
           upsertBatch={upsertBatch}
@@ -106,7 +111,7 @@ export const Op = ({
         ].map((appoint, i) =>
           <Appoint
             key={appoint.id}
-            basePath={basePath}
+            basePath={basePath + (isMachiningClass ? `ops[id=${id}].` : 'op.')}
             appoint={appoint}
             appointIndex={i}
             op={op}
@@ -117,5 +122,5 @@ export const Op = ({
         )}
       </Div>
     }
-  </Container>
+  </Wrapper>
 }
