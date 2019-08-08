@@ -80,7 +80,11 @@ export const Op = ({
             <WarningItem
               icon='trash'
               text='Удалить'
-              onClick={deleteElement}
+              onClick={isMachiningClass
+                ? () => upsertBatch(draft => {
+                    assignNested(draft, basePath + `ops[id=${id}]`, {})
+                  })
+                : deleteElement}
             />
           </DropdownMenu>
         </Menu>

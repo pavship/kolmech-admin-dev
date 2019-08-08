@@ -32,14 +32,13 @@ export default React.memo(function Batch ({
       produce(getStructure(batch), draftHandler)
     }, ...options})
   const { isNew, bpStat, elements, model } = produce(batch, draft => {
-    if (!draft.procs[0]) return
     const batchAutoStat = {
       planCost: 0,
       planLabor: 0,
       planRevenue: 0,
     }
-    const evalOp = op => {
-      op.appoints.forEach(ap => {
+    const evalOp = (op, batchAutoStat) => {
+      for (let ap of op.appoints) {
         if (!ap.bpStat) ap.bpStat = {}
         const { bpStat, laborCost } = ap
         const {
@@ -60,12 +59,14 @@ export default React.memo(function Batch ({
         for (let key of ['planCost', 'planLabor', 'planRevenue']) {
           if (bpStat[key]) batchAutoStat[key] += bpStat[key]
         }
-      })
+      }
     }
-    draft.elements.forEach(({ op, proc }) => {
-      if (op) evalOp(op)
-      if (proc) proc.ops.forEach(op => evalOp(op))
-    })
+    for (const { op, proc } of draft.elements) {
+      if (op)
+        evalOp(op, batchAutoStat)
+      if (proc)
+        for (let op of proc.ops) evalOp(op, batchAutoStat)
+    }
     if (!draft.bpStat) draft.bpStat = batchAutoStat
     else
       for (let key of ['autoPlanCost', 'autoPlanLabor', 'autoPlanRevenue']) {
@@ -130,13 +131,6 @@ export default React.memo(function Batch ({
           upsertBatch={upsertBatch}
         />
       </Div>
-      {/* <ProcOps
-        modelId={model.id}
-        ops={ops}
-        procs={procs}
-        upsertBatch={upsertBatch}
-        budgetMode={budgetMode}
-      /> */}
     </Div>
   </BatchContainer>
 })
