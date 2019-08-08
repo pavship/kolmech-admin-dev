@@ -74,7 +74,6 @@ export default React.memo(function Batch ({
           draft.bpStat['p'+key.slice(5)] = batchAutoStat['p'+key.slice(5)]
       }
   })
-  console.log('elements > ', elements)
   return <BatchContainer>
     <Div
       d='flex'

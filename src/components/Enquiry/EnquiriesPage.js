@@ -10,9 +10,9 @@ import { Sidebar } from 'semantic-ui-react'
 import EnquiriesMenu from './EnquiriesMenu'
 import EnquiriesTable from './EnquiriesTable'
 import DetailsSidebar from '../DetailsOld/DetailsSidebar'
-import PanelPusher from '../common/PanelPusher';
-import EnquiriesBottomPanel from './EnquiriesBottomPanel';
-import GlobalContext from '../context/GlobalContext';
+import PanelPusher from '../common/PanelPusher'
+import EnquiriesBottomPanel from './EnquiriesBottomPanel'
+import GlobalContext from '../context/GlobalContext'
 
 const Pushable = styled(Sidebar.Pushable)`
 	min-height: calc(100vh - 36px) !important;

@@ -18,7 +18,6 @@ export default function BpStat ({
   budgetMode,
   upsertParent
 }) {
-  console.log('bpStat > ', bpStat)
   const {
 		autoPlanCost,
 		autoPlanLabor,
