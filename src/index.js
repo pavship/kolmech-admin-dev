@@ -4,7 +4,7 @@ import 'semantic-ui-css/semantic.min.css'
 import 'react-vis/dist/style.css'
 import * as serviceWorker from './serviceWorker'
 
-import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider } from '@apollo/react-hooks'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { client } from './apollo/apollo'
 

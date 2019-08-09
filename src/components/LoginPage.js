@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
+import { useMutation } from '@apollo/react-hooks'
+import { login as lQ } from '../graphql/user'
 
 import styled from 'styled-components'
 import { Header, Form, Message, Button, Segment } from 'semantic-ui-react'
 
-import { login as lQ } from '../graphql/user'
-import { useMutation } from './hooks/apolloHooks'
 
 const MenuDiv = styled.div`
 	border-bottom: 1px solid #7e7e81;
@@ -25,6 +25,7 @@ export default function LoginPage ({ refreshToken }) {
 	const [ password, setPassword ] = useState('')
 	const [ login, { loading, error } ] = useMutation(lQ, {
 		variables: { email, password },
+		// TODO make sure password isn't cached
 		// fetchPolicy: 'no-cache'
 	})
 	return <>

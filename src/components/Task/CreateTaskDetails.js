@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Menu } from '../Details/Menu/Menu'
-import { useMutation, useQuery } from '../hooks/apolloHooks'
+import { useMutation } from '@apollo/react-hooks'
 import { upsertTask as uT } from '../../graphql/task'
 import { toLocalDatetimeString } from '../../utils/dates'
 import { Div } from '../styled/styled-semantic'
@@ -19,8 +19,7 @@ export default function CreateTaskDetails ({
 			text,
 			status: 'ACTIVE',
 			appointId
-		}},
-		mark: 'CreateTaskDetails upsertTask'
+		}}
 	})
   return <>
     <Menu

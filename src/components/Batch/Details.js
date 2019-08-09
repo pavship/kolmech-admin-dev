@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMutation, useQuery } from '../hooks/apolloHooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import { getStructure, produceNested } from '../form/utils'
 import { batchDetails, upsertBatch as uB } from '../../graphql/batch'
 import { Dimmer, Loader } from 'semantic-ui-react'
@@ -11,7 +11,7 @@ export default function BatchDetails ({
   bIndex,
   batchId
 }) {
-  const [ upsertBatch ] = useMutation(uB, {mark: 'uB Details'})
+  const [ upsertBatch ] = useMutation(uB)
   let loading, data
   if (!batchProp) ({ loading, data } = useQuery(batchDetails, { variables: { id: batchId } }))
   const batch = batchProp || (data && data.batch) || {}

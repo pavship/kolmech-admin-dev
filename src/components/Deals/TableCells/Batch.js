@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { useMutation } from '../../hooks/apolloHooks'
+import { useMutation } from '@apollo/react-hooks'
 import { upsertBatch as uBq } from '../../../graphql/batch'
 import { getStructure, assignNested } from '../../form/utils'
 import produce from 'immer'
@@ -26,7 +26,7 @@ export default React.memo(function Batch ({
   upsertDeal,
 }) {
   const { budgetMode } = useContext(DealsContext)
-  const [ upsertBatchProto ] = useMutation(uBq, {mark: 'Batch'})
+  const [ upsertBatchProto ] = useMutation(uBq)
   const upsertBatch = (draftHandler, options = {}) =>
     upsertBatchProto({ variables: { input:
       produce(getStructure(batch), draftHandler)
