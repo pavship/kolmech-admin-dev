@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from './hooks/apolloHooks'
 import { login as lQ } from '../graphql/user'
 
 import styled from 'styled-components'

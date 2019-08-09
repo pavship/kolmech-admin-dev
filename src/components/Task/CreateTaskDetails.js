@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Menu } from '../Details/Menu/Menu'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '../hooks/apolloHooks'
 import { upsertTask as uT } from '../../graphql/task'
+
+import { Menu } from '../Details/Menu/Menu'
 import { toLocalDatetimeString } from '../../utils/dates'
 import { Div } from '../styled/styled-semantic'
 import Field from '../form/Field'

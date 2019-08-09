@@ -23,7 +23,6 @@
     "lodash.flowright": "^3.5.0",
     "react": "^16.8.6",
     "react-apollo": "^3.0.0",
-    "react-apollo-hooks": "^0.4.5",
     "react-day-picker": "^7.2.4",
     "react-dom": "^16.8.6",
     "react-dropzone": "^8.0.3",

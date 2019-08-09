@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '../../hooks/apolloHooks'
 import { dealDetails } from '../../../graphql/deal'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import BatchDetails from '../../Batch/Details'

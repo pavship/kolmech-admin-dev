@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '../hooks/apolloHooks'
 import { getStructure, produceNested } from '../form/utils'
 import { batchDetails, upsertBatch as uB } from '../../graphql/batch'
 import { Dimmer, Loader } from 'semantic-ui-react'

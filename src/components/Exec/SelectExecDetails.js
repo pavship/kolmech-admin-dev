@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '../hooks/apolloHooks'
 import { personExecs } from '../../graphql/person'
 import { orgsAndPersonsExecs } from '../../graphql/exec'
 import { upsertPerson2 as uP } from '../../graphql/person'

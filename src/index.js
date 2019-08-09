@@ -5,16 +5,13 @@ import 'react-vis/dist/style.css'
 import * as serviceWorker from './serviceWorker'
 
 import { ApolloProvider } from '@apollo/react-hooks'
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { client } from './apollo/apollo'
 
 import App from './App'
 
 ReactDOM.render(
 	<ApolloProvider client={client}>
-		<ApolloHooksProvider client={client}>
-			<App client={client}/>
-		</ApolloHooksProvider>
+		<App client={client}/>
 	</ApolloProvider>
 , document.getElementById('root'))
 
