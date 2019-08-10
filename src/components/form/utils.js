@@ -160,7 +160,7 @@ export const assignNested = (obj, path, val, preserveKeys=false) => {
 				return obj[obj.length] = val
 			if (key.startsWith('id='))
 				return obj[obj.findIndex(i => i.id === key.slice(3))] = {
-					id: key.slice(3),
+					...Object.keys(val).length > 0 && {id: key.slice(3)},
 					...val
 				}
 			return obj[key] = val

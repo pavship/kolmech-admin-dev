@@ -28,7 +28,7 @@ export function NotificationsProvider ({
     clearTimeout(message.timerId)
     delete message.timerId
   }))
-  const providerValue = useMemo(() => ({ notify: create }), [ create ])
+  const providerValue = useMemo(() => ({ notify: create }), [])
   return <NotificationsContext.Provider
     value={providerValue}
   >
