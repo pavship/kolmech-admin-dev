@@ -13,9 +13,10 @@ import Qty from './Qty'
 import BpStat from './BpStat/BpStat'
 import Elements from './Element/Elements';
 
-const BatchContainer = styled.div`
+const Container = styled.div`
   width: 100%;
   border-bottom: 1px solid rgba(34,36,38,0.15);
+  line-height: 1.5em !important;
 `
 
 export default React.memo(function Batch ({
@@ -72,13 +73,13 @@ export default React.memo(function Batch ({
           draft.bpStat['p'+key.slice(5)] = batchAutoStat['p'+key.slice(5)]
       }
   })
-  return <BatchContainer>
+  return <Container>
     <Div
       d='flex'
       bb='1px solid rgba(34, 36, 38, 0.15)'
     >
       <Div
-        w='300px'
+        w='310px'
         br={isNew ? undefined : '1px solid rgba(34,36,38,0.15);'}
       >
         <Model
@@ -114,5 +115,5 @@ export default React.memo(function Batch ({
         budgetMode={budgetMode}
       />
     </Div>
-  </BatchContainer>
+  </Container>
 })

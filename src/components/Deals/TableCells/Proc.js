@@ -71,7 +71,7 @@ export default function Proc ({
     />
   else
     return <Container
-      w='270px'
+      w='170px'
     >
       <Title>
         {name}

@@ -14,7 +14,7 @@ const Container = styled.div`
 
 const Title = styled(Div)`
   ${Container}:hover & {
-    width: '70px';
+    width: '80px';
     font-weight: bold;
   }
 `
@@ -23,7 +23,6 @@ const Menu = styled(Div)`
   display: none;
   margin-left: auto;
   ${Container}:hover & {
-    /* width: '70px'; */
     display: unset;
   }
 `

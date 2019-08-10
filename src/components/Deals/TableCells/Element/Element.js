@@ -10,6 +10,7 @@ import { Div } from '../../../styled/styled-semantic'
 const Container = styled(Div)`
   width: 100%;
   border-bottom: 1px solid rgba(34,36,38,0.15);
+  line-height: 1.5em !important;
 `
 
 export default function Element ({

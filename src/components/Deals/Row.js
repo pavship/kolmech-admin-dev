@@ -71,7 +71,7 @@ export default function Row ({
             />
           </Div>
           <Div
-            w='100px'
+            w='111px'
           >
             {deal.org &&
               <Org
