@@ -1,9 +1,9 @@
-// import React, { useState, useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import {
   useQuery as useApolloQuery,
   useMutation as useApolloMutation
 } from '@apollo/react-hooks'
-import { useNotifications } from '../notifications/NotificationsContext'
+import NotificationsContext from '../notifications/NotificationsContext'
 
 export function useQuery(
   query,
@@ -13,7 +13,7 @@ export function useQuery(
     ...options
   } = {},
 ) {
-  const { notify } = useNotifications()
+  const { notify } = useContext(NotificationsContext)
   return useApolloQuery(query, {
     ...options,
     onError: err => {
@@ -41,12 +41,12 @@ export const useMutation = (
   // const refMounted = useRefMounted()
   // console.log('refMounted.current1 > ', refMounted.current)
   // console.log('useMutation > ', mark)
-  const { notify } = useNotifications()
+  const { notify } = useContext(NotificationsContext)
   return useApolloMutation(mutation, {
     ...options,
     onCompleted: res => {
       if (onCompleted) onCompleted(res)
-      notify({
+      successMsg !== null && notify({
         type: 'success',
         title: successMsg || 'Данные сохранены',
       })

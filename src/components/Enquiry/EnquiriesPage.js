@@ -33,14 +33,12 @@ export class EnquiriesPage extends Component {
 	render() {
 		const {
 			allEnquiries: { loading, error, refetch, enquiries },
-			refreshToken
 		} = this.props
 		const { panelClosing } = this.state
 		return <>
 			<EnquiriesMenu
 				refetchEnquiries={() => refetch()}
 				enquiriesAreLoading={loading}
-				refreshToken={refreshToken}
 			/>
 			{loading && "Загрузка..."}
 			{error && `Ошибка ${error.message}`}

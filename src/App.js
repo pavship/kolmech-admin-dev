@@ -5,16 +5,21 @@ import { theme } from './components/styled/styled-semantic'
 
 import { NotificationsProvider } from './components/notifications/NotificationsContext'
 import { DiskProvider } from './components/context/DiskContext'
+import { AuthProvider } from './components/auth/AuthContext'
 import Root from './components/Root'
 
-const App = ({ client }) => (
-	<NotificationsProvider>
-		<ThemeProvider theme={theme}>
-			<DiskProvider>
-				<Root client={client} />
-			</DiskProvider>
-		</ThemeProvider>
-	</NotificationsProvider>
-)
-
-export default App
+export default function App ({
+	client
+}) {
+	return (
+		<NotificationsProvider>
+			<ThemeProvider theme={theme}>
+				<DiskProvider>
+					<AuthProvider client={client}>
+						<Root />
+					</AuthProvider>
+				</DiskProvider>
+			</ThemeProvider>
+		</NotificationsProvider>
+	)
+}
