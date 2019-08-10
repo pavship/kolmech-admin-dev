@@ -8,7 +8,8 @@ import HtmlSelect from '../../../common/HtmlSelect'
 export default function NewElement ({
   modelId,
   opClass,
-  upsertBatch
+  upsertBatch,
+  newElementIndex
 }) {
   const { opTypes } = useContext(DealsContext)
   const inputRef = useRef(null)
@@ -45,13 +46,16 @@ export default function NewElement ({
       ref={inputRef2}
       // value={}
       options={opTypes.filter(ot => ot.opClass === opClass)}
-      hasNoUndefinedOption
+      undefinedOptionName='выберите операцию'
       onChange={opTypeId => upsertBatch(draft => {
         const laborPrice = opTypes.find(opt => opt.id === opTypeId).laborPrice
         // console.log('opTypeId > ', opTypeId)
-        assignNested(draft, 'elements[length].op', {
-          opTypeId,
-          ...laborPrice && { laborPrice }
+        assignNested(draft, 'elements[length]', {
+          op: {
+            opTypeId,
+            ...laborPrice && { laborPrice },
+          },
+          sort: newElementIndex
         })
       })}
       onBlur={() => setElementType('')}
@@ -63,7 +67,11 @@ export default function NewElement ({
       // value={name || ''}
       onChange={value => {
         upsertBatch(draft => {
-          assignNested(draft, 'elements[length].proc', { name: value, modelId })
+          assignNested(draft, 'elements[length].proc', {
+            name: value,
+            modelId,
+            sort: newElementIndex
+          })
         })
       }}
       onBlur={() => setElementType('')}

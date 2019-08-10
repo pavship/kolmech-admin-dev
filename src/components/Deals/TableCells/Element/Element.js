@@ -35,6 +35,7 @@ export default function Element ({
       <Proc
         proc={proc}
         upsertBatch={upsertBatch}
+        deleteElement={deleteElement}
       />
       {!proc.isNew &&
         <Ops

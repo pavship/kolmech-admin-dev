@@ -11,7 +11,7 @@ export const batchFragmentBasic = gql`
 		id
 		qty
 		model { ...ModelFragmentBasic }
-		elements { ...elementFragmentBasic }
+		elements (orderBy: sort_ASC) { ...elementFragmentBasic }
 		procs { ...procFragmentBasic }
 	}
 	${modelFragmentBasic}
@@ -24,7 +24,7 @@ export const batchFragmentMiddle = gql`
 		...batchFragmentBasic
 		sort
 		bpStat { ...bpStatFragmentMiddle }
-		elements { ...elementFragmentMiddle }
+		elements (orderBy: sort_ASC) { ...elementFragmentMiddle }
 		model { ...ModelFragmentBasic }
 		ops { ...opFragmentMiddle }
 		procs { ...procFragmentMiddle }
@@ -43,7 +43,7 @@ export const batchFragmentDetails = gql`
 		descript
 		info
 		warning
-		elements { ...elementFragmentDetails }
+		elements (orderBy: sort_ASC) { ...elementFragmentDetails }
 		model { ...ModelFragmentWithDrawings }
 		procs { ...procFragmentDetails }
 		workpiece { ...WorkpieceFragmentWithDrawings }

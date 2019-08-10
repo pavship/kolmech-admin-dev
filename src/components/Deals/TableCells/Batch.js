@@ -1,9 +1,8 @@
 import React, { useContext } from 'react'
 import { useMutation } from '../../hooks/apolloHooks'
 import { upsertBatch as uBq } from '../../../graphql/batch'
-import { getStructure, assignNested } from '../../form/utils'
+import { getStructure } from '../../form/utils'
 import produce from 'immer'
-import cuid from 'cuid'
 
 import { DealsContext } from '../context/Context'
 
@@ -12,8 +11,7 @@ import { Div } from '../../styled/styled-semantic'
 import Model from './Model'
 import Qty from './Qty'
 import BpStat from './BpStat/BpStat'
-import Element from './Element/Element'
-import NewElement from './Element/NewElement'
+import Elements from './Element/Elements';
 
 const BatchContainer = styled.div`
   width: 100%;
@@ -109,27 +107,12 @@ export default React.memo(function Batch ({
       pl='9px'
       bl='1px solid rgba(34, 36, 38, 0.15)'
     >
-      {elements.map(element =>
-        <Element
-          key={element.id}
-          element={element}
-          upsertBatch={upsertBatch}
-          deleteElement={() => upsertBatch(draft => {
-            assignNested(draft, `elements[id=${element.id}]`, {})
-          })}
-          budgetMode={budgetMode}
-        />
-      )}
-      <Div
-        w='170px'
-      >
-        <NewElement
-          key={cuid()}
-          modelId={model.id}
-          opClass='SURVEY'
-          upsertBatch={upsertBatch}
-        />
-      </Div>
+      <Elements
+        elements={elements}
+        upsertBatch={upsertBatch}
+        modelId={model.id}
+        budgetMode={budgetMode}
+      />
     </Div>
   </BatchContainer>
 })

@@ -12,6 +12,7 @@ export default forwardRef(({
   value,
   onChange,
   options,
+  undefinedOptionName = '--',
 	...rest
 }, ref) => {
 	return (
@@ -23,7 +24,7 @@ export default forwardRef(({
     >
       {[
         // ...hasNoUndefinedOption ? [] : [{ id: -1, name: '--' }],
-        { id: -1, name: '--' },
+        { id: -1, name: undefinedOptionName },
         ...options
       ].map(({ key, id, name }) =>
         <option key={key || id} value={id}>{name}</option>
