@@ -34,11 +34,11 @@ const PosedItem = posed.div({
 	},
 })
 
-export default ({
+export default function Notifications ({
 	messages,
 	dismissNotification,
 	cancelAutoDismiss
-}) => {
+}) {
 	// this Portal is never unmounted
   return reactDom.createPortal(
 		<NotificationsHolder>

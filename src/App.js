@@ -10,7 +10,7 @@ import Root from './components/Root'
 
 const App = ({ client }) => (
 	<NotificationsProvider>
-		<NotificationsViewer />
+		{/* <NotificationsViewer /> */}
 		<ThemeProvider theme={theme}>
 			<DiskProvider>
 				<Root client={client} />

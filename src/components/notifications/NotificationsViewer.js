@@ -3,7 +3,7 @@ import React from 'react'
 import NotificationsContext from './NotificationsContext'
 import Notifications from './Notifications'
 
-export default () => {
+export default function NotificationsViewer () {
   return (
 		<NotificationsContext.Consumer>
 			{({
