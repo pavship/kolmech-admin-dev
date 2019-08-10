@@ -27,7 +27,7 @@ export default ({
     onBlur={() => setEditMode(false)}
   />
   : <Div
-      pl='2px'
+      pl='4px'
       onClick={() => setEditMode(true)}
     >
       {dealLabor} ч

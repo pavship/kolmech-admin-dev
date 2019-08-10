@@ -14,37 +14,36 @@ export default function ExecName ({
   const { isNew: isNewAppoint, exec: { person: { amoName } = {} } = {} } = appoint
   const { setDetails } = useContext(DetailsContext)
   const [ addMode, setAddMode ] = useState(false)
-  if (isNewAppoint)
-    return <Icon
-      ml='6px'
-      // TODO fix addMode not recognized as truthy
-			c={addMode ? 'green' : 'rgba(50,50,50,.87)'}
-      link
-      name='plus'
-      activeColor='green'
-      // active={addMode}
-      onClick={() => {
-        setAddMode(true)
-        setDetails({
-          type: 'SelectExec',
-          opTypeId,
-          onSubmit: execId => {
-            upsertBatch(draft => {
-              assignNested( draft,
-                basePath + `appoints[length]`,
-                { execId, ...laborCost && { laborCost } }
-              )
+  return <Div
+    ov='hidden'
+    to='ellipsis'
+    pl='6px'
+  >
+    {isNewAppoint
+      ? <Icon
+          ml='6px'
+          // TODO fix addMode not recognized as truthy
+          c={addMode ? 'green' : 'rgba(50,50,50,.87)'}
+          link
+          name='plus'
+          activeColor='green'
+          onClick={() => {
+            setAddMode(true)
+            setDetails({
+              type: 'SelectExec',
+              opTypeId,
+              onSubmit: execId => {
+                upsertBatch(draft => {
+                  assignNested( draft,
+                    basePath + `appoints[length]`,
+                    { execId, ...laborCost && { laborCost } }
+                  )
+                })
+              }
             })
-          }
-        })
-      }}
-    />
-  else
-    return <Div
-      ov='hidden'
-			to='ellipsis'
-			pl='6px'
-    >
-      {amoName}
-    </Div>
+          }}
+        />
+      : amoName
+    }
+  </Div>
 }

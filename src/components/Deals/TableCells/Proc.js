@@ -13,7 +13,7 @@ const Container = styled(Div)`
 
 const Title = styled.div`
   position: relative;
-  width: 100%;
+  /* width: 100%; */
   text-overflow: ellipsis;
   white-space: nowrap;
   /* ${Container}:hover & {

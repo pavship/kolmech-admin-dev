@@ -20,7 +20,7 @@ export default function Element ({
   budgetMode
 }) {
   return <Container
-    w={budgetMode ? '1100px' : '430px'}
+    // w={budgetMode ? '1100px' : '430px'}
   >
     {op &&
       <Op

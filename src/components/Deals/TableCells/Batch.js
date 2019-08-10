@@ -79,7 +79,7 @@ export default React.memo(function Batch ({
       bb='1px solid rgba(34, 36, 38, 0.15)'
     >
       <Div
-        w='310px'
+        w='311px'
         br={isNew ? undefined : '1px solid rgba(34,36,38,0.15);'}
       >
         <Model

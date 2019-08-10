@@ -20,7 +20,7 @@ const TitleContainer = styled(Div)`
 
 const Title = styled.div`
   position: relative;
-  width: 100%;
+  /* width: 100%; */
   text-overflow: ellipsis;
   white-space: nowrap;
   ${TitleContainer}:hover & {
@@ -106,7 +106,7 @@ export const Op = ({
     {!isNew &&
       <Div
         // w={`calc(170px + 90px${budgetMode ? ' + 670px' : ''})`}
-        w={budgetMode ? '930px' : '260px'}
+        // w={budgetMode ? '930px' : '260px'}
         bl='1px solid rgba(34,36,38,0.15)'
       >
         {[

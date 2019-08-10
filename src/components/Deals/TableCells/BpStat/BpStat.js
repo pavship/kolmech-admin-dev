@@ -79,7 +79,7 @@ export default function BpStat ({
         />
       </Div>
       <Div
-        w='80px'
+        w='90px'
         pr='2px'
         c={factCost || planCost ? undefined : 'rgba(34,36,38,0.6)'}
         ta='right'
