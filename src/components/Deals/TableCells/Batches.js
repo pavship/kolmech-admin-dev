@@ -29,6 +29,7 @@ const DragHandle = sortableHandle(() =>
     c='rgba(0,0,0,.6)'
     fw='bold'
     ta='center'
+    lh='initial'
     cur='move'
     tr='opacity 0.25s ease-in-out'
   >::</Div>

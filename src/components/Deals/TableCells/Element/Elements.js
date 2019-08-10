@@ -14,7 +14,7 @@ import Element from './Element';
 
 const SortableItemContainer = styled(Div)`
   :hover {
-    .dragHandle {
+    .elementDragHandle {
       opacity: 1 !important;
     }
   }
@@ -24,13 +24,14 @@ const SortableContainer = sortableContainer(({children}) => {return <div>{childr
 
 const DragHandle = sortableHandle(() =>
   <Div
-    className='dragHandle'
-    w='32px'
-    ml='-32px'
+    className='elementDragHandle'
+    w='19px'
+    ml='-19px'
     o='0'
     c='rgba(0,0,0,.6)'
     fw='bold'
     ta='center'
+    lh='initial'
     cur='move'
     tr='opacity 0.25s ease-in-out'
   >::</Div>

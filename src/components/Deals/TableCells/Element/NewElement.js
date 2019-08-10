@@ -17,7 +17,6 @@ export default function NewElement ({
   const inputRef3 = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   const [ elementType, setElementType ] = useState('')
-  // console.log('editMode elementType > ', editMode, elementType)
   useEffect(() => (editMode &&
     inputRef.current &&
     inputRef.current.focus()) || undefined)
@@ -30,7 +29,6 @@ export default function NewElement ({
   if (editMode)
     return <HtmlSelect
       ref={inputRef}
-      // value={opTypeId}
       options={[
         {id: 'op', name: 'Операция'},
         {id: 'proc', name: 'Техпроцесс'},
@@ -44,12 +42,10 @@ export default function NewElement ({
   if (elementType === 'op')
     return <HtmlSelect
       ref={inputRef2}
-      // value={}
       options={opTypes.filter(ot => ot.opClass === opClass)}
       undefinedOptionName='выберите операцию'
       onChange={opTypeId => upsertBatch(draft => {
         const laborPrice = opTypes.find(opt => opt.id === opTypeId).laborPrice
-        // console.log('opTypeId > ', opTypeId)
         assignNested(draft, 'elements[length]', {
           op: {
             opTypeId,
@@ -64,12 +60,13 @@ export default function NewElement ({
     return <HtmlInput
       ref={inputRef3}
       placeholder='Новый техпроцесс'
-      // value={name || ''}
       onChange={value => {
         upsertBatch(draft => {
-          assignNested(draft, 'elements[length].proc', {
-            name: value,
-            modelId,
+          assignNested(draft, 'elements[length]', {
+            proc: {
+              name: value,
+              modelId,
+            },
             sort: newElementIndex
           })
         })
@@ -83,12 +80,4 @@ export default function NewElement ({
       c='rgba(50,50,50,.87)'
       onClick={() => setEditMode(true)}
     />
-  // else
-  //   return <Div
-  //     ov='hidden'
-  //     to='ellipsis'
-  //     onClick={() => setEditMode(true)}
-  //   >
-  //     {name}
-  //   </Div>
 }

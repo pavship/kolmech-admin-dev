@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   display: flex;
 `
 
-const Container = styled(Div)`
+const TitleContainer = styled(Div)`
   display: flex;
 `
 
@@ -23,7 +23,7 @@ const Title = styled.div`
   width: 100%;
   text-overflow: ellipsis;
   white-space: nowrap;
-  ${Container}:hover & {
+  ${TitleContainer}:hover & {
     ${props => !props.isNew && 'width: 140px;'}
     ${props => !props.isNew && props.isMachiningClass && 'width: 140px;'}
   }
@@ -32,7 +32,7 @@ const Title = styled.div`
 const Menu = styled.div`
   display: none;
   margin-left: auto;
-  ${Container}:hover & {
+  ${TitleContainer}:hover & {
     display: unset;
   }
 `
@@ -58,7 +58,7 @@ export const Op = ({
   const { id, isNew, appoints, opType, dealLabor } = op
   const isMachiningClass = basePath.endsWith('proc.')
   return <Wrapper>
-    <Container
+    <TitleContainer
       d='flex'
       w={isMachiningClass ? '125px' : '170px'}
     >
@@ -89,7 +89,7 @@ export const Op = ({
           </DropdownMenu>
         </Menu>
       }
-    </Container>
+    </TitleContainer>
     {!isNew && isMachiningClass &&
       <Div
         w='45px'

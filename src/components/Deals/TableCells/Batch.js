@@ -104,7 +104,7 @@ export default React.memo(function Batch ({
       />
     </Div>
     <Div
-      pl='9px'
+      pl='19px'
       bl='1px solid rgba(34, 36, 38, 0.15)'
     >
       <Elements

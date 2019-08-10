@@ -36,7 +36,6 @@ export default function OpType ({
   else if (isNewOp)
     return <Icon
       ml={isMachiningClass ? '6px' : undefined}
-			// color='grey'
 			c='rgba(50,50,50,.87)'
       link
       name='plus'
@@ -46,7 +45,7 @@ export default function OpType ({
     return <Div
       ov='hidden'
 			to='ellipsis'
-			pl='6px'
+			pl={isMachiningClass ? '6px' : undefined}
     >
       {name}
     </Div>
