@@ -23,6 +23,15 @@ export const appointFragmentMiddle = gql`
 	${taskFragmentMiddle}
 `
 
+export const appointFragmentExec = gql`
+	fragment appointFragmentExec on Appoint {
+		...appointFragmentBasic
+		exec { ...execFragmentBasic }
+	}
+	${appointFragmentBasic}
+	${execFragmentBasic}
+`
+
 export const upsertAppoint = gql`
 	mutation upsertAppoint($input: AppointInput!) {
 		upsertAppoint(input: $input) {

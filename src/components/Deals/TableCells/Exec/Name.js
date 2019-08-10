@@ -21,7 +21,6 @@ export default function ExecName ({
   >
     {isNewAppoint
       ? <Icon
-          ml='6px'
           // TODO fix addMode not recognized as truthy
           c={addMode ? 'green' : 'rgba(50,50,50,.87)'}
           link

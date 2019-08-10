@@ -95,22 +95,12 @@ export default function Appoint ({
               <Dropdown.Item
                 icon='plus'
                 text='Задача'
-                onClick={() => setDetails({ appointId, type: 'createTask' })}
+                onClick={() => setDetails({ appointId, type: 'tasks' })}
               />
             </DropdownMenu>
           </Menu>
         }
       </TitleContainer>
-      {/* {isNew &&
-        
-        <ExecName
-          basePath={basePath}
-          appoint={appoint}
-          opIndex={opIndex}
-          opType={opType}
-          upsertBatch={upsertBatch}
-        />
-      } */}
       {!isNew &&
         <BpStat
           bpStat={bpStat}

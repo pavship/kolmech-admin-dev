@@ -6,6 +6,7 @@ import OrgDetails from '../Org/Details/Details'
 import CreateComOfferDetails from '../ComOffer/CreateComOfferDetails'
 import CreateTaskDetails from '../Task/CreateTaskDetails'
 import SelectExecDetails from '../Exec/SelectExecDetails'
+import TasksDetails from '../Task/TasksDetails';
 
 const Sidebar = styled(posed.div({
   enter: { 
@@ -22,9 +23,10 @@ const Sidebar = styled(posed.div({
   top: 36px;
   right: 0;
   width: ${props =>
-    props.type === 'CreateComOffer' ? '470px' :
-    props.type === 'createTask' ? '470px' :
-    '600px'
+    ['CreateComOffer', 'createTask', 'tasks']
+      .includes(props.type)
+        ? '470px'
+        : '600px'
   };
   height: calc(100% - 36px);
 	background-color: rgba(255,255,255,1);
@@ -56,6 +58,10 @@ export const DetailsProvider = ({
                 details={details}
                 setDetails={setDetails}
               /> :
+              type === 'tasks' ?	<TasksDetails
+                details={details}
+                setDetails={setDetails}
+                /> :
               type === 'createTask' ?	<CreateTaskDetails
                 details={details}
                 setDetails={setDetails}

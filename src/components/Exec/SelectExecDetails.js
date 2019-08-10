@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from '../hooks/apolloHooks'
-import { personExecs } from '../../graphql/person'
 import { orgsAndPersonsExecs } from '../../graphql/exec'
 import { upsertPerson2 as uP } from '../../graphql/person'
 
@@ -59,7 +58,7 @@ export default function SelectExecDetails ({
 	},
   setDetails,
 }) {
-  const { data, loading } = useQuery(orgsAndPersonsExecs)
+  const { data, loading, error } = useQuery(orgsAndPersonsExecs)
 	const [ execId, setExecId ] = useState('')
 	const [ personId, setPersonId ] = useState('')
 	const [ search, setSearch ] = useState('')
@@ -100,7 +99,7 @@ export default function SelectExecDetails ({
 			h='calc(100% - 47px)'
 			oy='scroll'
 		>
-			{loading ? <Dimmer active ><Loader>Загрузка..</Loader></Dimmer> : <>
+			{!error && loading ? <Dimmer active ><Loader>Загрузка..</Loader></Dimmer> : <>
 				<ListTitle>Для выбранной операции</ListTitle>
 				{persons
 					.filter(p => p.exec && p.exec.opTypes.findIndex(ot => ot.id === opTypeId) !== -1)

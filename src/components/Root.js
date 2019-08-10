@@ -25,10 +25,10 @@ class Root extends Component {
 			const token = localStorage.getItem(AUTH_TOKEN)
 			if (token !== null && token !== undefined) {
 				const expired = isTokenExpired(token)
-				if (!expired) {
-					this.setState({ token: token })
-				} else {
+				if (expired) {
 					this.refreshToken(null)
+				} else {
+					this.setState({ token: token })
 				}
 			}
 		} catch (e) {
