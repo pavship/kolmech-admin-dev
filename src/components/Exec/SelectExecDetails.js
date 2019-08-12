@@ -40,9 +40,9 @@ const ListItem = ({
 	text,
 	onClick,
 }) => <ListItemContainer
-		active={active}
-		onClick={onClick}
-	>
+	active={active}
+	onClick={onClick}
+>
   <LeftIcon
     name={active ? 'check square outline' : 'square outline'}
   />

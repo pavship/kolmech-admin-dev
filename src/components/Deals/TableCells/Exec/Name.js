@@ -11,7 +11,7 @@ export default function ExecName ({
   opType: { id: opTypeId, laborCost },
   upsertBatch
 }) {
-  const { isNew: isNewAppoint, exec: { person: { amoName } = {} } = {} } = appoint
+  const { isNew: isNewAppoint, exec: { person: { id, amoName } = {} } = {} } = appoint
   const { setDetails } = useContext(DetailsContext)
   const [ addMode, setAddMode ] = useState(false)
   return <Div

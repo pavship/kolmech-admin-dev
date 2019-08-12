@@ -32,6 +32,14 @@ export const appointFragmentExec = gql`
 	${execFragmentBasic}
 `
 
+export const appointExecLocal = gql`
+	query appointExecLocal ($id: ID!) {
+		appoint (id: $id) @client {
+			id
+		}
+	}
+`
+
 export const upsertAppoint = gql`
 	mutation upsertAppoint($input: AppointInput!) {
 		upsertAppoint(input: $input) {

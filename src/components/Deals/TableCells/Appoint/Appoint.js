@@ -80,7 +80,7 @@ export default function Appoint ({
             opIndex={opIndex}
             opType={opType}
             upsertBatch={upsertBatch}
-            />
+          />
         </Title>
             {!isNew &&
           <Menu>
@@ -95,7 +95,7 @@ export default function Appoint ({
               <Dropdown.Item
                 icon='plus'
                 text='Задача'
-                onClick={() => setDetails({ appointId, type: 'tasks' })}
+                onClick={() => setDetails({ appoint, type: 'tasks' })}
               />
             </DropdownMenu>
           </Menu>

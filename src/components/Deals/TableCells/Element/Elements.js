@@ -9,8 +9,8 @@ import {
 
 import styled from 'styled-components'
 import { Div } from '../../../styled/styled-semantic'
+import Element from './Element'
 import NewElement from './NewElement'
-import Element from './Element';
 
 const SortableItemContainer = styled(Div)`
   :hover {

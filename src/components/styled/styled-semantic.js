@@ -133,15 +133,21 @@ const IconPropFilter = ({
 	active,
 	activeColor,
 	selectMode,
+	disabled,
+	onClick,
 	...rest
 }) => (
-	<SIcon {...rest} />
+	<SIcon
+		{...rest}
+		disabled
+		onClick={disabled ? undefined : onClick}
+	/>
 )
 export const Icon = styled(IconPropFilter)`
 	&&&& {
 		${props => baseSet(props)}
 	}
-	&&& {
+	&&&&& {
 		${props => props.activeColor && `{
 			&:hover {
 				color: ${getThemeColor(props.activeColor)} !important;
@@ -151,6 +157,7 @@ export const Icon = styled(IconPropFilter)`
 			}
 			${props.active && `color: ${getThemeColor(props.activeColor)} !important;`}
 		}`}
+		${props => props.disabled && 'opacity: .45!important;'}
 	}
 `
 

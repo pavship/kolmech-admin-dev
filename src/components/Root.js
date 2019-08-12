@@ -18,7 +18,7 @@ export default function Root () {
 	return <>
 		{!error && loading ? 'Загрузка..' :
 			<UserContext.Provider
-				value={me}
+				value={{ me }}
 			>
 				<Router>
 					<Switch>

@@ -11,7 +11,8 @@ export const taskFragmentMiddle = gql`
 	fragment taskFragmentMiddle on Task {
 		...taskFragmentBasic
     end
-    from
+		from
+		order
 		status
 		text
     to
@@ -48,8 +49,8 @@ export const tasksDetails = gql`
 export const upsertTask = gql`
 	mutation upsertTask($input: TaskInput!) {
 		upsertTask(input: $input) {
-			...taskFragmentMiddle
+			...taskFragmentFull
 		}
 	}
-	${taskFragmentMiddle}
+	${taskFragmentFull}
 `
