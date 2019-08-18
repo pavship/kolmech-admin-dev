@@ -3,6 +3,7 @@ import { DealsContext } from '../../context/Context'
 import { Div, Icon } from '../../../styled/styled-semantic'
 import HtmlInput from '../../../common/HtmlInput'
 import HtmlSelect from '../../../common/HtmlSelect'
+import { upsertOp } from '../../../../graphql/op';
 
 export default function NewElement ({
   modelId,
@@ -25,6 +26,17 @@ export default function NewElement ({
   useEffect(() => (!!elementType &&
     inputRef3.current &&
     inputRef3.current.focus()) || undefined)
+  const upsertOp = opTypeId => {
+    const laborPrice = opTypes.find(opt => opt.id === opTypeId).laborPrice
+      upsertBatch(['elements[length]', {
+      op: {
+        opTypeId,
+        ...laborPrice && { laborPrice },
+      },
+      sort: newElementIndex
+    }])
+  }
+  console.log('opTypes > ', opTypes)
   if (editMode)
     return <HtmlSelect
       ref={inputRef}
@@ -35,7 +47,8 @@ export default function NewElement ({
       ]}
       onChange={elementType => {
         setEditMode(false)
-        if (elementType === 'supplier') return 
+        if (elementType === 'supplier')
+          return upsertOp(opTypes.find(opt => opt.opClass === 'SUPPLIER').id)
         setElementType(elementType)
       }}
       onBlur={() => setEditMode(false)}
@@ -45,16 +58,7 @@ export default function NewElement ({
       ref={inputRef2}
       options={opTypes.filter(ot => ot.opClass === opClass)}
       undefinedOptionName='выберите операцию'
-      onChange={opTypeId => {
-        const laborPrice = opTypes.find(opt => opt.id === opTypeId).laborPrice
-        upsertBatch(['elements[length]', {
-          op: {
-            opTypeId,
-            ...laborPrice && { laborPrice },
-          },
-          sort: newElementIndex
-        }])
-      }}
+      onChange={opTypeId => upsertOp(opTypeId)}
       onBlur={() => setElementType('')}
     />
   if (elementType === 'proc')
