@@ -68,7 +68,6 @@ export default function DealsPage () {
                   w={budgetMode ? '1142px' : '472px'}
                 /> */}
                 <DealsTable
-                  notify={notify}
                   deals={data.deals}
                 />
               </DealsContextProvider>

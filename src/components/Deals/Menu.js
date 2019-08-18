@@ -33,7 +33,10 @@ export default function DealsMenu ({
 			ml='0'
 			ta='left'
 			activeColor='blue' 
-			onClick={syncDeals}
+			onClick={async () => {
+				await syncDeals()
+				refetchDeals()
+			}}
 		>
 			<Icon
 				name='refresh'

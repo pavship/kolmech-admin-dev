@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import Org from './TableCells/Org'
 import Batches from './TableCells/Batches'
 import Deal from './TableCells/Deal'
+import BpStat from './TableCells/BpStat/BpStat';
 
 const Container = styled.div`
   display: flex;
@@ -43,49 +44,45 @@ export default function Row ({
           bs='border-box'
           bc={status.color}
         />
-        <Div //HeaderContent
-          d='flex'
-          // bb={batches.length ? '1px solid rgba(34,36,38,0.15);' : undefined}
+        <Div //Deal ID
+          w='80px'
         >
-          <Div //Deal ID
-            w='80px'
-          >
-            {amoId}
-          </Div>
-          <Div //Deal date
-            w='90px'
-          >
-            {date}
-          </Div>
-          <Div //Deal name
-            w='170px'
-            whs='nowrap'
-            to='ellipsis'
-            pos='relative'
-          >
-            <Deal
-              deal={deal}
+          {amoId}
+        </Div>
+        <Div //Deal date
+          w='90px'
+        >
+          {date}
+        </Div>
+        <Div //Deal name
+          w='170px'
+          whs='nowrap'
+          to='ellipsis'
+          pos='relative'
+        >
+          <Deal
+            deal={deal}
+            setDetails={setDetails}
+          />
+        </Div>
+        <Div //Counteragent
+          w='111px'
+        >
+          {deal.org &&
+            <Org
+              dealId={deal.id}
+              org={deal.org}
               setDetails={setDetails}
-            />
-          </Div>
-          <Div //Counteragent
-            w='111px'
-          >
-            {deal.org &&
-              <Org
-                dealId={deal.id}
-                org={deal.org}
-                setDetails={setDetails}
-              />
-            }
-          </Div>
-          {budgetMode &&
-            <Div
-              w='670px'
             />
           }
         </Div>
-        {}
+        {!!batches.length
+          ? <BpStat
+              budgetMode={budgetMode}
+              hideLaborCell
+            />
+          : <Div w='680px' />
+        }
       </Div>
       <Div
         pos={!batches.length ? 'absolute' : undefined}
@@ -93,7 +90,7 @@ export default function Row ({
         l={!batches.length ? '482px' : undefined}
         w={!batches.length ? '260px' : undefined}
         pl={!batches.length ? '5px' : '32px'}
-        bt={batches.length ? '1px solid rgba(34,36,38,0.15)' : undefined}
+        bt={batches.length ? '1px solid rgba(34,36,38,0.35)' : undefined}
       >
         <Batches
           deal={deal}

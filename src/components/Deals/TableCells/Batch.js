@@ -44,6 +44,7 @@ export default React.memo(function Batch ({
   batch,
   upsertDeal,
 }) {
+  const { batches } = deal
   const { budgetMode } = useContext(DealsContext)
   const [ upsertBatchProto ] = useMutation(uBq)
   const upsertBatch = (draftHandler, options) =>
@@ -111,7 +112,15 @@ export default React.memo(function Batch ({
             name='trash'
             color='grey'
             activeColor='red'
-            onClick={() => upsertDeal([ `batches[id=${id}]`, {} ])}
+            onClick={() => {
+              let modifierArr = [ `batches[id=${id}]`, {} ]
+              batches
+                .filter(b => b.id !== id)
+                .forEach((b, i) => {
+                  modifierArr = [...modifierArr, `batches[id=${b.id}]`, { sort: i }]
+                })
+              upsertDeal(modifierArr)
+            }}
           />
         </ContolsContainer>
       </TitleContainer>

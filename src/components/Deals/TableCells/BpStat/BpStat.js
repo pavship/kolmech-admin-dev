@@ -12,7 +12,8 @@ const FlexContainer = styled.div`
 export default function BpStat ({
   bpStat,
   budgetMode,
-  upsertParent
+  upsertParent,
+  hideLaborCell
 }) {
   const {
 		autoPlanCost,
@@ -26,29 +27,31 @@ export default function BpStat ({
     planRevenue
   } = bpStat || {}
   return <FlexContainer>
-    <Div
-      w='90px'
-      pl='2px'
-      c={factLabor || planLabor ? undefined : 'rgba(34,36,38,0.6)'}
-      bl='1px solid rgba(34,36,38,0.15)'
-    >
-      <Stat
-        type='labor'
-        value={planLabor}
-        isAuto={autoPlanLabor}
-        onChange={value => {
-          upsertParent(draft => {
-            assignNested(draft, `bpStat.planLabor`, value)
-            assignNested(draft, `bpStat.autoPlanLabor`, false, true)
-          })
-        }}
-        onAutoEnable={() => {
-          upsertParent(draft => {
-            assignNested(draft, `bpStat.autoPlanLabor`, true)
-          })
-        }}
-      />
-    </Div>
+    {!hideLaborCell &&
+      <Div
+        w='90px'
+        pl='2px'
+        c={factLabor || planLabor ? undefined : 'rgba(34,36,38,0.6)'}
+        bl='1px solid rgba(34,36,38,0.15)'
+      >
+        <Stat
+          type='labor'
+          value={planLabor}
+          isAuto={autoPlanLabor}
+          onChange={value => {
+            upsertParent(draft => {
+              assignNested(draft, `bpStat.planLabor`, value)
+              assignNested(draft, `bpStat.autoPlanLabor`, false, true)
+            })
+          }}
+          onAutoEnable={() => {
+            upsertParent(draft => {
+              assignNested(draft, `bpStat.autoPlanLabor`, true)
+            })
+          }}
+        />
+      </Div>
+    }
     {budgetMode && <>
       <Div
         w='90px'
