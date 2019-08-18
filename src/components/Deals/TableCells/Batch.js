@@ -144,6 +144,7 @@ export default React.memo(function Batch ({
       bl='1px solid rgba(34, 36, 38, 0.15)'
     >
       <Elements
+        batch={batch}
         elements={elements}
         upsertBatch={upsertBatch}
         modelId={model.id}

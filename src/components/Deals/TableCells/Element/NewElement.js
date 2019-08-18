@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { DealsContext } from '../../context/Context'
-import { assignNested } from '../../../form/utils'
 import { Div, Icon } from '../../../styled/styled-semantic'
 import HtmlInput from '../../../common/HtmlInput'
 import HtmlSelect from '../../../common/HtmlSelect'
@@ -31,10 +30,12 @@ export default function NewElement ({
       ref={inputRef}
       options={[
         {id: 'op', name: 'Операция'},
+        {id: 'supplier', name: 'Поставщик'},
         {id: 'proc', name: 'Техпроцесс'},
       ]}
       onChange={elementType => {
         setEditMode(false)
+        if (elementType === 'supplier') return 
         setElementType(elementType)
       }}
       onBlur={() => setEditMode(false)}
@@ -44,33 +45,31 @@ export default function NewElement ({
       ref={inputRef2}
       options={opTypes.filter(ot => ot.opClass === opClass)}
       undefinedOptionName='выберите операцию'
-      onChange={opTypeId => upsertBatch(draft => {
+      onChange={opTypeId => {
         const laborPrice = opTypes.find(opt => opt.id === opTypeId).laborPrice
-        assignNested(draft, 'elements[length]', {
+        upsertBatch(['elements[length]', {
           op: {
             opTypeId,
             ...laborPrice && { laborPrice },
           },
           sort: newElementIndex
-        })
-      })}
+        }])
+      }}
       onBlur={() => setElementType('')}
     />
   if (elementType === 'proc')
     return <HtmlInput
       ref={inputRef3}
       placeholder='Новый техпроцесс'
-      onChange={value => {
-        upsertBatch(draft => {
-          assignNested(draft, 'elements[length]', {
-            proc: {
-              name: value,
-              modelId,
-            },
-            sort: newElementIndex
-          })
-        })
-      }}
+      onChange={value =>
+        upsertBatch(['elements[length]', {
+          proc: {
+            name: value,
+            modelId,
+          },
+          sort: newElementIndex
+        }]
+      )}
       onBlur={() => setElementType('')}
     />
   else

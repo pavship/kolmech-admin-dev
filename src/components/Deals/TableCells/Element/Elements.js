@@ -1,6 +1,5 @@
 import React from 'react'
 import cuid from 'cuid'
-import { assignNested } from '../../../form/utils'
 import {
   sortableContainer,
   sortableElement,
@@ -11,6 +10,7 @@ import styled from 'styled-components'
 import { Div } from '../../../styled/styled-semantic'
 import Element from './Element'
 import NewElement from './NewElement'
+import useUpsert from '../../../hooks/useUpsert'
 
 const SortableItemContainer = styled(Div)`
   :hover {
@@ -48,19 +48,21 @@ const SortableElement = sortableElement(props => (
 ))
 
 export default function Elements ({
+  batch,
   elements,
-  upsertBatch,
+  upsertBatch: upsertBatchDeprecated,
   modelId,
   budgetMode,
 }) {
+  const [ upsertBatch ] = useUpsert('batch', batch)
   return <>
     <SortableContainer
       onSortEnd={({oldIndex, newIndex}) => {
         if (oldIndex === newIndex) return
-        upsertBatch(draft => {
-          assignNested(draft, `elements[id=${elements[oldIndex].id}]`, { sort: newIndex })
-          assignNested(draft, `elements[id=${elements[newIndex].id}]`, { sort: oldIndex }, true)
-        })
+        upsertBatch([
+          `elements[id=${elements[oldIndex].id}]`, { sort: newIndex },
+          `elements[id=${elements[newIndex].id}]`, { sort: oldIndex }
+        ])
       }}
       useDragHandle
     >
@@ -69,10 +71,17 @@ export default function Elements ({
           key={element.id}
           index={index}
           element={element}
-          upsertBatch={upsertBatch}
-          deleteElement={() => upsertBatch(draft => {
-            assignNested(draft, `elements[id=${element.id}]`, {})
-          })}
+          upsertBatch={upsertBatchDeprecated}
+          deleteElement={() => {
+            const { id } = element
+            let modifierArr = [ `elements[id=${id}]`, {} ]
+            elements
+              .filter(b => b.id !== id)
+              .forEach((b, i) => {
+                modifierArr = [...modifierArr, `elements[id=${b.id}]`, { sort: i }]
+              })
+            upsertBatch(modifierArr)
+          }}
           budgetMode={budgetMode}
         />
       )}
@@ -82,6 +91,7 @@ export default function Elements ({
     >
       <NewElement
         key={cuid()}
+        batch={batch}
         modelId={modelId}
         opClass='SURVEY'
         upsertBatch={upsertBatch}
