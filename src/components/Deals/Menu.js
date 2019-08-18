@@ -7,7 +7,6 @@ import { useMutation } from '../hooks/apolloHooks';
 export default function DealsMenu ({
   title,
   titleLinkTo,
-	refreshToken,
 	refetchDeals,
 	budgetMode,
 	setBudgetMode
@@ -19,7 +18,6 @@ export default function DealsMenu ({
   return <Menu
 		title={title}
 		titleLinkTo={titleLinkTo}
-		refreshToken={refreshToken}
 	>
 		<Icon
 			link

@@ -20,8 +20,6 @@ const Container = styled.div`
 export default function Row ({
   isFirstRow,
   deal,
-  upsertDeal,
-  upsertingDeal,
   budgetMode,
 }) {
   const { amoId, date, batches, status } = deal
@@ -99,7 +97,6 @@ export default function Row ({
       >
         <Batches
           deal={deal}
-          upsertDeal={upsertDeal}
         />
       </Div>
     </Div>

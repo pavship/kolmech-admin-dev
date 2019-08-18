@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import { useMutation } from '../../hooks/apolloHooks'
 import { upsertBatch as uBq } from '../../../graphql/batch'
-import { getStructure } from '../../form/utils'
+import useUpsert from '../../hooks/useUpsert'
+import { getStructure, assignNested } from '../../form/utils'
 import produce from 'immer'
 
 import { DealsContext } from '../context/Context'
@@ -11,7 +12,7 @@ import { Div, Icon } from '../../styled/styled-semantic'
 import Model from './Model'
 import Qty from './Qty'
 import BpStat from './BpStat/BpStat'
-import Elements from './Element/Elements';
+import Elements from './Element/Elements'
 
 const Container = styled.div`
   width: 100%;
@@ -49,7 +50,7 @@ export default React.memo(function Batch ({
     upsertBatchProto({ variables: { input:
       produce(getStructure(batch), draftHandler)
     }, options})
-  const { isNew, bpStat, elements, model } = produce(batch, draft => {
+  const { id, bpStat, elements, model } = produce(batch, draft => {
     const batchAutoStat = {
       planCost: 0,
       planLabor: 0,
@@ -110,9 +111,7 @@ export default React.memo(function Batch ({
             name='trash'
             color='grey'
             activeColor='red'
-            // onClick={() => upsertDeal(draft => {
-            //   assignNested(draft, `tasks[id=${taskId}]`, {})
-            // })}
+            onClick={() => upsertDeal([ `batches[id=${id}]`, {} ])}
           />
         </ContolsContainer>
       </TitleContainer>

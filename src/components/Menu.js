@@ -22,7 +22,6 @@ export default ({
   children,
   title,
   titleLinkTo,
-	// refreshToken
 }) => {
   const { refreshToken } = useContext(AuthContext)
 	return (

@@ -30,8 +30,6 @@ const Background = styled(Div)`
 
 export default function DealsTable ({
   deals,
-  upsertDeal,
-  upsertingDeal,
 }) {
   const { budgetMode } = useContext(DealsContext)
   return <Div
@@ -66,8 +64,6 @@ export default function DealsTable ({
           key={deal.id}
           isFirstRow={i === 0}
           deal={deal}
-          upsertDeal={upsertDeal}
-          upsertingDeal={upsertingDeal}
           budgetMode={budgetMode}
         />
       )}

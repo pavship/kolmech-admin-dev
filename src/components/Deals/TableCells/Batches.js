@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import Batch from'./Batch'
 import Model from './Model'
 import { Div } from '../../styled/styled-semantic'
+import useUpsert from '../../hooks/useUpsert'
 
 const SortableItemContainer = styled(Div)`
   :hover {
@@ -18,13 +19,7 @@ const SortableItemContainer = styled(Div)`
   }
 `
 
-const SortableContainer = sortableContainer(({children}) =>
-  <Div
-    // bt='1px solid rgba(34,36,38,0.15)'
-  >
-    {children}
-  </Div>
-)
+const SortableContainer = sortableContainer(({children}) => <div>{children}</div>)
 
 const DragHandle = sortableHandle(() =>
   <Div
@@ -52,30 +47,18 @@ const SortableBatch = sortableElement(props => (
 ))
 
 export default function Batches ({
-  deal,
-  upsertDeal
+  deal
 }) {
-  const { id: dealId, batches } = deal
+  const { batches } = deal
+  const [ upsertDeal ] = useUpsert('deal', deal)
   return <>
     <SortableContainer
       onSortEnd={({oldIndex, newIndex}) => {
         if (oldIndex === newIndex) return
-        upsertDeal({ variables: { input: {
-          id: dealId,
-          batches: [
-            ...batches
-              .filter(b => ![oldIndex, newIndex].includes(b.sort))
-              .map(({ id }) => ({ id })),
-            {
-              id: batches.find(b => b.sort === oldIndex).id,
-              sort: newIndex
-            },
-            {
-              id: batches.find(b => b.sort === newIndex).id,
-              sort: oldIndex
-            }
-          ]
-        }}})
+        upsertDeal([
+          `batches[id=${batches[oldIndex].id}]`, { sort: newIndex },
+          `batches[id=${batches[newIndex].id}]`, { sort: oldIndex }
+        ])
       }}
       useDragHandle
     >
