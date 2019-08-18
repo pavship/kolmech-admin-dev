@@ -45,6 +45,7 @@ export const useMutation = (
   return useApolloMutation(mutation, {
     ...options,
     onCompleted: res => {
+      console.log('onCompleted > ', onCompleted)
       if (onCompleted) onCompleted(res)
       successMsg !== null && notify({
         type: 'success',

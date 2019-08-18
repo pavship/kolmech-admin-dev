@@ -2,13 +2,17 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import { Div, Icon } from '../../styled/styled-semantic'
 import HtmlInput from '../../common/HtmlInput'
+import useUpsert from '../../hooks/useUpsert';
+import { assignNested } from '../../form/utils';
 
 export default ({
+  deal,
   batch: { id: batchId, isNew: isNewBatch},
-  deal: { id: dealId, batches },
   model: { id, name } = {},
-  upsertDeal
+  // upsertDeal
 }) => {
+  const { id: dealId, batches } = deal
+  const [ upsertDeal ] = useUpsert('deal', deal)
   const inputRef = useRef(null)
   const [ editMode, setEditMode ] = useState(false)
   useEffect(() => (editMode &&
@@ -19,21 +23,31 @@ export default ({
       ref={inputRef}
       placeholder='Новое Изделие'
       value={name || ''}
-      onChange={value => value !== '' && upsertDeal({ variables: { input: {
-        id: dealId,
-        batches: [
-          ...batches.map(({ id }) => ({ id })).filter(b => b.id !== batchId),
-          {
-            ...isNewBatch
-              ? { qty: 1, sort: batches.length }
-              : { id: batchId },
-            model: {
-              ...!isNewBatch && { id },
-              name: value,
-            }
-          }
-        ]
-      }}})}
+      // onChange={value => value !== '' && upsertDeal({ variables: { input: {
+      //   id: dealId,
+      //   batches: [
+      //     ...batches.map(({ id }) => ({ id })).filter(b => b.id !== batchId),
+      //     {
+      //       ...isNewBatch
+      //         ? { qty: 1, sort: batches.length }
+      //         : { id: batchId },
+      //       model: {
+      //         ...!isNewBatch && { id },
+      //         name: value,
+      //       }
+      //     }
+      //   ]
+      // }}})}
+      onChange={value => value !== '' && upsertDeal(draft =>
+        assignNested(draft,
+          isNewBatch
+            ? 'batches[length]'
+            : `batches[id=${batchId}].model`,
+          isNewBatch
+            ? { qty: 1, sort: batches.length, model: { name: value } }
+            : { name: value }
+        )
+      )}
       onBlur={() => setEditMode(false)}
     />
   else if (isNewBatch)
@@ -47,6 +61,7 @@ export default ({
     return <Div
       ov='hidden'
       to='ellipsis'
+      fw='bold'
       onClick={() => setEditMode(true)}
     >
       {name}

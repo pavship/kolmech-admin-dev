@@ -7,7 +7,7 @@ import produce from 'immer'
 import { DealsContext } from '../context/Context'
 
 import styled from 'styled-components'
-import { Div } from '../../styled/styled-semantic'
+import { Div, Icon } from '../../styled/styled-semantic'
 import Model from './Model'
 import Qty from './Qty'
 import BpStat from './BpStat/BpStat'
@@ -19,6 +19,25 @@ const Container = styled.div`
   line-height: 1.5em !important;
 `
 
+const TitleContainer = styled.div`
+  position: relative;
+  width: 311px;
+  border-right: 1px solid rgba(34,36,38,0.15);
+`
+
+const ContolsContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: opacity 0.25s linear;
+  ${TitleContainer}:hover & {
+    opacity: 1;
+  }
+`
+
 export default React.memo(function Batch ({
   deal,
   batch,
@@ -26,10 +45,10 @@ export default React.memo(function Batch ({
 }) {
   const { budgetMode } = useContext(DealsContext)
   const [ upsertBatchProto ] = useMutation(uBq)
-  const upsertBatch = (draftHandler, options = {}) =>
+  const upsertBatch = (draftHandler, options) =>
     upsertBatchProto({ variables: { input:
       produce(getStructure(batch), draftHandler)
-    }, ...options})
+    }, options})
   const { isNew, bpStat, elements, model } = produce(batch, draft => {
     const batchAutoStat = {
       planCost: 0,
@@ -78,17 +97,25 @@ export default React.memo(function Batch ({
       d='flex'
       bb='1px solid rgba(34, 36, 38, 0.15)'
     >
-      <Div
-        w='311px'
-        br={isNew ? undefined : '1px solid rgba(34,36,38,0.15);'}
-      >
+      <TitleContainer>
         <Model
           batch={batch}
           deal={deal}
           model={model}
           upsertDeal={upsertDeal}
         />
-      </Div>
+        <ContolsContainer>
+          <Icon
+            link
+            name='trash'
+            color='grey'
+            activeColor='red'
+            // onClick={() => upsertDeal(draft => {
+            //   assignNested(draft, `tasks[id=${taskId}]`, {})
+            // })}
+          />
+        </ContolsContainer>
+      </TitleContainer>
       <Div
         w='50px'
       >

@@ -2,6 +2,7 @@ import React from 'react'
 
 import styled from 'styled-components'
 import { Div, Icon } from '../styled/styled-semantic'
+import TaskControls from './Controls'
 
 const Container = styled.div`
   display: flex;
@@ -13,50 +14,30 @@ const Container = styled.div`
   :hover {
     background: rgb(250, 250, 250);
     color: rgba(0,0,0,.95);
+    .taskControls {
+      opacity: 1;
+    }
   }
   ${props => props.active && `
 		background: rgba(0,0,0,.05);
 		font-weight: bold;
 		border-color: rgba(34, 36, 38, 0.15);
-    `}
-`
-
-const ControlsContainer = styled.div`
-  display: flex;
-  width: 30px;
-  margin-left: auto;
-  opacity: 0;
-  transition: opacity 0.25s ease-in-out;
-  ${Container}:hover & {
-    opacity: 1;
-  }
+  `}
 `
 
 export function TaskListItem ({
   task: { text, order },
-  // active,
-	// onClick,
+  upsertAppoint
 }) {
-  return <Container
-    // active={active}
-    // onClick={onClick}
-  >
+  return <Container>
     <Div
       w='25px'
     >{order + 1}.</Div>
-    {/* <LeftIcon
-      name={active ? 'check square outline' : 'square outline'}
-    /> */}
     <Div>
       {text}
     </Div>
-    <ControlsContainer>
-      <Icon
-        link
-        name='trash'
-        color='grey'
-        activeColor='red'
-      />
-    </ControlsContainer>
+    <TaskControls
+      upsertAppoint={upsertAppoint}
+    />
   </Container>
 }

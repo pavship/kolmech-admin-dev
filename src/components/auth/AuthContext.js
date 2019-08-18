@@ -13,8 +13,7 @@ export function AuthProvider ({
 	apolloClient
 }) {
 	const [ token, setToken ] = useState(localStorage.getItem(AUTH_TOKEN))
-	useEffect(() => {
-		bootStrapData()}, [])
+	useEffect(() => {bootStrapData()}, [])
 	const bootStrapData = () => {
 		try {
 			const token = localStorage.getItem(AUTH_TOKEN)
@@ -35,6 +34,7 @@ export function AuthProvider ({
 			localStorage.setItem(AUTH_TOKEN, token)
 		} else {
 			localStorage.removeItem(AUTH_TOKEN)
+			console.log('apolloClient > ', apolloClient)
 			if (apolloClient) apolloClient.resetStore()
 		}
 		setToken(token)

@@ -18,7 +18,13 @@ const SortableItemContainer = styled(Div)`
   }
 `
 
-const SortableContainer = sortableContainer(({children}) => {return <div>{children}</div>})
+const SortableContainer = sortableContainer(({children}) =>
+  <Div
+    // bt='1px solid rgba(34,36,38,0.15)'
+  >
+    {children}
+  </Div>
+)
 
 const DragHandle = sortableHandle(() =>
   <Div

@@ -61,7 +61,7 @@ export default function DealsTable ({
       mt='23px'
       // oy='scroll'
     >
-      {deals && deals.map((deal, i) => 
+      {deals && deals.map((deal, i) =>
         <Row
           key={deal.id}
           isFirstRow={i === 0}

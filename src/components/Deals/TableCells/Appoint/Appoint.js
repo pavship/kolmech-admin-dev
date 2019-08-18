@@ -14,9 +14,8 @@ import Task from '../../Task/Task'
 import BpStat from '../BpStat/BpStat'
 
 const Container = styled.div`
-  display: flex;
-  width: 100%;
   position: relative;
+  width: 100%;
   :not(:last-child) {
     border-bottom: 1px solid rgba(34,36,38,0.15);
   }
@@ -25,6 +24,10 @@ const Container = styled.div`
 const TitleContainer = styled.div`
   display: flex;
   width: 170px;
+`
+
+const HeaderContainer = styled.div`
+  display: flex;
 `
 
 const Title = styled(Div)`
@@ -59,55 +62,68 @@ export default function Appoint ({
   upsertBatch,
   budgetMode
 }) {
+  console.log('Appoint > ')
   const { opType } = op
   const { id: appointId, isNew, tasks, bpStat } = appoint
   const { setDetails } = useContext(DetailsContext)
   const [ upsertAppointProto ] = useMutation(uAq)
-  const upsertAppoint = (draftHandler, options = {}) => upsertAppointProto({ variables: { input:
-    produce(getStructure(appoint), draftHandler)
-  }, ...options})
+  const upsertAnyAppoint = (appoint, draftHandler, options = {}) => console.log('options > ', options) ||
+    upsertAppointProto({ variables: { input:
+      produce(getStructure(appoint), draftHandler)
+    }, options})
+  const upsertAppoint = (draftHandler, options) =>
+    upsertAnyAppoint(appoint, draftHandler, options)
   return <>
     <Container>
-      <TitleContainer>
-        <Title
-          whs='nowrap'
-          to='ellipsis'
-          pos='relative'
-        >
-          <ExecName
-            basePath={basePath}
-            appoint={appoint}
-            opIndex={opIndex}
-            opType={opType}
-            upsertBatch={upsertBatch}
+      <HeaderContainer>
+        <TitleContainer>
+          <Title
+            whs='nowrap'
+            to='ellipsis'
+            pos='relative'
+          >
+            <ExecName
+              basePath={basePath}
+              appoint={appoint}
+              opIndex={opIndex}
+              opType={opType}
+              upsertBatch={upsertBatch}
+            />
+          </Title>
+              {!isNew &&
+            <Menu>
+              <DropdownMenu>
+                <WarningItem
+                  icon='remove'
+                  text='Открепить'
+                  onClick={() => upsertBatch(draft => {
+                    assignNested(draft, `${basePath}appoints[id=${appointId}]`, {})
+                  })}
+                />
+                <Dropdown.Item
+                  icon='plus'
+                  text='Задача'
+                  onClick={() => setDetails({ appoint, upsertAppoint, upsertAnyAppoint, type: 'tasks' })}
+                />
+              </DropdownMenu>
+            </Menu>
+          }
+        </TitleContainer>
+        {!isNew &&
+          <BpStat
+            bpStat={bpStat}
+            budgetMode={budgetMode}
+            upsertParent={upsertAppoint}
           />
-        </Title>
-            {!isNew &&
-          <Menu>
-            <DropdownMenu>
-              <WarningItem
-                icon='remove'
-                text='Открепить'
-                onClick={() => upsertBatch(draft => {
-                  assignNested(draft, `${basePath}appoints[id=${appointId}]`, {})
-                })}
-              />
-              <Dropdown.Item
-                icon='plus'
-                text='Задача'
-                onClick={() => setDetails({ appoint, type: 'tasks' })}
-              />
-            </DropdownMenu>
-          </Menu>
         }
-      </TitleContainer>
-      {!isNew &&
-        <BpStat
-          bpStat={bpStat}
-          budgetMode={budgetMode}
-          upsertParent={upsertAppoint}
+      </HeaderContainer>
+      {tasks && tasks.map(task =>
+        <Task
+          key={task.id}
+          task={task}
+          upsertAppoint={upsertAppoint}
         />
-      }
+      )}
       {/* <Div
         pos='absolute'
         l='170px'

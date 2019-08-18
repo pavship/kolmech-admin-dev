@@ -1,13 +1,9 @@
-import React, { useState, useContext } from 'react'
+import React from 'react'
 import { assignNested } from '../../../form/utils'
-import DetailsContext from '../../../Details/Provider'
+
 import styled from 'styled-components'
-import { Div, Icon } from '../../../styled/styled-semantic'
-import { DropdownMenu } from '../DropdownMenu'
-import { Dropdown } from 'semantic-ui-react'
-import ExecName from '../Exec/Name'
-import Task from '../../Task/Task'
-import Stat from './Stat';
+import { Div } from '../../../styled/styled-semantic'
+import Stat from './Stat'
 
 const FlexContainer = styled.div`
   display: flex;

@@ -24,42 +24,26 @@ const ListTitle = styled.h4`
 `
 
 export default function TasksDetails ({
-  details: { appoint },
+  details: { appoint, upsertAnyAppoint, upsertAppoint },
   setDetails
 }) {
-  const { id: appointId, exec: { id: execId } } = appoint
-	const [ from, setFrom ] = useState(toLocalDatetimeString(new Date()))
-  const [ text, setText ] = useState()
+  const { exec: { id: execId } } = appoint
+	
   const { me: { person: {exec: { id: userExecId } }}} = useContext(UserContext)
-  const client = useApolloClient()
-  const { data, loading, error } = useQuery(tasksDetails)
-  console.log('appoint > ', appoint)
-  let newTaskOrder = 0
-	const [ upsertTask ] = useMutation(uT, {
-		variables: { input: {
-			from: new Date(from).toISOString(),
-			text,
-      status: 'ACTIVE',
-      order: newTaskOrder,
-			appointId
-		}}
-  })
+  const { data } = useQuery(tasksDetails)
   const tasksByExec = !(data && data.tasks)
     ? {}
     : (() => {
-        const grouped = groupBy(data.tasks, 'exec.id')
-        console.log('grouped > ', grouped)
+        const grouped = groupBy(data.tasks, 'appoint.exec.id')
         grouped[execId] = grouped[execId] || []
-        newTaskOrder = grouped[execId].length
         grouped[execId].push({
           isNew: true,
-          appoint
+          appoint,
         })
         return grouped
       })()
   console.log('tasksByExec > ', tasksByExec)
   const execIds = Object.keys(tasksByExec)
-  console.log('execIds > ', execIds)
   return <>
     <Menu
       setDetails={setDetails}
@@ -80,19 +64,22 @@ export default function TasksDetails ({
             console.log('tasks[0].appoint.exec.person.amoName > ', tasks[0].appoint.exec.person.amoName)
             return <div
               key={execId}
-            >
+            > 
               <ListTitle>{tasks[0].appoint.exec.person.amoName}</ListTitle>
               {tasks.map(task => task.isNew
                 ? <NewTask
                     key={cuid()}
-                    text={text}
-                    setText={setText}
-                    // upsertTask={() => upsertTask({ variables: { order: task.order }})}
-                    upsertTask={() => console.log('newTaskOrder > ', newTaskOrder) || upsertTask()}
+                    task={task}
+                    upsertAppoint={upsertAppoint}
                   />
                 : <TaskListItem
                     key={task.id}
                     task={task}
+                    upsertAppoint={(draftHandler, options) =>
+                      upsertAnyAppoint({
+                        ...task.appoint,
+                        tasks
+                      }, draftHandler, options)}
                     // active={p.exec.id === execId}
                     // onClick={() => setPersonId(p.id) || setExecId('')}
                   />

@@ -21,6 +21,7 @@ export function NotificationsProvider ({
     }))
   }
   const dismiss = messageId => setMessages(produce(messages, draft => {
+    console.log('messageId > ', messageId)
     return draft.splice[messages.findIndex(m => m.id === messageId), 1]
   }))
   const cancelAutoDismiss = messageId => setMessages(produce(messages, draft => {

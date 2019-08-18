@@ -33,33 +33,33 @@ export default function Row ({
       pos='relative'
       pe='auto'
     >
-      <Div
+      <Div //Header
         d='flex'
-        bt={isFirstRow ? undefined : '1px solid rgb(211,211,212)'}
+        bt={isFirstRow ? undefined : '1px solid rgb(125,125,126)'}
         w='max-content'
         pe='auto'
       >
-        <Div
+        <Div //Status
           w='22px'
           m='5px'
           bs='border-box'
           bc={status.color}
         />
-        <Div
+        <Div //HeaderContent
           d='flex'
-          bb={batches.length ? '1px solid rgba(34,36,38,0.15);' : undefined}
+          // bb={batches.length ? '1px solid rgba(34,36,38,0.15);' : undefined}
         >
-          <Div
+          <Div //Deal ID
             w='80px'
           >
             {amoId}
           </Div>
-          <Div
+          <Div //Deal date
             w='90px'
           >
             {date}
           </Div>
-          <Div
+          <Div //Deal name
             w='170px'
             whs='nowrap'
             to='ellipsis'
@@ -70,7 +70,7 @@ export default function Row ({
               setDetails={setDetails}
             />
           </Div>
-          <Div
+          <Div //Counteragent
             w='111px'
           >
             {deal.org &&
@@ -87,6 +87,7 @@ export default function Row ({
             />
           }
         </Div>
+        {}
       </Div>
       <Div
         pos={!batches.length ? 'absolute' : undefined}
@@ -94,6 +95,7 @@ export default function Row ({
         l={!batches.length ? '482px' : undefined}
         w={!batches.length ? '260px' : undefined}
         pl={!batches.length ? '5px' : '32px'}
+        bt={batches.length ? '1px solid rgba(34,36,38,0.15)' : undefined}
       >
         <Batches
           deal={deal}
