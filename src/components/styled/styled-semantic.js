@@ -139,7 +139,7 @@ const IconPropFilter = ({
 }) => (
 	<SIcon
 		{...rest}
-		disabled
+		disabled={disabled}
 		onClick={disabled ? undefined : onClick}
 	/>
 )

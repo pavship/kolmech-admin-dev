@@ -36,7 +36,6 @@ export default function NewElement ({
       sort: newElementIndex
     }])
   }
-  console.log('opTypes > ', opTypes)
   if (editMode)
     return <HtmlSelect
       ref={inputRef}
