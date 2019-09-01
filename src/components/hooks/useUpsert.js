@@ -3,7 +3,8 @@ import produce from "immer"
 import { upsertDeal } from "../../graphql/deal"
 import { upsertBatch } from "../../graphql/batch"
 import { getStructure, assignNested } from "../form/utils"
-import { upsertPerson2 } from "../../graphql/person";
+import { upsertPersonExec } from "../../graphql/person"
+import { upsertOrgExec } from "../../graphql/org"
 
 export default function useUpsert(
   objTypeName, obj, options
@@ -11,7 +12,8 @@ export default function useUpsert(
   const mutation =
     objTypeName === 'deal' ? upsertDeal :
     objTypeName === 'batch' ? upsertBatch :
-    objTypeName === 'person' ? upsertPerson2 :
+    objTypeName === 'personExec' ? upsertPersonExec :
+    objTypeName === 'orgExec' ? upsertOrgExec :
     undefined
   const [ mutate ] = useMutation(mutation, options)
   const upsert = async (pathsAndValuesArr, options) => {
@@ -38,7 +40,8 @@ export function useSpecUpsert(
   const mutation =
     objTypeName === 'deal' ? upsertDeal :
     objTypeName === 'batch' ? upsertBatch :
-    objTypeName === 'person' ? upsertPerson2 :
+    objTypeName === 'personExec' ? upsertPersonExec :
+    objTypeName === 'orgExec' ? upsertOrgExec :
     undefined
   const [ mutate ] = useMutation(mutation, options)
   const upsert = async (obj, pathsAndValuesArr, options) => {

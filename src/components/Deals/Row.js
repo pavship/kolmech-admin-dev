@@ -7,6 +7,7 @@ import Org from './TableCells/Org'
 import Batches from './TableCells/Batches'
 import Deal from './TableCells/Deal'
 import BpStat from './TableCells/BpStat/BpStat';
+import useTraceUpdate from '../hooks/useTraceUpdate';
 
 const Container = styled.div`
   display: flex;
@@ -18,11 +19,13 @@ const Container = styled.div`
   }
 `
 
-export default function Row ({
-  isFirstRow,
-  deal,
-  budgetMode,
-}) {
+export default React.memo(function Row (props) {
+  useTraceUpdate(props)
+  const {
+    isFirstRow,
+    deal,
+    budgetMode,
+  } = props
   const { amoId, date, batches, status } = deal
   const { setDetails } = useContext(DetailsContext)
   return <Container>
@@ -98,4 +101,4 @@ export default function Row ({
       </Div>
     </Div>
   </Container>
-}
+})

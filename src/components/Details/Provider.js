@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 
 import styled from 'styled-components'
 import posed, { PoseGroup } from 'react-pose'
@@ -41,9 +41,10 @@ export const DetailsProvider = ({
 }) => {
   const [ details, setDetails ] = useState(null)
   const { type } = details || {}
+  const providerValue = useMemo(() => ({ setDetails }), [])
   return (
     <DetailsContext.Provider
-      value={{ details, setDetails }}
+      value={providerValue}
     >
       <PoseGroup>
         {details &&

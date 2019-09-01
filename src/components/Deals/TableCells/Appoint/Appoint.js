@@ -62,7 +62,7 @@ export default function Appoint ({
   upsertBatch,
   budgetMode
 }) {
-  console.log('Appoint > ')
+  // console.log('Appoint > ')
   const { opType } = op
   const { id: appointId, isNew, tasks, bpStat } = appoint
   const { setDetails } = useContext(DetailsContext)

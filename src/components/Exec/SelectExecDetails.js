@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { Div, Button, Icon } from '../styled/styled-semantic'
 import { Menu } from '../Details/Menu/Menu'
 import LeftIcon from '../Details/Menu/LeftIcon'
-import { Dimmer, Loader, Input } from 'semantic-ui-react'
+import { Dimmer, Loader, Input, Header } from 'semantic-ui-react'
 import produce from 'immer'
 import { assignNested, getStructure } from '../form/utils'
 import { syncWithAmoContacts as sWAC } from '../../graphql/amo'
@@ -33,6 +33,11 @@ const ListTitle = styled.h4`
 	} */
 	display: flex;
 `
+
+const ListSubTitle = styled(Header)` &&& {
+	margin: 0 0 1em;
+	padding: 0 55px;
+}`
 
 const ListItemContainer = styled.div`
   display: flex;
@@ -100,7 +105,7 @@ export default function SelectExecDetails ({
   const { data, loading, error } = useQuery(orgsAndPersonsExecs)
 	const [ execId, setExecId ] = useState('')
 	const [ person, setPerson ] = useState(null)
-	const [ orgId, setOrgId ] = useState('')
+	const [ org, setOrg ] = useState('')
 	const [ search, setSearch ] = useState('')
 	const orgs = data && data.orgs && data.orgs
 		.filter(o => !search || o.name.toLowerCase().indexOf(search.toLowerCase()) !== -1) || []
@@ -111,10 +116,15 @@ export default function SelectExecDetails ({
 		errMsg: 'Ошибка синхронизации с Амо',
 		mark: 'syncWithAmoContacts'
 	})
-	const [ upsertSpecPerson ] = useSpecUpsert('person', {
+	const [ upsertSpecPerson ] = useSpecUpsert('personExec', {
 		successMsg: 'Обновлены данные исполнителя',
 		errMsg: 'Ошибка. Данные исполнителя не обновлены',
 	})
+	const [ upsertSpecOrg ] = useSpecUpsert('orgExec', {
+		successMsg: 'Обновлены данные исполнителя',
+		errMsg: 'Ошибка. Данные исполнителя не обновлены',
+	})
+	// const upsertSpecPerson = () => {}
 	const [ suitablePersons, otherPersons ] = partition(persons,
 		({ exec }) => exec && exec.opTypes.findIndex(ot => ot.id === opTypeId) > -1
 	)
@@ -122,22 +132,24 @@ export default function SelectExecDetails ({
 		({ exec }) => exec && exec.opTypes.findIndex(ot => ot.id === opTypeId) > -1
 	)
 	useEffect(() => searchInput.current.focus())
-	console.log('suitablePersons, otherPersons > ', suitablePersons, otherPersons)
   return <>
     <Menu
       setDetails={setDetails}
       title='Выбор исполнителя'
       onSubmit={async () => {
 				if (person) {
-					const { data } = await upsertSpecPerson(
-						person, [ `exec.opTypes[length]`, { opTypeId } ]
+					const { data } = await upsertSpecPerson(person,
+						[ `exec.opTypes[length]`, { opTypeId } ]
 					)
 					const execId = data && data.upsertPerson2.exec.id
 					if (execId) onSubmit(execId)
 				}
-				if (orgId) {
-					const { data } = await upsertSpecPerson()
-					const execId = data && data.upsertPerson2.exec.id
+				if (org) {
+					const { data } = await upsertSpecOrg(org,
+						[ `exec.opTypes[length]`, { opTypeId } ]
+					)
+					console.log('data > ', data)
+					const execId = data && data.upsertOrg.exec.id
 					if (execId) onSubmit(execId)
 				}
 				if (execId) onSubmit(execId)
@@ -157,14 +169,26 @@ export default function SelectExecDetails ({
     <Lists>
 			{!error && loading ? <Dimmer active ><Loader>Загрузка..</Loader></Dimmer> : <>
 				<ListTitle>Для выбранной категории</ListTitle>
-				{persons
-					.filter(p => p.exec && p.exec.opTypes.findIndex(ot => ot.id === opTypeId) !== -1)
+				{suitablePersons.length > 0 && <ListSubTitle sub > Контакты </ListSubTitle> }
+				{suitablePersons
 					.map(p => <ListItem
 						key={p.id}
 						active={p.exec.id === execId}
 						text={p.amoName}
-						onClick={() => setExecId(p.exec.id) || setPerson(null)}
+						onClick={() => setExecId(p.exec.id) || setPerson(null) || setOrg(null)}
 						onRemove={() => upsertSpecPerson(p,
+							[ `exec.opTypes[id=${opTypeId}]`, { disconnect: true } ]
+						)}
+					/>)
+				}
+				{suitableOrgs.length > 0 && <ListSubTitle sub > Компании </ListSubTitle> }
+				{suitableOrgs
+					.map(o => <ListItem
+						key={o.id}
+						active={o.exec.id === execId}
+						text={o.name}
+						onClick={() => setExecId(o.exec.id) || setPerson(null) || setOrg(null)}
+						onRemove={() => upsertSpecOrg(o,
 							[ `exec.opTypes[id=${opTypeId}]`, { disconnect: true } ]
 						)}
 					/>)
@@ -190,17 +214,16 @@ export default function SelectExecDetails ({
 						key={p.id}
 						active={p === person}
 						text={p.amoName}
-						onClick={() => setPerson(p) || setOrgId('') || setExecId('')}
+						onClick={() => setPerson(p) || setOrg(null) || setExecId('')}
 					/>)
 				}
-				<ListTitle>Все компании</ListTitle>
-				{orgs
-					// .filter(p => !p.exec)
+				<ListTitle>Остальные компании</ListTitle>
+				{otherOrgs
 					.map(o => <ListItem
 						key={o.id}
-						active={o.id === orgId}
+						active={o === org}
 						text={o.name}
-						onClick={() => setOrgId(o.id) || setPerson(null) || setExecId('')}
+						onClick={() => setOrg(o) || setPerson(null) || setExecId('')}
 					/>)
 				}
 			</>}
