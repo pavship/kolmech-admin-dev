@@ -99,6 +99,8 @@ export default React.memo(function Row (props) {
           deal={deal}
         />
       </Div>
+      {/* <Els
+      /> */}
     </Div>
   </Container>
 })

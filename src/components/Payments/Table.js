@@ -24,15 +24,21 @@ const fields = [{
 	title: 'Дата и время',
 	width: '145px'
 },{
+  name: 'counterparty',
+  title: 'Контрагент',
+  width: '200px',
+  truncated: true
+},{
+  name: 'project',
+  path: 'mpProject.Name',
+	title: 'Проект',
+	width: '230px',
+  truncated: true
+},{
   name: 'article',
   path: 'article.rusName',
 	title: 'Статья',
 	width: '180px',
-  truncated: true
-},{
-  name: 'counterparty',
-  title: 'Контрагент',
-  width: '200px',
   truncated: true
 },{
   name: 'equipment',

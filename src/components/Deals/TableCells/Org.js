@@ -35,8 +35,8 @@ export default React.memo(function Org ({
   const { highlightFolder } = useContext(DiskContext)
   const [ createPostEnvelopeAddressInsert ] = useMutation(cPEAI, {
     variables: { orgId },
-    successMsg: 'Почтовое адресное вложение создано',
-    errMsg: 'Ошибка создания почтового адресного вложения',
+    successMsg: 'Почтовое вложение создано',
+    errMsg: 'Ошибка создания почтового вложения',
     mark: 'Org createPostEnvelopeAddressInsert'
   })
   return <Container>
@@ -74,7 +74,7 @@ export default React.memo(function Org ({
         />
         <Dropdown.Item
           icon='mail'
-          text='Создать почт. адр. вложение'
+          text='Создать почтовое вложение'
           onClick={() => createPostEnvelopeAddressInsert()}
         />
       </DropdownMenu>
