@@ -30,7 +30,6 @@ const fields = [{
   truncated: true
 },{
   name: 'project',
-  path: 'mpProject.Name',
 	title: 'Проект',
 	width: '230px',
   truncated: true
@@ -59,9 +58,10 @@ const fields = [{
 }]
 
 export default ({
-  payments,
   activePayment,
-  onClickRow
+  mpProjects,
+  onClickRow,
+  payments,
 }) => {
   //  TODO add CollectionUtils to support sorting
   return (
@@ -98,6 +98,10 @@ export default ({
                   {
                     name: 'counterparty',
                     path: person ? 'person.amoName' : 'org.name',
+                  },
+                  {
+                    name: 'project',
+                    value: payment.mpProjectId ? mpProjects.find(mp => mp.Id === payment.mpProjectId).Name : '',
                   },
                   {
                     name: 'amount',

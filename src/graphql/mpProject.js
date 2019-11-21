@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export const mpProjectFragmentBasic = gql`
 	fragment mpProjectFragmentBasic on MpProject {
-		id
+		Id
 		Name
 	}
 `

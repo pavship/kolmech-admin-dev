@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import { articleFragmentBasic, articleFragmentFull } from './article'
 import { accountFragmentBasic, accountFragmentFull } from './account'
 import { equipmentFragmentBasic } from './equipment'
-import { mpProjectFragmentBasic, mpProjectFragmentFull } from './mpProject'
+import { mpProjectFragmentFull } from './mpProject'
 import { orgFragmentBasic } from './org'
 import { personFragmentBasic } from './person'
 
@@ -16,14 +16,13 @@ export const paymentFragmentBasic = gql`
 		account { ...AccountFragmentBasic }
 		article { ...ArticleFragmentBasic }
 		equipment { ...EquipmentFragmentBasic }
-		mpProject { ...mpProjectFragmentBasic }
+		mpProjectId
 		org { ...OrgFragmentBasic }
 		person { ...PersonFragmentBasic }
 	}
 	${accountFragmentBasic}
 	${articleFragmentBasic}
 	${equipmentFragmentBasic}
-	${mpProjectFragmentBasic}
 	${orgFragmentBasic}
 	${personFragmentBasic}
 `

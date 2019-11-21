@@ -75,7 +75,7 @@ export default ({
 		({ key: a.id, text: a.rusName, value: a.id })
 	)
 	const mpProjectOptions = mpProjects.map(p => 
-		({ key: p.id, text: p.Name, value: p.id })
+		({ key: p.Id, text: p.Id - 1000000 + '. ' + p.Name, value: p.Id })
 	)
 	const bankPayment = payment && payment.isIncome !== null
 	return (
